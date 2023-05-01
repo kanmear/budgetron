@@ -1,3 +1,4 @@
+import 'package:budgetron/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,15 +32,21 @@ class MainApp extends StatelessWidget {
 }
 
 class AppState extends ChangeNotifier {
-  var entries = <String>[];
+  var entries = <Entry>[];
+  var isChecked = false;
 
-  void addEntry(String entry) {
+  void addEntry(Entry entry) {
     entries.add(entry);
     notifyListeners();
   }
 
   void clearEntries() {
     entries.clear();
+    notifyListeners();
+  }
+
+  void updateCheck(bool value) {
+    isChecked = value;
     notifyListeners();
   }
 }
@@ -58,9 +65,19 @@ class EntriesPage extends StatelessWidget {
         body: ListView(
           children: [
             for (var entry in entries)
-              ListTile(
-                leading: const Icon(Icons.money),
-                title: Text(entry),
+              Card(
+                child: ListTile(
+                  leading: entry.isExpense
+                      ? const Icon(Icons.money_off)
+                      : const Icon(Icons.money),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(entry.value.toString()),
+                      Text(entry.section)
+                    ],
+                  ),
+                ),
               )
           ],
         ),
@@ -83,11 +100,13 @@ class EntryDialog extends StatefulWidget {
 }
 
 class _EntryDialogState extends State<EntryDialog> {
-  final controller = TextEditingController();
+  final valueController = TextEditingController();
+  final sectionController = TextEditingController();
 
   @override
   void dispose() {
-    controller.dispose();
+    valueController.dispose();
+    sectionController.dispose();
     super.dispose();
   }
 
@@ -97,21 +116,76 @@ class _EntryDialogState extends State<EntryDialog> {
 
     return AlertDialog(
       title: const Text("Entry"),
-      content: TextField(
-        controller: controller,
-        keyboardType: TextInputType.number,
-        decoration: const InputDecoration(
-            border: OutlineInputBorder(), hintText: 'Enter value'),
+      content: Column(
+        children: [
+          TextField(
+            controller: valueController,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(), hintText: 'Enter value'),
+          ),
+          TextField(
+            controller: sectionController,
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(), hintText: 'Enter section'),
+          ),
+          const ExpenseCheckbox()
+        ],
       ),
       actions: [
         TextButton(
-            onPressed: () =>
-                {appState.addEntry(controller.text), print(controller.text)},
+            onPressed: () => appState.addEntry(Entry(
+                int.parse(valueController.text),
+                appState.isChecked,
+                sectionController.text)),
             child: const Text("Add entry")),
         TextButton(
             onPressed: () => appState.clearEntries(),
             child: const Text("Clear all entries"))
       ],
+    );
+  }
+}
+
+class ExpenseCheckbox extends StatefulWidget {
+  const ExpenseCheckbox({
+    super.key,
+  });
+
+  @override
+  State<ExpenseCheckbox> createState() => _ExpenseCheckboxState();
+}
+
+class _ExpenseCheckboxState extends State<ExpenseCheckbox> {
+  bool isChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<AppState>();
+
+    Color getColor(Set<MaterialState> states) {
+      const Set<MaterialState> interactiveStates = <MaterialState>{
+        MaterialState.pressed,
+        MaterialState.hovered,
+        MaterialState.focused
+      };
+      if (states.any(interactiveStates.contains)) {
+        return Colors.blue;
+      } else {
+        return Colors.red;
+      }
+    }
+
+    return Checkbox(
+      value: isChecked,
+      checkColor: Colors.white,
+      fillColor: MaterialStateProperty.resolveWith(getColor),
+      onChanged: (bool? value) {
+        setState(() {
+          isChecked = value!;
+          appState.updateCheck(isChecked);
+        });
+      },
     );
   }
 }
