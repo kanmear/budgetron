@@ -117,6 +117,7 @@ class _EntryDialogState extends State<EntryDialog> {
     return AlertDialog(
       title: const Text("Entry"),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: valueController,
