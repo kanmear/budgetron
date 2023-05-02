@@ -124,22 +124,27 @@ class _ExpenseCheckboxState extends State<ExpenseCheckbox> {
         MaterialState.focused
       };
       if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
-      } else {
         return Colors.red;
+      } else {
+        return Colors.blue;
       }
     }
 
-    return Checkbox(
-      value: isChecked,
-      checkColor: Colors.white,
-      fillColor: MaterialStateProperty.resolveWith(getColor),
-      onChanged: (bool? value) {
-        setState(() {
-          isChecked = value!;
-          appState.updateCheck(isChecked);
-        });
-      },
+    return Row(
+      children: [
+        const Text("Expense?"),
+        Checkbox(
+          value: isChecked,
+          checkColor: Colors.white,
+          fillColor: MaterialStateProperty.resolveWith(getColor),
+          onChanged: (bool? value) {
+            setState(() {
+              isChecked = value!;
+              appState.updateCheck(isChecked);
+            });
+          },
+        ),
+      ],
     );
   }
 }
