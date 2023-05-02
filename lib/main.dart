@@ -2,7 +2,8 @@ import 'package:budgetron/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'entries_page.dart';
+import 'package:budgetron/stats_page.dart';
+import 'package:budgetron/entries_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -26,7 +27,7 @@ class MainApp extends StatelessWidget {
                 ]),
                 title: const Text('Tabs'),
               ),
-              body: const TabBarView(children: [EntriesPage(), Text('Stats')]),
+              body: const TabBarView(children: [EntriesPage(), StatsPage()]),
             ),
           ),
         ));
