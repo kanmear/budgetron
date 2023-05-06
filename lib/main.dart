@@ -59,7 +59,11 @@ class _BudgetronState extends State<Budgetron> {
         controller: pageViewController,
         children: const [
           EntriesPage(),
-          Text("Home page placeholder"),
+          Center(
+              child: Text(
+            "Home page placeholder",
+            textScaleFactor: 2,
+          )),
           StatsPage()
         ],
         onPageChanged: (index) => updateIndex(index),
