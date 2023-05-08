@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1841081728629343382",
-      "lastPropertyId": "4:5228530219470312318",
+      "lastPropertyId": "6:8232326785083288998",
       "name": "Entry",
       "properties": [
         {
@@ -20,28 +20,60 @@
           "type": 6
         },
         {
-          "id": "3:577077467858424290",
-          "name": "isExpense",
-          "type": 1
+          "id": "5:3858979273523268885",
+          "name": "sectionId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "1:6338406014766145511",
+          "relationTarget": "Section"
         },
         {
-          "id": "4:5228530219470312318",
-          "name": "section",
-          "type": 9
+          "id": "6:8232326785083288998",
+          "name": "dateTime",
+          "type": 10
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1383137764426738919",
+      "lastPropertyId": "3:4087762903791826018",
+      "name": "Section",
+      "properties": [
+        {
+          "id": "1:5332441267887283506",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2725091130922734899",
+          "name": "name",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "2:5510743531857434682"
+        },
+        {
+          "id": "3:4087762903791826018",
+          "name": "isExpense",
+          "type": 1
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "1:1841081728629343382",
-  "lastIndexId": "0:0",
+  "lastEntityId": "2:1383137764426738919",
+  "lastIndexId": "2:5510743531857434682",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredPropertyUids": [
+    577077467858424290,
+    5228530219470312318
+  ],
   "retiredRelationUids": [],
   "version": 1
 }

@@ -1,9 +1,9 @@
 import 'dart:collection';
-
-import 'package:budgetron/chart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'main.dart';
+
+import '../main.dart';
+import 'package:budgetron/chart_card.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({
@@ -21,7 +21,8 @@ class StatsPage extends StatelessWidget {
         sections[entry.section]!.value += entry.value;
       } else {
         sections.addAll({
-          entry.section: ChartCard(entry.value, entry.isExpense, entry.section)
+          entry.section.target!.name: ChartCard(entry.value,
+              entry.section.target!.isExpense, entry.section.target!.name)
         });
       }
     }

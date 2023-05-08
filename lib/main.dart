@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'db/object_box_helper.dart';
 
-import 'package:budgetron/stats_page.dart';
-import 'package:budgetron/entries_page.dart';
+import 'package:budgetron/pages/stats_page.dart';
+import 'package:budgetron/pages/entries_page.dart';
 
 late ObjectBox objectBox;
 

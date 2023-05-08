@@ -1,56 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'main.dart';
 
-import 'models/entry.dart';
-
-class EntriesPage extends StatelessWidget {
-  const EntriesPage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
-
-    return Scaffold(
-        body: StreamBuilder<List<Entry>>(
-            stream: objectBox.getEntries(),
-            builder: (context, snapshot) {
-              if (snapshot.data?.isNotEmpty ?? false) {
-                return ListView(
-                  children: [
-                    for (var entry in snapshot.data!)
-                      Card(
-                        child: ListTile(
-                          leading: entry.isExpense
-                              ? const Icon(Icons.money_off)
-                              : const Icon(Icons.money),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(entry.value.toString()),
-                              Text(entry.section)
-                            ],
-                          ),
-                        ),
-                      )
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: Text("No entries in database"),
-                );
-              }
-            }),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) => const EntryDialog()),
-          child: const Icon(Icons.add),
-        ));
-  }
-}
+import 'package:budgetron/main.dart';
+import 'package:budgetron/models/entry.dart';
 
 class EntryDialog extends StatefulWidget {
   const EntryDialog({
@@ -97,13 +49,16 @@ class _EntryDialogState extends State<EntryDialog> {
       ),
       actions: [
         TextButton(
-            onPressed: () => objectBox.addEntry(Entry(
-                value: int.parse(valueController.text),
-                isExpense: appState.isChecked,
-                section: sectionController.text)),
+            onPressed: () => objectBox.addEntry(
+                Entry(
+                    value: int.parse(valueController.text),
+                    dateTime: DateTime.now()),
+                Section(
+                    name: sectionController.text,
+                    isExpense: appState.isChecked)),
             child: const Text("Add entry")),
         TextButton(
-            onPressed: () => appState.clearEntries(),
+            onPressed: () => objectBox.clearEntries(),
             child: const Text("Clear all entries"))
       ],
     );
