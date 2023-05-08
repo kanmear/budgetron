@@ -1,12 +1,9 @@
 import 'dart:collection';
-import 'dart:ffi';
 
 import 'package:budgetron/chart_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
-
-import 'entry.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({
