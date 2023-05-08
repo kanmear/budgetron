@@ -1,11 +1,18 @@
-import 'package:budgetron/entry.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'db/object_box_helper.dart';
 
 import 'package:budgetron/stats_page.dart';
 import 'package:budgetron/entries_page.dart';
 
-void main() {
+late ObjectBox objectBox;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  objectBox = await ObjectBox.create();
+
   runApp(const MainApp());
 }
 
