@@ -13,6 +13,7 @@ class ObjectBox {
 
   ObjectBox._create(this.store) {
     entryBox = Box<Entry>(store);
+    sectionBox = Box<Section>(store);
     if (Admin.isAvailable()) {
       admin = Admin(store);
     }
@@ -36,5 +37,17 @@ class ObjectBox {
 
   void clearEntries() async {
     entryBox.removeAll();
+  }
+
+  Stream<List<Section>> getSections() {
+    final builder = sectionBox.query()
+      ..order(Section_.id, flags: Order.descending);
+    return builder.watch(triggerImmediately: true).map((query) => query.find());
+  }
+
+  int addSection(Section section) => sectionBox.put(section);
+
+  void clearSections() {
+    sectionBox.removeAll();
   }
 }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/pages/sections_page.dart';
 
 class EntryDialog extends StatefulWidget {
   const EntryDialog({
@@ -27,9 +28,12 @@ class _EntryDialogState extends State<EntryDialog> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
+    sectionController.value = sectionController.value.copyWith(
+      text: appState.selectedSection?.name ?? "Section",
+    );
 
     return AlertDialog(
-      title: const Text("Entry"),
+      title: const Text("New Entry"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -41,21 +45,22 @@ class _EntryDialogState extends State<EntryDialog> {
           ),
           TextField(
             controller: sectionController,
+            enabled: false,
             decoration: const InputDecoration(
-                border: OutlineInputBorder(), hintText: 'Enter section'),
+                border: OutlineInputBorder(), hintText: 'Section'),
           ),
-          const ExpenseCheckbox()
+          // const SectionDropdown(),
+          const SectionSelectionButton()
+          // const ExpenseCheckbox()
         ],
       ),
       actions: [
         TextButton(
-            onPressed: () => objectBox.addEntry(
-                Entry(
-                    value: int.parse(valueController.text),
-                    dateTime: DateTime.now()),
-                Section(
-                    name: sectionController.text,
-                    isExpense: appState.isChecked)),
+            onPressed: validateEntryFields(
+                    valueController.text, appState.selectedSection)
+                ? () => createEntry(
+                    valueController.text, appState, sectionController)
+                : null,
             child: const Text("Add entry")),
         TextButton(
             onPressed: () => objectBox.clearEntries(),
@@ -65,49 +70,77 @@ class _EntryDialogState extends State<EntryDialog> {
   }
 }
 
-class ExpenseCheckbox extends StatefulWidget {
-  const ExpenseCheckbox({
+bool validateEntryFields(String text, Section? selectedSection) {
+  if (text == "" || selectedSection == null) {
+    return false;
+  }
+  return true;
+}
+
+void createEntry(
+    String value, AppState appState, TextEditingController sectionController) {
+  objectBox.addEntry(Entry(value: int.parse(value), dateTime: DateTime.now()),
+      appState.selectedSection!);
+  appState.clearSelectedSection();
+  sectionController.text = "";
+}
+
+class SectionSelectionButton extends StatelessWidget {
+  const SectionSelectionButton({
     super.key,
   });
 
   @override
-  State<ExpenseCheckbox> createState() => _ExpenseCheckboxState();
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: ElevatedButton(
+              onPressed: () => {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SectionPage()))
+                  },
+              child: const Text("Section selection")),
+        ),
+      ],
+    );
+  }
 }
 
-class _ExpenseCheckboxState extends State<ExpenseCheckbox> {
-  bool isChecked = false;
+class SectionDropdown extends StatefulWidget {
+  const SectionDropdown({
+    super.key,
+  });
+
+  @override
+  State<SectionDropdown> createState() => _SectionDropdownState();
+}
+
+class _SectionDropdownState extends State<SectionDropdown> {
+  List<Section> sections = <Section>[Section(name: "Food", isExpense: true)];
+  // List<Section> sections = <Section>[];
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
 
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.red;
-      } else {
-        return Colors.blue;
-      }
-    }
-
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text("Expense?"),
-        Checkbox(
-          value: isChecked,
-          checkColor: Colors.white,
-          fillColor: MaterialStateProperty.resolveWith(getColor),
-          onChanged: (bool? value) {
-            setState(() {
-              isChecked = value!;
-              appState.updateCheck(isChecked);
-            });
-          },
+        DropdownButton<Section>(
+          hint: const Text("Select section"),
+          // value: sections.first,
+          onChanged: (value) => appState.updateSection(value!),
+          items: sections.map((section) {
+            return DropdownMenuItem<Section>(
+              value: section,
+              child: Text(section.name),
+            );
+          }).toList(),
         ),
+        TextButton(onPressed: () => {}, child: const Icon(Icons.add))
       ],
     );
   }
