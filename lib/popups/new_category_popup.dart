@@ -21,12 +21,12 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
     var appState = context.watch<AppState>();
 
     return AlertDialog(
-      title: const Text("New Section"),
+      title: const Text("New Category"),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
         TextField(
           controller: nameController,
           decoration: const InputDecoration(
-              border: OutlineInputBorder(), hintText: 'Enter section name'),
+              border: OutlineInputBorder(), hintText: 'Enter category name'),
         ),
         const ExpenseCheckbox()
       ]),
@@ -34,10 +34,10 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
         TextButton(
             onPressed: () => objectBox.addCategory(Category(
                 name: nameController.text, isExpense: appState.isChecked)),
-            child: const Text("Add section")),
+            child: const Text("Add category")),
         TextButton(
             onPressed: () => objectBox.clearCategories(),
-            child: const Text("Clear all sections"))
+            child: const Text("Clear all categories"))
       ],
     );
   }

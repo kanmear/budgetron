@@ -1,7 +1,7 @@
 class ChartCard {
   int value;
   bool isExpense;
-  String section;
+  String category;
 
-  ChartCard(this.value, this.isExpense, this.section);
+  ChartCard(this.value, this.isExpense, this.category);
 }
