@@ -5,6 +5,7 @@ import 'db/object_box_helper.dart';
 
 import 'package:budgetron/pages/stats_page.dart';
 import 'package:budgetron/pages/entries_page.dart';
+import 'package:budgetron/models/category.dart';
 
 late ObjectBox objectBox;
 
@@ -93,7 +94,7 @@ class _BudgetronState extends State<Budgetron> {
 class AppState extends ChangeNotifier {
   var entries = <Entry>[];
   var isChecked = false;
-  Section? selectedSection;
+  Category? selectedCategory;
 
   void addEntry(Entry entry) {
     entries.add(entry);
@@ -105,8 +106,8 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateSection(Section section) {
-    selectedSection = section;
+  void updateCategory(Category category) {
+    selectedCategory = category;
     notifyListeners();
   }
 
@@ -115,8 +116,8 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearSelectedSection() {
-    selectedSection = null;
+  void clearSelectedCategory() {
+    selectedCategory = null;
     notifyListeners();
   }
 }

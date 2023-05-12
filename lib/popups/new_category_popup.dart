@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:budgetron/main.dart';
-import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/models/category.dart';
 
-class NewSectionDialog extends StatefulWidget {
-  const NewSectionDialog({
+class NewCategoryDialog extends StatefulWidget {
+  const NewCategoryDialog({
     super.key,
   });
 
   @override
-  State<NewSectionDialog> createState() => _NewSectionDialogState();
+  State<NewCategoryDialog> createState() => _NewCategoryDialogState();
 }
 
-class _NewSectionDialogState extends State<NewSectionDialog> {
+class _NewCategoryDialogState extends State<NewCategoryDialog> {
   final nameController = TextEditingController();
 
   @override
@@ -32,11 +32,11 @@ class _NewSectionDialogState extends State<NewSectionDialog> {
       ]),
       actions: [
         TextButton(
-            onPressed: () => objectBox.addSection(Section(
+            onPressed: () => objectBox.addCategory(Category(
                 name: nameController.text, isExpense: appState.isChecked)),
             child: const Text("Add section")),
         TextButton(
-            onPressed: () => objectBox.clearSections(),
+            onPressed: () => objectBox.clearCategories(),
             child: const Text("Clear all sections"))
       ],
     );

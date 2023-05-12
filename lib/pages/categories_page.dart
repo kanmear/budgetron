@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:budgetron/main.dart';
-import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/popups/new_section_popup.dart';
+import 'package:budgetron/popups/new_category_popup.dart';
+import 'package:budgetron/models/category.dart';
 
-class SectionPage extends StatelessWidget {
-  const SectionPage({
+class CategoriesPage extends StatelessWidget {
+  const CategoriesPage({
     super.key,
   });
 
@@ -15,43 +15,42 @@ class SectionPage extends StatelessWidget {
     var appState = context.watch<AppState>();
 
     return Scaffold(
-      body: StreamBuilder<List<Section>>(
-          stream: objectBox.getSections(),
+      body: StreamBuilder<List<Category>>(
+          stream: objectBox.getCategories(),
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {
               return ListView(
                 children: [
-                  // rename entry to section
-                  for (var section in snapshot.data!)
+                  for (var category in snapshot.data!)
                     Card(
                         child: ListTile(
-                            leading: section.isExpense
+                            leading: category.isExpense
                                 ? const Icon(Icons.money_off)
                                 : const Icon(Icons.money),
-                            title: Text(section.name),
-                            onTap: () => selectSectionAndReturn(
-                                appState, section, context)))
+                            title: Text(category.name),
+                            onTap: () => selectCategoryAndReturn(
+                                appState, category, context)))
                 ],
               );
             } else {
               return const Center(
-                child: Text("No sections in database"),
+                child: Text("No categories in database"),
               );
             }
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog(
             context: context,
-            builder: (BuildContext context) => const NewSectionDialog()),
+            builder: (BuildContext context) => const NewCategoryDialog()),
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(title: const Text('Categories')),
     );
   }
 
-  selectSectionAndReturn(
-      AppState appState, Section section, BuildContext context) {
-    appState.updateSection(section);
+  selectCategoryAndReturn(
+      AppState appState, Category category, BuildContext context) {
+    appState.updateCategory(category);
     Navigator.pop(context);
   }
 }

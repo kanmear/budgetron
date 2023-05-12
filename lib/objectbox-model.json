@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1841081728629343382",
-      "lastPropertyId": "6:8232326785083288998",
+      "lastPropertyId": "7:669270188771895921",
       "name": "Entry",
       "properties": [
         {
@@ -20,41 +20,41 @@
           "type": 6
         },
         {
-          "id": "5:3858979273523268885",
-          "name": "sectionId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "1:6338406014766145511",
-          "relationTarget": "Section"
-        },
-        {
           "id": "6:8232326785083288998",
           "name": "dateTime",
           "type": 10
+        },
+        {
+          "id": "7:669270188771895921",
+          "name": "categoryId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:3488498022012942360",
+          "relationTarget": "Category"
         }
       ],
       "relations": []
     },
     {
-      "id": "2:1383137764426738919",
-      "lastPropertyId": "3:4087762903791826018",
-      "name": "Section",
+      "id": "3:7088683628330508985",
+      "lastPropertyId": "3:6892076539601629267",
+      "name": "Category",
       "properties": [
         {
-          "id": "1:5332441267887283506",
+          "id": "1:3511144183017071519",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:2725091130922734899",
+          "id": "2:718943841663284220",
           "name": "name",
           "type": 9,
           "flags": 2080,
-          "indexId": "2:5510743531857434682"
+          "indexId": "3:1415916222469566662"
         },
         {
-          "id": "3:4087762903791826018",
+          "id": "3:6892076539601629267",
           "name": "isExpense",
           "type": 1
         }
@@ -62,17 +62,25 @@
       "relations": []
     }
   ],
-  "lastEntityId": "2:1383137764426738919",
-  "lastIndexId": "2:5510743531857434682",
+  "lastEntityId": "3:7088683628330508985",
+  "lastIndexId": "4:3488498022012942360",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
-  "retiredIndexUids": [],
+  "retiredEntityUids": [
+    1383137764426738919
+  ],
+  "retiredIndexUids": [
+    6338406014766145511
+  ],
   "retiredPropertyUids": [
     577077467858424290,
-    5228530219470312318
+    5228530219470312318,
+    5332441267887283506,
+    2725091130922734899,
+    4087762903791826018,
+    3858979273523268885
   ],
   "retiredRelationUids": [],
   "version": 1

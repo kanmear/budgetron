@@ -15,27 +15,27 @@ class StatsPage extends StatelessWidget {
     var appState = context.watch<AppState>();
     var entries = appState.entries;
 
-    Map<String, ChartCard> sections = HashMap();
+    Map<String, ChartCard> categories = HashMap();
     for (var entry in entries) {
-      if (sections.containsKey(entry.section)) {
-        sections[entry.section]!.value += entry.value;
+      if (categories.containsKey(entry.category)) {
+        categories[entry.category]!.value += entry.value;
       } else {
-        sections.addAll({
-          entry.section.target!.name: ChartCard(entry.value,
-              entry.section.target!.isExpense, entry.section.target!.name)
+        categories.addAll({
+          entry.category.target!.name: ChartCard(entry.value,
+              entry.category.target!.isExpense, entry.category.target!.name)
         });
       }
     }
 
     return ListView(
       children: [
-        for (var key in sections.keys)
+        for (var key in categories.keys)
           Card(
             child: ListTile(
               title: Row(
                 children: [
-                  Text(sections[key]!.value.toString()),
-                  sections[key]!.isExpense
+                  Text(categories[key]!.value.toString()),
+                  categories[key]!.isExpense
                       ? const Text(
                           " spent on ",
                           style: TextStyle(color: Colors.red),

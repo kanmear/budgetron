@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/pages/sections_page.dart';
+import 'package:budgetron/pages/categories_page.dart';
+import 'package:budgetron/models/category.dart';
 
 class EntryDialog extends StatefulWidget {
   const EntryDialog({
@@ -16,20 +17,20 @@ class EntryDialog extends StatefulWidget {
 
 class _EntryDialogState extends State<EntryDialog> {
   final valueController = TextEditingController();
-  final sectionController = TextEditingController();
+  final categoryController = TextEditingController();
 
   @override
   void dispose() {
     valueController.dispose();
-    sectionController.dispose();
+    categoryController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<AppState>();
-    sectionController.value = sectionController.value.copyWith(
-      text: appState.selectedSection?.name ?? "Section",
+    categoryController.value = categoryController.value.copyWith(
+      text: appState.selectedCategory?.name ?? "Select category",
     );
 
     return AlertDialog(
@@ -44,22 +45,20 @@ class _EntryDialogState extends State<EntryDialog> {
                 border: OutlineInputBorder(), hintText: 'Enter value'),
           ),
           TextField(
-            controller: sectionController,
+            controller: categoryController,
             enabled: false,
             decoration: const InputDecoration(
-                border: OutlineInputBorder(), hintText: 'Section'),
+                border: OutlineInputBorder(), hintText: 'Category'),
           ),
-          // const SectionDropdown(),
-          const SectionSelectionButton()
-          // const ExpenseCheckbox()
+          const CategorySelectionButton()
         ],
       ),
       actions: [
         TextButton(
             onPressed: validateEntryFields(
-                    valueController.text, appState.selectedSection)
+                    valueController.text, appState.selectedCategory)
                 ? () => createEntry(
-                    valueController.text, appState, sectionController)
+                    valueController.text, appState, categoryController)
                 : null,
             child: const Text("Add entry")),
         TextButton(
@@ -70,23 +69,23 @@ class _EntryDialogState extends State<EntryDialog> {
   }
 }
 
-bool validateEntryFields(String text, Section? selectedSection) {
-  if (text == "" || selectedSection == null) {
+bool validateEntryFields(String text, Category? selectedCategory) {
+  if (text == "" || selectedCategory == null) {
     return false;
   }
   return true;
 }
 
 void createEntry(
-    String value, AppState appState, TextEditingController sectionController) {
+    String value, AppState appState, TextEditingController categoryController) {
   objectBox.addEntry(Entry(value: int.parse(value), dateTime: DateTime.now()),
-      appState.selectedSection!);
-  appState.clearSelectedSection();
-  sectionController.text = "";
+      appState.selectedCategory!);
+  appState.clearSelectedCategory();
+  categoryController.text = "";
 }
 
-class SectionSelectionButton extends StatelessWidget {
-  const SectionSelectionButton({
+class CategorySelectionButton extends StatelessWidget {
+  const CategorySelectionButton({
     super.key,
   });
 
@@ -100,47 +99,10 @@ class SectionSelectionButton extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const SectionPage()))
+                            builder: (context) => const CategoriesPage()))
                   },
-              child: const Text("Section selection")),
+              child: const Text("Category selection")),
         ),
-      ],
-    );
-  }
-}
-
-class SectionDropdown extends StatefulWidget {
-  const SectionDropdown({
-    super.key,
-  });
-
-  @override
-  State<SectionDropdown> createState() => _SectionDropdownState();
-}
-
-class _SectionDropdownState extends State<SectionDropdown> {
-  List<Section> sections = <Section>[Section(name: "Food", isExpense: true)];
-  // List<Section> sections = <Section>[];
-
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        DropdownButton<Section>(
-          hint: const Text("Select section"),
-          // value: sections.first,
-          onChanged: (value) => appState.updateSection(value!),
-          items: sections.map((section) {
-            return DropdownMenuItem<Section>(
-              value: section,
-              child: Text(section.name),
-            );
-          }).toList(),
-        ),
-        TextButton(onPressed: () => {}, child: const Icon(Icons.add))
       ],
     );
   }

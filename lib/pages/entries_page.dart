@@ -21,7 +21,7 @@ class EntriesPage extends StatelessWidget {
                     for (var entry in snapshot.data!)
                       Card(
                         child: ListTile(
-                          leading: entry.section.target!.isExpense
+                          leading: entry.category.target!.isExpense
                               ? const Icon(Icons.money_off)
                               : const Icon(Icons.money),
                           title: Row(
@@ -29,7 +29,7 @@ class EntriesPage extends StatelessWidget {
                             children: [
                               Text(entry.value.toString()),
                               Text(entry.dateTime.toString()),
-                              Text(entry.section.target!.name)
+                              Text(entry.category.target!.name)
                             ],
                           ),
                         ),

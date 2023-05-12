@@ -1,12 +1,14 @@
 import 'package:objectbox/objectbox.dart';
 
+import 'package:budgetron/models/category.dart';
+
 @Entity()
 class Entry {
   int id = 0;
 
   int value;
 
-  final section = ToOne<Section>();
+  final category = ToOne<Category>();
 
   @Property(type: PropertyType.date)
   DateTime dateTime;
@@ -15,23 +17,6 @@ class Entry {
 
   @override
   String toString() {
-    return 'Entry {value: $value, section: $section, date: $dateTime}';
-  }
-}
-
-@Entity()
-class Section {
-  int id = 0;
-
-  @Unique()
-  String name;
-
-  bool isExpense;
-
-  Section({required this.name, required this.isExpense});
-
-  @override
-  String toString() {
-    return 'Section {name: $name, isExpense: $isExpense}';
+    return 'Entry {value: $value, category: $category, date: $dateTime}';
   }
 }
