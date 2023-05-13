@@ -10,11 +10,11 @@ class ObjectBox {
   late var admin;
 
   late final Box<Entry> entryBox;
-  late final Box<Category> categoryBox;
+  late final Box<EntryCategory> categoryBox;
 
   ObjectBox._create(this.store) {
     entryBox = Box<Entry>(store);
-    categoryBox = Box<Category>(store);
+    categoryBox = Box<EntryCategory>(store);
     if (Admin.isAvailable()) {
       admin = Admin(store);
     }
@@ -31,7 +31,7 @@ class ObjectBox {
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 
-  int addEntry(Entry entry, Category category) {
+  int addEntry(Entry entry, EntryCategory category) {
     entry.category.target = category;
     return entryBox.put(entry);
   }
@@ -40,13 +40,14 @@ class ObjectBox {
     entryBox.removeAll();
   }
 
-  Stream<List<Category>> getCategories() {
-    final builder = categoryBox.query()
-      ..order(Category_.id, flags: Order.descending);
+  Stream<List<EntryCategory>> getCategories(String nameFilter) {
+    final builder = categoryBox
+        .query(EntryCategory_.name.contains(nameFilter, caseSensitive: false))
+      ..order(EntryCategory_.id, flags: Order.descending);
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 
-  int addCategory(Category category) => categoryBox.put(category);
+  int addCategory(EntryCategory category) => categoryBox.put(category);
 
   void clearCategories() {
     categoryBox.removeAll();

@@ -30,31 +30,31 @@
           "type": 11,
           "flags": 520,
           "indexId": "4:3488498022012942360",
-          "relationTarget": "Category"
+          "relationTarget": "EntryCategory"
         }
       ],
       "relations": []
     },
     {
-      "id": "3:7088683628330508985",
-      "lastPropertyId": "3:6892076539601629267",
-      "name": "Category",
+      "id": "4:4368116380135990787",
+      "lastPropertyId": "3:5105921252028396056",
+      "name": "EntryCategory",
       "properties": [
         {
-          "id": "1:3511144183017071519",
+          "id": "1:1181774913984969440",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:718943841663284220",
+          "id": "2:442673249071930849",
           "name": "name",
           "type": 9,
           "flags": 2080,
-          "indexId": "3:1415916222469566662"
+          "indexId": "5:4696415487503646653"
         },
         {
-          "id": "3:6892076539601629267",
+          "id": "3:5105921252028396056",
           "name": "isExpense",
           "type": 1
         }
@@ -62,14 +62,15 @@
       "relations": []
     }
   ],
-  "lastEntityId": "3:7088683628330508985",
-  "lastIndexId": "4:3488498022012942360",
+  "lastEntityId": "4:4368116380135990787",
+  "lastIndexId": "5:4696415487503646653",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    1383137764426738919
+    1383137764426738919,
+    7088683628330508985
   ],
   "retiredIndexUids": [
     6338406014766145511
@@ -80,7 +81,10 @@
     5332441267887283506,
     2725091130922734899,
     4087762903791826018,
-    3858979273523268885
+    3858979273523268885,
+    3511144183017071519,
+    718943841663284220,
+    6892076539601629267
   ],
   "retiredRelationUids": [],
   "version": 1

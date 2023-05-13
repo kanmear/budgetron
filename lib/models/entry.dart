@@ -8,7 +8,7 @@ class Entry {
 
   int value;
 
-  final category = ToOne<Category>();
+  final category = ToOne<EntryCategory>();
 
   @Property(type: PropertyType.date)
   DateTime dateTime;

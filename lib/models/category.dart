@@ -1,7 +1,7 @@
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class Category {
+class EntryCategory {
   int id = 0;
 
   @Unique()
@@ -9,7 +9,7 @@ class Category {
 
   bool isExpense;
 
-  Category({required this.name, required this.isExpense});
+  EntryCategory({required this.name, required this.isExpense});
 
   @override
   String toString() {

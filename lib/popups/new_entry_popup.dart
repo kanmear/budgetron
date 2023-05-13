@@ -69,7 +69,7 @@ class _EntryDialogState extends State<EntryDialog> {
   }
 }
 
-bool validateEntryFields(String text, Category? selectedCategory) {
+bool validateEntryFields(String text, EntryCategory? selectedCategory) {
   if (text == "" || selectedCategory == null) {
     return false;
   }
@@ -99,7 +99,7 @@ class CategorySelectionButton extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const CategoriesPage()))
+                            builder: (context) => CategoriesPage()))
                   },
               child: const Text("Category selection")),
         ),

@@ -6,38 +6,27 @@ import 'package:budgetron/popups/new_category_popup.dart';
 import 'package:budgetron/models/category.dart';
 
 class CategoriesPage extends StatelessWidget {
-  const CategoriesPage({
+  final filter = ValueNotifier("");
+
+  CategoriesPage({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
-
     return Scaffold(
-      body: StreamBuilder<List<Category>>(
-          stream: objectBox.getCategories(),
-          builder: (context, snapshot) {
-            if (snapshot.data?.isNotEmpty ?? false) {
-              return ListView(
-                children: [
-                  for (var category in snapshot.data!)
-                    Card(
-                        child: ListTile(
-                            leading: category.isExpense
-                                ? const Icon(Icons.money_off)
-                                : const Icon(Icons.money),
-                            title: Text(category.name),
-                            onTap: () => selectCategoryAndReturn(
-                                appState, category, context)))
-                ],
-              );
-            } else {
-              return const Center(
-                child: Text("No categories in database"),
-              );
-            }
-          }),
+      body: Column(
+        children: [
+          TextField(
+            decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Search',
+                prefixIcon: Icon(Icons.search)),
+            onChanged: (value) => {filter.value = value},
+          ),
+          CategoriesList(valueNotifier: filter),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => showDialog(
             context: context,
@@ -47,9 +36,56 @@ class CategoriesPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Categories')),
     );
   }
+}
 
-  selectCategoryAndReturn(
-      AppState appState, Category category, BuildContext context) {
+class CategoriesList extends StatelessWidget {
+  final ValueNotifier<String> valueNotifier;
+
+  const CategoriesList({
+    super.key,
+    required this.valueNotifier,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<AppState>();
+
+    return Expanded(
+      child: StreamBuilder<List<EntryCategory>>(
+          stream: objectBox.getCategories(""),
+          builder: (context, snapshot) {
+            if (snapshot.data?.isNotEmpty ?? false) {
+              return ValueListenableBuilder(
+                  valueListenable: valueNotifier,
+                  builder: (context, value, child) {
+                    return ListView(
+                      children: [
+                        for (var category in snapshot.data!)
+                          if (category.name
+                              .toLowerCase()
+                              .contains(valueNotifier.value.toLowerCase()))
+                            Card(
+                                child: ListTile(
+                                    leading: category.isExpense
+                                        ? const Icon(Icons.money_off)
+                                        : const Icon(Icons.money),
+                                    title: Text(category.name),
+                                    onTap: () => selectCategoryAndReturn(
+                                        appState, category, context)))
+                      ],
+                    );
+                  });
+            } else {
+              return const Center(
+                child: Text("No categories in database"),
+              );
+            }
+          }),
+    );
+  }
+
+  void selectCategoryAndReturn(
+      AppState appState, EntryCategory category, BuildContext context) {
     appState.updateCategory(category);
     Navigator.pop(context);
   }
