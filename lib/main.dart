@@ -94,7 +94,6 @@ class _BudgetronState extends State<Budgetron> {
 class AppState extends ChangeNotifier {
   var entries = <Entry>[];
   var isChecked = false;
-  EntryCategory? selectedCategory;
 
   void addEntry(Entry entry) {
     entries.add(entry);
@@ -106,18 +105,8 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateCategory(EntryCategory category) {
-    selectedCategory = category;
-    notifyListeners();
-  }
-
   void updateCheck(bool value) {
     isChecked = value;
-    notifyListeners();
-  }
-
-  void clearSelectedCategory() {
-    selectedCategory = null;
     notifyListeners();
   }
 }

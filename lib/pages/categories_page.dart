@@ -86,7 +86,6 @@ class CategoriesList extends StatelessWidget {
 
   void selectCategoryAndReturn(
       AppState appState, EntryCategory category, BuildContext context) {
-    appState.updateCategory(category);
-    Navigator.pop(context);
+    Navigator.pop(context, category);
   }
 }

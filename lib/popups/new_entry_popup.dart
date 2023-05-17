@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/models/entry.dart';
@@ -19,6 +18,11 @@ class _EntryDialogState extends State<EntryDialog> {
   final valueController = TextEditingController();
   final categoryController = TextEditingController();
 
+  EntryCategory? _selectedCategory;
+  set selectedCategory(EntryCategory category) => setState(() {
+        _selectedCategory = category;
+      });
+
   @override
   void dispose() {
     valueController.dispose();
@@ -28,10 +32,8 @@ class _EntryDialogState extends State<EntryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
-    categoryController.value = categoryController.value.copyWith(
-      text: appState.selectedCategory?.name ?? "Select category",
-    );
+    categoryController.value = categoryController.value
+        .copyWith(text: _selectedCategory?.name ?? "Select category");
 
     return AlertDialog(
       title: const Text("New Entry"),
@@ -50,16 +52,20 @@ class _EntryDialogState extends State<EntryDialog> {
             decoration: const InputDecoration(
                 border: OutlineInputBorder(), hintText: 'Category'),
           ),
-          const CategorySelectionButton()
+          CategorySelectionButton(
+            callback: (value) => setState(() {
+              _selectedCategory = value;
+            }),
+          )
         ],
       ),
       actions: [
         TextButton(
-            onPressed: validateEntryFields(
-                    valueController.text, appState.selectedCategory)
-                ? () => createEntry(
-                    valueController.text, appState, categoryController)
-                : null,
+            onPressed:
+                validateEntryFields(valueController.text, _selectedCategory)
+                    ? () => createEntry(valueController.text,
+                        _selectedCategory!, categoryController)
+                    : null,
             child: const Text("Add entry")),
         TextButton(
             onPressed: () => objectBox.clearEntries(),
@@ -76,34 +82,44 @@ bool validateEntryFields(String text, EntryCategory? selectedCategory) {
   return true;
 }
 
-void createEntry(
-    String value, AppState appState, TextEditingController categoryController) {
-  objectBox.addEntry(Entry(value: int.parse(value), dateTime: DateTime.now()),
-      appState.selectedCategory!);
-  appState.clearSelectedCategory();
+void createEntry(String value, EntryCategory category,
+    TextEditingController categoryController) {
+  objectBox.addEntry(
+      Entry(value: int.parse(value), dateTime: DateTime.now()), category);
   categoryController.text = "";
 }
 
-class CategorySelectionButton extends StatelessWidget {
-  const CategorySelectionButton({
-    super.key,
-  });
+class CategorySelectionButton extends StatefulWidget {
+  final Function callback;
 
+  const CategorySelectionButton({super.key, required this.callback});
+
+  @override
+  State<CategorySelectionButton> createState() =>
+      _CategorySelectionButtonState();
+}
+
+class _CategorySelectionButtonState extends State<CategorySelectionButton> {
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: ElevatedButton(
-              onPressed: () => {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CategoriesPage()))
-                  },
+              onPressed: () =>
+                  _navigateToCategorySelection(context, widget.callback),
               child: const Text("Category selection")),
         ),
       ],
     );
+  }
+
+  Future<void> _navigateToCategorySelection(
+      BuildContext context, Function callback) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CategoriesPage()));
+
+    if (!mounted) return;
+    callback.call(result);
   }
 }
