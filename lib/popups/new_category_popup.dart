@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/models/category.dart';
@@ -15,11 +14,10 @@ class NewCategoryDialog extends StatefulWidget {
 
 class _NewCategoryDialogState extends State<NewCategoryDialog> {
   final nameController = TextEditingController();
+  final isExpense = ValueNotifier(false);
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
-
     return AlertDialog(
       title: const Text("New Category"),
       content: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -28,12 +26,12 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
           decoration: const InputDecoration(
               border: OutlineInputBorder(), hintText: 'Enter category name'),
         ),
-        const ExpenseCheckbox()
+        ExpenseCheckbox(valueNotifier: isExpense)
       ]),
       actions: [
         TextButton(
             onPressed: () => objectBox.addCategory(EntryCategory(
-                name: nameController.text, isExpense: appState.isChecked)),
+                name: nameController.text, isExpense: isExpense.value)),
             child: const Text("Add category")),
         TextButton(
             onPressed: () => objectBox.clearCategories(),
@@ -44,9 +42,9 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
 }
 
 class ExpenseCheckbox extends StatefulWidget {
-  const ExpenseCheckbox({
-    super.key,
-  });
+  final ValueNotifier<bool> valueNotifier;
+
+  const ExpenseCheckbox({super.key, required this.valueNotifier});
   @override
   State<ExpenseCheckbox> createState() => _ExpenseCheckboxState();
 }
@@ -55,7 +53,6 @@ class _ExpenseCheckboxState extends State<ExpenseCheckbox> {
   bool isChecked = false;
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
     Color getColor(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
         MaterialState.pressed,
@@ -79,7 +76,7 @@ class _ExpenseCheckboxState extends State<ExpenseCheckbox> {
           onChanged: (bool? value) {
             setState(() {
               isChecked = value!;
-              appState.updateCheck(isChecked);
+              widget.valueNotifier.value = isChecked;
             });
           },
         ),

@@ -93,7 +93,6 @@ class _BudgetronState extends State<Budgetron> {
 
 class AppState extends ChangeNotifier {
   var entries = <Entry>[];
-  var isChecked = false;
 
   void addEntry(Entry entry) {
     entries.add(entry);
@@ -102,11 +101,6 @@ class AppState extends ChangeNotifier {
 
   void clearEntries() {
     entries.clear();
-    notifyListeners();
-  }
-
-  void updateCheck(bool value) {
-    isChecked = value;
     notifyListeners();
   }
 }
