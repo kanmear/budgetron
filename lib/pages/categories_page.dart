@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/popups/new_category_popup.dart';
@@ -48,8 +47,6 @@ class CategoriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<AppState>();
-
     return Expanded(
       child: StreamBuilder<List<EntryCategory>>(
           stream: objectBox.getCategories(""),
@@ -70,8 +67,8 @@ class CategoriesList extends StatelessWidget {
                                         ? const Icon(Icons.money_off)
                                         : const Icon(Icons.money),
                                     title: Text(category.name),
-                                    onTap: () => selectCategoryAndReturn(
-                                        appState, category, context)))
+                                    onTap: () => _selectCategoryAndReturn(
+                                        category, context)))
                       ],
                     );
                   });
@@ -84,8 +81,7 @@ class CategoriesList extends StatelessWidget {
     );
   }
 
-  void selectCategoryAndReturn(
-      AppState appState, EntryCategory category, BuildContext context) {
+  void _selectCategoryAndReturn(EntryCategory category, BuildContext context) {
     Navigator.pop(context, category);
   }
 }
