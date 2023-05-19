@@ -1,11 +1,9 @@
-import 'package:budgetron/models/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'db/object_box_helper.dart';
 
 import 'package:budgetron/pages/stats_page.dart';
 import 'package:budgetron/pages/entries_page.dart';
-import 'package:budgetron/models/category.dart';
 
 late ObjectBox objectBox;
 
@@ -91,16 +89,4 @@ class _BudgetronState extends State<Budgetron> {
   }
 }
 
-class AppState extends ChangeNotifier {
-  var entries = <Entry>[];
-
-  void addEntry(Entry entry) {
-    entries.add(entry);
-    notifyListeners();
-  }
-
-  void clearEntries() {
-    entries.clear();
-    notifyListeners();
-  }
-}
+class AppState extends ChangeNotifier {}
