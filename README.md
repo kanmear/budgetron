@@ -1,3 +1,3 @@
 # budgetron
 
-A new Flutter project.
+Flutter budget app.
