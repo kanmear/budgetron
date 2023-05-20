@@ -16,26 +16,7 @@ class EntriesPage extends StatelessWidget {
             stream: objectBox.getEntries(),
             builder: (context, snapshot) {
               if (snapshot.data?.isNotEmpty ?? false) {
-                return ListView(
-                  children: [
-                    for (var entry in snapshot.data!)
-                      Card(
-                        child: ListTile(
-                          leading: entry.category.target!.isExpense
-                              ? const Icon(Icons.money_off)
-                              : const Icon(Icons.money),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(entry.value.toString()),
-                              Text(entry.dateTime.toString()),
-                              Text(entry.category.target!.name)
-                            ],
-                          ),
-                        ),
-                      )
-                  ],
-                );
+                return EntriesListView(data: snapshot.data!);
               } else {
                 return const Center(
                   child: Text("No entries in database"),
@@ -48,5 +29,82 @@ class EntriesPage extends StatelessWidget {
               builder: (BuildContext context) => const EntryDialog()),
           child: const Icon(Icons.add),
         ));
+  }
+}
+
+class EntriesListView extends StatelessWidget {
+  final List<Entry> data;
+
+  const EntriesListView({
+    super.key,
+    required this.data,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Map<DateTime, List<Entry>> entriesMap = {};
+
+    void addEntryToMap(Entry entry) {
+      DateTime dateTime = DateTime(
+          entry.dateTime.year, entry.dateTime.month, entry.dateTime.day);
+      if (entriesMap.containsKey(dateTime)) {
+        entriesMap.update(
+            dateTime, (value) => List.from(value)..addAll({entry}));
+      } else {
+        entriesMap[dateTime] = List.from({entry});
+      }
+    }
+
+    for (var element in data) {
+      addEntryToMap(element);
+    }
+
+    return ListView(
+      children: [
+        for (var day in entriesMap.keys)
+          Column(
+            children: [
+              Text(day.toString()),
+              Column(children: [
+                for (var entry in entriesMap[day]!)
+                  Card(
+                    child: ListTile(
+                      leading: entry.category.target!.isExpense
+                          ? const Icon(Icons.money_off)
+                          : const Icon(Icons.money),
+                      title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(entry.value.toString()),
+                            Text(entry.category.target!.name)
+                          ]),
+                    ),
+                  )
+              ]),
+            ],
+          )
+      ],
+    );
+
+    // return ListView(
+    //   children: [
+    //     for (var entry in data)
+    //       Card(
+    //         child: ListTile(
+    //           leading: entry.category.target!.isExpense
+    //               ? const Icon(Icons.money_off)
+    //               : const Icon(Icons.money),
+    //           title: Row(
+    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //             children: [
+    //               Text(entry.value.toString()),
+    //               Text(entry.dateTime.toString()),
+    //               Text(entry.category.target!.name)
+    //             ],
+    //           ),
+    //         ),
+    //       )
+    //   ],
+    // );
   }
 }
