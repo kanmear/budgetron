@@ -1,8 +1,10 @@
+import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/popups/new_entry_popup.dart';
+import 'package:intl/intl.dart';
 
 class EntriesPage extends StatelessWidget {
   const EntriesPage({
@@ -64,47 +66,70 @@ class EntriesListView extends StatelessWidget {
         for (var day in entriesMap.keys)
           Column(
             children: [
-              Text(day.toString()),
-              Column(children: [
-                for (var entry in entriesMap[day]!)
-                  Card(
-                    child: ListTile(
-                      leading: entry.category.target!.isExpense
-                          ? const Icon(Icons.money_off)
-                          : const Icon(Icons.money),
-                      title: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(entry.value.toString()),
-                            Text(entry.category.target!.name)
-                          ]),
+              Card(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            DateFormat.yMMMd().format(day),
+                            style: BudgetronFonts.nunito16,
+                          ),
+                          Text(
+                            entriesMap[day]!
+                                .map((e) => e.value)
+                                .reduce((value, element) => value + element)
+                                .toString(),
+                            style: BudgetronFonts.nunito16,
+                          )
+                        ],
+                      ),
                     ),
-                  )
-              ]),
+                    const SizedBox(height: 8),
+                    Column(children: [
+                      for (var entry in entriesMap[day]!)
+                        Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8.0, bottom: 8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.square_rounded,
+                                        color: Colors.grey,
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(entry.category.target!.name)
+                                    ],
+                                  ),
+                                  Text(
+                                    entry.value.toString(),
+                                    style: BudgetronFonts.nunito16,
+                                  )
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 2)
+                          ],
+                        ),
+                    ]),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              )
             ],
           )
       ],
     );
-
-    // return ListView(
-    //   children: [
-    //     for (var entry in data)
-    //       Card(
-    //         child: ListTile(
-    //           leading: entry.category.target!.isExpense
-    //               ? const Icon(Icons.money_off)
-    //               : const Icon(Icons.money),
-    //           title: Row(
-    //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //             children: [
-    //               Text(entry.value.toString()),
-    //               Text(entry.dateTime.toString()),
-    //               Text(entry.category.target!.name)
-    //             ],
-    //           ),
-    //         ),
-    //       )
-    //   ],
-    // );
   }
 }
