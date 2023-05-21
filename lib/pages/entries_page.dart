@@ -70,7 +70,8 @@ class EntriesListView extends StatelessWidget {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -88,15 +89,15 @@ class EntriesListView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 16),
                     Column(children: [
                       for (var entry in entriesMap[day]!)
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, right: 8.0, bottom: 8.0),
-                              child: Row(
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 8.0, right: 10.0),
+                          child: Column(
+                            children: [
+                              Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
@@ -116,9 +117,9 @@ class EntriesListView extends StatelessWidget {
                                   )
                                 ],
                               ),
-                            ),
-                            const SizedBox(height: 2)
-                          ],
+                              const SizedBox(height: 8.0)
+                            ],
+                          ),
                         ),
                     ]),
                   ],
