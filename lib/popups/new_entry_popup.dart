@@ -84,8 +84,10 @@ bool validateEntryFields(String text, EntryCategory? selectedCategory) {
 
 void createEntry(String value, EntryCategory category,
     TextEditingController categoryController) {
+  int intValue = int.parse(value);
+  intValue *= category.isExpense ? -1 : 1;
   objectBox.addEntry(
-      Entry(value: int.parse(value), dateTime: DateTime.now()), category);
+      Entry(value: intValue, dateTime: DateTime.now()), category);
   categoryController.text = "";
 }
 
