@@ -66,68 +66,70 @@ class EntriesListView extends StatelessWidget {
         for (var day in entriesMap.keys)
           Column(
             children: [
-              Card(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10.0, right: 10.0, top: 10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            DateFormat.yMMMd().format(day),
-                            style: BudgetronFonts.nunito16,
-                          ),
-                          Text(
-                            entriesMap[day]!
-                                .map((e) => e.value)
-                                .reduce((value, element) => value + element)
-                                .toString(),
-                            style: BudgetronFonts.nunito16,
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Column(children: [
-                      for (var entry in entriesMap[day]!)
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(left: 8.0, right: 10.0),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.square_rounded,
-                                        color: Colors.grey,
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(entry.category.target!.name)
-                                    ],
-                                  ),
-                                  Text(
-                                    entry.value.toString(),
-                                    style: BudgetronFonts.nunito16,
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: 8.0)
-                            ],
-                          ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+                child: Card(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 10.0, right: 10.0, top: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              DateFormat.yMMMd().format(day),
+                              style: BudgetronFonts.nunitoSize16Weight600,
+                            ),
+                            Text(
+                              entriesMap[day]!
+                                  .map((e) => e.value)
+                                  .reduce((value, element) => value + element)
+                                  .toString(),
+                              style: BudgetronFonts.nunitoSize16Weight600,
+                            )
+                          ],
                         ),
-                    ]),
-                  ],
+                      ),
+                      const SizedBox(height: 16),
+                      Column(children: [
+                        for (var entry in entriesMap[day]!)
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 8.0, right: 10.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.square_rounded,
+                                          color: Colors.grey,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(entry.category.target!.name)
+                                      ],
+                                    ),
+                                    Text(
+                                      entry.value.toString(),
+                                      style:
+                                          BudgetronFonts.nunitoSize16Weight400,
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(height: 8.0)
+                              ],
+                            ),
+                          ),
+                      ]),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(
-                height: 24,
-              )
+              const SizedBox(height: 24)
             ],
           )
       ],
