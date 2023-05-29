@@ -9,6 +9,8 @@ class EntryCategory {
 
   bool isExpense;
 
+  //TODO: add usage counter and color
+
   EntryCategory({required this.name, required this.isExpense});
 
   @override

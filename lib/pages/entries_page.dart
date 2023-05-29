@@ -1,3 +1,4 @@
+import 'package:budgetron/popups/new_entry_page.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -6,11 +7,16 @@ import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/popups/new_entry_popup.dart';
 import 'package:intl/intl.dart';
 
-class EntriesPage extends StatelessWidget {
+class EntriesPage extends StatefulWidget {
   const EntriesPage({
     super.key,
   });
 
+  @override
+  State<EntriesPage> createState() => _EntriesPageState();
+}
+
+class _EntriesPageState extends State<EntriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +32,18 @@ class EntriesPage extends StatelessWidget {
               }
             }),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) => const EntryDialog()),
+          onPressed: () => _navigateToEntryCreation(context, () => {}),
           child: const Icon(Icons.add),
         ));
+  }
+
+  Future<void> _navigateToEntryCreation(
+      BuildContext context, Function callback) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NewEntryPage()));
+
+    if (!mounted) return;
+    callback.call(result);
   }
 }
 
