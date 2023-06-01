@@ -24,24 +24,18 @@ class DateAndCategoryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 21),
-      child: SizedBox(
-        //FIXME: hardcoded height in order for divider to work
-        height: 47,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            DateField(),
-            VerticalDivider(
-              width: 0,
-              thickness: 1,
-              color: BudgetronColors.gray1,
-            ),
-            CategoryField()
-          ],
+    //FIXME enable vertical divider
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: const [
+        DateField(),
+        VerticalDivider(
+          width: 0,
+          thickness: 1,
+          color: BudgetronColors.gray1,
         ),
-      ),
+        CategoryField()
+      ],
     );
   }
 }
@@ -54,20 +48,28 @@ class CategoryField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+        child: GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => {print("tapped")},
+      child: Padding(
+        //FIXME top zone is too small, but padding moves the layout
+        padding: const EdgeInsets.only(bottom: 21.0),
         child: Center(
             child: Column(
-      children: [
-        Text("Category", style: BudgetronFonts.nunitoSize14Weight400),
-        const SizedBox(height: 6),
-        TextButton(
-            style: BudgetronButtonStyles.textButtonStyle,
-            onPressed: () => {},
-            child: Text(
-              "Choose",
-              style: BudgetronFonts.nunitoSize16Weight600Unused,
-            ))
-      ],
-    )));
+          children: [
+            Text("Category", style: BudgetronFonts.nunitoSize14Weight400),
+            const SizedBox(height: 6),
+            TextButton(
+                style: BudgetronButtonStyles.textButtonStyle,
+                onPressed: () => {},
+                child: Text(
+                  "Choose",
+                  style: BudgetronFonts.nunitoSize16Weight600Unused,
+                ))
+          ],
+        )),
+      ),
+    ));
   }
 }
 
@@ -79,20 +81,25 @@ class DateField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+        child: GestureDetector(
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 21.0),
         child: Center(
             child: Column(
-      children: [
-        Text(
-          "Date",
-          style: BudgetronFonts.nunitoSize14Weight400,
-        ),
-        const SizedBox(height: 6),
-        Text(
-          DateFormat.yMMMd().format(DateTime.now()),
-          style: BudgetronFonts.nunitoSize16Weight600,
-        )
-      ],
-    )));
+          children: [
+            Text(
+              "Date",
+              style: BudgetronFonts.nunitoSize14Weight400,
+            ),
+            const SizedBox(height: 6),
+            Text(
+              DateFormat.yMMMd().format(DateTime.now()),
+              style: BudgetronFonts.nunitoSize16Weight600,
+            )
+          ],
+        )),
+      ),
+    ));
   }
 }
 
