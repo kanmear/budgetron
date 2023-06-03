@@ -32,4 +32,17 @@ class BudgetronFonts {
       fontSize: 16,
       fontWeight: FontWeight.w600,
       color: BudgetronColors.gray4);
+
+  // for input fields
+  static TextStyle robotoSize32Weight400 = TextStyle(
+      fontFamily: GoogleFonts.roboto().fontFamily,
+      fontSize: 32,
+      fontWeight: FontWeight.w400,
+      color: BudgetronColors.gray1);
+
+  static TextStyle robotoSize32Weight400Hint = TextStyle(
+      fontFamily: GoogleFonts.roboto().fontFamily,
+      fontSize: 32,
+      fontWeight: FontWeight.w400,
+      color: BudgetronColors.gray4);
 }
