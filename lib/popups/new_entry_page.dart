@@ -2,11 +2,12 @@ import 'package:budgetron/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/ui/button_styles.dart';
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 
 class NewEntryPage extends StatefulWidget {
+  final ValueNotifier<int> tabNotifier = ValueNotifier(0);
+
   NewEntryPage({super.key});
 
   @override
@@ -14,14 +15,19 @@ class NewEntryPage extends StatefulWidget {
 }
 
 class _NewEntryPageState extends State<NewEntryPage> {
-  var _selectedTab;
   EntryCategory? _selectedCategory;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
-      children: [PseudoAppBar(), EntryValueTextField(), DateAndCategoryRow()],
+      children: [
+        PseudoAppBar(tabNotifier: widget.tabNotifier),
+        EntryValueTextField(
+          tabNotifier: widget.tabNotifier,
+        ),
+        DateAndCategoryRow()
+      ],
     ));
   }
 }
@@ -118,8 +124,11 @@ class DateField extends StatelessWidget {
 }
 
 class EntryValueTextField extends StatelessWidget {
+  final ValueNotifier<int> tabNotifier;
+
   const EntryValueTextField({
     super.key,
+    required this.tabNotifier,
   });
 
   @override
@@ -130,7 +139,8 @@ class EntryValueTextField extends StatelessWidget {
           padding: const EdgeInsets.only(left: 36.0, right: 36.0),
           child: TextField(
             style: BudgetronFonts.robotoSize32Weight400,
-            onSubmitted: (value) => {/* validate fields and create entry */},
+            // onSubmitted: (value) => {/* validate fields and create entry */},
+            onSubmitted: (value) => {print(tabNotifier.value)},
             onTapOutside: (event) {},
             autofocus: true,
             keyboardType: TextInputType.number,
@@ -153,9 +163,10 @@ class EntryValueTextField extends StatelessWidget {
 }
 
 class PseudoAppBar extends StatelessWidget {
-  const PseudoAppBar({
-    super.key,
-  });
+  //TODO maybe tab should be saved between entries
+  final ValueNotifier<int> tabNotifier;
+
+  const PseudoAppBar({super.key, required this.tabNotifier});
 
   @override
   Widget build(BuildContext context) {
@@ -171,17 +182,37 @@ class PseudoAppBar extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back_ios_new)),
             Row(
               children: [
-                TextButton(
-                    style: BudgetronButtonStyles.textButtonStyle,
-                    onPressed: () => {},
-                    child: Text("Income",
-                        style: BudgetronFonts.nunitoSize16Weight400)),
-                const SizedBox(width: 30),
-                TextButton(
-                    style: BudgetronButtonStyles.textButtonStyle,
-                    onPressed: () => {},
-                    child: Text("Expense",
-                        style: BudgetronFonts.nunitoSize16Weight400)),
+                InkWell(
+                  onTap: () => {tabNotifier.value = 1},
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 24, right: 15, top: 13, bottom: 13),
+                    child: ValueListenableBuilder(
+                        valueListenable: tabNotifier,
+                        builder: (context, value, child) {
+                          return Text("Expense",
+                              style: tabNotifier.value == 1
+                                  ? BudgetronFonts.nunitoSize16Weight400Selected
+                                  : BudgetronFonts.nunitoSize16Weight400);
+                        }),
+                  ),
+                ),
+                // const SizedBox(width: 30),
+                InkWell(
+                  onTap: () => {tabNotifier.value = 2},
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 15, right: 24, top: 13, bottom: 13),
+                    child: ValueListenableBuilder(
+                        valueListenable: tabNotifier,
+                        builder: (context, value, child) {
+                          return Text("Income",
+                              style: tabNotifier.value == 2
+                                  ? BudgetronFonts.nunitoSize16Weight400Selected
+                                  : BudgetronFonts.nunitoSize16Weight400);
+                        }),
+                  ),
+                ),
               ],
             ),
             //TODO find a way to properly center

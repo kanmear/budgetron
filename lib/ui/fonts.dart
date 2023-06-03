@@ -26,14 +26,26 @@ class BudgetronFonts {
       fontWeight: FontWeight.w600,
       color: BudgetronColors.gray1);
 
-  // for buttons
+  // for custom buttons
   static TextStyle nunitoSize16Weight600Unused = TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontSize: 16,
       fontWeight: FontWeight.w600,
       color: BudgetronColors.gray4);
+  static TextStyle nunitoSize16Weight400Selected = TextStyle(
+      decoration: TextDecoration.underline,
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: BudgetronColors.gray1);
+  static TextStyle nunitoSize16Weight400Base = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: BudgetronColors.gray1);
 
   // for input fields
+  //TODO set custom line height (height parameter)
   static TextStyle robotoSize32Weight400 = TextStyle(
       fontFamily: GoogleFonts.roboto().fontFamily,
       fontSize: 32,
