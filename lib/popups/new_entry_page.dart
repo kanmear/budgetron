@@ -6,7 +6,8 @@ import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 
 class NewEntryPage extends StatefulWidget {
-  final ValueNotifier<int> tabNotifier = ValueNotifier(0);
+  //TODO maybe tab should be saved between entries
+  final ValueNotifier<int> tabNotifier = ValueNotifier(1);
 
   NewEntryPage({super.key});
 
@@ -163,7 +164,6 @@ class EntryValueTextField extends StatelessWidget {
 }
 
 class PseudoAppBar extends StatelessWidget {
-  //TODO maybe tab should be saved between entries
   final ValueNotifier<int> tabNotifier;
 
   const PseudoAppBar({super.key, required this.tabNotifier});
@@ -190,10 +190,17 @@ class PseudoAppBar extends StatelessWidget {
                     child: ValueListenableBuilder(
                         valueListenable: tabNotifier,
                         builder: (context, value, child) {
-                          return Text("Expense",
-                              style: tabNotifier.value == 1
-                                  ? BudgetronFonts.nunitoSize16Weight400Selected
-                                  : BudgetronFonts.nunitoSize16Weight400);
+                          return Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 1,
+                                        color: tabNotifier.value == 1
+                                            ? BudgetronColors.gray1
+                                            : Colors.transparent))),
+                            child: Text("Expense",
+                                style: BudgetronFonts.nunitoSize16Weight400),
+                          );
                         }),
                   ),
                 ),
@@ -206,10 +213,18 @@ class PseudoAppBar extends StatelessWidget {
                     child: ValueListenableBuilder(
                         valueListenable: tabNotifier,
                         builder: (context, value, child) {
-                          return Text("Income",
-                              style: tabNotifier.value == 2
-                                  ? BudgetronFonts.nunitoSize16Weight400Selected
-                                  : BudgetronFonts.nunitoSize16Weight400);
+                          return Container(
+                            decoration: BoxDecoration(
+                                //FIXME this pads text by 1 vpx
+                                border: Border(
+                                    bottom: BorderSide(
+                                        width: 1,
+                                        color: tabNotifier.value == 2
+                                            ? BudgetronColors.gray1
+                                            : Colors.transparent))),
+                            child: Text("Income",
+                                style: BudgetronFonts.nunitoSize16Weight400),
+                          );
                         }),
                   ),
                 ),

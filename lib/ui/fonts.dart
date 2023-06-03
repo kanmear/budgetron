@@ -32,17 +32,6 @@ class BudgetronFonts {
       fontSize: 16,
       fontWeight: FontWeight.w600,
       color: BudgetronColors.gray4);
-  static TextStyle nunitoSize16Weight400Selected = TextStyle(
-      decoration: TextDecoration.underline,
-      fontFamily: GoogleFonts.nunito().fontFamily,
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      color: BudgetronColors.gray1);
-  static TextStyle nunitoSize16Weight400Base = TextStyle(
-      fontFamily: GoogleFonts.nunito().fontFamily,
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      color: BudgetronColors.gray1);
 
   // for input fields
   //TODO set custom line height (height parameter)
