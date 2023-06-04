@@ -119,7 +119,11 @@ class _CategorySelectionButtonState extends State<CategorySelectionButton> {
   Future<void> _navigateToCategorySelection(
       BuildContext context, Function callback) async {
     final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CategoriesPage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => CategoriesPage(
+                  typeFilter: true,
+                )));
 
     if (!mounted) return;
     callback.call(result);

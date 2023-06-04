@@ -40,11 +40,22 @@ class ObjectBox {
     entryBox.removeAll();
   }
 
-  Stream<List<EntryCategory>> getCategories(String nameFilter) {
-    final builder = categoryBox
-        .query(EntryCategory_.name.contains(nameFilter, caseSensitive: false))
-      ..order(EntryCategory_.id, flags: Order.descending);
-    return builder.watch(triggerImmediately: true).map((query) => query.find());
+  Stream<List<EntryCategory>> getCategories(
+      String nameFilter, bool? typeFilter) {
+    QueryBuilder<EntryCategory> queryBuilder;
+    if (typeFilter != null) {
+      queryBuilder = categoryBox
+          .query(EntryCategory_.isExpense.equals(typeFilter) &
+              EntryCategory_.name.contains(nameFilter, caseSensitive: false))
+          .order(EntryCategory_.id, flags: Order.descending);
+    } else {
+      queryBuilder = categoryBox
+          .query(EntryCategory_.name.contains(nameFilter, caseSensitive: false))
+          .order(EntryCategory_.id, flags: Order.descending);
+    }
+    return queryBuilder
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
   }
 
   int addCategory(EntryCategory category) => categoryBox.put(category);

@@ -11,7 +11,7 @@ import 'package:budgetron/ui/fonts.dart';
 //TODO refactor
 class NewEntryPage extends StatefulWidget {
   //TODO maybe tab should be saved between entries
-  final ValueNotifier<int> tabNotifier = ValueNotifier(1);
+  final ValueNotifier<bool> tabNotifier = ValueNotifier(true);
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
 
   NewEntryPage({super.key});
@@ -35,6 +35,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
             widget.categoryNotifier.value = value;
           }),
           categoryNotifier: widget.categoryNotifier,
+          tabNotifier: widget.tabNotifier,
         )
       ],
     ));
@@ -43,12 +44,14 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
 class DateAndCategoryRow extends StatelessWidget {
   final ValueNotifier<EntryCategory?> categoryNotifier;
+  final ValueNotifier<bool> tabNotifier;
   final Function setCategoryCallback;
 
   const DateAndCategoryRow({
     super.key,
     required this.setCategoryCallback,
     required this.categoryNotifier,
+    required this.tabNotifier,
   });
 
   @override
@@ -64,8 +67,10 @@ class DateAndCategoryRow extends StatelessWidget {
               border: Border.all(color: BudgetronColors.gray1, width: 1)),
         ),
         CategoryField(
-            setCategoryCallback: setCategoryCallback,
-            categoryNotifier: categoryNotifier)
+          setCategoryCallback: setCategoryCallback,
+          categoryNotifier: categoryNotifier,
+          tabNotifier: tabNotifier,
+        )
       ],
     );
   }
@@ -73,12 +78,14 @@ class DateAndCategoryRow extends StatelessWidget {
 
 class CategoryField extends StatefulWidget {
   final ValueNotifier<EntryCategory?> categoryNotifier;
+  final ValueNotifier<bool> tabNotifier;
   final Function setCategoryCallback;
 
   const CategoryField({
     super.key,
     required this.setCategoryCallback,
     required this.categoryNotifier,
+    required this.tabNotifier,
   });
 
   @override
@@ -90,8 +97,8 @@ class _CategoryFieldState extends State<CategoryField> {
   Widget build(BuildContext context) {
     return Expanded(
         child: InkWell(
-      onTap: () =>
-          _navigateToCategorySelection(context, widget.setCategoryCallback),
+      onTap: () => _navigateToCategorySelection(
+          context, widget.setCategoryCallback, widget.tabNotifier.value),
       child: Padding(
         padding: const EdgeInsets.only(top: 21, bottom: 21),
         child: Center(
@@ -119,9 +126,12 @@ class _CategoryFieldState extends State<CategoryField> {
   }
 
   Future<void> _navigateToCategorySelection(
-      BuildContext context, Function callback) async {
+      BuildContext context, Function callback, bool typeFilter) async {
+    print(typeFilter);
     final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CategoriesPage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => CategoriesPage(typeFilter: typeFilter)));
 
     if (!mounted) return;
     callback.call(result);
@@ -160,7 +170,7 @@ class DateField extends StatelessWidget {
 }
 
 class EntryValueTextField extends StatelessWidget {
-  final ValueNotifier<int> tabNotifier;
+  final ValueNotifier<bool> tabNotifier;
 
   const EntryValueTextField({
     super.key,
@@ -199,7 +209,7 @@ class EntryValueTextField extends StatelessWidget {
 }
 
 class PseudoAppBar extends StatelessWidget {
-  final ValueNotifier<int> tabNotifier;
+  final ValueNotifier<bool> tabNotifier;
 
   const PseudoAppBar({super.key, required this.tabNotifier});
 
@@ -218,7 +228,7 @@ class PseudoAppBar extends StatelessWidget {
             Row(
               children: [
                 InkWell(
-                  onTap: () => {tabNotifier.value = 1},
+                  onTap: () => {tabNotifier.value = true},
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 24, right: 15, top: 13, bottom: 13),
@@ -230,7 +240,7 @@ class PseudoAppBar extends StatelessWidget {
                                 border: Border(
                                     bottom: BorderSide(
                                         width: 1,
-                                        color: tabNotifier.value == 1
+                                        color: tabNotifier.value == true
                                             ? BudgetronColors.gray1
                                             : Colors.transparent))),
                             child: Text("Expense",
@@ -241,7 +251,7 @@ class PseudoAppBar extends StatelessWidget {
                 ),
                 // const SizedBox(width: 30),
                 InkWell(
-                  onTap: () => {tabNotifier.value = 2},
+                  onTap: () => {tabNotifier.value = false},
                   child: Padding(
                     padding: const EdgeInsets.only(
                         left: 15, right: 24, top: 13, bottom: 13),
@@ -253,7 +263,7 @@ class PseudoAppBar extends StatelessWidget {
                                 border: Border(
                                     bottom: BorderSide(
                                         width: 1,
-                                        color: tabNotifier.value == 2
+                                        color: tabNotifier.value == false
                                             ? BudgetronColors.gray1
                                             : Colors.transparent))),
                             child: Text("Income",

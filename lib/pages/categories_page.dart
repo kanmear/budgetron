@@ -6,9 +6,11 @@ import 'package:budgetron/models/category.dart';
 
 class CategoriesPage extends StatelessWidget {
   final filter = ValueNotifier("");
+  final bool typeFilter;
 
   CategoriesPage({
     super.key,
+    required this.typeFilter,
   });
 
   @override
@@ -23,7 +25,10 @@ class CategoriesPage extends StatelessWidget {
                 prefixIcon: Icon(Icons.search)),
             onChanged: (value) => {filter.value = value},
           ),
-          CategoriesList(valueNotifier: filter),
+          CategoriesList(
+            valueNotifier: filter,
+            typeFilter: typeFilter,
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -39,17 +44,19 @@ class CategoriesPage extends StatelessWidget {
 
 class CategoriesList extends StatelessWidget {
   final ValueNotifier<String> valueNotifier;
+  final bool typeFilter;
 
   const CategoriesList({
     super.key,
     required this.valueNotifier,
+    required this.typeFilter,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: StreamBuilder<List<EntryCategory>>(
-          stream: objectBox.getCategories(""),
+          stream: objectBox.getCategories("", typeFilter),
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {
               return ValueListenableBuilder(
