@@ -1,13 +1,18 @@
+import 'dart:ui';
+
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/pages/categories_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 
+//TODO refactor
 class NewEntryPage extends StatefulWidget {
   //TODO maybe tab should be saved between entries
   final ValueNotifier<int> tabNotifier = ValueNotifier(1);
+  final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
 
   NewEntryPage({super.key});
 
@@ -16,8 +21,6 @@ class NewEntryPage extends StatefulWidget {
 }
 
 class _NewEntryPageState extends State<NewEntryPage> {
-  EntryCategory? _selectedCategory;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,15 +30,25 @@ class _NewEntryPageState extends State<NewEntryPage> {
         EntryValueTextField(
           tabNotifier: widget.tabNotifier,
         ),
-        DateAndCategoryRow()
+        DateAndCategoryRow(
+          setCategoryCallback: (value) => setState(() {
+            widget.categoryNotifier.value = value;
+          }),
+          categoryNotifier: widget.categoryNotifier,
+        )
       ],
     ));
   }
 }
 
 class DateAndCategoryRow extends StatelessWidget {
+  final ValueNotifier<EntryCategory?> categoryNotifier;
+  final Function setCategoryCallback;
+
   const DateAndCategoryRow({
     super.key,
+    required this.setCategoryCallback,
+    required this.categoryNotifier,
   });
 
   @override
@@ -50,23 +63,35 @@ class DateAndCategoryRow extends StatelessWidget {
           decoration: BoxDecoration(
               border: Border.all(color: BudgetronColors.gray1, width: 1)),
         ),
-        CategoryField()
+        CategoryField(
+            setCategoryCallback: setCategoryCallback,
+            categoryNotifier: categoryNotifier)
       ],
     );
   }
 }
 
-class CategoryField extends StatelessWidget {
+class CategoryField extends StatefulWidget {
+  final ValueNotifier<EntryCategory?> categoryNotifier;
+  final Function setCategoryCallback;
+
   const CategoryField({
     super.key,
+    required this.setCategoryCallback,
+    required this.categoryNotifier,
   });
 
   @override
+  State<CategoryField> createState() => _CategoryFieldState();
+}
+
+class _CategoryFieldState extends State<CategoryField> {
+  @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () => {print("tapped category")},
+        child: InkWell(
+      onTap: () =>
+          _navigateToCategorySelection(context, widget.setCategoryCallback),
       child: Padding(
         padding: const EdgeInsets.only(top: 21, bottom: 21),
         child: Center(
@@ -74,21 +99,32 @@ class CategoryField extends StatelessWidget {
           children: [
             Text("Category", style: BudgetronFonts.nunitoSize14Weight400),
             const SizedBox(height: 6),
-            Text(
-              "Choose",
-              style: BudgetronFonts.nunitoSize16Weight600Unused,
-            ),
-            // TextButton(
-            //     style: BudgetronButtonStyles.textButtonStyle,
-            //     onPressed: null,
-            //     child: Text(
-            //       "Choose",
-            //       style: BudgetronFonts.nunitoSize16Weight600Unused,
-            //     ))
+            ValueListenableBuilder(
+                valueListenable: widget.categoryNotifier,
+                builder: (context, value, child) {
+                  return widget.categoryNotifier.value == null
+                      ? Text(
+                          "Choose",
+                          style: BudgetronFonts.nunitoSize16Weight600Unused,
+                        )
+                      : Text(
+                          widget.categoryNotifier.value!.name,
+                          style: BudgetronFonts.nunitoSize16Weight600,
+                        );
+                }),
           ],
         )),
       ),
     ));
+  }
+
+  Future<void> _navigateToCategorySelection(
+      BuildContext context, Function callback) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CategoriesPage()));
+
+    if (!mounted) return;
+    callback.call(result);
   }
 }
 
@@ -100,9 +136,8 @@ class DateField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () => {print("tapped date")},
+        child: InkWell(
+      onTap: () => {/* TODO add date selection */},
       child: Padding(
         padding: const EdgeInsets.only(top: 21, bottom: 21),
         child: Center(
@@ -215,7 +250,6 @@ class PseudoAppBar extends StatelessWidget {
                         builder: (context, value, child) {
                           return Container(
                             decoration: BoxDecoration(
-                                //FIXME this pads text by 1 vpx
                                 border: Border(
                                     bottom: BorderSide(
                                         width: 1,
