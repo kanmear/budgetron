@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:budgetron/main.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/pages/categories_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +31,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
         PseudoAppBar(tabNotifier: widget.tabNotifier),
         EntryValueTextField(
           tabNotifier: widget.tabNotifier,
+          categoryNotifier: widget.categoryNotifier,
         ),
         DateAndCategoryRow(
           setCategoryCallback: (value) => setState(() {
@@ -171,10 +174,12 @@ class DateField extends StatelessWidget {
 
 class EntryValueTextField extends StatelessWidget {
   final ValueNotifier<bool> tabNotifier;
+  final ValueNotifier<EntryCategory?> categoryNotifier;
 
   const EntryValueTextField({
     super.key,
     required this.tabNotifier,
+    required this.categoryNotifier,
   });
 
   @override
@@ -185,8 +190,7 @@ class EntryValueTextField extends StatelessWidget {
           padding: const EdgeInsets.only(left: 36.0, right: 36.0),
           child: TextField(
             style: BudgetronFonts.robotoSize32Weight400,
-            // onSubmitted: (value) => {/* validate fields and create entry */},
-            onSubmitted: (value) => {print(tabNotifier.value)},
+            onSubmitted: (value) => _validateAndSubmit(value, context),
             onTapOutside: (event) {},
             autofocus: true,
             keyboardType: TextInputType.number,
@@ -205,6 +209,18 @@ class EntryValueTextField extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _validateAndSubmit(String value, BuildContext context) {
+    if (value.isEmpty || categoryNotifier.value == null) {
+      //TODO add some sort of message for user to fill in value and/or category
+      return;
+    }
+    int entryValue =
+        int.parse(value) * (categoryNotifier.value!.isExpense ? -1 : 1);
+    Entry entry = Entry(value: entryValue, dateTime: DateTime.now());
+    objectBox.addEntry(entry, categoryNotifier.value!);
+    Navigator.pop(context);
   }
 }
 
