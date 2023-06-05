@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/popups/new_entry_popup.dart';
 import 'package:intl/intl.dart';
 
 class EntriesPage extends StatefulWidget {
