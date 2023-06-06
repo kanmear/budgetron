@@ -1,14 +1,12 @@
-import 'dart:ui';
-
-import 'package:budgetron/main.dart';
-import 'package:budgetron/models/category.dart';
-import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/pages/categories_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/main.dart';
+import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/pages/categories_page.dart';
 
 //TODO refactor
 class NewEntryPage extends StatefulWidget {
@@ -130,7 +128,6 @@ class _CategoryFieldState extends State<CategoryField> {
 
   Future<void> _navigateToCategorySelection(
       BuildContext context, Function callback, bool typeFilter) async {
-    print(typeFilter);
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
