@@ -240,50 +240,21 @@ class PseudoAppBar extends StatelessWidget {
                 icon: const Icon(Icons.arrow_back_ios_new)),
             Row(
               children: [
-                InkWell(
-                  onTap: () => {tabNotifier.value = true},
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 24, right: 15, top: 13, bottom: 13),
-                    child: ValueListenableBuilder(
-                        valueListenable: tabNotifier,
-                        builder: (context, value, child) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 1,
-                                        color: tabNotifier.value == true
-                                            ? BudgetronColors.gray1
-                                            : Colors.transparent))),
-                            child: Text("Expense",
-                                style: BudgetronFonts.nunitoSize16Weight400),
-                          );
-                        }),
-                  ),
+                BudgetronTopBarTab(
+                  tabNotifier: tabNotifier,
+                  onTapAction: () => {tabNotifier.value = true},
+                  padding: const EdgeInsets.only(
+                      left: 24, right: 15, top: 13, bottom: 13),
+                  name: 'Expense',
+                  associatedTabValue: true,
                 ),
-                // const SizedBox(width: 30),
-                InkWell(
-                  onTap: () => {tabNotifier.value = false},
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 24, top: 13, bottom: 13),
-                    child: ValueListenableBuilder(
-                        valueListenable: tabNotifier,
-                        builder: (context, value, child) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        width: 1,
-                                        color: tabNotifier.value == false
-                                            ? BudgetronColors.gray1
-                                            : Colors.transparent))),
-                            child: Text("Income",
-                                style: BudgetronFonts.nunitoSize16Weight400),
-                          );
-                        }),
-                  ),
+                BudgetronTopBarTab(
+                  tabNotifier: tabNotifier,
+                  onTapAction: () => {tabNotifier.value = false},
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 24, top: 13, bottom: 13),
+                  name: 'Income',
+                  associatedTabValue: false,
                 ),
               ],
             ),
@@ -291,6 +262,47 @@ class PseudoAppBar extends StatelessWidget {
             const SizedBox(width: 48 /* width of iconButton */),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class BudgetronTopBarTab extends StatelessWidget {
+  final ValueNotifier<bool> tabNotifier;
+  final Function onTapAction;
+  final EdgeInsets padding;
+  final String name;
+  final bool associatedTabValue;
+
+  const BudgetronTopBarTab({
+    super.key,
+    required this.tabNotifier,
+    required this.onTapAction,
+    required this.padding,
+    required this.name,
+    required this.associatedTabValue,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => onTapAction(),
+      child: Padding(
+        padding: padding,
+        child: ValueListenableBuilder(
+            valueListenable: tabNotifier,
+            builder: (context, value, child) {
+              return Container(
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                            width: 1,
+                            color: tabNotifier.value == associatedTabValue
+                                ? BudgetronColors.gray1
+                                : Colors.transparent))),
+                child: Text(name, style: BudgetronFonts.nunitoSize16Weight400),
+              );
+            }),
       ),
     );
   }
