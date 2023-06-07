@@ -7,6 +7,8 @@ import 'package:budgetron/main.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/pages/categories_page.dart';
+import 'package:budgetron/ui/budgetron_ui.dart';
+import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 
 //TODO refactor
 class NewEntryPage extends StatefulWidget {
@@ -26,7 +28,29 @@ class _NewEntryPageState extends State<NewEntryPage> {
     return Scaffold(
         body: Column(
       children: [
-        PseudoAppBar(tabNotifier: widget.tabNotifier),
+        BudgetronAppBarWithTabs(
+          tabNotifier: widget.tabNotifier,
+          tabs: Row(
+            children: [
+              BudgetronTopBarTab(
+                tabNotifier: widget.tabNotifier,
+                onTapAction: () => {widget.tabNotifier.value = true},
+                padding: const EdgeInsets.only(
+                    left: 24, right: 15, top: 13, bottom: 13),
+                name: 'Expense',
+                associatedTabValue: true,
+              ),
+              BudgetronTopBarTab(
+                tabNotifier: widget.tabNotifier,
+                onTapAction: () => {widget.tabNotifier.value = false},
+                padding: const EdgeInsets.only(
+                    left: 15, right: 24, top: 13, bottom: 13),
+                name: 'Income',
+                associatedTabValue: false,
+              ),
+            ],
+          ),
+        ),
         EntryValueTextField(
           tabNotifier: widget.tabNotifier,
           categoryNotifier: widget.categoryNotifier,
@@ -186,23 +210,12 @@ class EntryValueTextField extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 36.0, right: 36.0),
           child: TextField(
-            style: BudgetronFonts.robotoSize32Weight400,
-            onSubmitted: (value) => _validateAndSubmit(value, context),
-            onTapOutside: (event) {},
-            autofocus: true,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                contentPadding: const EdgeInsets.only(
-                    top: 9, bottom: 9, left: 10, right: 10),
-                hintStyle: BudgetronFonts.robotoSize32Weight400Hint,
-                enabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.all(Radius.zero)),
-                focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.all(Radius.zero)),
-                hintText: 'Enter value'),
-          ),
+              style: BudgetronFonts.robotoSize32Weight400,
+              onSubmitted: (value) => _validateAndSubmit(value, context),
+              onTapOutside: (event) {},
+              autofocus: true,
+              keyboardType: TextInputType.number,
+              decoration: BudgetronUI.budgetronInputDecoration()),
         ),
       ),
     );
@@ -218,92 +231,5 @@ class EntryValueTextField extends StatelessWidget {
     Entry entry = Entry(value: entryValue, dateTime: DateTime.now());
     objectBox.addEntry(entry, categoryNotifier.value!);
     Navigator.pop(context);
-  }
-}
-
-class PseudoAppBar extends StatelessWidget {
-  final ValueNotifier<bool> tabNotifier;
-
-  const PseudoAppBar({super.key, required this.tabNotifier});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 38.0),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_ios_new)),
-            Row(
-              children: [
-                BudgetronTopBarTab(
-                  tabNotifier: tabNotifier,
-                  onTapAction: () => {tabNotifier.value = true},
-                  padding: const EdgeInsets.only(
-                      left: 24, right: 15, top: 13, bottom: 13),
-                  name: 'Expense',
-                  associatedTabValue: true,
-                ),
-                BudgetronTopBarTab(
-                  tabNotifier: tabNotifier,
-                  onTapAction: () => {tabNotifier.value = false},
-                  padding: const EdgeInsets.only(
-                      left: 15, right: 24, top: 13, bottom: 13),
-                  name: 'Income',
-                  associatedTabValue: false,
-                ),
-              ],
-            ),
-            //TODO find a way to properly center
-            const SizedBox(width: 48 /* width of iconButton */),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class BudgetronTopBarTab extends StatelessWidget {
-  final ValueNotifier<bool> tabNotifier;
-  final Function onTapAction;
-  final EdgeInsets padding;
-  final String name;
-  final bool associatedTabValue;
-
-  const BudgetronTopBarTab({
-    super.key,
-    required this.tabNotifier,
-    required this.onTapAction,
-    required this.padding,
-    required this.name,
-    required this.associatedTabValue,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => onTapAction(),
-      child: Padding(
-        padding: padding,
-        child: ValueListenableBuilder(
-            valueListenable: tabNotifier,
-            builder: (context, value, child) {
-              return Container(
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                            width: 1,
-                            color: tabNotifier.value == associatedTabValue
-                                ? BudgetronColors.gray1
-                                : Colors.transparent))),
-                child: Text(name, style: BudgetronFonts.nunitoSize16Weight400),
-              );
-            }),
-      ),
-    );
   }
 }
