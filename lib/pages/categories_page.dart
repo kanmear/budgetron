@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
@@ -16,9 +17,14 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var title = EntryCreationTabs.expense == typeFilter
+        ? "Expense categories"
+        : "Income categories";
+
     return Scaffold(
       body: Column(
         children: [
+          BudgetronAppBarWithTitle(title: title),
           TextField(
             decoration: const InputDecoration(
                 border: OutlineInputBorder(),
@@ -38,7 +44,6 @@ class CategoriesPage extends StatelessWidget {
             builder: (BuildContext context) => const NewCategoryDialog()),
         child: const Icon(Icons.add),
       ),
-      appBar: AppBar(title: const Text('Categories')),
     );
   }
 }
@@ -64,6 +69,7 @@ class CategoriesList extends StatelessWidget {
                   valueListenable: valueNotifier,
                   builder: (context, value, child) {
                     return ListView(
+                      padding: EdgeInsets.zero,
                       children: [
                         for (var category in snapshot.data!)
                           if (category.name
