@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/colors.dart';
@@ -20,9 +21,7 @@ class BudgetronAppBarWithTabs extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.arrow_back_ios_new)),
+            const ArrowBackIconButton(),
             tabs,
             //TODO find a way to properly center
             const SizedBox(width: 48 /* width of iconButton */),
@@ -64,7 +63,7 @@ class BudgetronTopBarTab extends StatelessWidget {
                         bottom: BorderSide(
                             width: 1,
                             color: tabNotifier.value == associatedTabValue
-                                ? BudgetronColors.gray1
+                                ? BudgetronColors.black
                                 : Colors.transparent))),
                 child: Text(name, style: BudgetronFonts.nunitoSize16Weight400),
               );
