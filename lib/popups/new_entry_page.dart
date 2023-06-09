@@ -91,7 +91,7 @@ class DateAndCategoryRow extends StatelessWidget {
           height: 47,
           width: 1,
           decoration: BoxDecoration(
-              border: Border.all(color: BudgetronColors.gray1, width: 1)),
+              border: Border.all(color: BudgetronColors.black, width: 1)),
         ),
         CategoryField(
           setCategoryCallback: setCategoryCallback,
