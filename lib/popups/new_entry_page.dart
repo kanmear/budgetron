@@ -139,7 +139,7 @@ class _CategoryFieldState extends State<CategoryField> {
                   return widget.categoryNotifier.value == null
                       ? Text(
                           "Choose",
-                          style: BudgetronFonts.nunitoSize16Weight600Unused,
+                          style: BudgetronFonts.nunitoSize16Weight600Hint,
                         )
                       : Text(
                           widget.categoryNotifier.value!.name,
