@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
-import 'package:budgetron/popups/new_category_popup.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/popups/new_category_popup.dart';
+import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 
 class CategoriesPage extends StatelessWidget {
   final filter = ValueNotifier("");
-  final bool typeFilter;
+  final EntryCreationTabs typeFilter;
 
   CategoriesPage({
     super.key,
@@ -44,7 +45,7 @@ class CategoriesPage extends StatelessWidget {
 
 class CategoriesList extends StatelessWidget {
   final ValueNotifier<String> valueNotifier;
-  final bool typeFilter;
+  final EntryCreationTabs typeFilter;
 
   const CategoriesList({
     super.key,

@@ -4,8 +4,8 @@ import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 
 class BudgetronAppBarWithTabs extends StatelessWidget {
+  final ValueNotifier<EntryCreationTabs> tabNotifier;
   final Row tabs;
-  final ValueNotifier<bool> tabNotifier;
 
   const BudgetronAppBarWithTabs(
       {super.key, required this.tabNotifier, required this.tabs});
@@ -33,13 +33,12 @@ class BudgetronAppBarWithTabs extends StatelessWidget {
   }
 }
 
-//TODO move to separate folder
 class BudgetronTopBarTab extends StatelessWidget {
-  final ValueNotifier<bool> tabNotifier;
+  final ValueNotifier<Enum> tabNotifier;
+  final Enum associatedTabValue;
   final Function onTapAction;
   final EdgeInsets padding;
   final String name;
-  final bool associatedTabValue;
 
   const BudgetronTopBarTab({
     super.key,
@@ -64,7 +63,6 @@ class BudgetronTopBarTab extends StatelessWidget {
                     border: Border(
                         bottom: BorderSide(
                             width: 1,
-                            //TODO universal solution needed for any number of tabs
                             color: tabNotifier.value == associatedTabValue
                                 ? BudgetronColors.gray1
                                 : Colors.transparent))),
@@ -75,3 +73,5 @@ class BudgetronTopBarTab extends StatelessWidget {
     );
   }
 }
+
+enum EntryCreationTabs { income, expense }

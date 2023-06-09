@@ -10,10 +10,10 @@ import 'package:budgetron/pages/categories_page.dart';
 import 'package:budgetron/ui/budgetron_ui.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 
-//TODO refactor
 class NewEntryPage extends StatefulWidget {
   //TODO maybe tab should be saved between entries
-  final ValueNotifier<bool> tabNotifier = ValueNotifier(true);
+  final ValueNotifier<EntryCreationTabs> tabNotifier =
+      ValueNotifier(EntryCreationTabs.expense);
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
 
   NewEntryPage({super.key});
@@ -34,19 +34,21 @@ class _NewEntryPageState extends State<NewEntryPage> {
             children: [
               BudgetronTopBarTab(
                 tabNotifier: widget.tabNotifier,
-                onTapAction: () => {widget.tabNotifier.value = true},
+                onTapAction: () =>
+                    {widget.tabNotifier.value = EntryCreationTabs.expense},
                 padding: const EdgeInsets.only(
                     left: 24, right: 15, top: 13, bottom: 13),
                 name: 'Expense',
-                associatedTabValue: true,
+                associatedTabValue: EntryCreationTabs.expense,
               ),
               BudgetronTopBarTab(
                 tabNotifier: widget.tabNotifier,
-                onTapAction: () => {widget.tabNotifier.value = false},
+                onTapAction: () =>
+                    {widget.tabNotifier.value = EntryCreationTabs.income},
                 padding: const EdgeInsets.only(
                     left: 15, right: 24, top: 13, bottom: 13),
                 name: 'Income',
-                associatedTabValue: false,
+                associatedTabValue: EntryCreationTabs.income,
               ),
             ],
           ),
@@ -68,8 +70,8 @@ class _NewEntryPageState extends State<NewEntryPage> {
 }
 
 class DateAndCategoryRow extends StatelessWidget {
+  final ValueNotifier<EntryCreationTabs> tabNotifier;
   final ValueNotifier<EntryCategory?> categoryNotifier;
-  final ValueNotifier<bool> tabNotifier;
   final Function setCategoryCallback;
 
   const DateAndCategoryRow({
@@ -102,8 +104,8 @@ class DateAndCategoryRow extends StatelessWidget {
 }
 
 class CategoryField extends StatefulWidget {
+  final ValueNotifier<EntryCreationTabs> tabNotifier;
   final ValueNotifier<EntryCategory?> categoryNotifier;
-  final ValueNotifier<bool> tabNotifier;
   final Function setCategoryCallback;
 
   const CategoryField({
@@ -150,8 +152,8 @@ class _CategoryFieldState extends State<CategoryField> {
     ));
   }
 
-  Future<void> _navigateToCategorySelection(
-      BuildContext context, Function callback, bool typeFilter) async {
+  Future<void> _navigateToCategorySelection(BuildContext context,
+      Function callback, EntryCreationTabs typeFilter) async {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -194,7 +196,7 @@ class DateField extends StatelessWidget {
 }
 
 class EntryValueTextField extends StatelessWidget {
-  final ValueNotifier<bool> tabNotifier;
+  final ValueNotifier<EntryCreationTabs> tabNotifier;
   final ValueNotifier<EntryCategory?> categoryNotifier;
 
   const EntryValueTextField({

@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:budgetron/objectbox.g.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 
 class ObjectBox {
   late final Store store;
@@ -41,11 +42,12 @@ class ObjectBox {
   }
 
   Stream<List<EntryCategory>> getCategories(
-      String nameFilter, bool? typeFilter) {
+      String nameFilter, EntryCreationTabs? typeFilter) {
     QueryBuilder<EntryCategory> queryBuilder;
     if (typeFilter != null) {
+      bool isExpense = typeFilter == EntryCreationTabs.expense;
       queryBuilder = categoryBox
-          .query(EntryCategory_.isExpense.equals(typeFilter) &
+          .query(EntryCategory_.isExpense.equals(isExpense) &
               EntryCategory_.name.contains(nameFilter, caseSensitive: false))
           .order(EntryCategory_.id, flags: Order.descending);
     } else {
