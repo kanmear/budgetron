@@ -1,4 +1,5 @@
 import 'package:budgetron/popups/new_entry_page.dart';
+import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -30,9 +31,8 @@ class _EntriesPageState extends State<EntriesPage> {
                 );
               }
             }),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: BudgetronFloatingActionButtonWithPlus(
           onPressed: () => _navigateToEntryCreation(context, () => {}),
-          child: const Icon(Icons.add),
         ));
   }
 

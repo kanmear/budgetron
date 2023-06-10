@@ -1,13 +1,14 @@
-import 'package:budgetron/ui/colors.dart';
-import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
+import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/classes/search_field.dart';
 import 'package:budgetron/popups/new_category_popup.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
+import 'package:budgetron/ui/classes/floating_action_button.dart';
 
 class CategoriesPage extends StatelessWidget {
   final ValueNotifier<String> nameFilter = ValueNotifier("");
@@ -25,26 +26,24 @@ class CategoriesPage extends StatelessWidget {
         : "Income categories";
 
     return Scaffold(
-      body: Column(
-        children: [
-          BudgetronAppBarWithTitle(title: title),
-          const SizedBox(height: 24),
-          BudgetronSearchField(
-              hintText: "Search for a category", filter: nameFilter),
-          const SizedBox(height: 8),
-          CategoriesList(
-            nameFilter: nameFilter,
-            typeFilter: typeFilter,
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showDialog(
-            context: context,
-            builder: (BuildContext context) => const NewCategoryDialog()),
-        child: const Icon(Icons.add),
-      ),
-    );
+        body: Column(
+          children: [
+            BudgetronAppBarWithTitle(title: title),
+            const SizedBox(height: 24),
+            BudgetronSearchField(
+                hintText: "Search for a category", filter: nameFilter),
+            const SizedBox(height: 8),
+            CategoriesList(
+              nameFilter: nameFilter,
+              typeFilter: typeFilter,
+            ),
+          ],
+        ),
+        floatingActionButton: BudgetronFloatingActionButtonWithPlus(
+          onPressed: () => showDialog(
+              context: context,
+              builder: (BuildContext context) => const NewCategoryDialog()),
+        ));
   }
 }
 
