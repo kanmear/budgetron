@@ -43,7 +43,7 @@ class _BudgetronSearchFieldState extends State<BudgetronSearchField> {
           cursorColor: BudgetronColors.black,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.only(top: 13, bottom: 13),
-            border: const OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: BudgetronColors.black),
                 borderRadius: BorderRadius.all(Radius.circular(2))),
             focusedBorder: const OutlineInputBorder(
