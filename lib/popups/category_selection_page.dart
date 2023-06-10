@@ -1,13 +1,14 @@
-import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/ui/classes/search_field.dart';
 import 'package:budgetron/popups/new_category_popup.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
+import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 
 class CategoriesPage extends StatelessWidget {
-  final filter = ValueNotifier("");
+  final ValueNotifier<String> nameFilter = ValueNotifier("");
   final EntryCreationTabs typeFilter;
 
   CategoriesPage({
@@ -25,15 +26,11 @@ class CategoriesPage extends StatelessWidget {
       body: Column(
         children: [
           BudgetronAppBarWithTitle(title: title),
-          TextField(
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Search',
-                prefixIcon: Icon(Icons.search)),
-            onChanged: (value) => {filter.value = value},
-          ),
+          const SizedBox(height: 24),
+          BudgetronSearchField(
+              hintText: "Search for a category", filter: nameFilter),
           CategoriesList(
-            valueNotifier: filter,
+            nameFilter: nameFilter,
             typeFilter: typeFilter,
           ),
         ],
@@ -49,12 +46,12 @@ class CategoriesPage extends StatelessWidget {
 }
 
 class CategoriesList extends StatelessWidget {
-  final ValueNotifier<String> valueNotifier;
+  final ValueNotifier<String> nameFilter;
   final EntryCreationTabs typeFilter;
 
   const CategoriesList({
     super.key,
-    required this.valueNotifier,
+    required this.nameFilter,
     required this.typeFilter,
   });
 
@@ -66,7 +63,7 @@ class CategoriesList extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {
               return ValueListenableBuilder(
-                  valueListenable: valueNotifier,
+                  valueListenable: nameFilter,
                   builder: (context, value, child) {
                     return ListView(
                       padding: EdgeInsets.zero,
@@ -74,7 +71,7 @@ class CategoriesList extends StatelessWidget {
                         for (var category in snapshot.data!)
                           if (category.name
                               .toLowerCase()
-                              .contains(valueNotifier.value.toLowerCase()))
+                              .contains(nameFilter.value.toLowerCase()))
                             Card(
                                 child: ListTile(
                                     leading: category.isExpense
