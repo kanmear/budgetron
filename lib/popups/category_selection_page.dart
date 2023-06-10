@@ -1,3 +1,5 @@
+import 'package:budgetron/ui/colors.dart';
+import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
@@ -29,6 +31,7 @@ class CategoriesPage extends StatelessWidget {
           const SizedBox(height: 24),
           BudgetronSearchField(
               hintText: "Search for a category", filter: nameFilter),
+          const SizedBox(height: 8),
           CategoriesList(
             nameFilter: nameFilter,
             typeFilter: typeFilter,
@@ -72,14 +75,7 @@ class CategoriesList extends StatelessWidget {
                           if (category.name
                               .toLowerCase()
                               .contains(nameFilter.value.toLowerCase()))
-                            Card(
-                                child: ListTile(
-                                    leading: category.isExpense
-                                        ? const Icon(Icons.money_off)
-                                        : const Icon(Icons.money),
-                                    title: Text(category.name),
-                                    onTap: () => _selectCategoryAndReturn(
-                                        category, context)))
+                            categoryListTile(category, context)
                       ],
                     );
                   });
@@ -89,6 +85,42 @@ class CategoriesList extends StatelessWidget {
               );
             }
           }),
+    );
+  }
+
+  InkWell categoryListTile(EntryCategory category, BuildContext context) {
+    return InkWell(
+      onTap: () => _selectCategoryAndReturn(category, context),
+      child: Column(
+        children: [
+          Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: const Icon(
+                      Icons.square_rounded,
+                      //TODO add category color
+                      color: BudgetronColors.gray4,
+                    ),
+                  ),
+                  Text(
+                    category.name,
+                    style: BudgetronFonts.nunitoSize16Weight400,
+                  )
+                ],
+              )),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: Container(
+              height: 1,
+              decoration: BoxDecoration(
+                  border: Border.all(color: BudgetronColors.gray0, width: 1)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

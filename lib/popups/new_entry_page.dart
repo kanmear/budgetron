@@ -88,6 +88,7 @@ class DateAndCategoryRow extends StatelessWidget {
       children: [
         DateField(),
         Container(
+          //HACK custom divider; check that this height works for all screens
           height: 47,
           width: 1,
           decoration: BoxDecoration(
