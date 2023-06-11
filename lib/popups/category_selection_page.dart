@@ -102,10 +102,9 @@ class CategoriesList extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.only(right: 8),
-                    child: const Icon(
+                    child: Icon(
                       Icons.square_rounded,
-                      //TODO add category color
-                      color: BudgetronColors.gray4,
+                      color: Color(int.parse(radix: 16, category.color)),
                     ),
                   ),
                   Text(

@@ -117,9 +117,11 @@ class EntriesListView extends StatelessWidget {
                                   children: [
                                     Row(
                                       children: [
-                                        const Icon(
+                                        Icon(
                                           Icons.square_rounded,
-                                          color: Colors.grey,
+                                          color: Color(int.parse(
+                                              radix: 16,
+                                              entry.category.target!.color)),
                                         ),
                                         const SizedBox(width: 8),
                                         Text(entry.category.target!.name)

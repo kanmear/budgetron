@@ -31,7 +31,11 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
       actions: [
         TextButton(
             onPressed: () => objectBox.addCategory(EntryCategory(
-                name: nameController.text, isExpense: isExpense.value)),
+                name: nameController.text.trimRight(),
+                isExpense: isExpense.value,
+                usages: 0,
+                color:
+                    'ff${Colors.indigo.value.toRadixString(16).substring(2)}')),
             child: const Text("Add category")),
         TextButton(
             onPressed: () => objectBox.clearCategories(),

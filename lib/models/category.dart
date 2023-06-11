@@ -8,10 +8,14 @@ class EntryCategory {
   String name;
 
   bool isExpense;
+  String color;
+  int usages;
 
-  //TODO: add usage counter and color
-
-  EntryCategory({required this.name, required this.isExpense});
+  EntryCategory(
+      {required this.name,
+      required this.isExpense,
+      required this.usages,
+      required this.color});
 
   @override
   String toString() {

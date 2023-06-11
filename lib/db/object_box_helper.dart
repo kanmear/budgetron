@@ -33,6 +33,9 @@ class ObjectBox {
   }
 
   int addEntry(Entry entry, EntryCategory category) {
+    category.usages++;
+    categoryBox.put(category);
+
     entry.category.target = category;
     return entryBox.put(entry);
   }
