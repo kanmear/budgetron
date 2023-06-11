@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
@@ -28,7 +29,10 @@ class CategoriesPage extends StatelessWidget {
     return Scaffold(
         body: Column(
           children: [
-            BudgetronAppBarWithTitle(title: title),
+            BudgetronAppBarWithTitle(
+              title: title,
+              iconButton: const EditIconButton(),
+            ),
             const SizedBox(height: 24),
             BudgetronSearchField(
                 hintText: "Search for a category", filter: nameFilter),

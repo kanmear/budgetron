@@ -3,9 +3,11 @@ import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronAppBarWithTitle extends StatelessWidget {
+  final Widget iconButton;
   final String title;
 
-  const BudgetronAppBarWithTitle({super.key, required this.title});
+  const BudgetronAppBarWithTitle(
+      {super.key, required this.title, required this.iconButton});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class BudgetronAppBarWithTitle extends StatelessWidget {
                 style: BudgetronFonts.nunitoSize18Weight600,
               ),
             ),
-            const EditIconButton()
+            iconButton
           ],
         ),
       ),
