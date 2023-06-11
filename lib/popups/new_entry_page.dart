@@ -142,9 +142,19 @@ class _CategoryFieldState extends State<CategoryField> {
                           "Choose",
                           style: BudgetronFonts.nunitoSize16Weight600Hint,
                         )
-                      : Text(
-                          widget.categoryNotifier.value!.name,
-                          style: BudgetronFonts.nunitoSize16Weight600,
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.square_rounded,
+                                color: Color(int.parse(
+                                    radix: 16,
+                                    widget.categoryNotifier.value!.color))),
+                            const SizedBox(width: 6),
+                            Text(
+                              widget.categoryNotifier.value!.name,
+                              style: BudgetronFonts.nunitoSize16Weight600,
+                            ),
+                          ],
                         );
                 }),
           ],
