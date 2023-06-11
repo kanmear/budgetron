@@ -20,6 +20,7 @@ class _EntriesPageState extends State<EntriesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: StreamBuilder<List<Entry>>(
             stream: objectBox.getEntries(),
             builder: (context, snapshot) {
@@ -81,6 +82,7 @@ class EntriesListView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Card(
+                  color: Theme.of(context).colorScheme.surface,
                   child: Column(
                     children: [
                       Padding(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'db/object_box_helper.dart';
 
+import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/pages/stats_page.dart';
 import 'package:budgetron/pages/entries_page.dart';
 
@@ -22,8 +23,9 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (context) => AppState(),
-        child: const MaterialApp(
-          home: Budgetron(),
+        child: MaterialApp(
+          theme: ThemeData(colorScheme: BudgetronColors.budgetronColorScheme),
+          home: const Budgetron(),
         ));
   }
 }
