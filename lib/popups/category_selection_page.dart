@@ -104,6 +104,7 @@ class CategoriesList extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8),
                     child: Icon(
                       Icons.square_rounded,
+                      size: 18,
                       color: Color(int.parse(radix: 16, category.color)),
                     ),
                   ),
