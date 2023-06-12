@@ -1,11 +1,11 @@
-import 'package:budgetron/popups/new_entry_page.dart';
-import 'package:budgetron/ui/classes/floating_action_button.dart';
-import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:budgetron/main.dart';
+import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:intl/intl.dart';
+import 'package:budgetron/popups/new_entry_page.dart';
+import 'package:budgetron/ui/classes/floating_action_button.dart';
 
 class EntriesPage extends StatefulWidget {
   const EntriesPage({
@@ -82,6 +82,10 @@ class EntriesListView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                 child: Card(
+                  elevation: 3,
+                  shadowColor: entriesMap.keys.first == day
+                      ? const Color.fromARGB(25, 0, 0, 0)
+                      : Colors.transparent,
                   color: Theme.of(context).colorScheme.surface,
                   child: Column(
                     children: [
@@ -92,7 +96,9 @@ class EntriesListView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              DateFormat.yMMMd().format(day),
+                              entriesMap.keys.first == day
+                                  ? "Today"
+                                  : DateFormat.yMMMd().format(day),
                               style: BudgetronFonts.nunitoSize16Weight600,
                             ),
                             Text(
@@ -121,12 +127,15 @@ class EntriesListView extends StatelessWidget {
                                       children: [
                                         Icon(
                                           Icons.square_rounded,
+                                          size: 18,
                                           color: Color(int.parse(
                                               radix: 16,
                                               entry.category.target!.color)),
                                         ),
                                         const SizedBox(width: 8),
-                                        Text(entry.category.target!.name)
+                                        Text(entry.category.target!.name,
+                                            style: BudgetronFonts
+                                                .nunitoSize16Weight400)
                                       ],
                                     ),
                                     Text(
