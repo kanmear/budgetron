@@ -96,7 +96,12 @@ class EntriesListView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              entriesMap.keys.first == day
+                              (entriesMap.keys.first == day &&
+                                      day ==
+                                          DateTime(
+                                              DateTime.now().year,
+                                              DateTime.now().month,
+                                              DateTime.now().day))
                                   ? "Today"
                                   : DateFormat.yMMMd().format(day),
                               style: BudgetronFonts.nunitoSize16Weight600,
