@@ -39,7 +39,6 @@ class BudgetronFonts {
       color: BudgetronColors.gray4);
 
   // for input fields
-  //TODO set custom line height (height parameter)
   static TextStyle robotoSize32Weight400 = TextStyle(
       fontFamily: GoogleFonts.roboto().fontFamily,
       fontSize: 32,
@@ -49,6 +48,12 @@ class BudgetronFonts {
   static TextStyle robotoSize32Weight400Hint = TextStyle(
       fontFamily: GoogleFonts.roboto().fontFamily,
       fontSize: 32,
+      fontWeight: FontWeight.w400,
+      color: BudgetronColors.gray4);
+
+  static TextStyle nunitoSize14Weight400Hint = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 14,
       fontWeight: FontWeight.w400,
       color: BudgetronColors.gray4);
 }

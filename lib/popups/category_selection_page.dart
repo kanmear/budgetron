@@ -46,6 +46,7 @@ class CategoriesPage extends StatelessWidget {
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
           onPressed: () => showDialog(
               context: context,
+              //TODO send current category group to automatically select group in radio
               builder: (BuildContext context) => const NewCategoryDialog()),
         ));
   }

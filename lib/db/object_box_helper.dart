@@ -65,7 +65,8 @@ class ObjectBox {
 
   int addCategory(EntryCategory category) => categoryBox.put(category);
 
+  //HACK dev tool
   void clearCategories() {
-    categoryBox.removeAll();
+    // categoryBox.removeMany([12, 13, 14, 15]);
   }
 }
