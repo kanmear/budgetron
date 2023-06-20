@@ -1,3 +1,4 @@
+import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +6,7 @@ import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 
 class BudgetronAppBarWithTabs extends StatelessWidget {
-  final ValueNotifier<EntryCreationTabs> tabNotifier;
+  final ValueNotifier<EntryCategoryType> tabNotifier;
   final Row tabs;
 
   const BudgetronAppBarWithTabs(
@@ -72,5 +73,3 @@ class BudgetronTopBarTab extends StatelessWidget {
     );
   }
 }
-
-enum EntryCreationTabs { income, expense }

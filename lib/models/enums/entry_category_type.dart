@@ -1,0 +1,1 @@
+enum EntryCategoryType { expense, income }

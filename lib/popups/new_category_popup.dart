@@ -1,13 +1,13 @@
+import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/radio_list_tile.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
+import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
-import 'package:flutter/material.dart';
-
 import 'package:budgetron/main.dart';
-import 'package:budgetron/models/category.dart';
 
 class NewCategoryDialog extends StatefulWidget {
   const NewCategoryDialog({
@@ -181,5 +181,3 @@ class _CategoryTypeRadioButtonsState extends State<CategoryTypeRadioButtons> {
     ]);
   }
 }
-
-enum EntryCategoryType { expense, income }

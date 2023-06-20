@@ -1,3 +1,4 @@
+import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,7 @@ import 'package:budgetron/ui/classes/floating_action_button.dart';
 
 class CategoriesPage extends StatelessWidget {
   final ValueNotifier<String> nameFilter = ValueNotifier("");
-  final EntryCreationTabs typeFilter;
+  final EntryCategoryType typeFilter;
 
   CategoriesPage({
     super.key,
@@ -22,7 +23,7 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = EntryCreationTabs.expense == typeFilter
+    var title = EntryCategoryType.expense == typeFilter
         ? "Expense categories"
         : "Income categories";
 
@@ -54,7 +55,7 @@ class CategoriesPage extends StatelessWidget {
 
 class CategoriesList extends StatelessWidget {
   final ValueNotifier<String> nameFilter;
-  final EntryCreationTabs typeFilter;
+  final EntryCategoryType typeFilter;
 
   const CategoriesList({
     super.key,

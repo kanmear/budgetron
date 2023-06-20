@@ -1,3 +1,4 @@
+import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,8 +13,8 @@ import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 
 class NewEntryPage extends StatefulWidget {
   //TODO maybe tab should be saved between entries
-  final ValueNotifier<EntryCreationTabs> tabNotifier =
-      ValueNotifier(EntryCreationTabs.expense);
+  final ValueNotifier<EntryCategoryType> tabNotifier =
+      ValueNotifier(EntryCategoryType.expense);
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
 
   NewEntryPage({super.key});
@@ -35,20 +36,20 @@ class _NewEntryPageState extends State<NewEntryPage> {
               BudgetronTopBarTab(
                 tabNotifier: widget.tabNotifier,
                 onTapAction: () =>
-                    {widget.tabNotifier.value = EntryCreationTabs.expense},
+                    {widget.tabNotifier.value = EntryCategoryType.expense},
                 padding: const EdgeInsets.only(
                     left: 24, right: 15, top: 13, bottom: 13),
                 name: 'Expense',
-                associatedTabValue: EntryCreationTabs.expense,
+                associatedTabValue: EntryCategoryType.expense,
               ),
               BudgetronTopBarTab(
                 tabNotifier: widget.tabNotifier,
                 onTapAction: () =>
-                    {widget.tabNotifier.value = EntryCreationTabs.income},
+                    {widget.tabNotifier.value = EntryCategoryType.income},
                 padding: const EdgeInsets.only(
                     left: 15, right: 24, top: 13, bottom: 13),
                 name: 'Income',
-                associatedTabValue: EntryCreationTabs.income,
+                associatedTabValue: EntryCategoryType.income,
               ),
             ],
           ),
@@ -70,7 +71,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
 }
 
 class DateAndCategoryRow extends StatelessWidget {
-  final ValueNotifier<EntryCreationTabs> tabNotifier;
+  final ValueNotifier<EntryCategoryType> tabNotifier;
   final ValueNotifier<EntryCategory?> categoryNotifier;
   final Function setCategoryCallback;
 
@@ -105,7 +106,7 @@ class DateAndCategoryRow extends StatelessWidget {
 }
 
 class CategoryField extends StatefulWidget {
-  final ValueNotifier<EntryCreationTabs> tabNotifier;
+  final ValueNotifier<EntryCategoryType> tabNotifier;
   final ValueNotifier<EntryCategory?> categoryNotifier;
   final Function setCategoryCallback;
 
@@ -164,7 +165,7 @@ class _CategoryFieldState extends State<CategoryField> {
   }
 
   Future<void> _navigateToCategorySelection(BuildContext context,
-      Function callback, EntryCreationTabs typeFilter) async {
+      Function callback, EntryCategoryType typeFilter) async {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -207,7 +208,7 @@ class DateField extends StatelessWidget {
 }
 
 class EntryValueTextField extends StatelessWidget {
-  final ValueNotifier<EntryCreationTabs> tabNotifier;
+  final ValueNotifier<EntryCategoryType> tabNotifier;
   final ValueNotifier<EntryCategory?> categoryNotifier;
 
   const EntryValueTextField({
