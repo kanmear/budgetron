@@ -10,8 +10,11 @@ import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/main.dart';
 
 class NewCategoryDialog extends StatefulWidget {
+  final EntryCategoryType entryCategoryType;
+
   const NewCategoryDialog({
     super.key,
+    required this.entryCategoryType,
   });
 
   @override
@@ -19,14 +22,15 @@ class NewCategoryDialog extends StatefulWidget {
 }
 
 class _NewCategoryDialogState extends State<NewCategoryDialog> {
-  final ValueNotifier<EntryCategoryType> categoryTypeNotifier =
-      ValueNotifier(EntryCategoryType.expense);
   final isExpense = ValueNotifier(false);
 
   Color categoryColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<EntryCategoryType> categoryTypeNotifier =
+        ValueNotifier(widget.entryCategoryType);
+
     return AlertDialog(
       elevation: 0,
       alignment: Alignment.bottomCenter,

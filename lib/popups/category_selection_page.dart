@@ -48,7 +48,8 @@ class CategoriesPage extends StatelessWidget {
           onPressed: () => showDialog(
               context: context,
               //TODO send current category group to automatically select group in radio
-              builder: (BuildContext context) => const NewCategoryDialog()),
+              builder: (BuildContext context) =>
+                  NewCategoryDialog(entryCategoryType: typeFilter)),
         ));
   }
 }
