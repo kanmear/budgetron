@@ -5,7 +5,7 @@ class BudgetronColors {
   static const Color gray4 = Color(0xffbdbdbd);
   static const Color gray0 = Color(0xffe0e0e0);
 
-  static const Color background = Color(0xfff5f5f5);
+  static const Color background = Color(0xfff7f7f7);
   static const Color surface = Color(0xffffffff);
 
   static ColorScheme budgetronColorScheme = const ColorScheme(

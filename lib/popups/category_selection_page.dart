@@ -28,6 +28,7 @@ class CategoriesPage extends StatelessWidget {
         : "Income categories";
 
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
             BudgetronAppBarWithTitle(
@@ -47,7 +48,6 @@ class CategoriesPage extends StatelessWidget {
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
           onPressed: () => showDialog(
               context: context,
-              //TODO send current category group to automatically select group in radio
               builder: (BuildContext context) =>
                   NewCategoryDialog(entryCategoryType: typeFilter)),
         ));

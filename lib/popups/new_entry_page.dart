@@ -27,46 +27,47 @@ class _NewEntryPageState extends State<NewEntryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
-      children: [
-        BudgetronAppBarWithTabs(
-          tabNotifier: widget.tabNotifier,
-          tabs: Row(
-            children: [
-              BudgetronTopBarTab(
-                tabNotifier: widget.tabNotifier,
-                onTapAction: () =>
-                    {widget.tabNotifier.value = EntryCategoryType.expense},
-                padding: const EdgeInsets.only(
-                    left: 24, right: 15, top: 13, bottom: 13),
-                name: 'Expense',
-                associatedTabValue: EntryCategoryType.expense,
+          children: [
+            BudgetronAppBarWithTabs(
+              tabNotifier: widget.tabNotifier,
+              tabs: Row(
+                children: [
+                  BudgetronTopBarTab(
+                    tabNotifier: widget.tabNotifier,
+                    onTapAction: () =>
+                        {widget.tabNotifier.value = EntryCategoryType.expense},
+                    padding: const EdgeInsets.only(
+                        left: 24, right: 15, top: 13, bottom: 13),
+                    name: 'Expense',
+                    associatedTabValue: EntryCategoryType.expense,
+                  ),
+                  BudgetronTopBarTab(
+                    tabNotifier: widget.tabNotifier,
+                    onTapAction: () =>
+                        {widget.tabNotifier.value = EntryCategoryType.income},
+                    padding: const EdgeInsets.only(
+                        left: 15, right: 24, top: 13, bottom: 13),
+                    name: 'Income',
+                    associatedTabValue: EntryCategoryType.income,
+                  ),
+                ],
               ),
-              BudgetronTopBarTab(
-                tabNotifier: widget.tabNotifier,
-                onTapAction: () =>
-                    {widget.tabNotifier.value = EntryCategoryType.income},
-                padding: const EdgeInsets.only(
-                    left: 15, right: 24, top: 13, bottom: 13),
-                name: 'Income',
-                associatedTabValue: EntryCategoryType.income,
-              ),
-            ],
-          ),
-        ),
-        EntryValueTextField(
-          tabNotifier: widget.tabNotifier,
-          categoryNotifier: widget.categoryNotifier,
-        ),
-        DateAndCategoryRow(
-          setCategoryCallback: (value) => setState(() {
-            widget.categoryNotifier.value = value;
-          }),
-          categoryNotifier: widget.categoryNotifier,
-          tabNotifier: widget.tabNotifier,
-        )
-      ],
-    ));
+            ),
+            EntryValueTextField(
+              tabNotifier: widget.tabNotifier,
+              categoryNotifier: widget.categoryNotifier,
+            ),
+            DateAndCategoryRow(
+              setCategoryCallback: (value) => setState(() {
+                widget.categoryNotifier.value = value;
+              }),
+              categoryNotifier: widget.categoryNotifier,
+              tabNotifier: widget.tabNotifier,
+            )
+          ],
+        ));
   }
 }
 

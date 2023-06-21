@@ -32,7 +32,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
         ValueNotifier(widget.entryCategoryType);
 
     return AlertDialog(
-      elevation: 0,
+      backgroundColor: Theme.of(context).colorScheme.background,
       alignment: Alignment.bottomCenter,
       insetPadding: EdgeInsets.zero,
       contentPadding:
