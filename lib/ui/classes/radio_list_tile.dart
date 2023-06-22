@@ -36,7 +36,7 @@ class BudgetronRadioListTile extends StatelessWidget {
                 horizontal: VisualDensity.minimumDensity,
                 vertical: VisualDensity.minimumDensity),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           Text(label, style: BudgetronFonts.nunitoSize16Weight400)
         ]),
       ),
