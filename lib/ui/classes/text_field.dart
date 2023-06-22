@@ -25,12 +25,14 @@ class BudgetronTextField extends StatelessWidget {
         isDense: true,
         contentPadding:
             const EdgeInsets.only(top: 9, bottom: 10, left: 8, right: 8),
-        enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: BudgetronColors.black),
-            borderRadius: BorderRadius.all(Radius.circular(2))),
-        focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: BudgetronColors.black, width: 1.5),
-            borderRadius: BorderRadius.all(Radius.circular(2))),
+        enabledBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.primary),
+            borderRadius: const BorderRadius.all(Radius.circular(2))),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.primary, width: 1.5),
+            borderRadius: const BorderRadius.all(Radius.circular(2))),
         hintText: hintText,
         hintStyle: BudgetronFonts.nunitoSize14Weight400Hint,
       ),

@@ -64,7 +64,7 @@ class BudgetronTopBarTab extends StatelessWidget {
                         bottom: BorderSide(
                             width: 1,
                             color: tabNotifier.value == associatedTabValue
-                                ? BudgetronColors.black
+                                ? Theme.of(context).colorScheme.primary
                                 : Colors.transparent))),
                 child: Text(name, style: BudgetronFonts.nunitoSize16Weight400),
               );

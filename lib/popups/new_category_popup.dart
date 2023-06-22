@@ -75,7 +75,8 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
                     decoration: BoxDecoration(
                         color: categoryColor,
                         border: Border.all(
-                            color: BudgetronColors.black, width: 1.5)),
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 1.5)),
                     child: const Icon(Icons.add)),
               ),
               const SizedBox(width: 8),

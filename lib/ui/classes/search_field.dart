@@ -43,13 +43,14 @@ class _BudgetronSearchFieldState extends State<BudgetronSearchField> {
           cursorColor: BudgetronColors.black,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.only(top: 13, bottom: 13),
-            enabledBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: BudgetronColors.black),
-                borderRadius: BorderRadius.all(Radius.circular(2))),
-            focusedBorder: const OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
                 borderSide:
-                    BorderSide(color: BudgetronColors.black, width: 1.5),
-                borderRadius: BorderRadius.all(Radius.circular(2))),
+                    BorderSide(color: Theme.of(context).colorScheme.primary),
+                borderRadius: const BorderRadius.all(Radius.circular(2))),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary, width: 1.5),
+                borderRadius: const BorderRadius.all(Radius.circular(2))),
             hintText: widget.hintText,
             hintStyle: BudgetronFonts.nunitoSize16Weight600Hint,
             prefixIconConstraints: const BoxConstraints(),
