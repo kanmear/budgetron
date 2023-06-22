@@ -43,7 +43,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("New Category", style: BudgetronFonts.nunitoSize18Weight600),
+              Text("New Category", style: BudgetronFonts.nunitoSize18Weight500),
               IconButton(
                 constraints: const BoxConstraints(),
                 padding: EdgeInsets.zero,
