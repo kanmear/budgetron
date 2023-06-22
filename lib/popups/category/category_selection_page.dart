@@ -1,16 +1,15 @@
-import 'package:budgetron/models/enums/entry_category_type.dart';
-import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
+import 'package:budgetron/ui/icons.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/classes/search_field.dart';
-import 'package:budgetron/popups/new_category_popup.dart';
-import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
+import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
+import 'package:budgetron/popups/category/new_category_popup.dart';
 
 class CategoriesPage extends StatelessWidget {
   final ValueNotifier<String> nameFilter = ValueNotifier("");

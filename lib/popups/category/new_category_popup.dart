@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:budgetron/popups/category/category_color_selection_popup.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/radio_list_tile.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/main.dart';
 
@@ -67,7 +67,10 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
           Row(
             children: [
               InkWell(
-                onTap: () => _chooseColor(),
+                onTap: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) => CategoryColorDialog()),
+                // onTap: () => _chooseColor(),
                 child: Container(
                     padding: EdgeInsets.zero,
                     height: 38,

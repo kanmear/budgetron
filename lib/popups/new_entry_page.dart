@@ -1,15 +1,14 @@
-import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/ui/colors.dart';
-import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/main.dart';
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/popups/category_selection_page.dart';
+import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/budgetron_ui.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
+import 'package:budgetron/models/enums/entry_category_type.dart';
+import 'package:budgetron/popups/category/category_selection_page.dart';
 
 class NewEntryPage extends StatefulWidget {
   //TODO maybe tab should be saved between entries
