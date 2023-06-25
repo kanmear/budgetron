@@ -54,14 +54,12 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
             ],
           ),
           const SizedBox(height: 24),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                "Color and category name",
-                style: BudgetronFonts.nunitoSize16Weight400,
-              ),
-            ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Color and category name",
+              style: BudgetronFonts.nunitoSize16Weight400,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
