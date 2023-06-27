@@ -66,9 +66,10 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
             children: [
               InkWell(
                 onTap: () => showDialog(
-                    context: context,
-                    builder: (BuildContext context) => CategoryColorDialog()),
-                // onTap: () => _chooseColor(),
+                        context: context,
+                        builder: (BuildContext context) =>
+                            CategoryColorDialog())
+                    .then((value) => _setColor(value)),
                 child: Container(
                     padding: EdgeInsets.zero,
                     height: 38,
@@ -111,35 +112,9 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
     );
   }
 
-  void _chooseColor() {
-    //placeholder
-    int i = Random().nextInt(5);
-    Color color;
-    switch (i) {
-      case 0:
-        color = Colors.red;
-        break;
-      case 1:
-        color = Colors.indigo;
-        break;
-      case 2:
-        color = Colors.green;
-        break;
-      case 3:
-        color = Colors.orange;
-        break;
-      case 4:
-        color = Colors.blue;
-        break;
-      case 5:
-        color = Colors.pink;
-        break;
-      default:
-        color = Colors.black;
-    }
-
+  void _setColor(Color value) {
     setState(() {
-      categoryColor = color;
+      categoryColor = value;
     });
   }
 }

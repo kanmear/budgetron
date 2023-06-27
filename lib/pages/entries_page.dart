@@ -74,6 +74,7 @@ class EntriesListView extends StatelessWidget {
       addEntryToMap(element);
     }
 
+    //TODO entries with the same category should be squashed together
     return ListView(
       children: [
         for (var day in entriesMap.keys)
