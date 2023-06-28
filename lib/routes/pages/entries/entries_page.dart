@@ -4,8 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:budgetron/main.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/routes/pages/entries/new_entry_page.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
+import 'package:budgetron/routes/pages/entries/new_entry_page.dart';
 
 class EntriesPage extends StatefulWidget {
   const EntriesPage({
@@ -74,96 +74,99 @@ class EntriesListView extends StatelessWidget {
       addEntryToMap(element);
     }
 
+    List<DateTime> entriesDates = entriesMap.keys.toList();
+
     //TODO entries with the same category should be squashed together
-    return ListView(
-      children: [
-        for (var day in entriesMap.keys)
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                child: Card(
-                  elevation: 3,
-                  shadowColor: entriesMap.keys.first == day
-                      ? const Color.fromARGB(25, 0, 0, 0)
-                      : Colors.transparent,
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 10.0, right: 10.0, top: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              (entriesMap.keys.first == day &&
-                                      day ==
-                                          DateTime(
-                                              DateTime.now().year,
-                                              DateTime.now().month,
-                                              DateTime.now().day))
-                                  ? "Today"
-                                  : DateFormat.yMMMd().format(day),
-                              style: BudgetronFonts.nunitoSize16Weight600,
-                            ),
-                            Text(
-                              entriesMap[day]!
-                                  .map((e) => e.value)
-                                  .reduce((value, element) => value + element)
-                                  .toString(),
-                              style: BudgetronFonts.nunitoSize16Weight600,
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Column(children: [
-                        for (var entry in entriesMap[day]!)
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 8.0, right: 10.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.square_rounded,
-                                          size: 18,
-                                          color: Color(int.parse(
-                                              radix: 16,
-                                              entry.category.target!.color)),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(entry.category.target!.name,
-                                            style: BudgetronFonts
-                                                .nunitoSize16Weight400)
-                                      ],
-                                    ),
-                                    Text(
-                                      entry.value.toString(),
-                                      style:
-                                          BudgetronFonts.nunitoSize16Weight400,
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(height: 8.0)
-                              ],
-                            ),
+    return ListView.builder(
+      itemCount: entriesDates.length,
+      itemBuilder: (context, index) {
+        var day = entriesDates[index];
+
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              child: Card(
+                elevation: 3,
+                shadowColor: entriesMap.keys.first == day
+                    ? const Color.fromARGB(25, 0, 0, 0)
+                    : Colors.transparent,
+                color: Theme.of(context).colorScheme.surface,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10.0, right: 10.0, top: 10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            (entriesMap.keys.first == day &&
+                                    day ==
+                                        DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day))
+                                ? "Today"
+                                : DateFormat.yMMMd().format(day),
+                            style: BudgetronFonts.nunitoSize16Weight600,
                           ),
-                      ]),
-                    ],
-                  ),
+                          Text(
+                            entriesMap[day]!
+                                .map((e) => e.value)
+                                .reduce((value, element) => value + element)
+                                .toString(),
+                            style: BudgetronFonts.nunitoSize16Weight600,
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Column(children: [
+                      for (var entry in entriesMap[day]!)
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 8.0, right: 10.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.square_rounded,
+                                        size: 18,
+                                        color: Color(int.parse(
+                                            radix: 16,
+                                            entry.category.target!.color)),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(entry.category.target!.name,
+                                          style: BudgetronFonts
+                                              .nunitoSize16Weight400)
+                                    ],
+                                  ),
+                                  Text(
+                                    entry.value.toString(),
+                                    style: BudgetronFonts.nunitoSize16Weight400,
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 8.0)
+                            ],
+                          ),
+                        ),
+                    ]),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24)
-            ],
-          )
-      ],
+            ),
+            const SizedBox(height: 24)
+          ],
+        );
+      },
     );
   }
 }
