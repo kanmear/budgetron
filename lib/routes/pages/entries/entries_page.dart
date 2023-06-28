@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:budgetron/main.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/popups/new_entry_page.dart';
+import 'package:budgetron/routes/pages/entries/new_entry_page.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 
 class EntriesPage extends StatefulWidget {

@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'db/object_box_helper.dart';
 
 import 'package:budgetron/ui/colors.dart';
-import 'package:budgetron/pages/stats_page.dart';
-import 'package:budgetron/pages/entries_page.dart';
+import 'package:budgetron/routes/pages/stats_page.dart';
+import 'package:budgetron/routes/pages/entries/entries_page.dart';
 
 late ObjectBox objectBox;
 
