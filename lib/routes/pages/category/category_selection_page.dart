@@ -80,7 +80,7 @@ class CategoriesList extends StatelessWidget {
                           if (category.name
                               .toLowerCase()
                               .contains(nameFilter.value.toLowerCase()))
-                            categoryListTile(category, context)
+                            _categoryListTile(category, context)
                       ],
                     );
                   });
@@ -93,7 +93,7 @@ class CategoriesList extends StatelessWidget {
     );
   }
 
-  InkWell categoryListTile(EntryCategory category, BuildContext context) {
+  InkWell _categoryListTile(EntryCategory category, BuildContext context) {
     return InkWell(
       onTap: () => _selectCategoryAndReturn(category, context),
       child: Column(

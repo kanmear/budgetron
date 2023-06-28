@@ -86,6 +86,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
                   hintText: "Enter category name",
                   autoFocus: true,
                   onSubmitted: (value) {
+                    //TODO validate that color isn't white (meaning it wasn't selected)
                     objectBox.addCategory(EntryCategory(
                         name: value.toString().trim(),
                         isExpense: categoryTypeNotifier.value ==

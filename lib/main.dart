@@ -49,17 +49,6 @@ class _BudgetronState extends State<Budgetron> {
     super.dispose();
   }
 
-  void selectPage(index) {
-    pageViewController.animateToPage(index,
-        duration: const Duration(milliseconds: 200), curve: Curves.ease);
-  }
-
-  void updateIndex(index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,11 +63,11 @@ class _BudgetronState extends State<Budgetron> {
           )),
           StatsPage()
         ],
-        onPageChanged: (index) => updateIndex(index),
+        onPageChanged: (index) => _updateIndex(index),
       ),
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
-          onTap: selectPage,
+          onTap: _selectPage,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Entries'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -88,6 +77,17 @@ class _BudgetronState extends State<Budgetron> {
         title: const Text('Budgetron a0.1'),
       ),
     );
+  }
+
+  void _selectPage(index) {
+    pageViewController.animateToPage(index,
+        duration: const Duration(milliseconds: 200), curve: Curves.ease);
+  }
+
+  void _updateIndex(index) {
+    setState(() {
+      selectedIndex = index;
+    });
   }
 }
 
