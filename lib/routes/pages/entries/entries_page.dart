@@ -1,3 +1,4 @@
+import 'package:budgetron/logic/entries/entry_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -58,29 +59,15 @@ class EntriesListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Map<DateTime, List<Entry>> entriesMap = {};
+    List<DateTime> entryDates = [];
 
-    void addEntryToMap(Entry entry) {
-      DateTime dateTime = DateTime(
-          entry.dateTime.year, entry.dateTime.month, entry.dateTime.day);
-      if (entriesMap.containsKey(dateTime)) {
-        entriesMap.update(
-            dateTime, (value) => List.from(value)..addAll({entry}));
-      } else {
-        entriesMap[dateTime] = List.from({entry});
-      }
-    }
-
-    for (var element in data) {
-      addEntryToMap(element);
-    }
-
-    List<DateTime> entriesDates = entriesMap.keys.toList();
+    EntryService.formEntriesData(data, entriesMap, entryDates);
 
     //TODO entries with the same category should be squashed together
     return ListView.builder(
-      itemCount: entriesDates.length,
+      itemCount: entryDates.length,
       itemBuilder: (context, index) {
-        var day = entriesDates[index];
+        var day = entryDates[index];
 
         return Column(
           children: [
