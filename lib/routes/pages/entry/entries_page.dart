@@ -1,13 +1,13 @@
-import 'package:budgetron/logic/category/category_service.dart';
-import 'package:budgetron/logic/entries/entry_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/main.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
-import 'package:budgetron/routes/pages/entries/new_entry_page.dart';
+import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
 
 class EntriesPage extends StatefulWidget {
   const EntriesPage({
