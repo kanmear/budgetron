@@ -1,3 +1,4 @@
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -148,9 +149,8 @@ class _CategoryFieldState extends State<CategoryField> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(Icons.square_rounded,
-                                color: Color(int.parse(
-                                    radix: 16,
-                                    widget.categoryNotifier.value!.color))),
+                                color: CategoryService.stringToColor(
+                                    widget.categoryNotifier.value!.color)),
                             const SizedBox(width: 6),
                             Text(
                               widget.categoryNotifier.value!.name,

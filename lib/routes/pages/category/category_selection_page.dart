@@ -1,3 +1,4 @@
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/main.dart';
@@ -104,11 +105,9 @@ class CategoriesList extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.only(right: 8),
-                    child: Icon(
-                      Icons.square_rounded,
-                      size: 18,
-                      color: Color(int.parse(radix: 16, category.color)),
-                    ),
+                    child: Icon(Icons.square_rounded,
+                        size: 18,
+                        color: CategoryService.stringToColor(category.color)),
                   ),
                   Text(
                     category.name,

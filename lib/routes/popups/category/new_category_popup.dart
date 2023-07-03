@@ -1,3 +1,4 @@
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
@@ -95,8 +96,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
                         isExpense: categoryTypeNotifier.value ==
                             EntryCategoryType.expense,
                         usages: 0,
-                        color:
-                            'ff${categoryColor.value.toRadixString(16).substring(2)}'));
+                        color: CategoryService.colorToString(categoryColor)));
                     Navigator.pop(context);
                   },
                 ),

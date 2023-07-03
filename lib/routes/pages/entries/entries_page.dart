@@ -1,3 +1,4 @@
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/entries/entry_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -163,8 +164,8 @@ class EntryListTile extends StatelessWidget {
                   Icon(
                     Icons.square_rounded,
                     size: 18,
-                    color: Color(
-                        int.parse(radix: 16, entry.category.target!.color)),
+                    color: CategoryService.stringToColor(
+                        entry.category.target!.color),
                   ),
                   const SizedBox(width: 8),
                   Text(entry.category.target!.name,
