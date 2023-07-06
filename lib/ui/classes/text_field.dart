@@ -19,12 +19,11 @@ class BudgetronTextField extends StatelessWidget {
     return TextField(
       onSubmitted: (value) => onSubmitted(value),
       autofocus: autoFocus,
-      style: BudgetronFonts.nunitoSize14Weight400,
+      style: BudgetronFonts.nunitoSize16Weight400,
       cursorColor: BudgetronColors.black,
       decoration: InputDecoration(
         isDense: true,
-        contentPadding:
-            const EdgeInsets.only(top: 9, bottom: 10, left: 8, right: 8),
+        contentPadding: const EdgeInsets.all(8),
         enabledBorder: OutlineInputBorder(
             borderSide:
                 BorderSide(color: Theme.of(context).colorScheme.primary),
@@ -34,7 +33,7 @@ class BudgetronTextField extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary, width: 1.5),
             borderRadius: const BorderRadius.all(Radius.circular(2))),
         hintText: hintText,
-        hintStyle: BudgetronFonts.nunitoSize14Weight400Hint,
+        hintStyle: BudgetronFonts.nunitoSize16Weight400Hint,
       ),
     );
   }
