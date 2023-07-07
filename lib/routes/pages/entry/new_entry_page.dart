@@ -38,8 +38,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     tabNotifier: widget.tabNotifier,
                     onTapAction: () =>
                         {widget.tabNotifier.value = EntryCategoryType.expense},
-                    padding: const EdgeInsets.only(
-                        left: 24, right: 15, top: 13, bottom: 13),
+                    padding: BudgetronUI.leftTabInAppBar(),
                     name: 'Expense',
                     associatedTabValue: EntryCategoryType.expense,
                   ),
@@ -47,8 +46,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     tabNotifier: widget.tabNotifier,
                     onTapAction: () =>
                         {widget.tabNotifier.value = EntryCategoryType.income},
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 24, top: 13, bottom: 13),
+                    padding: BudgetronUI.rightTabInAppBar(),
                     name: 'Income',
                     associatedTabValue: EntryCategoryType.income,
                   ),
@@ -230,7 +228,7 @@ class EntryValueTextField extends StatelessWidget {
               onTapOutside: (event) {},
               autofocus: true,
               keyboardType: TextInputType.number,
-              decoration: BudgetronUI.budgetronInputDecoration()),
+              decoration: BudgetronUI.inputDecoration()),
         ),
       ),
     );
