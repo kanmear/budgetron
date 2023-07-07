@@ -5,10 +5,16 @@ import 'package:budgetron/ui/fonts.dart';
 
 class BudgetronAppBarWithTabs extends StatelessWidget {
   final ValueNotifier<Enum> tabNotifier;
+  final Widget leftIcon;
+  final Widget rightIcon;
   final Row tabs;
 
   const BudgetronAppBarWithTabs(
-      {super.key, required this.tabNotifier, required this.tabs});
+      {super.key,
+      required this.tabNotifier,
+      required this.tabs,
+      this.leftIcon = const ArrowBackIconButton(),
+      this.rightIcon = const SizedBox(width: 48)});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +26,10 @@ class BudgetronAppBarWithTabs extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const ArrowBackIconButton(),
+            leftIcon,
             tabs,
             //TODO find a way to properly center
-            const SizedBox(width: 48 /* width of iconButton */),
+            rightIcon
           ],
         ),
       ),
