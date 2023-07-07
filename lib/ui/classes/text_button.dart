@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/ui/colors.dart';
 
 class BudgetronTextButton extends StatelessWidget {
@@ -25,7 +24,7 @@ class BudgetronTextButton extends StatelessWidget {
             visualDensity: VisualDensity.compact),
         onPressed: () => onTap(),
         child: Container(
-            width: 126,
+            constraints: const BoxConstraints(minWidth: 126),
             padding: const EdgeInsets.only(
               top: 8,
               bottom: 8,
