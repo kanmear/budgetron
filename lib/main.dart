@@ -1,3 +1,4 @@
+import 'package:budgetron/routes/pages/budget/budget_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'db/object_box_helper.dart';
@@ -54,14 +55,15 @@ class _BudgetronState extends State<Budgetron> {
     return Scaffold(
       body: PageView(
         controller: pageViewController,
-        children: const [
-          EntriesPage(),
-          Center(
+        children: [
+          const EntriesPage(),
+          const Center(
               child: Text(
             "Home page placeholder",
             textScaleFactor: 2,
           )),
-          StatsPage()
+          BudgetPage(),
+          const StatsPage()
         ],
         onPageChanged: (index) => _updateIndex(index),
       ),
@@ -78,9 +80,6 @@ class _BudgetronState extends State<Budgetron> {
             BottomNavigationBarItem(icon: Icon(Icons.wallet), label: 'Budget'),
             BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats')
           ]),
-      appBar: AppBar(
-        title: const Text('Budgetron a0.1'),
-      ),
     );
   }
 
