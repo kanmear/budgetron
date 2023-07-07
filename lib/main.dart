@@ -66,11 +66,16 @@ class _BudgetronState extends State<Budgetron> {
         onPageChanged: (index) => _updateIndex(index),
       ),
       bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: BudgetronColors.background,
+          unselectedItemColor: BudgetronColors.backgroundHalfOpacity,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: BudgetronColors.black,
           currentIndex: selectedIndex,
           onTap: _selectPage,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Entries'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.wallet), label: 'Budget'),
             BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats')
           ]),
       appBar: AppBar(
