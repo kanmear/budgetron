@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
@@ -31,29 +32,9 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
     final ValueNotifier<EntryCategoryType> categoryTypeNotifier =
         ValueNotifier(widget.entryCategoryType);
 
-    return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      alignment: Alignment.bottomCenter,
-      insetPadding: EdgeInsets.zero,
-      contentPadding:
-          const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 14),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("New Category", style: BudgetronFonts.nunitoSize18Weight600),
-              IconButton(
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                icon: const Icon(Icons.close),
-                //TODO dismiss keyboard with FocusManager.instance.primaryFocus?.unfocus()
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
-          ),
-          const SizedBox(height: 24),
+    return DockedDialog(
+        title: "New Category",
+        body: Column(children: [
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -68,7 +49,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
                 onTap: () => showDialog(
                         context: context,
                         builder: (BuildContext context) =>
-                            CategoryColorDialog())
+                            const CategoryColorDialog())
                     .then((value) => _setColor(value)),
                 child: Container(
                     padding: EdgeInsets.zero,
@@ -110,9 +91,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
               child: CategoryTypeRadioButtons(
                 categoryTypeNotifier: categoryTypeNotifier,
               )),
-        ]),
-      ),
-    );
+        ]));
   }
 
   void _setColor(Color value) {
