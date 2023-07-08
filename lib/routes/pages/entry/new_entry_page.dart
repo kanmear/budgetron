@@ -1,13 +1,13 @@
-import 'package:budgetron/logic/category/category_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/main.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/budgetron_ui.dart';
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 
@@ -242,7 +242,7 @@ class EntryValueTextField extends StatelessWidget {
     int entryValue =
         int.parse(value) * (categoryNotifier.value!.isExpense ? -1 : 1);
     Entry entry = Entry(value: entryValue, dateTime: DateTime.now());
-    objectBox.addEntry(entry, categoryNotifier.value!);
+    EntryController.addEntry(entry, categoryNotifier.value!);
     Navigator.pop(context);
   }
 }
