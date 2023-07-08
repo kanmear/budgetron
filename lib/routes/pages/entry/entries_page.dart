@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/main.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
@@ -24,7 +24,7 @@ class _EntriesPageState extends State<EntriesPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: StreamBuilder<List<Entry>>(
-            stream: objectBox.getEntries(),
+            stream: EntryController.getEntries(),
             builder: (context, snapshot) {
               if (snapshot.data?.isNotEmpty ?? false) {
                 return EntriesListView(data: snapshot.data!);

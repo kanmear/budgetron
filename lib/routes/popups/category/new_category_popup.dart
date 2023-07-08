@@ -1,13 +1,13 @@
-import 'package:budgetron/logic/category/category_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/radio_list_tile.dart';
+import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/fonts.dart';
-import 'package:budgetron/main.dart';
 
 class NewCategoryDialog extends StatefulWidget {
   final EntryCategoryType entryCategoryType;
@@ -91,7 +91,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
                   autoFocus: true,
                   onSubmitted: (value) {
                     //TODO validate that color isn't white (meaning it wasn't selected)
-                    objectBox.addCategory(EntryCategory(
+                    CategoryController.addCategory(EntryCategory(
                         name: value.toString().trim(),
                         isExpense: categoryTypeNotifier.value ==
                             EntryCategoryType.expense,
