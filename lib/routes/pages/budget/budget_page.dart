@@ -1,3 +1,6 @@
+import 'package:budgetron/db/budget_controller.dart';
+import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +49,7 @@ class BudgetPage extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: Column(
                   children: [
+                    //TODO return budget / saving listView depending on selected tab
                     BudgetListView(
                       tabNotifier: tabNotifier,
                     ),
@@ -55,7 +59,10 @@ class BudgetPage extends StatelessWidget {
                           text: "Add budget",
                           backgroundColor:
                               Theme.of(context).colorScheme.background,
-                          onTap: () => {},
+                          onTap: () => showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  NewBudgetDialog()),
                           textStyle: BudgetronFonts.nunitoSize18Weight500),
                     )
                   ],
@@ -74,7 +81,22 @@ class BudgetListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: Center(child: Text("placeholder")));
+    return Expanded(
+      child: StreamBuilder<List<Budget>>(
+        stream: BudgetController.getBudgets(),
+        builder: (context, snapshot) {
+          if (snapshot.data?.isNotEmpty ?? false) {
+            return ListView(children: [
+              for (var budget in snapshot.data!)
+                ListTile(title: Text(budget.category.target!.name))
+            ]);
+          } else {
+            return const Center(child: Text("No budgets in database"));
+          }
+        },
+      ),
+    );
+    // return Expanded(child: Center(child: Text("No budgets in database")));
   }
 }
 
