@@ -3,8 +3,8 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:budgetron/objectbox.g.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/models/enums/entry_category_type.dart';
 
 class ObjectBox {
   late final Store store;
@@ -12,10 +12,13 @@ class ObjectBox {
 
   late final Box<Entry> entryBox;
   late final Box<EntryCategory> categoryBox;
+  late final Box<Budget> budgetBox;
 
   ObjectBox._create(this.store) {
     entryBox = Box<Entry>(store);
     categoryBox = Box<EntryCategory>(store);
+    budgetBox = Box<Budget>(store);
+
     if (Admin.isAvailable()) {
       admin = Admin(store);
     }
