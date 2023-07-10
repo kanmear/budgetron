@@ -19,6 +19,6 @@ class EntryCategory {
 
   @override
   String toString() {
-    return 'Category {name: $name, isExpense: $isExpense}';
+    return name;
   }
 }
