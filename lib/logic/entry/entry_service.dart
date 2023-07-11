@@ -37,4 +37,33 @@ class EntryService {
       entriesMap[dateTime] = List.from({entry});
     }
   }
+
+  static List<DateTime> getDatePeriod(String period) {
+    DateTime now = DateTime.now();
+    DateTime start;
+    switch (period) {
+      case 'Month':
+        start = DateTime(now.year, now.month);
+        break;
+      //FIXME that's not how weeks are supposed to work
+      case 'Week':
+        start =
+            DateTime(now.year, now.month, now.day - 7 <= 0 ? 1 : now.day - 7);
+        break;
+      case 'Two weeks':
+        start =
+            DateTime(now.year, now.month, now.day - 14 <= 0 ? 1 : now.day - 14);
+        break;
+      case 'Six months':
+        start = DateTime(now.year, now.month - 6 <= 0 ? 1 : now.month - 6);
+        break;
+      case 'Year':
+        start = DateTime(now.year);
+        break;
+      default:
+        start = now;
+    }
+
+    return [start, now];
+  }
 }
