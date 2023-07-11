@@ -68,6 +68,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
               const SizedBox(width: 8),
               Expanded(
                 child: BudgetronTextField(
+                  inputType: TextInputType.text,
                   hintText: "Enter category name",
                   autoFocus: true,
                   onSubmitted: (value) {
