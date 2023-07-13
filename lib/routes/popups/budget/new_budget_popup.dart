@@ -1,8 +1,14 @@
+import 'package:budgetron/db/budget_controller.dart';
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
+import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/fonts.dart';
@@ -10,8 +16,9 @@ import 'package:flutter/material.dart';
 
 class NewBudgetDialog extends StatefulWidget {
   final ValueNotifier<Object?> categoryNotifier = ValueNotifier(null);
-  final ValueNotifier<Object?> periodNotifier = ValueNotifier("Month");
+  final ValueNotifier<String> periodNotifier = ValueNotifier("Month");
   final ValueNotifier<bool> switchNotifier = ValueNotifier(true);
+  final TextEditingController textController = TextEditingController();
 
   NewBudgetDialog({super.key});
 
@@ -66,6 +73,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                     ),
                     const SizedBox(height: 4),
                     BudgetronTextField(
+                        textController: widget.textController,
                         inputType: TextInputType.number,
                         hintText: "0",
                         autoFocus: true,
@@ -89,6 +97,8 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                 Switch(
                   onChanged: (bool value) {
                     setState(() {
+                      //FIXME flicking switch while dropdown category is chosen causes an error
+                      // maybe extracting switch to a separate widget will help
                       widget.switchNotifier.value = value;
                     });
                   },
@@ -97,7 +107,13 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                 )
               ],
             ),
-          )
+          ),
+          const SizedBox(height: 16),
+          BudgetronBigTextButton(
+              text: "Add budget",
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              onTap: () => _addBudget(),
+              textStyle: BudgetronFonts.nunitoSize18Weight500White)
         ]));
   }
 
@@ -115,5 +131,31 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
           size: 18, color: CategoryService.stringToColor(category.color)),
       const SizedBox(width: 8),
     ]);
+  }
+
+  //TODO add validations
+  void _addBudget() async {
+    EntryCategory category = widget.categoryNotifier.value as EntryCategory;
+    String period = widget.periodNotifier.value;
+    int currentValue = await _calculateCurrentValue(category);
+
+    Budget budget = Budget(
+      targetValue: int.parse(widget.textController.value.text),
+      budgetPeriod: BudgetService.budgetPeriodStrings.indexOf(period),
+      currentValue: currentValue,
+      onMainPage: widget.switchNotifier.value,
+    );
+
+    BudgetController.addBudget(budget, category);
+  }
+
+  Future<int> _calculateCurrentValue(EntryCategory category) async {
+    return await EntryController.getEntries(
+                categoryFilter: List.from([category]))
+            .first
+            .then((entries) => entries
+                .map((entry) => entry.value)
+                .reduce((value, element) => value + element)) *
+        -1;
   }
 }

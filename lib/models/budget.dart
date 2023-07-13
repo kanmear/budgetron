@@ -1,5 +1,6 @@
-import 'package:budgetron/models/category.dart';
 import 'package:objectbox/objectbox.dart';
+
+import 'package:budgetron/models/category.dart';
 
 @Entity()
 class Budget {
@@ -9,15 +10,16 @@ class Budget {
 
   int currentValue;
 
-  //TODO how this should be implemented?
+  //index of budget period string values
   int budgetPeriod;
 
-  //TODO add isOnMainPage boolean
+  bool onMainPage;
 
   final category = ToOne<EntryCategory>();
 
   Budget(
       {required this.targetValue,
       required this.currentValue,
-      required this.budgetPeriod});
+      required this.budgetPeriod,
+      required this.onMainPage});
 }

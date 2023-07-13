@@ -57,6 +57,11 @@ class BudgetronFonts {
       fontSize: 16,
       fontWeight: FontWeight.w400,
       color: BudgetronColors.gray4);
+  static TextStyle nunitoSize18Weight500White = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: BudgetronColors.background);
 
   // for input fields
   static TextStyle robotoSize32Weight400 = TextStyle(
