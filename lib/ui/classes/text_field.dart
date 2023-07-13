@@ -4,6 +4,7 @@ import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 
 class BudgetronTextField extends StatelessWidget {
+  final TextEditingController? textController;
   final TextInputType inputType;
   final Function onSubmitted;
   final String hintText;
@@ -14,12 +15,14 @@ class BudgetronTextField extends StatelessWidget {
       required this.hintText,
       required this.autoFocus,
       required this.onSubmitted,
-      required this.inputType});
+      required this.inputType,
+      this.textController});
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       onSubmitted: (value) => onSubmitted(value),
+      controller: textController,
       autofocus: autoFocus,
       keyboardType: inputType,
       style: BudgetronFonts.nunitoSize16Weight400,
