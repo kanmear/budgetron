@@ -9,7 +9,10 @@ class Budget {
 
   int currentValue;
 
+  //TODO how this should be implemented?
   int budgetPeriod;
+
+  //TODO add isOnMainPage boolean
 
   final category = ToOne<EntryCategory>();
 

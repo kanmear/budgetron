@@ -45,14 +45,11 @@ class EntryService {
       case 'Month':
         start = DateTime(now.year, now.month);
         break;
-      //FIXME that's not how weeks are supposed to work
       case 'Week':
-        start =
-            DateTime(now.year, now.month, now.day - 7 <= 0 ? 1 : now.day - 7);
+        start = DateTime(now.year, now.month, getClosestMonday(now.day));
         break;
       case 'Two weeks':
-        start =
-            DateTime(now.year, now.month, now.day - 14 <= 0 ? 1 : now.day - 14);
+        start = DateTime(now.year, now.month, getClosestMonday(now.day));
         break;
       case 'Six months':
         start = DateTime(now.year, now.month - 6 <= 0 ? 1 : now.month - 6);
@@ -65,5 +62,18 @@ class EntryService {
     }
 
     return [start, now];
+  }
+
+  //TODO test
+  //TODO add two weeks impl
+  static int getClosestMonday(int currentDay) {
+    DateTime now = DateTime.now();
+    DateTime weekStart = DateTime(now.year, now.month, currentDay);
+
+    while (weekStart.weekday != 1) {
+      weekStart = DateTime(weekStart.year, weekStart.month, weekStart.day - 1);
+    }
+
+    return weekStart.day;
   }
 }
