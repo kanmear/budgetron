@@ -23,7 +23,7 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
   @override
   initState() {
     super.initState();
-    widget.valueNotifier.value = null;
+    widget.valueNotifier.value;
   }
 
   @override
@@ -33,7 +33,8 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
         constraints: const BoxConstraints(),
         height: 38,
         decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.primary)),
+            border: Border.all(color: Theme.of(context).colorScheme.primary),
+            borderRadius: const BorderRadius.all(Radius.circular(2))),
         child: FutureBuilder(
             future: widget.items,
             builder: (BuildContext context,
@@ -54,6 +55,7 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                       return DropdownMenuItem<Object>(
                         value: o.toString(),
                         child: Row(children: [
+                          const SizedBox(width: 8),
                           if (widget.leading != null) widget.leading!(o),
                           Text(o.toString(),
                               style: BudgetronFonts.nunitoSize16Weight400)
