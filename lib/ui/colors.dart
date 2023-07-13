@@ -9,10 +9,12 @@ class BudgetronColors {
   static const Color backgroundHalfOpacity = Color(0x80f7f7f7);
   static const Color surface = Color(0xffffffff);
 
+  static const Color mainGreen = Color(0xff9fd356);
+
   static ColorScheme budgetronColorScheme = const ColorScheme(
     primary: BudgetronColors.black,
     onPrimary: Colors.white,
-    secondary: Colors.blue,
+    secondary: BudgetronColors.mainGreen,
     onSecondary: Colors.white,
     background: BudgetronColors.background,
     onBackground: Colors.black,
