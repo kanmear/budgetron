@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 class NewBudgetDialog extends StatefulWidget {
   final ValueNotifier<Object?> categoryNotifier = ValueNotifier(null);
   final ValueNotifier<Object?> periodNotifier = ValueNotifier("Month");
+  final ValueNotifier<bool> switchNotifier = ValueNotifier(true);
 
   NewBudgetDialog({super.key});
 
@@ -73,6 +74,29 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                 ),
               )
             ],
+          ),
+          const SizedBox(height: 40),
+          Container(
+            color: Theme.of(context).colorScheme.surface,
+            height: 58,
+            padding: const EdgeInsets.all(10),
+            constraints: const BoxConstraints(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Add budget tracking to the main screen",
+                    style: BudgetronFonts.nunitoSize14Weight400),
+                Switch(
+                  onChanged: (bool value) {
+                    setState(() {
+                      widget.switchNotifier.value = value;
+                    });
+                  },
+                  value: widget.switchNotifier.value,
+                  activeColor: Theme.of(context).colorScheme.secondary,
+                )
+              ],
+            ),
           )
         ]));
   }
