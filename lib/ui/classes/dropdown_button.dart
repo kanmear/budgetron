@@ -51,13 +51,13 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                     ),
                     underline: const SizedBox(),
                     isExpanded: true,
-                    items: dropdownItems.data!.map((Object o) {
+                    items: dropdownItems.data!.map((Object object) {
                       return DropdownMenuItem<Object>(
-                        value: o.toString(),
+                        value: object,
                         child: Row(children: [
                           const SizedBox(width: 8),
-                          if (widget.leading != null) widget.leading!(o),
-                          Text(o.toString(),
+                          if (widget.leading != null) widget.leading!(object),
+                          Text(object.toString(),
                               style: BudgetronFonts.nunitoSize16Weight400)
                         ]),
                       );
