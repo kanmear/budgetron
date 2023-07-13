@@ -1,4 +1,3 @@
-import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -25,7 +24,7 @@ class _EntriesPageState extends State<EntriesPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: StreamBuilder<List<Entry>>(
-            stream: EntryController.getEntries(null),
+            stream: EntryController.getEntries(),
             builder: (context, snapshot) {
               if (snapshot.data?.isNotEmpty ?? false) {
                 return EntriesListView(data: snapshot.data!);
