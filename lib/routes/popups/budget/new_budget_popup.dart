@@ -4,10 +4,10 @@ import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/models/budget.dart';
-import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
+import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
 import 'package:budgetron/models/category.dart';
@@ -77,7 +77,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                         inputType: TextInputType.number,
                         hintText: "0",
                         autoFocus: true,
-                        onSubmitted: () => {})
+                        onSubmitted: (value) => {})
                   ],
                 ),
               )
@@ -94,17 +94,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
               children: [
                 Text("Add budget tracking to the main screen",
                     style: BudgetronFonts.nunitoSize14Weight400),
-                Switch(
-                  onChanged: (bool value) {
-                    setState(() {
-                      //FIXME flicking switch while dropdown category is chosen causes an error
-                      // maybe extracting switch to a separate widget will help
-                      widget.switchNotifier.value = value;
-                    });
-                  },
-                  value: widget.switchNotifier.value,
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                )
+                BudgetronSwitch(switchNotifier: widget.switchNotifier)
               ],
             ),
           ),
