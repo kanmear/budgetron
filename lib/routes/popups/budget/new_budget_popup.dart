@@ -137,7 +137,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   void _addBudget() async {
     EntryCategory category = widget.categoryNotifier.value as EntryCategory;
     String period = widget.periodNotifier.value;
-    int currentValue = await _calculateCurrentValue(category);
+    int currentValue = await _calculateCurrentValue(category, period);
 
     Budget budget = Budget(
       targetValue: int.parse(widget.textController.value.text),
@@ -149,9 +149,12 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     BudgetController.addBudget(budget, category);
   }
 
-  Future<int> _calculateCurrentValue(EntryCategory category) async {
+  Future<int> _calculateCurrentValue(
+      EntryCategory category, String period) async {
+    List<DateTime> datePeriod = EntryService.getDatePeriod(period);
+
     return await EntryController.getEntries(
-                categoryFilter: List.from([category]))
+                period: datePeriod, categoryFilter: List.from([category]))
             .first
             .then((entries) => entries
                 .map((entry) => entry.value)
