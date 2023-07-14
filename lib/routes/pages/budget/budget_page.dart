@@ -1,7 +1,10 @@
 import 'package:budgetron/db/budget_controller.dart';
+import 'package:budgetron/logic/budget/budget_service.dart';
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
+import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -44,6 +47,7 @@ class BudgetPage extends StatelessWidget {
                       associatedTabValue: BudgetTabs.savings)
                 ],
               )),
+          const SizedBox(height: 30),
           Expanded(
             child: Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
@@ -86,9 +90,9 @@ class BudgetListView extends StatelessWidget {
         stream: BudgetController.getBudgets(),
         builder: (context, snapshot) {
           if (snapshot.data?.isNotEmpty ?? false) {
-            return ListView(children: [
+            return ListView(padding: EdgeInsets.zero, children: [
               for (var budget in snapshot.data!)
-                ListTile(title: Text(budget.category.target!.name))
+                BudgetronListTile(budget: budget)
             ]);
           } else {
             return const Center(child: Text("No budgets in database"));
@@ -97,6 +101,81 @@ class BudgetListView extends StatelessWidget {
       ),
     );
     // return Expanded(child: Center(child: Text("No budgets in database")));
+  }
+}
+
+class BudgetronListTile extends StatelessWidget {
+  const BudgetronListTile({
+    super.key,
+    required this.budget,
+  });
+
+  final Budget budget;
+
+  @override
+  Widget build(BuildContext context) {
+    int currentValue = budget.currentValue;
+    int targetValue = budget.targetValue;
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.square_rounded,
+                    size: 18,
+                    color: CategoryService.stringToColor(
+                      budget.category.target!.color,
+                    )),
+                const SizedBox(width: 4),
+                Text(budget.category.target!.name,
+                    style: BudgetronFonts.nunitoSize14Weight400),
+              ],
+            ),
+            Row(
+              children: [
+                Text(currentValue.toString(),
+                    style: BudgetronFonts.nunitoSize14Weight300),
+                const SizedBox(width: 8),
+                const Text('•'),
+                const SizedBox(width: 8),
+                Text(targetValue.toString(),
+                    style: BudgetronFonts.nunitoSize14Weight300),
+              ],
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Padding(
+          padding: const EdgeInsets.only(left: 2, right: 2),
+          child: Container(
+            decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(2))),
+            padding: EdgeInsets.zero,
+            constraints: const BoxConstraints(),
+            child: LinearProgressIndicator(
+                value: currentValue / targetValue,
+                color: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.surface),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Text(BudgetService.budgetPeriodStrings[budget.budgetPeriod],
+              style: BudgetronFonts.nunitoSize14Weight400),
+        ),
+        const SizedBox(height: 16),
+        Container(
+          height: 1,
+          decoration: BoxDecoration(
+              border: Border.all(color: BudgetronColors.gray0, width: 1)),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+    // return ListTile(title: Text(budget.category.target!.name));
   }
 }
 

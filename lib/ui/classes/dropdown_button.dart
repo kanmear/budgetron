@@ -41,6 +41,8 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                 AsyncSnapshot<List<Object>> dropdownItems) {
               if (dropdownItems.data?.isNotEmpty ?? false) {
                 return DropdownButton(
+                    //TODO limit max size of dropdown item container
+                    // menuMaxHeight: 260,
                     value: widget.valueNotifier.value,
                     hint: Row(
                       children: [
