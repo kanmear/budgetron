@@ -151,7 +151,10 @@ class BudgetronListTile extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 2, right: 2),
           child: Container(
+            height: 4,
+            clipBehavior: Clip.hardEdge,
             decoration: const BoxDecoration(
+                color: BudgetronColors.mainGreen,
                 borderRadius: BorderRadius.all(Radius.circular(2))),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
