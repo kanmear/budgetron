@@ -14,4 +14,8 @@ class BudgetController {
     budget.category.target = category;
     return objectBox.budgetBox.put(budget);
   }
+
+  static void cleanBudgets() {
+    objectBox.budgetBox.removeMany([6, 5, 3, 2, 1]);
+  }
 }
