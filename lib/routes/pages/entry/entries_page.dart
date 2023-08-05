@@ -35,17 +35,15 @@ class _EntriesPageState extends State<EntriesPage> {
               }
             }),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
-          onPressed: () => _navigateToEntryCreation(context, () => {}),
+          onPressed: () => _navigateToEntryCreation(context),
         ));
   }
 
-  Future<void> _navigateToEntryCreation(
-      BuildContext context, Function callback) async {
-    final result = await Navigator.push(
+  Future<void> _navigateToEntryCreation(BuildContext context) async {
+    await Navigator.push(
         context, MaterialPageRoute(builder: (context) => NewEntryPage()));
 
     if (!mounted) return;
-    callback.call(result);
   }
 }
 
