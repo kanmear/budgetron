@@ -1,32 +1,26 @@
-import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 
 import 'package:budgetron/objectbox.g.dart';
-import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/models/budget.dart';
-import 'package:budgetron/models/category.dart';
 
 class ObjectBox {
-  late final Store store;
-  late Admin admin;
+  static late final Store store;
 
-  late final Box<Entry> entryBox;
-  late final Box<EntryCategory> categoryBox;
-  late final Box<Budget> budgetBox;
+  // web db browsing
+  static late Admin admin;
 
-  ObjectBox._create(this.store) {
-    entryBox = Box<Entry>(store);
-    categoryBox = Box<EntryCategory>(store);
-    budgetBox = Box<Budget>(store);
-
-    if (Admin.isAvailable()) {
-      admin = Admin(store);
-    }
-  }
-
-  static Future<ObjectBox> create() async {
+  static Future init() async {
     final docsDir = await getApplicationDocumentsDirectory();
-    final store = await openStore(directory: join(docsDir.path, "budgetron"));
-    return ObjectBox._create(store);
+    final dbPath = join(docsDir.path, 'db');
+
+    if (Store.isOpen(dbPath)) {
+      store = Store.attach(getObjectBoxModel(), dbPath);
+    } else {
+      store = await openStore(directory: join(docsDir.path, 'db'));
+
+      if (Admin.isAvailable()) {
+        admin = Admin(store);
+      }
+    }
   }
 }

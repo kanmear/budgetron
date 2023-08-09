@@ -1,20 +1,23 @@
-import 'package:budgetron/routes/pages/budget/budget_page.dart';
-import 'package:flutter/material.dart';
+import 'package:budgetron/db/category_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
 
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/routes/pages/stats_page.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
+import 'package:budgetron/routes/pages/budget/budget_page.dart';
 
 late ObjectBox objectBox;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  objectBox = await ObjectBox.create();
+  await ObjectBox.init();
 
   runApp(const MainApp());
+
+  CategoryController.clearCategories();
 }
 
 class MainApp extends StatelessWidget {

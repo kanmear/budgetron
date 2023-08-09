@@ -1,7 +1,8 @@
-import 'package:budgetron/main.dart';
-import 'package:budgetron/objectbox.g.dart';
-import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/db/category_controller.dart';
+import 'package:budgetron/db/object_box_helper.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/objectbox.g.dart';
 
 class EntryController {
   static Stream<List<Entry>> getEntries(
@@ -15,7 +16,7 @@ class EntryController {
               Entry_.dateTime.lessOrEqual(period[1].millisecondsSinceEpoch);
     }
 
-    queryBuilder = objectBox.entryBox.query(condition);
+    queryBuilder = _getEntryBox().query(condition);
 
     if (categoryFilter != null) {
       queryBuilder.link(Entry_.category,
@@ -31,13 +32,15 @@ class EntryController {
 
   static int addEntry(Entry entry, EntryCategory category) {
     category.usages++;
-    objectBox.categoryBox.put(category);
+    CategoryController.addCategory(category);
 
     entry.category.target = category;
-    return objectBox.entryBox.put(entry);
+    return _getEntryBox().put(entry);
   }
 
   static void clearEntries() async {
-    objectBox.entryBox.removeAll();
+    _getEntryBox().removeAll();
   }
+
+  static Box<Entry> _getEntryBox() => ObjectBox.store.box<Entry>();
 }
