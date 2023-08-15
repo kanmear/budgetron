@@ -1,4 +1,5 @@
-import 'package:budgetron/db/category_controller.dart';
+import 'package:budgetron/pigeon/budget.g.dart';
+import 'package:budgetron/pigeon/budget_api.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
@@ -17,7 +18,8 @@ Future<void> main() async {
 
   runApp(const MainApp());
 
-  CategoryController.clearCategories();
+  BudgetAPI.setup(BudgetApiImpl());
+  await AlarmAPI().setupBudgetReset(1, 'test1', 'test2');
 }
 
 class MainApp extends StatelessWidget {
