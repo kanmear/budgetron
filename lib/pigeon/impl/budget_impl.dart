@@ -1,3 +1,5 @@
+// implementation of Flutter API that can be called from native Android
+
 import 'package:budgetron/pigeon/budget.g.dart';
 
 class BudgetApiImpl implements BudgetAPI {

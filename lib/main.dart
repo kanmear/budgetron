@@ -1,5 +1,6 @@
+import 'package:budgetron/pigeon/impl/budget_impl.dart';
 import 'package:budgetron/pigeon/budget.g.dart';
-import 'package:budgetron/pigeon/budget_api.dart';
+import 'package:budgetron/pigeon/alarm.g.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
