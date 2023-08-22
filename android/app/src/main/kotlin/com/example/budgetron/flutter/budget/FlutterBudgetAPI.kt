@@ -1,8 +1,8 @@
 package com.example.budgetron.flutter.budget
 
-import BudgetAPI
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.plugin.common.BinaryMessenger
+import pigeon.BudgetAPI
 
 class FlutterBudgetAPI(binaryMessenger: BinaryMessenger) : FlutterActivity() {
     var flutterApi: BudgetAPI? = null
