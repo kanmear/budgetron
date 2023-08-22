@@ -23,7 +23,6 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
   objectbox_generator: any
-  pigeon:
 
 flutter:
   uses-material-design: true

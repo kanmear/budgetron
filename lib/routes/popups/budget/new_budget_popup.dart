@@ -136,8 +136,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
       onMainPage: widget.switchNotifier.value,
     );
 
-    int budgetId = BudgetController.addBudget(budget, category);
-    BudgetService.setPeriodicTask(budget, budgetId);
+    BudgetController.addBudget(budget, category);
   }
 
   Future<int> _calculateCurrentValue(

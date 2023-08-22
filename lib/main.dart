@@ -1,8 +1,4 @@
-import 'package:budgetron/pigeon/impl/budget_impl.dart';
-import 'package:budgetron/pigeon/budget.g.dart';
-import 'package:budgetron/pigeon/alarm.g.dart';
-import 'package:budgetron/ui/classes/text_button.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/db/category_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
@@ -20,6 +16,8 @@ Future<void> main() async {
   await ObjectBox.init();
 
   runApp(const MainApp());
+
+  CategoryController.clearCategories();
 }
 
 class MainApp extends StatelessWidget {
@@ -62,16 +60,10 @@ class _BudgetronState extends State<Budgetron> {
         controller: pageViewController,
         children: [
           const EntriesPage(),
-          Center(
-              // const Text(
-              //   "Home page placeholder",
-              //   textScaleFactor: 2,
-              // ),
-              child: BudgetronTextButton(
-            backgroundColor: BudgetronColors.background,
-            onTap: () => _setAlarm(),
-            text: 'Set alarm',
-            textStyle: BudgetronFonts.nunitoSize16Weight400,
+          const Center(
+              child: Text(
+            "Home page placeholder",
+            textScaleFactor: 2,
           )),
           BudgetPage(),
           const StatsPage()
@@ -92,11 +84,6 @@ class _BudgetronState extends State<Budgetron> {
             BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats')
           ]),
     );
-  }
-
-  void _setAlarm() async {
-    BudgetAPI.setup(BudgetApiImpl());
-    await AlarmAPI().setupBudgetReset(1, 'test1', 'test2');
   }
 
   void _selectPage(index) {
