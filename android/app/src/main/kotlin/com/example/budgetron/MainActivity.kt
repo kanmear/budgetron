@@ -1,17 +1,22 @@
 package com.example.budgetron
 
-import AlarmAPI
-import com.example.budgetron.flutter.budget.FlutterBudgetAPI
+import android.app.Activity
+import com.example.budgetron.alarm.AndroidAlarmService
+import com.example.budgetron.flutter.engine.FlutterEngineStorage
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
+import pigeon.AlarmAPI
 
 class MainActivity: FlutterActivity() {
     inner class ImplAlarmAPI : AlarmAPI {
         override fun setupBudgetReset(budgetId: Long, firstTriggerDate: String, period: String) {
             println("This is Kotlin called from Flutter $budgetId")
 
-            FlutterBudgetAPI(this@MainActivity.flutterEngine!!.dartExecutor.binaryMessenger)
-                    .callResetBudget(budgetId + 1)
+            val alarmService = AndroidAlarmService(context)
+            alarmService.schedule()
+
+//            FlutterBudgetAPI(this@MainActivity.flutterEngine!!.dartExecutor.binaryMessenger)
+//                    .callResetBudget(budgetId + 1)
         }
     }
 
@@ -19,5 +24,6 @@ class MainActivity: FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         AlarmAPI.setUp(flutterEngine.dartExecutor.binaryMessenger, ImplAlarmAPI())
+        FlutterEngineStorage.setFlutterEngine(flutterEngine)
     }
 }
