@@ -166,7 +166,8 @@ class BudgetronListTile extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.centerRight,
-          child: Text(BudgetService.budgetPeriodStrings[budget.budgetPeriod],
+          child: Text(
+              BudgetService.budgetPeriodStrings[budget.budgetPeriodIndex],
               style: BudgetronFonts.nunitoSize14Weight400),
         ),
         const SizedBox(height: 16),
