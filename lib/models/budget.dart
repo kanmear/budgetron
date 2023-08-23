@@ -11,7 +11,10 @@ class Budget {
   int currentValue;
 
   //index of budget period string values
-  int budgetPeriod;
+  int budgetPeriodIndex;
+
+  @Property(type: PropertyType.date)
+  DateTime resetDate;
 
   bool onMainPage;
 
@@ -20,6 +23,7 @@ class Budget {
   Budget(
       {required this.targetValue,
       required this.currentValue,
-      required this.budgetPeriod,
-      required this.onMainPage});
+      required this.budgetPeriodIndex,
+      required this.onMainPage,
+      required this.resetDate});
 }
