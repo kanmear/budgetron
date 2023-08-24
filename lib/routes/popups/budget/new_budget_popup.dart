@@ -130,7 +130,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     int budgetPeriodIndex = BudgetService.budgetPeriodStrings.indexOf(period);
 
     Budget budget = Budget(
-        targetValue: int.parse(widget.textController.value.text),
+        targetValue: double.parse(widget.textController.value.text),
         budgetPeriodIndex: budgetPeriodIndex,
         currentValue: await _calculateCurrentValue(category, period),
         onMainPage: widget.switchNotifier.value,
@@ -139,7 +139,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     BudgetController.addBudget(budget, category);
   }
 
-  Future<int> _calculateCurrentValue(
+  Future<double> _calculateCurrentValue(
       EntryCategory category, String period) async {
     List<DateTime> datePeriod = EntryService.getDatePeriod(period);
 

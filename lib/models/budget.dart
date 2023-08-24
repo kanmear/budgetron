@@ -6,9 +6,9 @@ import 'package:budgetron/models/category.dart';
 class Budget {
   int id = 0;
 
-  int targetValue;
+  double targetValue;
 
-  int currentValue;
+  double currentValue;
 
   //index of budget period string values
   int budgetPeriodIndex;
