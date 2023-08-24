@@ -26,6 +26,8 @@ class EntryService {
       if (sameCategoryEntry != -1) {
         Entry updatedEntry = currentEntries[sameCategoryEntry];
         updatedEntry.value += entry.value;
+        updatedEntry.value =
+            double.parse(updatedEntry.value.toStringAsFixed(2));
         currentEntries[sameCategoryEntry] = updatedEntry;
       }
 
