@@ -1,4 +1,5 @@
 import 'package:budgetron/models/entry.dart';
+import 'package:flutter/material.dart';
 
 class EntryService {
   static void formEntriesData(List<Entry> data,
@@ -41,43 +42,39 @@ class EntryService {
     }
   }
 
-  static List<DateTime> getDatePeriod(String period) {
-    DateTime now = DateTime.now();
+  //TODO move to budgetService?
+  static List<DateTime> getDatePeriod(String period, {DateTime? end}) {
+    end ??= DateTime.now();
     DateTime start;
+
     switch (period) {
       case 'Month':
-        start = DateTime(now.year, now.month);
+        start = DateTime(end.year, end.month);
         break;
       case 'Week':
-        start = DateTime(now.year, now.month, getClosestMonday(now.day));
+        start = _getPastMonday(end);
         break;
       case 'Two weeks':
-        start = DateTime(now.year, now.month, getClosestMonday(now.day));
+        start = _getPastMonday(end, weekMultiplier: 2);
         break;
       case 'Six months':
-        //TODO replace with dateUtils addMonths
-        start = DateTime(now.year, now.month - 6 <= 0 ? 1 : now.month - 6);
+        start = DateUtils.addMonthsToMonthDate(end, -6);
         break;
       case 'Year':
-        start = DateTime(now.year);
+        start = DateTime(end.year);
         break;
       default:
-        start = now;
+        start = end;
     }
 
-    return [start, now];
+    return [start, end];
   }
 
-  //TODO test
-  //TODO add two weeks impl
-  static int getClosestMonday(int currentDay) {
-    DateTime now = DateTime.now();
-    DateTime weekStart = DateTime(now.year, now.month, currentDay);
-
+  static DateTime _getPastMonday(DateTime weekStart, {int weekMultiplier = 1}) {
     while (weekStart.weekday != 1) {
-      weekStart = DateTime(weekStart.year, weekStart.month, weekStart.day - 1);
+      weekStart = DateUtils.addDaysToDate(weekStart, -1);
     }
 
-    return weekStart.day;
+    return DateUtils.addDaysToDate(weekStart, (--weekMultiplier * -7));
   }
 }
