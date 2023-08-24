@@ -141,6 +141,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
 
   Future<double> _calculateCurrentValue(
       EntryCategory category, String period) async {
+    //TODO maybe move this to entry service alltogether
     List<DateTime> datePeriod = EntryService.getDatePeriod(period);
 
     return await EntryController.getEntries(
