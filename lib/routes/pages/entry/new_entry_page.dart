@@ -239,9 +239,8 @@ class EntryValueTextField extends StatelessWidget {
       //TODO add some sort of message for user to fill in value and/or category
       return;
     }
-    double entryValue =
-        double.parse(value) * (categoryNotifier.value!.isExpense ? -1 : 1);
-    Entry entry = Entry(value: entryValue, dateTime: DateTime.now());
+
+    Entry entry = Entry(value: double.parse(value), dateTime: DateTime.now());
     EntryController.addEntry(entry, categoryNotifier.value!);
     Navigator.pop(context);
   }
