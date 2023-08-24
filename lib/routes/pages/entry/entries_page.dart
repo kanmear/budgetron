@@ -119,7 +119,7 @@ class EntryListTileContainer extends StatelessWidget {
                         entriesMap[day]!
                             .map((e) => e.value)
                             .reduce((value, element) => value + element)
-                            .toString(),
+                            .toStringAsFixed(2),
                         style: BudgetronFonts.nunitoSize16Weight600,
                       )
                     ],
