@@ -114,8 +114,8 @@ class BudgetronListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int currentValue = budget.currentValue;
-    int targetValue = budget.targetValue;
+    double currentValue = budget.currentValue;
+    double targetValue = budget.targetValue;
 
     return Column(
       children: [
