@@ -31,6 +31,7 @@ class EntryController {
   }
 
   static int addEntry(Entry entry, EntryCategory category) {
+    entry.value *= (category.isExpense ? -1 : 1);
     category.usages++;
     CategoryController.addCategory(category);
 
