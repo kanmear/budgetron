@@ -8,7 +8,8 @@ class EntryService {
     }
 
     entryDates.addAll(entriesMap.keys.toList());
-    //TODO is it an optimal approach?
+    entryDates.sort(((a, b) => b.compareTo(a)));
+    //TODO is this approach optimal?
   }
 
   static void _addEntryToMap(
@@ -52,6 +53,7 @@ class EntryService {
         start = DateTime(now.year, now.month, getClosestMonday(now.day));
         break;
       case 'Six months':
+        //TODO replace with dateUtils addMonths
         start = DateTime(now.year, now.month - 6 <= 0 ? 1 : now.month - 6);
         break;
       case 'Year':
