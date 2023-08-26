@@ -41,40 +41,4 @@ class EntryService {
       entriesMap[dateTime] = List.from({entry});
     }
   }
-
-  //TODO move to budgetService?
-  static List<DateTime> getDatePeriod(String period, {DateTime? end}) {
-    end ??= DateTime.now();
-    DateTime start;
-
-    switch (period) {
-      case 'Month':
-        start = DateTime(end.year, end.month);
-        break;
-      case 'Week':
-        start = _getPastMonday(end);
-        break;
-      case 'Two weeks':
-        start = _getPastMonday(end, weekMultiplier: 2);
-        break;
-      case 'Six months':
-        start = DateUtils.addMonthsToMonthDate(end, -6);
-        break;
-      case 'Year':
-        start = DateTime(end.year);
-        break;
-      default:
-        start = end;
-    }
-
-    return [start, end];
-  }
-
-  static DateTime _getPastMonday(DateTime weekStart, {int weekMultiplier = 1}) {
-    while (weekStart.weekday != 1) {
-      weekStart = DateUtils.addDaysToDate(weekStart, -1);
-    }
-
-    return DateUtils.addDaysToDate(weekStart, (--weekMultiplier * -7));
-  }
 }
