@@ -26,9 +26,8 @@ class CategoryController {
   static int addCategory(EntryCategory category) =>
       _getCategoryBox().put(category);
 
-  //HACK dev tool
   static void clearCategories() {
-    _getCategoryBox().removeMany([7, 8]);
+    _getCategoryBox().removeAll();
   }
 
   static Box<EntryCategory> _getCategoryBox() =>
