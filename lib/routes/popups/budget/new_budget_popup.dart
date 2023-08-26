@@ -4,6 +4,7 @@ import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
@@ -127,29 +128,32 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   void _addBudget() async {
     EntryCategory category = widget.categoryNotifier.value as EntryCategory;
     String period = widget.periodNotifier.value;
+    List<DateTime> datePeriod = BudgetService.calculateDatePeriod(period);
+
     int budgetPeriodIndex = BudgetService.budgetPeriodStrings.indexOf(period);
 
     Budget budget = Budget(
         targetValue: double.parse(widget.textController.value.text),
         budgetPeriodIndex: budgetPeriodIndex,
-        currentValue: await _calculateCurrentValue(category, period),
+        currentValue: await _calculateCurrentValue(category, datePeriod),
         onMainPage: widget.switchNotifier.value,
-        resetDate: BudgetService.calculateResetDate(budgetPeriodIndex));
+        resetDate: BudgetService.calculateResetDate(period, datePeriod.first));
 
     BudgetController.addBudget(budget, category);
   }
 
   Future<double> _calculateCurrentValue(
-      EntryCategory category, String period) async {
-    //TODO maybe move this to entry service alltogether
-    List<DateTime> datePeriod = EntryService.getDatePeriod(period);
+      EntryCategory category, List<DateTime> datePeriod) async {
+    List<Entry> entries = await EntryController.getEntries(
+        period: datePeriod, categoryFilter: List.from([category])).first;
 
-    return await EntryController.getEntries(
-                period: datePeriod, categoryFilter: List.from([category]))
-            .first
-            .then((entries) => entries
-                .map((entry) => entry.value)
-                .reduce((value, element) => value + element)) *
-        -1;
+    if (entries.isNotEmpty) {
+      return entries
+              .map((entry) => entry.value)
+              .reduce((value, element) => value + element) *
+          -1;
+    }
+
+    return 0;
   }
 }
