@@ -100,7 +100,6 @@ class BudgetListView extends StatelessWidget {
         },
       ),
     );
-    // return Expanded(child: Center(child: Text("No budgets in database")));
   }
 }
 
@@ -136,7 +135,7 @@ class BudgetronListTile extends StatelessWidget {
             ),
             Row(
               children: [
-                Text(currentValue.toString(),
+                Text(currentValue.toStringAsFixed(2),
                     style: BudgetronFonts.nunitoSize14Weight300),
                 const SizedBox(width: 8),
                 const Text('•'),
