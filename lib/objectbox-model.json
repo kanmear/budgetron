@@ -37,7 +37,7 @@
     },
     {
       "id": "4:4368116380135990787",
-      "lastPropertyId": "6:3928302752111010614",
+      "lastPropertyId": "7:3458440511409531826",
       "name": "EntryCategory",
       "properties": [
         {
@@ -67,6 +67,11 @@
           "id": "6:3928302752111010614",
           "name": "color",
           "type": 9
+        },
+        {
+          "id": "7:3458440511409531826",
+          "name": "isBudgetTracked",
+          "type": 1
         }
       ],
       "relations": []
