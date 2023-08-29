@@ -6,6 +6,7 @@ import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/budgetron_ui.dart';
 import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
@@ -240,8 +241,14 @@ class EntryValueTextField extends StatelessWidget {
       return;
     }
 
+    EntryCategory category = categoryNotifier.value!;
     Entry entry = Entry(value: double.parse(value), dateTime: DateTime.now());
-    EntryController.addEntry(entry, categoryNotifier.value!);
+
+    EntryController.addEntry(entry, category);
+    if (category.isBudgetTracked) {
+      BudgetController.updateBudget(category, value);
+    }
+
     Navigator.pop(context);
   }
 }
