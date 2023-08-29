@@ -11,6 +11,20 @@ class BudgetController {
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 
+  static Future<Budget> getBudgetByCategory(int categoryId) async {
+    List<Budget> queryResult = (await _getBudgetBox()
+        .query(Budget_.category.equals(categoryId))
+        .watch(triggerImmediately: true)
+        .map((query) => query.find())
+        .first);
+
+    if (queryResult.isEmpty) {
+      throw Exception('Budget with categoryId: $categoryId not found.');
+    }
+
+    return queryResult.first;
+  }
+
   static int addBudget(Budget budget, EntryCategory category) {
     category.isBudgetTracked = true;
     CategoryController.updateCategory(category);
@@ -19,22 +33,7 @@ class BudgetController {
     return _getBudgetBox().put(budget);
   }
 
-  static void updateBudget(EntryCategory entryCategory, String value) async {
-    List<Budget> queryResult = (await _getBudgetBox()
-        .query(Budget_.category.equals(entryCategory.id))
-        .watch(triggerImmediately: true)
-        .map((query) => query.find())
-        .first);
-
-    if (queryResult.isEmpty) {
-      throw Exception(
-          'Category.isBudgetTracked: ${entryCategory.isBudgetTracked}, but budget does not exist');
-    }
-
-    Budget budget = queryResult.first;
-    budget.currentValue += double.parse(value);
-    _getBudgetBox().put(budget);
-  }
+  static void updateBudget(Budget budget) => _getBudgetBox().put(budget);
 
   static void clearBudgets() {
     _getBudgetBox().removeAll();

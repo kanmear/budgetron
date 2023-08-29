@@ -1,3 +1,7 @@
+import 'package:budgetron/db/budget_controller.dart';
+import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/models/category.dart';
+import 'package:budgetron/objectbox.g.dart';
 import 'package:flutter/material.dart';
 
 class BudgetService {
@@ -9,6 +13,12 @@ class BudgetService {
     "Six months",
     "Year"
   ];
+
+  static void updateBudgetValue(int categoryId, String value) async {
+    Budget budget = await BudgetController.getBudgetByCategory(categoryId);
+    budget.currentValue += double.parse(value);
+    BudgetController.updateBudget(budget);
+  }
 
   static List<DateTime> calculateDatePeriod(String period, {DateTime? end}) {
     end ??= DateTime.now();

@@ -1,3 +1,4 @@
+import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -246,7 +247,7 @@ class EntryValueTextField extends StatelessWidget {
 
     EntryController.addEntry(entry, category);
     if (category.isBudgetTracked) {
-      BudgetController.updateBudget(category, value);
+      BudgetService.updateBudgetValue(category.id, value);
     }
 
     Navigator.pop(context);
