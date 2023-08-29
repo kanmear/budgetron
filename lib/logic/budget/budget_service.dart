@@ -16,8 +16,22 @@ class BudgetService {
 
   static void updateBudgetValue(int categoryId, String value) async {
     Budget budget = await BudgetController.getBudgetByCategory(categoryId);
+    resetBudget(budget);
     budget.currentValue += double.parse(value);
+
     BudgetController.updateBudget(budget);
+  }
+
+  static bool resetBudget(Budget budget) {
+    DateTime now = DateTime.now();
+    if (now.isAfter(budget.resetDate)) {
+      budget.currentValue = 0;
+      budget.resetDate = calculateResetDate(
+          budgetPeriodStrings[budget.budgetPeriodIndex], now);
+      return true;
+    }
+
+    return false;
   }
 
   static List<DateTime> calculateDatePeriod(String period, {DateTime? end}) {
@@ -47,7 +61,6 @@ class BudgetService {
     return [start, end];
   }
 
-  //REFACTOR the same switch is used twice
   static DateTime calculateResetDate(String period, DateTime fromDate) {
     switch (period) {
       case 'Month':
