@@ -1,7 +1,7 @@
+import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/db/budget_controller.dart';
-import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/objectbox.g.dart';
+import 'package:budgetron/models/budget.dart';
 import 'package:flutter/material.dart';
 
 class BudgetService {
@@ -13,6 +13,14 @@ class BudgetService {
     "Six months",
     "Year"
   ];
+
+  static void createBudget(Budget budget, EntryCategory category) {
+    category.isBudgetTracked = true;
+    CategoryController.updateCategory(category);
+
+    budget.category.target = category;
+    BudgetController.addBudget(budget);
+  }
 
   static void updateBudgetValue(int categoryId, String value) async {
     Budget budget = await BudgetController.getBudgetByCategory(categoryId);

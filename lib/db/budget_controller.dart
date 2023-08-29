@@ -1,6 +1,4 @@
-import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/db/object_box_helper.dart';
-import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/objectbox.g.dart';
 
@@ -25,13 +23,7 @@ class BudgetController {
     return queryResult.first;
   }
 
-  static int addBudget(Budget budget, EntryCategory category) {
-    category.isBudgetTracked = true;
-    CategoryController.updateCategory(category);
-
-    budget.category.target = category;
-    return _getBudgetBox().put(budget);
-  }
+  static int addBudget(Budget budget) => _getBudgetBox().put(budget);
 
   static void updateBudget(Budget budget) => _getBudgetBox().put(budget);
 
