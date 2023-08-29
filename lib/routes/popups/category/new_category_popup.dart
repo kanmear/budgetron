@@ -1,13 +1,14 @@
-import 'package:budgetron/logic/category/category_service.dart';
+import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/radio_list_tile.dart';
+import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/fonts.dart';
-import 'package:budgetron/main.dart';
 
 class NewCategoryDialog extends StatefulWidget {
   final EntryCategoryType entryCategoryType;
@@ -31,29 +32,9 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
     final ValueNotifier<EntryCategoryType> categoryTypeNotifier =
         ValueNotifier(widget.entryCategoryType);
 
-    return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      alignment: Alignment.bottomCenter,
-      insetPadding: EdgeInsets.zero,
-      contentPadding:
-          const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 14),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("New Category", style: BudgetronFonts.nunitoSize18Weight600),
-              IconButton(
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                icon: const Icon(Icons.close),
-                //TODO dismiss keyboard with FocusManager.instance.primaryFocus?.unfocus()
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
-          ),
-          const SizedBox(height: 24),
+    return DockedDialog(
+        title: "New Category",
+        body: Column(children: [
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -68,7 +49,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
                 onTap: () => showDialog(
                         context: context,
                         builder: (BuildContext context) =>
-                            CategoryColorDialog())
+                            const CategoryColorDialog())
                     .then((value) => _setColor(value)),
                 child: Container(
                     padding: EdgeInsets.zero,
@@ -87,11 +68,12 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
               const SizedBox(width: 8),
               Expanded(
                 child: BudgetronTextField(
+                  inputType: TextInputType.text,
                   hintText: "Enter category name",
                   autoFocus: true,
                   onSubmitted: (value) {
                     //TODO validate that color isn't white (meaning it wasn't selected)
-                    objectBox.addCategory(EntryCategory(
+                    CategoryController.addCategory(EntryCategory(
                         name: value.toString().trim(),
                         isExpense: categoryTypeNotifier.value ==
                             EntryCategoryType.expense,
@@ -110,9 +92,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
               child: CategoryTypeRadioButtons(
                 categoryTypeNotifier: categoryTypeNotifier,
               )),
-        ]),
-      ),
-    );
+        ]));
   }
 
   void _setColor(Color value) {

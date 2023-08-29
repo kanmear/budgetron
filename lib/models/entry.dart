@@ -6,7 +6,7 @@ import 'package:budgetron/models/category.dart';
 class Entry {
   int id = 0;
 
-  int value;
+  double value;
 
   final category = ToOne<EntryCategory>();
 

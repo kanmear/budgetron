@@ -1,19 +1,27 @@
-import 'package:flutter/material.dart';
+import 'package:budgetron/db/category_controller.dart';
+import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/db/mock_data_generator.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
 
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/routes/pages/stats_page.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
+import 'package:budgetron/routes/pages/budget/budget_page.dart';
 
 late ObjectBox objectBox;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  objectBox = await ObjectBox.create();
+  await ObjectBox.init();
 
   runApp(const MainApp());
+
+  // EntryController.clearEntries();
+  // CategoryController.clearCategories();
+  // MockDataGenerator.generateMockData();
 }
 
 class MainApp extends StatelessWidget {
@@ -54,28 +62,31 @@ class _BudgetronState extends State<Budgetron> {
     return Scaffold(
       body: PageView(
         controller: pageViewController,
-        children: const [
-          EntriesPage(),
-          Center(
+        children: [
+          const EntriesPage(),
+          const Center(
               child: Text(
             "Home page placeholder",
             textScaleFactor: 2,
           )),
-          StatsPage()
+          BudgetPage(),
+          const StatsPage()
         ],
         onPageChanged: (index) => _updateIndex(index),
       ),
       bottomNavigationBar: BottomNavigationBar(
+          selectedItemColor: BudgetronColors.background,
+          unselectedItemColor: BudgetronColors.backgroundHalfOpacity,
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: BudgetronColors.black,
           currentIndex: selectedIndex,
           onTap: _selectPage,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Entries'),
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.wallet), label: 'Budget'),
             BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats')
           ]),
-      appBar: AppBar(
-        title: const Text('Budgetron a0.1'),
-      ),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:budgetron/models/entry.dart';
+import 'package:flutter/material.dart';
 
 class EntryService {
   static void formEntriesData(List<Entry> data,
@@ -8,7 +9,8 @@ class EntryService {
     }
 
     entryDates.addAll(entriesMap.keys.toList());
-    //TODO is it an optimal approach?
+    entryDates.sort(((a, b) => b.compareTo(a)));
+    //TODO is this approach optimal?
   }
 
   static void _addEntryToMap(
@@ -25,6 +27,8 @@ class EntryService {
       if (sameCategoryEntry != -1) {
         Entry updatedEntry = currentEntries[sameCategoryEntry];
         updatedEntry.value += entry.value;
+        updatedEntry.value =
+            double.parse(updatedEntry.value.toStringAsFixed(2));
         currentEntries[sameCategoryEntry] = updatedEntry;
       }
 

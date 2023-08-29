@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/main.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
@@ -24,7 +24,7 @@ class _EntriesPageState extends State<EntriesPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: StreamBuilder<List<Entry>>(
-            stream: objectBox.getEntries(),
+            stream: EntryController.getEntries(),
             builder: (context, snapshot) {
               if (snapshot.data?.isNotEmpty ?? false) {
                 return EntriesListView(data: snapshot.data!);
@@ -35,17 +35,15 @@ class _EntriesPageState extends State<EntriesPage> {
               }
             }),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
-          onPressed: () => _navigateToEntryCreation(context, () => {}),
+          onPressed: () => _navigateToEntryCreation(context),
         ));
   }
 
-  Future<void> _navigateToEntryCreation(
-      BuildContext context, Function callback) async {
-    final result = await Navigator.push(
+  Future<void> _navigateToEntryCreation(BuildContext context) async {
+    await Navigator.push(
         context, MaterialPageRoute(builder: (context) => NewEntryPage()));
 
     if (!mounted) return;
-    callback.call(result);
   }
 }
 
@@ -121,7 +119,7 @@ class EntryListTileContainer extends StatelessWidget {
                         entriesMap[day]!
                             .map((e) => e.value)
                             .reduce((value, element) => value + element)
-                            .toString(),
+                            .toStringAsFixed(2),
                         style: BudgetronFonts.nunitoSize16Weight600,
                       )
                     ],

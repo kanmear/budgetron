@@ -9,6 +9,11 @@ class BudgetronFonts {
       fontSize: 11,
       fontWeight: FontWeight.w300,
       color: BudgetronColors.black);
+  static TextStyle nunitoSize14Weight300 = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 14,
+      fontWeight: FontWeight.w300,
+      color: BudgetronColors.black);
   static TextStyle nunitoSize14Weight400 = TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontSize: 14,
@@ -30,6 +35,11 @@ class BudgetronFonts {
       fontSize: 16,
       fontWeight: FontWeight.w600,
       color: BudgetronColors.black);
+  static TextStyle nunitoSize18Weight500 = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: BudgetronColors.black);
   static TextStyle nunitoSize18Weight600 = TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontSize: 18,
@@ -47,6 +57,11 @@ class BudgetronFonts {
       fontSize: 16,
       fontWeight: FontWeight.w400,
       color: BudgetronColors.gray4);
+  static TextStyle nunitoSize18Weight500White = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 18,
+      fontWeight: FontWeight.w500,
+      color: BudgetronColors.background);
 
   // for input fields
   static TextStyle robotoSize32Weight400 = TextStyle(

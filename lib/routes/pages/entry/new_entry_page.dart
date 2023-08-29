@@ -1,13 +1,13 @@
-import 'package:budgetron/logic/category/category_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/main.dart';
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/budgetron_ui.dart';
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 
@@ -38,8 +38,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     tabNotifier: widget.tabNotifier,
                     onTapAction: () =>
                         {widget.tabNotifier.value = EntryCategoryType.expense},
-                    padding: const EdgeInsets.only(
-                        left: 24, right: 15, top: 13, bottom: 13),
+                    padding: BudgetronUI.leftTabInAppBar(),
                     name: 'Expense',
                     associatedTabValue: EntryCategoryType.expense,
                   ),
@@ -47,8 +46,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                     tabNotifier: widget.tabNotifier,
                     onTapAction: () =>
                         {widget.tabNotifier.value = EntryCategoryType.income},
-                    padding: const EdgeInsets.only(
-                        left: 15, right: 24, top: 13, bottom: 13),
+                    padding: BudgetronUI.rightTabInAppBar(),
                     name: 'Income',
                     associatedTabValue: EntryCategoryType.income,
                   ),
@@ -230,7 +228,7 @@ class EntryValueTextField extends StatelessWidget {
               onTapOutside: (event) {},
               autofocus: true,
               keyboardType: TextInputType.number,
-              decoration: BudgetronUI.budgetronInputDecoration()),
+              decoration: BudgetronUI.inputDecoration()),
         ),
       ),
     );
@@ -241,10 +239,9 @@ class EntryValueTextField extends StatelessWidget {
       //TODO add some sort of message for user to fill in value and/or category
       return;
     }
-    int entryValue =
-        int.parse(value) * (categoryNotifier.value!.isExpense ? -1 : 1);
-    Entry entry = Entry(value: entryValue, dateTime: DateTime.now());
-    objectBox.addEntry(entry, categoryNotifier.value!);
+
+    Entry entry = Entry(value: double.parse(value), dateTime: DateTime.now());
+    EntryController.addEntry(entry, categoryNotifier.value!);
     Navigator.pop(context);
   }
 }
