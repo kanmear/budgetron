@@ -1,4 +1,3 @@
-import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,8 +5,8 @@ import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/budgetron_ui.dart';
-import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/db/budget_controller.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
@@ -245,7 +244,7 @@ class EntryValueTextField extends StatelessWidget {
     EntryCategory category = categoryNotifier.value!;
     Entry entry = Entry(value: double.parse(value), dateTime: DateTime.now());
 
-    EntryController.addEntry(entry, category);
+    EntryService.createEntry(entry, category);
     if (category.isBudgetTracked) {
       BudgetService.updateBudgetValue(category.id, value);
     }

@@ -1,7 +1,18 @@
+import 'package:budgetron/db/category_controller.dart';
+import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:flutter/material.dart';
 
 class EntryService {
+  static void createEntry(Entry entry, EntryCategory category) {
+    entry.value *= (category.isExpense ? -1 : 1);
+    category.usages++;
+    CategoryController.updateCategory(category);
+
+    entry.category.target = category;
+    EntryController.addEntry(entry);
+  }
+
   static void formEntriesData(List<Entry> data,
       Map<DateTime, List<Entry>> entriesMap, List<DateTime> entryDates) {
     for (var element in data) {
@@ -10,7 +21,7 @@ class EntryService {
 
     entryDates.addAll(entriesMap.keys.toList());
     entryDates.sort(((a, b) => b.compareTo(a)));
-    //TODO is this approach optimal?
+    //APPROACH is this approach optimal?
   }
 
   static void _addEntryToMap(

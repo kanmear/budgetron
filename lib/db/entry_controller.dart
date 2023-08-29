@@ -1,4 +1,3 @@
-import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/db/object_box_helper.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
@@ -30,14 +29,7 @@ class EntryController {
         .map((query) => query.find());
   }
 
-  static int addEntry(Entry entry, EntryCategory category) {
-    entry.value *= (category.isExpense ? -1 : 1);
-    category.usages++;
-    CategoryController.updateCategory(category);
-
-    entry.category.target = category;
-    return _getEntryBox().put(entry);
-  }
+  static int addEntry(Entry entry) => _getEntryBox().put(entry);
 
   static void clearEntries() async {
     _getEntryBox().removeAll();

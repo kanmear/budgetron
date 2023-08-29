@@ -1,7 +1,7 @@
 import 'dart:math';
 
+import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
 
@@ -33,7 +33,7 @@ class MockDataGenerator {
               double.parse((Random().nextDouble() * 50).toStringAsFixed(2));
           int categoryIndex = Random().nextInt(4);
 
-          EntryController.addEntry(
+          EntryService.createEntry(
               Entry(value: value, dateTime: DateTime(2023, m, d)),
               categories.elementAt(categoryIndex));
         }
