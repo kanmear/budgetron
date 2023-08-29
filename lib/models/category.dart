@@ -7,6 +7,7 @@ class EntryCategory {
   @Unique()
   String name;
 
+  bool isBudgetTracked;
   bool isExpense;
   String color;
   int usages;
@@ -14,8 +15,9 @@ class EntryCategory {
   EntryCategory(
       {required this.name,
       required this.isExpense,
-      required this.usages,
-      required this.color});
+      this.usages = 0,
+      required this.color,
+      this.isBudgetTracked = false});
 
   @override
   String toString() {

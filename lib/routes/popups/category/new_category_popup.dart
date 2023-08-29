@@ -77,7 +77,6 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
                         name: value.toString().trim(),
                         isExpense: categoryTypeNotifier.value ==
                             EntryCategoryType.expense,
-                        usages: 0,
                         color: CategoryService.colorToString(categoryColor)));
                     Navigator.pop(context);
                   },

@@ -14,14 +14,14 @@ class MockDataGenerator {
       return;
     }
 
-    CategoryController.addCategory(EntryCategory(
-        name: 'Groceries', isExpense: true, usages: 0, color: 'ff8bc34a'));
-    CategoryController.addCategory(EntryCategory(
-        name: 'Rent', isExpense: true, usages: 0, color: 'ffff5252'));
-    CategoryController.addCategory(EntryCategory(
-        name: 'Transport', isExpense: true, usages: 0, color: 'ff00bcd4'));
-    CategoryController.addCategory(EntryCategory(
-        name: 'Utilities', isExpense: true, usages: 0, color: 'ff00d4bb'));
+    CategoryController.addCategory(
+        EntryCategory(name: 'Groceries', isExpense: true, color: 'ff8bc34a'));
+    CategoryController.addCategory(
+        EntryCategory(name: 'Rent', isExpense: true, color: 'ffff5252'));
+    CategoryController.addCategory(
+        EntryCategory(name: 'Transport', isExpense: true, color: 'ff00bcd4'));
+    CategoryController.addCategory(
+        EntryCategory(name: 'Utilities', isExpense: true, color: 'ff00d4bb'));
 
     categories = await CategoryController.getCategories('', null).first;
 
