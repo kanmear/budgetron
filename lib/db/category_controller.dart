@@ -26,6 +26,9 @@ class CategoryController {
   static int addCategory(EntryCategory category) =>
       _getCategoryBox().put(category);
 
+  static int updateCategory(EntryCategory category) =>
+      _getCategoryBox().put(category);
+
   static void clearCategories() {
     _getCategoryBox().removeAll();
   }

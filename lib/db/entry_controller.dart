@@ -33,7 +33,7 @@ class EntryController {
   static int addEntry(Entry entry, EntryCategory category) {
     entry.value *= (category.isExpense ? -1 : 1);
     category.usages++;
-    CategoryController.addCategory(category);
+    CategoryController.updateCategory(category);
 
     entry.category.target = category;
     return _getEntryBox().put(entry);
