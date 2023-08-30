@@ -20,7 +20,6 @@ class EntryService {
     }
 
     entryDates.addAll(entriesMap.keys.toList());
-    entryDates.sort(((a, b) => b.compareTo(a)));
     //APPROACH is this approach optimal?
   }
 

@@ -22,7 +22,7 @@ class EntryController {
           EntryCategory_.id.oneOf(categoryFilter.map((e) => e.id).toList()));
     }
 
-    queryBuilder.order(Entry_.id, flags: Order.descending);
+    queryBuilder.order(Entry_.dateTime, flags: Order.descending);
 
     return queryBuilder
         .watch(triggerImmediately: true)
