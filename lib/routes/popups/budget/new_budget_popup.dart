@@ -135,25 +135,11 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     Budget budget = Budget(
         targetValue: double.parse(widget.textController.value.text),
         budgetPeriodIndex: budgetPeriodIndex,
-        currentValue: await _calculateCurrentValue(category, datePeriod),
+        currentValue:
+            await BudgetService.calculateCurrentValue(category, datePeriod),
         onMainPage: widget.switchNotifier.value,
         resetDate: BudgetService.calculateResetDate(period, datePeriod.first));
 
     BudgetService.createBudget(budget, category);
-  }
-
-  Future<double> _calculateCurrentValue(
-      EntryCategory category, List<DateTime> datePeriod) async {
-    List<Entry> entries = await EntryController.getEntries(
-        period: datePeriod, categoryFilter: List.from([category])).first;
-
-    if (entries.isNotEmpty) {
-      return entries
-              .map((entry) => entry.value)
-              .reduce((value, element) => value + element) *
-          -1;
-    }
-
-    return 0;
   }
 }

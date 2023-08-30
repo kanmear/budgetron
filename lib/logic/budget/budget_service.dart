@@ -1,7 +1,9 @@
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/db/budget_controller.dart';
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:flutter/material.dart';
 
 class BudgetService {
@@ -20,6 +22,21 @@ class BudgetService {
 
     budget.category.target = category;
     BudgetController.addBudget(budget);
+  }
+
+  static Future<double> calculateCurrentValue(
+      EntryCategory category, List<DateTime> datePeriod) async {
+    List<Entry> entries = await EntryController.getEntries(
+        period: datePeriod, categoryFilter: List.from([category])).first;
+
+    if (entries.isNotEmpty) {
+      return entries
+              .map((entry) => entry.value)
+              .reduce((value, element) => value + element) *
+          -1;
+    }
+
+    return 0;
   }
 
   static void updateBudgetValue(int categoryId, String value) async {
