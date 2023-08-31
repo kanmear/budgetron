@@ -1,6 +1,3 @@
-import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/db/mock_data_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
@@ -18,10 +15,6 @@ Future<void> main() async {
   await ObjectBox.init();
 
   runApp(const MainApp());
-
-  // EntryController.clearEntries();
-  // CategoryController.clearCategories();
-  // MockDataGenerator.generateMockData();
 }
 
 class MainApp extends StatelessWidget {
