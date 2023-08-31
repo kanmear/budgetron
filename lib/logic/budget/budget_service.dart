@@ -1,6 +1,5 @@
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/db/budget_controller.dart';
-import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/entry.dart';
@@ -24,11 +23,8 @@ class BudgetService {
     BudgetController.addBudget(budget);
   }
 
-  static Future<double> calculateCurrentValue(
-      EntryCategory category, List<DateTime> datePeriod) async {
-    List<Entry> entries = await EntryController.getEntries(
-        period: datePeriod, categoryFilter: List.from([category])).first;
-
+  static double calculateCurrentValue(
+      List<Entry> entries, List<DateTime> datePeriod) {
     if (entries.isNotEmpty) {
       return entries
               .map((entry) => entry.value)

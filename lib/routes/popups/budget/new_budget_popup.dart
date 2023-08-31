@@ -1,21 +1,21 @@
-import 'package:budgetron/db/budget_controller.dart';
-import 'package:budgetron/db/entry_controller.dart';
+import 'package:flutter/material.dart';
+
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
-import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/models/budget.dart';
-import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
+import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/fonts.dart';
-import 'package:flutter/material.dart';
 
 class NewBudgetDialog extends StatefulWidget {
+  //FIX change object to EntryCategory (and test everything still works)
   final ValueNotifier<Object?> categoryNotifier = ValueNotifier(null);
   final ValueNotifier<String> periodNotifier = ValueNotifier("Month");
   final ValueNotifier<bool> switchNotifier = ValueNotifier(true);
@@ -127,16 +127,18 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   //TODO add validations
   void _addBudget() async {
     EntryCategory category = widget.categoryNotifier.value as EntryCategory;
+
     String period = widget.periodNotifier.value;
     List<DateTime> datePeriod = BudgetService.calculateDatePeriod(period);
+    List<Entry> entries = await EntryController.getEntries(
+        period: datePeriod, categoryFilter: List.from([category])).first;
 
     int budgetPeriodIndex = BudgetService.budgetPeriodStrings.indexOf(period);
 
     Budget budget = Budget(
         targetValue: double.parse(widget.textController.value.text),
         budgetPeriodIndex: budgetPeriodIndex,
-        currentValue:
-            await BudgetService.calculateCurrentValue(category, datePeriod),
+        currentValue: BudgetService.calculateCurrentValue(entries, datePeriod),
         onMainPage: widget.switchNotifier.value,
         resetDate: BudgetService.calculateResetDate(period, datePeriod.first));
 
