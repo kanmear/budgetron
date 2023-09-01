@@ -14,24 +14,19 @@ class BudgetronAppBarWithTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      //APPROACH safe area or top padding?
-      padding: const EdgeInsets.only(top: 38.0),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            leftIconButton,
-            Expanded(
-              child: Text(
-                title,
-                style: BudgetronFonts.nunitoSize18Weight600,
-              ),
+    return SafeArea(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          leftIconButton,
+          Expanded(
+            child: Text(
+              title,
+              style: BudgetronFonts.nunitoSize18Weight600,
             ),
-            if (rightIconButton != null) rightIconButton!
-          ],
-        ),
+          ),
+          if (rightIconButton != null) rightIconButton!
+        ],
       ),
     );
   }
