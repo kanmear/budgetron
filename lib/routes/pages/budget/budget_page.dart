@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/fonts.dart';
@@ -25,28 +26,11 @@ class BudgetPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: Column(children: [
-          BudgetronAppBarWithTabs(
-              leftIcon: const MenuIconButton(),
-              rightIcon: const EditIconButton(),
-              tabNotifier: tabNotifier,
-              tabs: Row(
-                children: [
-                  BudgetronTopBarTab(
-                      tabNotifier: tabNotifier,
-                      onTapAction: () =>
-                          {tabNotifier.value = BudgetTabs.budget},
-                      padding: BudgetronUI.leftTabInAppBar(),
-                      name: "Budget",
-                      associatedTabValue: BudgetTabs.budget),
-                  BudgetronTopBarTab(
-                      tabNotifier: tabNotifier,
-                      onTapAction: () =>
-                          {tabNotifier.value = BudgetTabs.savings},
-                      padding: BudgetronUI.rightTabInAppBar(),
-                      name: "Savings",
-                      associatedTabValue: BudgetTabs.savings)
-                ],
-              )),
+          const BudgetronAppBarWithTitle(
+            title: 'Budgeting',
+            leftIconButton: MenuIconButton(),
+            rightIconButton: EditIconButton(),
+          ),
           const SizedBox(height: 30),
           Expanded(
             child: Padding(
