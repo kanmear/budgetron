@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 
 class BudgetronAppBarWithTitle extends StatelessWidget {
   final Widget leftIconButton;
-  final Widget rightIconButton;
+  final Widget? rightIconButton;
   final String title;
 
   const BudgetronAppBarWithTitle(
       {super.key,
       required this.title,
       required this.leftIconButton,
-      required this.rightIconButton});
+      this.rightIconButton});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      //TODO find universally correct solution for status bar
+      //APPROACH safe area or top padding?
       padding: const EdgeInsets.only(top: 38.0),
       child: SafeArea(
         top: false,
@@ -29,7 +29,7 @@ class BudgetronAppBarWithTitle extends StatelessWidget {
                 style: BudgetronFonts.nunitoSize18Weight600,
               ),
             ),
-            rightIconButton
+            if (rightIconButton != null) rightIconButton!
           ],
         ),
       ),
