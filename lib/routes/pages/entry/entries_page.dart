@@ -31,7 +31,7 @@ class _EntriesPageState extends State<EntriesPage> {
                 title: 'Entries',
                 leftIconButton: MenuIconButton(),
                 rightIconButton: EditIconButton()),
-            Expanded(
+            Flexible(
               child: StreamBuilder<List<Entry>>(
                   stream: EntryController.getEntries(),
                   builder: (context, snapshot) {
@@ -74,8 +74,8 @@ class EntriesListView extends StatelessWidget {
 
     EntryService.formEntriesData(data, entriesMap, entryDates);
 
-    //TODO entries with the same category should be squashed together
     return ListView.builder(
+      padding: EdgeInsets.zero,
       itemCount: entryDates.length,
       itemBuilder: (context, index) {
         var day = entryDates[index];
