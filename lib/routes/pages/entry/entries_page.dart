@@ -1,3 +1,5 @@
+import 'package:budgetron/ui/classes/top_bar_with_title.dart';
+import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -23,17 +25,27 @@ class _EntriesPageState extends State<EntriesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: StreamBuilder<List<Entry>>(
-            stream: EntryController.getEntries(),
-            builder: (context, snapshot) {
-              if (snapshot.data?.isNotEmpty ?? false) {
-                return EntriesListView(data: snapshot.data!);
-              } else {
-                return const Center(
-                  child: Text("No entries in database"),
-                );
-              }
-            }),
+        body: Column(
+          children: [
+            const BudgetronAppBarWithTitle(
+                title: 'Entries',
+                leftIconButton: MenuIconButton(),
+                rightIconButton: EditIconButton()),
+            Expanded(
+              child: StreamBuilder<List<Entry>>(
+                  stream: EntryController.getEntries(),
+                  builder: (context, snapshot) {
+                    if (snapshot.data?.isNotEmpty ?? false) {
+                      return EntriesListView(data: snapshot.data!);
+                    } else {
+                      return const Center(
+                        child: Text("No entries in database"),
+                      );
+                    }
+                  }),
+            ),
+          ],
+        ),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
           onPressed: () => _navigateToEntryCreation(context),
         ));
