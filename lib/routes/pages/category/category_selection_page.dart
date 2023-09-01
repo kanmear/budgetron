@@ -33,7 +33,8 @@ class CategoriesPage extends StatelessWidget {
           children: [
             BudgetronAppBarWithTitle(
               title: title,
-              iconButton: const EditIconButton(),
+              leftIconButton: const ArrowBackIconButton(),
+              rightIconButton: const EditIconButton(),
             ),
             const SizedBox(height: 24),
             BudgetronSearchField(

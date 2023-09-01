@@ -1,13 +1,16 @@
 import 'package:budgetron/ui/fonts.dart';
-import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronAppBarWithTitle extends StatelessWidget {
-  final Widget iconButton;
+  final Widget leftIconButton;
+  final Widget rightIconButton;
   final String title;
 
   const BudgetronAppBarWithTitle(
-      {super.key, required this.title, required this.iconButton});
+      {super.key,
+      required this.title,
+      required this.leftIconButton,
+      required this.rightIconButton});
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +22,14 @@ class BudgetronAppBarWithTitle extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const ArrowBackIconButton(),
+            leftIconButton,
             Expanded(
               child: Text(
                 title,
                 style: BudgetronFonts.nunitoSize18Weight600,
               ),
             ),
-            iconButton
+            rightIconButton
           ],
         ),
       ),
