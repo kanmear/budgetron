@@ -1,17 +1,16 @@
-import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/ui/icons.dart';
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/models/budget.dart';
-import 'package:budgetron/ui/budgetron_ui.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
-import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
+import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
+import 'package:budgetron/ui/classes/data_visualization/progress_bar.dart';
 
 class BudgetPage extends StatelessWidget {
   final ValueNotifier<BudgetTabs> tabNotifier =
@@ -132,22 +131,8 @@ class BudgetronListTile extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 2),
-        Padding(
-          padding: const EdgeInsets.only(left: 2, right: 2),
-          child: Container(
-            height: 4,
-            clipBehavior: Clip.hardEdge,
-            decoration: const BoxDecoration(
-                color: BudgetronColors.mainGreen,
-                borderRadius: BorderRadius.all(Radius.circular(2))),
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-            child: LinearProgressIndicator(
-                value: currentValue / targetValue,
-                color: Theme.of(context).colorScheme.primary,
-                backgroundColor: Theme.of(context).colorScheme.surface),
-          ),
-        ),
+        BudgetronProgressBar(
+            currentValue: currentValue, targetValue: targetValue),
         Align(
           alignment: Alignment.centerRight,
           child: Text(
