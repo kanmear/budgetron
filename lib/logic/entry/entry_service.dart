@@ -13,6 +13,17 @@ class EntryService {
     EntryController.addEntry(entry);
   }
 
+  static double calculateTotalValue(List<Entry> entries) {
+    if (entries.isNotEmpty) {
+      return entries
+              .map((entry) => entry.value)
+              .reduce((value, element) => value + element) *
+          -1;
+    }
+
+    return 0;
+  }
+
   static void formEntriesData(List<Entry> data,
       Map<DateTime, List<Entry>> entriesMap, List<DateTime> entryDates) {
     for (var element in data) {

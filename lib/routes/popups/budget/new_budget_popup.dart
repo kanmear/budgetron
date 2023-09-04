@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
@@ -138,7 +139,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     Budget budget = Budget(
         targetValue: double.parse(widget.textController.value.text),
         budgetPeriodIndex: budgetPeriodIndex,
-        currentValue: BudgetService.calculateCurrentValue(entries, datePeriod),
+        currentValue: EntryService.calculateTotalValue(entries),
         onMainPage: widget.switchNotifier.value,
         resetDate: BudgetService.calculateResetDate(period, datePeriod.first));
 
