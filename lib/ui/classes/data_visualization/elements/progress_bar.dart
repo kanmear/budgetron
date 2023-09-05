@@ -4,11 +4,11 @@ class BudgetronProgressBar extends StatelessWidget {
   const BudgetronProgressBar({
     super.key,
     required this.currentValue,
-    required this.targetValue,
+    required this.totalValue,
   });
 
   final double currentValue;
-  final double targetValue;
+  final double totalValue;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class BudgetronProgressBar extends StatelessWidget {
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(),
         child: LinearProgressIndicator(
-            value: currentValue / targetValue,
+            value: currentValue / totalValue,
             color: Theme.of(context).colorScheme.primary,
             backgroundColor: Theme.of(context).colorScheme.surface),
       ),

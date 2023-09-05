@@ -4,13 +4,14 @@ import 'package:budgetron/ui/fonts.dart';
 import 'package:budgetron/ui/icons.dart';
 import 'package:budgetron/ui/colors.dart';
 import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
-import 'package:budgetron/ui/classes/data_visualization/progress_bar.dart';
+import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
 class BudgetPage extends StatelessWidget {
   final ValueNotifier<BudgetTabs> tabNotifier =
@@ -97,42 +98,20 @@ class BudgetronListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _resetBudget(budget);
+    EntryCategory category = budget.category.target!;
     double currentValue = budget.currentValue;
     double targetValue = budget.targetValue;
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.square_rounded,
-                    size: 18,
-                    color: CategoryService.stringToColor(
-                      budget.category.target!.color,
-                    )),
-                const SizedBox(width: 4),
-                Text(budget.category.target!.name,
-                    style: BudgetronFonts.nunitoSize14Weight400),
-              ],
-            ),
-            Row(
-              children: [
-                Text(currentValue.toStringAsFixed(2),
-                    style: BudgetronFonts.nunitoSize14Weight300),
-                const SizedBox(width: 8),
-                const Text('•'),
-                const SizedBox(width: 8),
-                Text(targetValue.toString(),
-                    style: BudgetronFonts.nunitoSize14Weight300),
-              ],
-            ),
-          ],
+        ListTileWithProgressBar(
+          name: category.name,
+          color: CategoryService.stringToColor(category.color),
+          currentValue: currentValue,
+          totalValue: targetValue,
+          leftString: currentValue.toStringAsFixed(2),
+          rightString: targetValue.toStringAsFixed(0),
         ),
-        const SizedBox(height: 2),
-        BudgetronProgressBar(
-            currentValue: currentValue, targetValue: targetValue),
         Align(
           alignment: Alignment.centerRight,
           child: Text(

@@ -1,7 +1,7 @@
-import 'package:budgetron/ui/classes/data_visualization/progress_bar.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/classes/data_visualization/pie_chart.dart';
+import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
+import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
@@ -149,31 +149,14 @@ class CategoryWithProgressBar extends StatelessWidget {
 
     return Column(children: [
       const SizedBox(height: 16),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(Icons.square_rounded, size: 18, color: data.color),
-              const SizedBox(width: 4),
-              Text(data.name, style: BudgetronFonts.nunitoSize14Weight400),
-            ],
-          ),
-          Row(
-            children: [
-              Text(value.toStringAsFixed(2),
-                  style: BudgetronFonts.nunitoSize14Weight300),
-              const SizedBox(width: 8),
-              const Text('•'),
-              const SizedBox(width: 8),
-              Text('${(value / total * 100).toStringAsFixed(0)}%',
-                  style: BudgetronFonts.nunitoSize14Weight400),
-            ],
-          ),
-        ],
-      ),
-      const SizedBox(height: 2),
-      BudgetronProgressBar(currentValue: value, targetValue: total),
+      ListTileWithProgressBar(
+        name: data.name,
+        color: data.color,
+        currentValue: value,
+        totalValue: total,
+        leftString: value.toStringAsFixed(2),
+        rightString: '${(value / total * 100).toStringAsFixed(0)}%',
+      )
     ]);
   }
 }
