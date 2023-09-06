@@ -5,7 +5,9 @@ import 'package:budgetron/objectbox.g.dart';
 
 class EntryController {
   static Stream<List<Entry>> getEntries(
-      {List<DateTime>? period, List<EntryCategory>? categoryFilter}) {
+      {List<DateTime>? period,
+      List<EntryCategory>? categoryFilter,
+      bool? isExpense}) {
     QueryBuilder<Entry> queryBuilder;
     Condition<Entry>? condition;
 
@@ -20,6 +22,11 @@ class EntryController {
     if (categoryFilter != null) {
       queryBuilder.link(Entry_.category,
           EntryCategory_.id.oneOf(categoryFilter.map((e) => e.id).toList()));
+    }
+
+    if (isExpense != null) {
+      queryBuilder.link(
+          Entry_.category, EntryCategory_.isExpense.equals(isExpense));
     }
 
     queryBuilder.order(Entry_.dateTime, flags: Order.descending);
