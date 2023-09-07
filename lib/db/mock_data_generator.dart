@@ -10,14 +10,15 @@ import 'package:budgetron/models/entry.dart';
 class MockDataGenerator {
   static void generateRandomEntries() async {
     List<EntryCategory> categories = await _generateCategories();
+    DateTime now = DateTime.now();
 
-    for (int m = 1; m < 8; m++) {
-      for (int d = 1; d < 28; d++) {
+    for (int m = 1; m <= now.month; m++) {
+      for (int d = 1; d <= now.month; d++) {
         int amount = Random().nextInt(categories.length);
         for (int i = 0; i < amount; i++) {
           double value =
               double.parse((Random().nextDouble() * 50).toStringAsFixed(2));
-          int categoryIndex = Random().nextInt(4);
+          int categoryIndex = Random().nextInt(categories.length);
 
           EntryService.createEntry(
               Entry(value: value, dateTime: DateTime(2023, m, d)),
@@ -136,6 +137,8 @@ class MockDataGenerator {
 
     CategoryController.addCategory(
         EntryCategory(name: 'Salary', isExpense: false, color: 'ff5bcd14a'));
+    CategoryController.addCategory(
+        EntryCategory(name: 'Trading', isExpense: false, color: 'ff721d8da'));
 
     return CategoryController.getCategories('', null).first;
   }

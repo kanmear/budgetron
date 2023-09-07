@@ -1,3 +1,4 @@
+import 'package:budgetron/db/mock_data_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
@@ -13,6 +14,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await ObjectBox.init();
+
+  // MockDataGenerator.removeAllData();
+  // MockDataGenerator.generateRandomEntries();
 
   runApp(const MainApp());
 }
@@ -63,7 +67,7 @@ class _BudgetronState extends State<Budgetron> {
             textScaleFactor: 2,
           )),
           BudgetPage(),
-          const StatsPage()
+          StatsPage()
         ],
         onPageChanged: (index) => _updateIndex(index),
       ),

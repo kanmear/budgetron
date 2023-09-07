@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
+import 'package:budgetron/ui/classes/date_period_tab_switch.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
@@ -12,7 +14,10 @@ import 'package:budgetron/ui/icons.dart';
 import 'package:budgetron/ui/fonts.dart';
 
 class StatsPage extends StatelessWidget {
-  const StatsPage({
+  final ValueNotifier<DatePeriod> datePeriodNotifier =
+      ValueNotifier(DatePeriod.month);
+
+  StatsPage({
     super.key,
   });
 
@@ -21,66 +26,84 @@ class StatsPage extends StatelessWidget {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
-          children: const [
-            BudgetronAppBarWithTitle(
+          children: [
+            const BudgetronAppBarWithTitle(
                 title: 'Statistics', leftIconButton: MenuIconButton()),
-            OverallChart()
+            BudgetronDatePeriodTabSwitch(
+                valueNotifier: datePeriodNotifier,
+                tabs: const [DatePeriod.month, DatePeriod.year]),
+            const SizedBox(height: 24),
+            OverallChart(datePeriodNotifier: datePeriodNotifier)
           ],
         ));
   }
 }
 
 class OverallChart extends StatelessWidget {
-  const OverallChart({super.key});
+  final ValueNotifier<Object> datePeriodNotifier;
+
+  const OverallChart({super.key, required this.datePeriodNotifier});
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<Entry>>(
-        stream: _getEntries(),
-        builder: (context, snapshot) {
-          if (snapshot.data?.isNotEmpty ?? false) {
-            List<Entry> entries = snapshot.data!;
-            double totalValue = EntryService.calculateTotalValue(entries);
-            Map<int, PieChartData> data = _getData(entries);
+    return ValueListenableBuilder(
+      valueListenable: datePeriodNotifier,
+      builder: (BuildContext context, value, Widget? child) {
+        return StreamBuilder<List<Entry>>(
+            stream: _getEntries(),
+            builder: (context, snapshot) {
+              if (snapshot.data?.isNotEmpty ?? false) {
+                List<Entry> entries = snapshot.data!;
+                double totalValue = EntryService.calculateTotalValue(entries);
+                Map<int, PieChartData> data = _getData(entries);
 
-            return Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: Theme.of(context).colorScheme.background),
-                padding: const EdgeInsets.only(
-                    top: 12, left: 10, right: 10, bottom: 12),
-                child: Column(
-                  children: [
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Overall',
-                            style: BudgetronFonts.nunitoSize16Weight400)),
-                    const SizedBox(height: 9),
-                    BudgetronPieChart(
-                      data: _getData(entries),
-                      child: _formChild(totalValue),
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Theme.of(context).colorScheme.background),
+                    padding: const EdgeInsets.only(
+                        top: 12, left: 10, right: 10, bottom: 12),
+                    child: Column(
+                      children: [
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Overall',
+                                style: BudgetronFonts.nunitoSize16Weight400)),
+                        const SizedBox(height: 9),
+                        BudgetronPieChart(
+                          data: data,
+                          child: _formChild(totalValue),
+                        ),
+                        const SizedBox(height: 2),
+                        TopThreeCategories(
+                            data: data.values.toList(), total: totalValue)
+                      ],
                     ),
-                    const SizedBox(height: 2),
-                    TopThreeCategories(
-                        data: data.values.toList(), total: totalValue)
-                  ],
-                ),
-              ),
-            );
-          } else {
-            return const Center(
-                child: Text(
-              'No data to display.',
-            ));
-          }
-        });
+                  ),
+                );
+              } else {
+                return const Center(
+                    child: Text(
+                  'No data to display.',
+                ));
+              }
+            });
+      },
+    );
   }
 
   Stream<List<Entry>> _getEntries() {
-    return EntryController.getEntries(
-        period: [DateTime(2023, 7, 1), DateTime(2023, 7, 30)]);
+    DateTime now = DateTime.now();
+    if (datePeriodNotifier.value == DatePeriod.month) {
+      return EntryController.getEntries(
+          isExpense: true,
+          period: [DateTime(now.year, now.month), DateTime.now()]);
+    } else {
+      return EntryController.getEntries(
+          isExpense: true, period: [DateTime(now.year), DateTime.now()]);
+    }
   }
 
   Map<int, PieChartData> _getData(List<Object> entries) {
