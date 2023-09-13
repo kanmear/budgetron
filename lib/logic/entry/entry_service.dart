@@ -16,9 +16,9 @@ class EntryService {
   static double calculateTotalValue(List<Entry> entries) {
     if (entries.isNotEmpty) {
       return entries
-              .map((entry) => entry.value)
-              .reduce((value, element) => value + element) *
-          -1;
+          .map((entry) => entry.value)
+          .reduce((value, element) => value + element)
+          .abs();
     }
 
     return 0;
