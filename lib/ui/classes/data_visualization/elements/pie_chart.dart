@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class BudgetronPieChart extends StatelessWidget {
-  final Map<int, PieChartData> data;
+  final List<PieChartData> data;
   final Widget? child;
 
   const BudgetronPieChart({super.key, required this.data, this.child});
@@ -16,7 +16,7 @@ class BudgetronPieChart extends StatelessWidget {
 }
 
 class PieChartPainter extends CustomPainter {
-  Map<int, PieChartData> data;
+  final List<PieChartData> data;
 
   PieChartPainter({required this.data});
 
@@ -28,16 +28,14 @@ class PieChartPainter extends CustomPainter {
 
     Offset center = Offset(size.width / 2, size.height / 2);
     double radius = 90;
-    double total = data.values
-        .map((e) => e.value)
-        .reduce((value, element) => value + element);
+    double total =
+        data.map((e) => e.value).reduce((value, element) => value + element);
 
     double startAngle = _degreeToRadians(0);
 
-    List<PieChartData> pieChartDataList = data.values.toList();
-    pieChartDataList.sort((a, b) => b.value.compareTo(a.value));
+    data.sort((a, b) => b.value.compareTo(a.value));
 
-    for (PieChartData pieChartData in pieChartDataList) {
+    for (PieChartData pieChartData in data) {
       double radian = pieChartData.value * 2 * pi / total;
       paint.color = (pieChartData.color);
 

@@ -32,7 +32,7 @@ class OverallChart extends StatelessWidget {
               if (snapshot.data?.isNotEmpty ?? false) {
                 List<Entry> entries = snapshot.data!;
                 double totalValue = EntryService.calculateTotalValue(entries);
-                Map<int, PieChartData> data = _getData(entries);
+                List<PieChartData> data = _getData(entries);
 
                 return Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
@@ -51,8 +51,7 @@ class OverallChart extends StatelessWidget {
                           child: _formChild(totalValue),
                         ),
                         const SizedBox(height: 2),
-                        TopThreeCategories(
-                            data: data.values.toList(), total: totalValue)
+                        TopThreeCategories(data: data, total: totalValue)
                       ],
                     ),
                   ),
@@ -81,7 +80,7 @@ class OverallChart extends StatelessWidget {
     }
   }
 
-  Map<int, PieChartData> _getData(List<Object> entries) {
+  List<PieChartData> _getData(List<Object> entries) {
     Map<int, PieChartData> data = {};
     for (Entry entry in entries as List<Entry>) {
       EntryCategory category = entry.category.target!;
@@ -101,7 +100,7 @@ class OverallChart extends StatelessWidget {
       }
     }
 
-    return data;
+    return data.values.toList();
   }
 
   Widget _formChild(double value) {
