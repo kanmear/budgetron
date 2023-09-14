@@ -33,9 +33,13 @@ class PieChartPainter extends CustomPainter {
         .reduce((value, element) => value + element);
 
     double startAngle = _degreeToRadians(0);
-    for (int i in data.keys) {
-      double radian = data[i]!.value * 2 * pi / total;
-      paint.color = (data[i]!.color);
+
+    List<PieChartData> pieChartDataList = data.values.toList();
+    pieChartDataList.sort((a, b) => b.value.compareTo(a.value));
+
+    for (PieChartData pieChartData in pieChartDataList) {
+      double radian = pieChartData.value * 2 * pi / total;
+      paint.color = (pieChartData.color);
 
       canvas.drawArc(Rect.fromCircle(center: center, radius: radius),
           startAngle, radian, false, paint);
