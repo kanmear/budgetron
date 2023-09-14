@@ -6,6 +6,7 @@ import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/ui/icons.dart';
 
 import 'overall_chart.dart';
+import 'top_spendings_chart.dart';
 
 class StatsPage extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
@@ -20,7 +21,7 @@ class StatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        body: Column(
+        body: ListView(
           children: [
             const BudgetronAppBarWithTitle(
                 title: 'Statistics', leftIconButton: MenuIconButton()),
@@ -30,7 +31,10 @@ class StatsPage extends StatelessWidget {
             const SizedBox(height: 24),
             OverallChart(
                 datePeriodNotifier: datePeriodNotifier,
-                isExpenseFilterNotifier: isExpenseFilterNotifier)
+                isExpenseFilterNotifier: isExpenseFilterNotifier),
+            const SizedBox(height: 24),
+            TopSpendingsChart(datePeriodNotifier: datePeriodNotifier),
+            const SizedBox(height: 24),
           ],
         ));
   }
