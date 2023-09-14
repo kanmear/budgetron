@@ -11,7 +11,7 @@ import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/fonts.dart';
 
 class OverallChart extends StatelessWidget {
-  final ValueNotifier<Object> datePeriodNotifier;
+  final ValueNotifier<DatePeriod> datePeriodNotifier;
   final ValueNotifier<bool> isExpenseFilterNotifier;
 
   const OverallChart(
