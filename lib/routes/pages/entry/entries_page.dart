@@ -1,12 +1,13 @@
-import 'package:budgetron/ui/classes/top_bar_with_title.dart';
-import 'package:budgetron/ui/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/icons.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
@@ -119,13 +120,7 @@ class EntryListTileContainer extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       _resolveContainerTitle(),
-                      Text(
-                        entries
-                            .map((e) => e.value)
-                            .reduce((value, element) => value + element)
-                            .toStringAsFixed(2),
-                        style: BudgetronFonts.nunitoSize16Weight600,
-                      )
+                      _resolveContainerSumValue(entries)
                     ],
                   ),
                 ),
@@ -157,6 +152,16 @@ class EntryListTileContainer extends StatelessWidget {
     return Text(DateFormat.yMMMd().format(day),
         style: BudgetronFonts.nunitoSize16Weight600);
   }
+
+  Widget _resolveContainerSumValue(List<Entry> entries) {
+    return Text(
+      entries
+          .map((e) => e.value)
+          .reduce((value, element) => value + element)
+          .toStringAsFixed(2),
+      style: BudgetronFonts.nunitoSize16Weight600,
+    );
+  }
 }
 
 class EntryListTile extends StatelessWidget {
@@ -169,6 +174,8 @@ class EntryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    EntryCategory category = entry.category.target!;
+
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 10.0),
       child: Column(
@@ -181,11 +188,10 @@ class EntryListTile extends StatelessWidget {
                   Icon(
                     Icons.square_rounded,
                     size: 18,
-                    color: CategoryService.stringToColor(
-                        entry.category.target!.color),
+                    color: CategoryService.stringToColor(category.color),
                   ),
                   const SizedBox(width: 8),
-                  Text(entry.category.target!.name,
+                  Text(category.name,
                       style: BudgetronFonts.nunitoSize16Weight400)
                 ],
               ),
