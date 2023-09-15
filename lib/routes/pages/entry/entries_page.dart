@@ -98,6 +98,8 @@ class EntryListTileContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Entry> entries = entriesMap[day]!;
+
     return Column(
       children: [
         Padding(
@@ -116,19 +118,9 @@ class EntryListTileContainer extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      _resolveContainerTitle(),
                       Text(
-                        (entriesMap.keys.first == day &&
-                                day ==
-                                    DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day))
-                            ? "Today"
-                            : DateFormat.yMMMd().format(day),
-                        style: BudgetronFonts.nunitoSize16Weight600,
-                      ),
-                      Text(
-                        entriesMap[day]!
+                        entries
                             .map((e) => e.value)
                             .reduce((value, element) => value + element)
                             .toStringAsFixed(2),
@@ -139,8 +131,7 @@ class EntryListTileContainer extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Column(children: [
-                  for (var entry in entriesMap[day]!)
-                    EntryListTile(entry: entry),
+                  for (var entry in entries) EntryListTile(entry: entry),
                 ]),
               ],
             ),
@@ -149,6 +140,22 @@ class EntryListTileContainer extends StatelessWidget {
         const SizedBox(height: 24)
       ],
     );
+  }
+
+  Widget _resolveContainerTitle() {
+    if (entriesMap.keys.first == day) {
+      DateTime now = DateTime.now();
+
+      if (day == DateTime(now.year, now.month, now.day)) {
+        return Text(
+          "Today",
+          style: BudgetronFonts.nunitoSize16Weight600,
+        );
+      }
+    }
+
+    return Text(DateFormat.yMMMd().format(day),
+        style: BudgetronFonts.nunitoSize16Weight600);
   }
 }
 
@@ -183,7 +190,7 @@ class EntryListTile extends StatelessWidget {
                 ],
               ),
               Text(
-                entry.value.toString(),
+                entry.value.toStringAsFixed(2),
                 style: BudgetronFonts.nunitoSize16Weight400,
               )
             ],
