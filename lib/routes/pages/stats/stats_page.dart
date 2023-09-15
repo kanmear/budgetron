@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/ui/classes/date_period_tab_switch.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/models/enums/date_period.dart';
-import 'package:budgetron/ui/icons.dart';
+import 'package:budgetron/ui/data/icons.dart';
 
 import 'overall_chart.dart';
 import 'top_spendings_chart.dart';

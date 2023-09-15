@@ -8,7 +8,7 @@ import 'package:budgetron/ui/classes/radio_list_tile.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/text_field.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 
 class NewCategoryDialog extends StatefulWidget {
   final EntryCategoryType entryCategoryType;

@@ -1,7 +1,7 @@
-import 'package:budgetron/ui/icons.dart';
+import 'package:budgetron/ui/data/icons.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 
 class BudgetronAppBarWithTabs extends StatelessWidget {
   final ValueNotifier<Enum> tabNotifier;

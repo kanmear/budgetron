@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/colors.dart';
+import 'package:budgetron/ui/data/colors.dart';
 
 class BudgetronTextButton extends StatelessWidget {
   final Function onTap;

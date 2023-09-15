@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/classes/text_button.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 
 class CategoryColorDialog extends StatelessWidget {
   final List<List<Color>> colors = const [

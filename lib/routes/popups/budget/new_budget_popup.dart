@@ -13,7 +13,7 @@ import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 
 class NewBudgetDialog extends StatefulWidget {
   //FIX change object to EntryCategory (and test everything still works)

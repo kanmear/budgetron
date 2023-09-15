@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/ui/fonts.dart';
-import 'package:budgetron/ui/icons.dart';
+import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/entry_controller.dart';

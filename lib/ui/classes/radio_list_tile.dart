@@ -1,4 +1,4 @@
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronRadioListTile extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:budgetron/ui/colors.dart';
+import 'package:budgetron/ui/data/colors.dart';
 
 class BudgetronFonts {
   // for text

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/models/enums/date_period.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 
 class BudgetronDatePeriodTabSwitch extends StatelessWidget {
   final ValueNotifier<DatePeriod> valueNotifier;

@@ -1,5 +1,5 @@
 import 'package:budgetron/ui/classes/data_visualization/elements/progress_bar.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 class ListTileWithProgressBar extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/colors.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'colors.dart';
+import 'fonts.dart';
 
 class BudgetronUI {
   static InputDecoration inputDecoration() {

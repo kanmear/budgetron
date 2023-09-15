@@ -8,7 +8,7 @@ import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/fonts.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 
 class OverallChart extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier;
