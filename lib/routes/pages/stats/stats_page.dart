@@ -21,20 +21,27 @@ class StatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        body: ListView(
+        body: Column(
           children: [
             const BudgetronAppBarWithTitle(
                 title: 'Statistics', leftIconButton: MenuIconButton()),
-            BudgetronDatePeriodTabSwitch(
-                valueNotifier: datePeriodNotifier,
-                tabs: const [DatePeriod.month, DatePeriod.year]),
-            const SizedBox(height: 24),
-            OverallChart(
-                datePeriodNotifier: datePeriodNotifier,
-                isExpenseFilterNotifier: isExpenseFilterNotifier),
-            const SizedBox(height: 24),
-            TopSpendingsChart(datePeriodNotifier: datePeriodNotifier),
-            const SizedBox(height: 24),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  BudgetronDatePeriodTabSwitch(
+                      valueNotifier: datePeriodNotifier,
+                      tabs: const [DatePeriod.month, DatePeriod.year]),
+                  const SizedBox(height: 24),
+                  OverallChart(
+                      datePeriodNotifier: datePeriodNotifier,
+                      isExpenseFilterNotifier: isExpenseFilterNotifier),
+                  const SizedBox(height: 24),
+                  TopSpendingsChart(datePeriodNotifier: datePeriodNotifier),
+                  const SizedBox(height: 24),
+                ],
+              ),
+            ),
           ],
         ));
   }
