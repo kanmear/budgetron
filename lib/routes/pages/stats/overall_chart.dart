@@ -72,11 +72,11 @@ class OverallChart extends StatelessWidget {
     if (datePeriodNotifier.value == DatePeriod.month) {
       return EntryController.getEntries(
           isExpense: isExpenseFilterNotifier.value,
-          period: [DateTime(now.year, now.month), DateTime.now()]);
+          period: [DateTime(now.year, now.month), now]);
     } else {
       return EntryController.getEntries(
           isExpense: isExpenseFilterNotifier.value,
-          period: [DateTime(now.year), DateTime.now()]);
+          period: [DateTime(now.year), now]);
     }
   }
 
