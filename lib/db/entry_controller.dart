@@ -36,6 +36,16 @@ class EntryController {
         .map((query) => query.find());
   }
 
+  static Stream<List<Entry>> getLatestEntries() {
+    var queryBuilder = _getEntryBox().query();
+    queryBuilder.order(Entry_.dateTime, flags: Order.descending);
+
+    return queryBuilder.watch(triggerImmediately: true).map((query) {
+      query.limit = 3;
+      return query.find();
+    });
+  }
+
   static int addEntry(Entry entry) => _getEntryBox().put(entry);
 
   static void clearEntries() async {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 
+import 'latest_entries.dart';
 import 'micro_overview.dart';
 import 'favorite_budgets.dart';
 
@@ -22,7 +23,10 @@ class HomePage extends StatelessWidget {
             SizedBox(height: 8),
             MicroOverview(),
             SizedBox(height: 32),
-            FavoriteBudgets()
+            FavoriteBudgets(),
+            Spacer(),
+            LatestEntries(),
+            SizedBox(height: 16),
           ],
         ));
   }
