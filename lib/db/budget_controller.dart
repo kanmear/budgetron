@@ -3,9 +3,16 @@ import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/objectbox.g.dart';
 
 class BudgetController {
-  static Stream<List<Budget>> getBudgets() {
-    final builder = _getBudgetBox().query()
+  static Stream<List<Budget>> getBudgets({bool? isOnMainPage}) {
+    Condition<Budget>? condition;
+
+    if (isOnMainPage != null) {
+      condition = Budget_.onMainPage.equals(isOnMainPage);
+    }
+
+    final builder = _getBudgetBox().query(condition)
       ..order(Budget_.id, flags: Order.descending);
+
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 
