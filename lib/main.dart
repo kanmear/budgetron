@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
 
 import 'package:budgetron/ui/data/colors.dart';
+import 'package:budgetron/routes/pages/home/home_page.dart';
 import 'package:budgetron/routes/pages/stats/stats_page.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/routes/pages/budget/budget_page.dart';
@@ -61,11 +62,7 @@ class _BudgetronState extends State<Budgetron> {
         controller: pageViewController,
         children: [
           const EntriesPage(),
-          const Center(
-              child: Text(
-            "Home page placeholder",
-            textScaleFactor: 2,
-          )),
+          const HomePage(),
           BudgetPage(),
           StatsPage()
         ],
