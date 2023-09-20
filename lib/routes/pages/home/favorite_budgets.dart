@@ -41,13 +41,11 @@ class FavoriteBudgetsListView extends StatelessWidget {
 
     return SizedBox(
       height: ((45 + 8) * 5) - 8,
-      child: Expanded(
-        child: ListView(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            children: [
-              for (var budget in budgets) BudgetListContainer(budget: budget)
-            ]),
-      ),
+      child: ListView(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          children: [
+            for (var budget in budgets) BudgetListContainer(budget: budget)
+          ]),
     );
   }
 }
