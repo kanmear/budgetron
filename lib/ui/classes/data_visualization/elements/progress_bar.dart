@@ -24,7 +24,7 @@ class BudgetronProgressBar extends StatelessWidget {
         child: LinearProgressIndicator(
             value: currentValue / totalValue,
             color: Theme.of(context).colorScheme.primary,
-            backgroundColor: Theme.of(context).colorScheme.surface),
+            backgroundColor: Theme.of(context).colorScheme.background),
       ),
     );
   }
