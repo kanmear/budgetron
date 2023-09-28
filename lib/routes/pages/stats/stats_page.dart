@@ -25,24 +25,42 @@ class StatsPage extends StatelessWidget {
           children: [
             const BudgetronAppBarWithTitle(
                 title: 'Statistics', leftIconButton: MenuIconButton()),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  BudgetronDatePeriodTabSwitch(
-                      valueNotifier: datePeriodNotifier,
-                      tabs: const [DatePeriod.month, DatePeriod.year]),
-                  const SizedBox(height: 24),
-                  OverallChart(
-                      datePeriodNotifier: datePeriodNotifier,
-                      isExpenseFilterNotifier: isExpenseFilterNotifier),
-                  const SizedBox(height: 24),
-                  TopSpendingsChart(datePeriodNotifier: datePeriodNotifier),
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
+            StatsView(
+                datePeriodNotifier: datePeriodNotifier,
+                isExpenseFilterNotifier: isExpenseFilterNotifier),
           ],
         ));
+  }
+}
+
+class StatsView extends StatelessWidget {
+  const StatsView({
+    super.key,
+    required this.datePeriodNotifier,
+    required this.isExpenseFilterNotifier,
+  });
+
+  final ValueNotifier<DatePeriod> datePeriodNotifier;
+  final ValueNotifier<bool> isExpenseFilterNotifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          BudgetronDatePeriodTabSwitch(
+              valueNotifier: datePeriodNotifier,
+              tabs: const [DatePeriod.month, DatePeriod.year]),
+          const SizedBox(height: 24),
+          OverallChart(
+              datePeriodNotifier: datePeriodNotifier,
+              isExpenseFilterNotifier: isExpenseFilterNotifier),
+          const SizedBox(height: 24),
+          TopSpendingsChart(datePeriodNotifier: datePeriodNotifier),
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
   }
 }
