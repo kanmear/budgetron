@@ -27,24 +27,12 @@ class _EntriesPageState extends State<EntriesPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
-          children: [
-            const BudgetronAppBarWithTitle(
+          children: const [
+            BudgetronAppBarWithTitle(
                 title: 'Entries',
                 leftIconButton: MenuIconButton(),
                 rightIconButton: EditIconButton()),
-            Flexible(
-              child: StreamBuilder<List<Entry>>(
-                  stream: EntryController.getEntries(),
-                  builder: (context, snapshot) {
-                    if (snapshot.data?.isNotEmpty ?? false) {
-                      return EntriesListView(data: snapshot.data!);
-                    } else {
-                      return const Center(
-                        child: Text("No entries in database"),
-                      );
-                    }
-                  }),
-            ),
+            EntriesListView(),
           ],
         ),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
@@ -61,29 +49,36 @@ class _EntriesPageState extends State<EntriesPage> {
 }
 
 class EntriesListView extends StatelessWidget {
-  final List<Entry> data;
-
   const EntriesListView({
     super.key,
-    required this.data,
   });
 
   @override
   Widget build(BuildContext context) {
-    Map<DateTime, List<Entry>> entriesMap = {};
-    List<DateTime> entryDates = [];
+    return Flexible(
+        child: StreamBuilder<List<Entry>>(
+            stream: EntryController.getEntries(),
+            builder: (context, snapshot) {
+              if (snapshot.data?.isNotEmpty ?? false) {
+                Map<DateTime, List<Entry>> entriesMap = {};
+                List<DateTime> entryDates = [];
 
-    EntryService.formEntriesData(data, entriesMap, entryDates);
+                EntryService.formEntriesData(
+                    snapshot.data!, entriesMap, entryDates);
 
-    return ListView.builder(
-      padding: EdgeInsets.zero,
-      itemCount: entryDates.length,
-      itemBuilder: (context, index) {
-        var day = entryDates[index];
+                return ListView.builder(
+                    padding: EdgeInsets.zero,
+                    itemCount: entryDates.length,
+                    itemBuilder: (context, index) {
+                      var day = entryDates[index];
 
-        return EntryListTileContainer(entriesMap: entriesMap, day: day);
-      },
-    );
+                      return EntryListTileContainer(
+                          entriesMap: entriesMap, day: day);
+                    });
+              } else {
+                return const Center(child: Text("No entries in database"));
+              }
+            }));
   }
 }
 
