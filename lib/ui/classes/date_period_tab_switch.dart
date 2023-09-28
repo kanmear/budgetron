@@ -22,29 +22,47 @@ class BudgetronDatePeriodTabSwitch extends StatelessWidget {
         child: Row(
           children: [
             for (DatePeriod tab in tabs)
-              Expanded(
-                  child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => _selectTab(tab),
-                child: ValueListenableBuilder(
-                  valueListenable: valueNotifier,
-                  builder: (BuildContext context, value, Widget? child) {
-                    bool isSelected = tab == valueNotifier.value ? true : false;
-                    return Container(
-                      color: _resolveColor(isSelected, context),
-                      child: Center(
-                          child: Text(
-                        DatePeriodMap.getName(tab),
-                        style: _resolveStyle(isSelected),
-                      )),
-                    );
-                  },
-                ),
-              ))
+              DatePeriodTab(valueNotifier: valueNotifier, tab: tab)
           ],
         ),
       ),
     );
+  }
+}
+
+class DatePeriodTab extends StatelessWidget {
+  final ValueNotifier<DatePeriod> valueNotifier;
+  final DatePeriod tab;
+
+  const DatePeriodTab(
+      {super.key, required this.valueNotifier, required this.tab});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _selectTab(tab),
+      child: ValueListenableBuilder(
+        valueListenable: valueNotifier,
+        builder: (BuildContext context, value, Widget? child) {
+          bool isSelected = tab == valueNotifier.value ? true : false;
+          return Padding(
+            padding: const EdgeInsets.all(4),
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  color: _resolveColor(isSelected, context)),
+              child: Center(
+                  child: Text(
+                DatePeriodMap.getName(tab),
+                style: _resolveStyle(isSelected),
+              )),
+            ),
+          );
+        },
+      ),
+    ));
   }
 
   void _selectTab(DatePeriod value) {
