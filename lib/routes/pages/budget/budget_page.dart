@@ -32,32 +32,44 @@ class BudgetPage extends StatelessWidget {
             rightIconButton: EditIconButton(),
           ),
           const SizedBox(height: 30),
-          Expanded(
-            child: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  children: [
-                    //TODO return budget / saving listView depending on selected tab
-                    BudgetListView(
-                      tabNotifier: tabNotifier,
-                    ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: BudgetronBigTextButton(
-                          text: "Add budget",
-                          backgroundColor:
-                              Theme.of(context).colorScheme.background,
-                          onTap: () => showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  NewBudgetDialog()),
-                          textStyle: BudgetronFonts.nunitoSize18Weight500),
-                    )
-                  ],
-                )),
-          ),
+          BudgetView(tabNotifier: tabNotifier),
         ]),
       ),
+    );
+  }
+}
+
+class BudgetView extends StatelessWidget {
+  const BudgetView({
+    super.key,
+    required this.tabNotifier,
+  });
+
+  final ValueNotifier<BudgetTabs> tabNotifier;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Column(
+            children: [
+              //TODO return budget / saving listView depending on selected tab
+              BudgetListView(
+                tabNotifier: tabNotifier,
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: BudgetronBigTextButton(
+                    text: "Add budget",
+                    backgroundColor: Theme.of(context).colorScheme.background,
+                    onTap: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) => NewBudgetDialog()),
+                    textStyle: BudgetronFonts.nunitoSize18Weight500),
+              )
+            ],
+          )),
     );
   }
 }
