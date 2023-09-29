@@ -6,14 +6,19 @@ import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
+import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
 
 class EntriesPage extends StatefulWidget {
-  const EntriesPage({
+  final ValueNotifier<DatePeriod> datePeriodNotifier =
+      ValueNotifier(DatePeriod.month);
+
+  EntriesPage({
     super.key,
   });
 
@@ -27,12 +32,14 @@ class _EntriesPageState extends State<EntriesPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
-          children: const [
-            BudgetronAppBarWithTitle(
+          children: [
+            const BudgetronAppBarWithTitle(
                 title: 'Entries',
                 leftIconButton: MenuIconButton(),
                 rightIconButton: EditIconButton()),
-            EntriesListView(),
+            const SizedBox(height: 8),
+            const SizedBox(height: 16),
+            const EntriesListView(),
           ],
         ),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
@@ -96,21 +103,16 @@ class EntryListTileContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Entry> entries = entriesMap[day]!;
 
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-          child: Card(
-            elevation: 3,
-            shadowColor: entriesMap.keys.first == day
-                ? const Color.fromARGB(25, 0, 0, 0)
-                : Colors.transparent,
-            color: Theme.of(context).colorScheme.surface,
-            child: Column(
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Container(
+        color: Theme.of(context).colorScheme.background,
+        child: Column(
+          children: [
+            Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+                  padding: const EdgeInsets.only(left: 10, right: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -125,10 +127,12 @@ class EntryListTileContainer extends StatelessWidget {
                 ]),
               ],
             ),
-          ),
+            const SizedBox(height: 16),
+            const HorizontalSeparator(),
+            const SizedBox(height: 16)
+          ],
         ),
-        const SizedBox(height: 24)
-      ],
+      ),
     );
   }
 
@@ -171,11 +175,14 @@ class EntryListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     EntryCategory category = entry.category.target!;
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0, right: 10.0),
-      child: Column(
-        children: [
-          Row(
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+              color: Theme.of(context).colorScheme.surface),
+          padding: const EdgeInsets.only(left: 8, right: 10, top: 8, bottom: 8),
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
@@ -196,9 +203,9 @@ class EntryListTile extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 8.0)
-        ],
-      ),
+        ),
+        const SizedBox(height: 8)
+      ],
     );
   }
 }

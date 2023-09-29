@@ -60,12 +60,7 @@ class _BudgetronState extends State<Budgetron> {
     return Scaffold(
       body: PageView(
         controller: pageViewController,
-        children: [
-          const EntriesPage(),
-          const HomePage(),
-          BudgetPage(),
-          StatsPage()
-        ],
+        children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
         onPageChanged: (index) => _updateIndex(index),
       ),
       bottomNavigationBar: BottomNavigationBar(
