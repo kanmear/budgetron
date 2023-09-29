@@ -39,7 +39,7 @@ class OverallChart extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: Theme.of(context).colorScheme.background),
+                        color: Theme.of(context).colorScheme.surface),
                     padding: const EdgeInsets.only(
                         top: 12, left: 10, right: 10, bottom: 12),
                     child: Column(

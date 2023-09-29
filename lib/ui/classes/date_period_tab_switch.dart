@@ -17,7 +17,7 @@ class BudgetronDatePeriodTabSwitch extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
-            color: Theme.of(context).colorScheme.background),
+            color: Theme.of(context).colorScheme.surface),
         height: 42,
         child: Row(
           children: [
@@ -71,7 +71,7 @@ class DatePeriodTab extends StatelessWidget {
 
   Color _resolveColor(bool isSelected, BuildContext context) => isSelected
       ? Theme.of(context).colorScheme.primary
-      : Theme.of(context).colorScheme.background;
+      : Theme.of(context).colorScheme.surface;
 
   TextStyle _resolveStyle(bool isSelected) => isSelected
       ? BudgetronFonts.nunitoSize18Weight500White
