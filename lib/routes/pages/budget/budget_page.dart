@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
+import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
@@ -131,11 +131,7 @@ class BudgetronListTile extends StatelessWidget {
               style: BudgetronFonts.nunitoSize14Weight400),
         ),
         const SizedBox(height: 16),
-        Container(
-          height: 1,
-          decoration: BoxDecoration(
-              border: Border.all(color: BudgetronColors.gray0, width: 1)),
-        ),
+        const HorizontalSeparator(),
         const SizedBox(height: 16),
       ],
     );
