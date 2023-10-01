@@ -24,8 +24,10 @@ class EntryService {
     return 0;
   }
 
-  static void formEntriesData(List<Entry> data,
-      Map<DateTime, List<Entry>> entriesMap, List<DateTime> entryDates) {
+  static void formEntriesData(
+      List<Entry> data,
+      Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap,
+      List<DateTime> entryDates) {
     for (var element in data) {
       _addEntryToMap(entriesMap, element);
     }
@@ -35,31 +37,35 @@ class EntryService {
   }
 
   static void _addEntryToMap(
-      Map<DateTime, List<Entry>> entriesMap, Entry entry) {
+      Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap, Entry entry) {
     DateTime dateTime =
         DateTime(entry.dateTime.year, entry.dateTime.month, entry.dateTime.day);
+    EntryCategory category = entry.category.target!;
 
     if (entriesMap.containsKey(dateTime)) {
-      List<Entry> currentEntries = entriesMap[dateTime]!;
+      Map<EntryCategory, List<Entry>> currentEntries = entriesMap[dateTime]!;
 
       // if an entry with the same category exists - update that entry
-      int sameCategoryEntry = currentEntries.indexWhere((element) =>
-          element.category.target!.name == entry.category.target!.name);
-      if (sameCategoryEntry != -1) {
-        Entry updatedEntry = currentEntries[sameCategoryEntry];
-        updatedEntry.value += entry.value;
-        updatedEntry.value =
-            double.parse(updatedEntry.value.toStringAsFixed(2));
-        currentEntries[sameCategoryEntry] = updatedEntry;
+      if (currentEntries.containsKey(category)) {
+        List<Entry> sameCategoryEntries = currentEntries[category]!;
+        sameCategoryEntries.addAll(List.from({entry}));
+
+        currentEntries.update(category, (value) => sameCategoryEntries);
       }
 
       // if category is unique for that date - add as a separate row
       else {
-        entriesMap.update(
-            dateTime, (value) => List.from(value)..addAll({entry}));
+        var categoryMap = entriesMap[dateTime]!;
+        categoryMap.addAll({
+          category: List.from({entry})
+        });
+
+        entriesMap.update(dateTime, (value) => categoryMap);
       }
     } else {
-      entriesMap[dateTime] = List.from({entry});
+      entriesMap[dateTime] = {
+        category: List.from({entry})
+      };
     }
   }
 }

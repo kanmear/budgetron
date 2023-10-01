@@ -32,14 +32,14 @@ class _EntriesPageState extends State<EntriesPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
-          children: [
-            const BudgetronAppBarWithTitle(
+          children: const [
+            BudgetronAppBarWithTitle(
                 title: 'Entries',
                 leftIconButton: MenuIconButton(),
                 rightIconButton: EditIconButton()),
-            const SizedBox(height: 8),
-            const SizedBox(height: 16),
-            const EntriesListView(),
+            SizedBox(height: 8),
+            SizedBox(height: 16),
+            EntriesListView(),
           ],
         ),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
@@ -67,7 +67,7 @@ class EntriesListView extends StatelessWidget {
             stream: EntryController.getEntries(),
             builder: (context, snapshot) {
               if (snapshot.data?.isNotEmpty ?? false) {
-                Map<DateTime, List<Entry>> entriesMap = {};
+                Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
                 List<DateTime> entryDates = [];
 
                 EntryService.formEntriesData(
@@ -90,18 +90,18 @@ class EntriesListView extends StatelessWidget {
 }
 
 class EntryListTileContainer extends StatelessWidget {
+  final Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap;
+  final DateTime day;
+
   const EntryListTileContainer({
     super.key,
     required this.entriesMap,
     required this.day,
   });
 
-  final Map<DateTime, List<Entry>> entriesMap;
-  final DateTime day;
-
   @override
   Widget build(BuildContext context) {
-    List<Entry> entries = entriesMap[day]!;
+    Map<EntryCategory, List<Entry>> entries = entriesMap[day]!;
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
@@ -123,7 +123,8 @@ class EntryListTileContainer extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Column(children: [
-                  for (var entry in entries) EntryListTile(entry: entry),
+                  for (var key in entries.keys)
+                    EntryListTile(category: key, entries: entries[key]!),
                 ]),
               ],
             ),
@@ -152,9 +153,10 @@ class EntryListTileContainer extends StatelessWidget {
         style: BudgetronFonts.nunitoSize16Weight600);
   }
 
-  Widget _resolveContainerSumValue(List<Entry> entries) {
+  Widget _resolveContainerSumValue(Map<EntryCategory, List<Entry>> entries) {
     return Text(
-      entries
+      entries.values
+          .expand((element) => element.toList())
           .map((e) => e.value)
           .reduce((value, element) => value + element)
           .toStringAsFixed(2),
@@ -164,47 +166,134 @@ class EntryListTileContainer extends StatelessWidget {
 }
 
 class EntryListTile extends StatelessWidget {
-  const EntryListTile({
+  final ValueNotifier<bool> isExpandedListenable = ValueNotifier(false);
+  final EntryCategory category;
+  final List<Entry> entries;
+
+  EntryListTile({
+    super.key,
+    required this.entries,
+    required this.category,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+      valueListenable: isExpandedListenable,
+      builder: (context, value, child) {
+        return InkWell(
+          onTap: () => _toggleExpandedView(),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Theme.of(context).colorScheme.surface),
+                padding: const EdgeInsets.only(
+                    left: 8, right: 10, top: 8, bottom: 8),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.square_rounded,
+                              size: 18,
+                              color:
+                                  CategoryService.stringToColor(category.color),
+                            ),
+                            const SizedBox(width: 8),
+                            _resolveTileName()
+                          ],
+                        ),
+                        Text(
+                          _resolveSum(),
+                          style: BudgetronFonts.nunitoSize16Weight400,
+                        )
+                      ],
+                    ),
+                    _expandedView()
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8)
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _resolveTileName() {
+    return Row(
+      children: [
+        Text(category.name, style: BudgetronFonts.nunitoSize16Weight400),
+        const SizedBox(width: 4),
+        entries.length > 1
+            ? Text(" +${(entries.length - 1).toString()}",
+                style: BudgetronFonts.nunitoSize11Weight300)
+            : const SizedBox()
+      ],
+    );
+  }
+
+  _resolveSum() {
+    return entries
+        .map((entry) => entry.value)
+        .reduce((value, element) => value + element)
+        .toStringAsFixed(2);
+  }
+
+  _toggleExpandedView() =>
+      isExpandedListenable.value = !isExpandedListenable.value;
+
+  _expandedView() {
+    if (isExpandedListenable.value && entries.length > 1) {
+      return Container(
+          padding: const EdgeInsets.only(top: 8),
+          height: 76,
+          child: ListView(scrollDirection: Axis.horizontal, children: [
+            for (var entry in entries) ExpandedEntryTile(entry: entry)
+          ]));
+    } else {
+      return const SizedBox();
+    }
+  }
+}
+
+class ExpandedEntryTile extends StatelessWidget {
+  final Entry entry;
+
+  const ExpandedEntryTile({
     super.key,
     required this.entry,
   });
 
-  final Entry entry;
-
   @override
   Widget build(BuildContext context) {
-    EntryCategory category = entry.category.target!;
-
-    return Column(
+    return Row(
       children: [
         Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
-              color: Theme.of(context).colorScheme.surface),
-          padding: const EdgeInsets.only(left: 8, right: 10, top: 8, bottom: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              color: Theme.of(context).colorScheme.background),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          child: Column(
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.square_rounded,
-                    size: 18,
-                    color: CategoryService.stringToColor(category.color),
-                  ),
-                  const SizedBox(width: 8),
-                  Text(category.name,
-                      style: BudgetronFonts.nunitoSize16Weight400)
-                ],
-              ),
-              Text(
-                entry.value.toStringAsFixed(2),
-                style: BudgetronFonts.nunitoSize16Weight400,
-              )
+              Text("${entry.dateTime.hour}:${entry.dateTime.minute}",
+                  style: BudgetronFonts.nunitoSize16Weight300Gray,
+                  textAlign: TextAlign.center),
+              const SizedBox(height: 8),
+              Text(entry.value.toStringAsFixed(2),
+                  style: BudgetronFonts.nunitoSize16Weight400,
+                  textAlign: TextAlign.center),
             ],
           ),
         ),
-        const SizedBox(height: 8)
+        const SizedBox(width: 8)
       ],
     );
   }

@@ -23,4 +23,12 @@ class EntryCategory {
   String toString() {
     return name;
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is EntryCategory && other.id == id;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, id, 53, 97);
 }
