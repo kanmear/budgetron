@@ -269,8 +269,7 @@ class EntryListTile extends StatelessWidget {
         Text(category.name, style: BudgetronFonts.nunitoSize16Weight400),
         const SizedBox(width: 4),
         isExpandable && entries.length > 1
-            ? Text(" +${(entries.length - 1).toString()}",
-                style: BudgetronFonts.nunitoSize11Weight300)
+            ? Text("•", style: BudgetronFonts.nunitoSize11Weight300)
             : const SizedBox()
       ],
     );
