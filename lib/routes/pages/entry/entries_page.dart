@@ -210,9 +210,9 @@ class EntryListTile extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: isExpandedListenable,
       builder: (context, value, child) {
-        return _getWrapperWidget(Column(
+        return Column(
           children: [
-            Container(
+            _getWrapperWidget(Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2),
                   color: Theme.of(context).colorScheme.surface),
@@ -241,19 +241,19 @@ class EntryListTile extends StatelessWidget {
                       )
                     ],
                   ),
-                  _expandedView()
                 ],
               ),
-            ),
+            )),
+            _expandedView(context),
             const SizedBox(height: 8)
           ],
-        ));
+        );
       },
     );
   }
 
   _getWrapperWidget(Widget child) {
-    if (isExpandable) {
+    if (isExpandable && entries.length > 1) {
       return InkWell(onTap: () => _toggleExpandedView(), child: child);
     } else {
       return child;
@@ -283,10 +283,13 @@ class EntryListTile extends StatelessWidget {
         .toStringAsFixed(2);
   }
 
-  _expandedView() {
+  _expandedView(BuildContext context) {
     if (isExpandedListenable.value && entries.length > 1) {
       return Container(
-          padding: const EdgeInsets.only(top: 8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+              color: Theme.of(context).colorScheme.surface),
+          padding: const EdgeInsets.only(left: 8, right: 10, bottom: 8),
           height: 76,
           child: ListView(scrollDirection: Axis.horizontal, children: [
             for (var entry in entries) ExpandedEntryTile(entry: entry)
