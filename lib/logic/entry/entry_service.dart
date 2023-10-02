@@ -2,6 +2,7 @@ import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/models/enums/date_period.dart';
 
 class EntryService {
   static void createEntry(Entry entry, EntryCategory category) {
@@ -25,11 +26,12 @@ class EntryService {
   }
 
   static void formEntriesData(
-      List<Entry> data,
+      DatePeriod datePeriod,
+      List<Entry> entries,
       Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap,
       List<DateTime> entryDates) {
-    for (var element in data) {
-      _addEntryToMap(entriesMap, element);
+    for (var entry in entries) {
+      _addEntryToMap(entriesMap, entry, datePeriod);
     }
 
     entryDates.addAll(entriesMap.keys.toList());
@@ -37,9 +39,13 @@ class EntryService {
   }
 
   static void _addEntryToMap(
-      Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap, Entry entry) {
-    DateTime dateTime =
-        DateTime(entry.dateTime.year, entry.dateTime.month, entry.dateTime.day);
+      Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap,
+      Entry entry,
+      DatePeriod datePeriod) {
+    DateTime dateTime = datePeriod == DatePeriod.day
+        ? DateTime(
+            entry.dateTime.year, entry.dateTime.month, entry.dateTime.day)
+        : DateTime(entry.dateTime.year, entry.dateTime.month);
     EntryCategory category = entry.category.target!;
 
     if (entriesMap.containsKey(dateTime)) {
