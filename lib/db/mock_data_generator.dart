@@ -13,7 +13,8 @@ class MockDataGenerator {
     DateTime now = DateTime.now();
 
     for (int m = 1; m <= now.month; m++) {
-      for (int d = 1; d <= now.month; d++) {
+      for (int d = 1; d <= 28; d++) {
+        if (DateTime(now.year, m, d).isAfter(now)) return;
         int amount = Random().nextInt(categories.length);
         for (int i = 0; i < amount; i++) {
           double value =
