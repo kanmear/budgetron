@@ -78,7 +78,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                         textController: widget.textController,
                         inputType: TextInputType.number,
                         hintText: "0",
-                        autoFocus: true,
+                        autoFocus: false,
                         onSubmitted: (value) => {})
                   ],
                 ),
