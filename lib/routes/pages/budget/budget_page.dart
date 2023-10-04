@@ -8,7 +8,6 @@ import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
-import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
@@ -31,7 +30,7 @@ class BudgetPage extends StatelessWidget {
             leftIconButton: MenuIconButton(),
             rightIconButton: EditIconButton(),
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 8),
           BudgetView(tabNotifier: tabNotifier),
         ]),
       ),
@@ -54,7 +53,6 @@ class BudgetView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             children: [
-              //TODO return budget / saving listView depending on selected tab
               BudgetListView(
                 tabNotifier: tabNotifier,
               ),
@@ -88,7 +86,12 @@ class BudgetListView extends StatelessWidget {
           if (snapshot.data?.isNotEmpty ?? false) {
             return ListView(padding: EdgeInsets.zero, children: [
               for (var budget in snapshot.data!)
-                BudgetronListTile(budget: budget)
+                Column(
+                  children: [
+                    BudgetronListTile(budget: budget),
+                    const SizedBox(height: 8)
+                  ],
+                )
             ]);
           } else {
             return const Center(child: Text("No budgets in database"));
@@ -114,28 +117,29 @@ class BudgetronListTile extends StatelessWidget {
     double currentValue = budget.currentValue;
     double targetValue = budget.targetValue;
 
-    return Column(
-      children: [
-        ListTileWithProgressBar(
-          name: category.name,
-          color: CategoryService.stringToColor(category.color),
-          currentValue: currentValue,
-          totalValue: targetValue,
-          leftString: currentValue.toStringAsFixed(2),
-          rightString: targetValue.toStringAsFixed(0),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Text(
-              BudgetService.budgetPeriodStrings[budget.budgetPeriodIndex],
-              style: BudgetronFonts.nunitoSize14Weight400),
-        ),
-        const SizedBox(height: 16),
-        const HorizontalSeparator(),
-        const SizedBox(height: 16),
-      ],
+    return Container(
+      color: Theme.of(context).colorScheme.surface,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          ListTileWithProgressBar(
+            name: category.name,
+            color: CategoryService.stringToColor(category.color),
+            currentValue: currentValue,
+            totalValue: targetValue,
+            leftString: currentValue.toStringAsFixed(2),
+            rightString: targetValue.toStringAsFixed(0),
+          ),
+          const SizedBox(height: 2),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+                BudgetService.budgetPeriodStrings[budget.budgetPeriodIndex],
+                style: BudgetronFonts.nunitoSize14Weight400),
+          ),
+        ],
+      ),
     );
-    // return ListTile(title: Text(budget.category.target!.name));
   }
 
   void _resetBudget(Budget budget) {
