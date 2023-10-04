@@ -14,7 +14,7 @@ dependencies:
   intl:
   google_fonts:
   path_provider:
-  objectbox: ^2.0.0
+  objectbox: 2.2.0
   objectbox_flutter_libs: any
 
 dev_dependencies:

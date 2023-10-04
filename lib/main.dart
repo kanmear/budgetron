@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:budgetron/db/mock_data_generator.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
