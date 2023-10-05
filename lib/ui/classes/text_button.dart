@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/colors.dart';
 
+//REFACTOR small button should have 8 padding
 class BudgetronTextButton extends StatelessWidget {
   final Function onTap;
   final String text;
@@ -24,10 +25,10 @@ class BudgetronTextButton extends StatelessWidget {
             visualDensity: VisualDensity.compact),
         onPressed: () => onTap(),
         child: Container(
-            constraints: const BoxConstraints(minWidth: 126),
+            width: double.infinity,
             padding: const EdgeInsets.only(
-              top: 8,
-              bottom: 8,
+              top: 13.5,
+              bottom: 13.5,
             ),
             decoration: BoxDecoration(
                 color: backgroundColor,

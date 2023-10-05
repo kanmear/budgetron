@@ -23,8 +23,7 @@ class CategoryColorDialog extends StatelessWidget {
     return AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.background,
         insetPadding: const EdgeInsets.all(30),
-        contentPadding:
-            const EdgeInsets.only(top: 24, bottom: 16, left: 20, right: 20),
+        contentPadding: const EdgeInsets.all(16),
         content: SizedBox(
           height: 280,
           width: MediaQuery.of(context).size.width,
@@ -34,9 +33,20 @@ class CategoryColorDialog extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Category color",
-                    style: BudgetronFonts.nunitoSize18Weight600,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Category color",
+                        style: BudgetronFonts.nunitoSize18Weight600,
+                      ),
+                      IconButton(
+                        constraints: const BoxConstraints(),
+                        padding: EdgeInsets.zero,
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      )
+                    ],
                   ),
                   Text(
                     "Colors used by existing categories *",
@@ -76,17 +86,13 @@ class CategoryColorDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BudgetronTextButton(
-                  text: "Cancel",
-                  onTap: () => {Navigator.pop(context)},
-                  backgroundColor: Theme.of(context).colorScheme.background,
-                  textStyle: BudgetronFonts.nunitoSize16Weight400,
-                ),
-                BudgetronTextButton(
-                  text: "Confirm",
-                  onTap: () => _validateColorIsChosen(context, colorNotifier),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  textStyle: BudgetronFonts.nunitoSize16Weight400Confirm,
+                Expanded(
+                  child: BudgetronTextButton(
+                    text: "Confirm",
+                    onTap: () => _validateColorIsChosen(context, colorNotifier),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    textStyle: BudgetronFonts.nunitoSize16Weight400Confirm,
+                  ),
                 ),
               ],
             )
