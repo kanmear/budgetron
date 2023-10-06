@@ -26,7 +26,7 @@ class FavoriteBudgets extends StatelessWidget {
   }
 
   _getBudgets() {
-    return BudgetController.getBudgets(isOnMainPage: true);
+    return BudgetController.getBudgetsForMainPage();
   }
 }
 
@@ -40,6 +40,7 @@ class FavoriteBudgetsListView extends StatelessWidget {
     budgets.sort((a, b) => b.targetValue.compareTo(a.targetValue));
 
     return SizedBox(
+      //REFACTOR hardcoded values
       height: ((45 + 8) * 5) - 8,
       child: ListView(
           padding: const EdgeInsets.only(left: 16, right: 16),

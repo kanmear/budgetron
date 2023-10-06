@@ -16,6 +16,13 @@ class BudgetController {
     return builder.watch(triggerImmediately: true).map((query) => query.find());
   }
 
+  static Stream<List<Budget>> getBudgetsForMainPage() {
+    return (_getBudgetBox().query(Budget_.onMainPage.equals(true))
+          ..order(Budget_.id, flags: Order.descending))
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
   static Future<Budget> getBudgetByCategory(int categoryId) async {
     List<Budget> queryResult = (await _getBudgetBox()
         .query(Budget_.category.equals(categoryId))

@@ -16,8 +16,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Column(
-          children: const [
+        body: const Column(
+          children: [
             BudgetronAppBarWithTitle(
                 title: 'Home', leftIconButton: MenuIconButton()),
             SizedBox(height: 8),
