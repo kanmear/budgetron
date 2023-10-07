@@ -84,24 +84,38 @@ class DateAndCategoryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        DateField(),
-        Container(
-          //HACK custom divider; check that this height works for all screens
-          height: 47,
-          width: 1,
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: Theme.of(context).colorScheme.primary, width: 1)),
-        ),
-        CategoryField(
-          setCategoryCallback: setCategoryCallback,
-          categoryNotifier: categoryNotifier,
-          tabNotifier: tabNotifier,
-        )
-      ],
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const DateField(),
+          const VerticalSeparator(),
+          CategoryField(
+            setCategoryCallback: setCategoryCallback,
+            categoryNotifier: categoryNotifier,
+            tabNotifier: tabNotifier,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class VerticalSeparator extends StatelessWidget {
+  const VerticalSeparator({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 21, bottom: 21),
+      child: Container(
+        width: 1,
+        decoration: BoxDecoration(
+            border: Border.all(
+                color: Theme.of(context).colorScheme.primary, width: 1)),
+      ),
     );
   }
 }
