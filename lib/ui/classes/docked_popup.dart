@@ -10,14 +10,19 @@ class DockedDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       backgroundColor: Theme.of(context).colorScheme.background,
       alignment: Alignment.bottomCenter,
       insetPadding: EdgeInsets.zero,
       contentPadding:
           const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 14),
       content: SizedBox(
-        width: MediaQuery.of(context).size.width,
+        width: screenWidth,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,7 +32,6 @@ class DockedDialog extends StatelessWidget {
                 constraints: const BoxConstraints(),
                 padding: EdgeInsets.zero,
                 icon: const Icon(Icons.close),
-                //TODO dismiss keyboard with FocusManager.instance.primaryFocus?.unfocus()
                 onPressed: () => Navigator.pop(context),
               )
             ],
