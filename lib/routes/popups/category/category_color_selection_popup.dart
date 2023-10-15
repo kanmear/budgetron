@@ -26,7 +26,7 @@ class CategoryColorDialog extends StatelessWidget {
         contentPadding: const EdgeInsets.all(16),
         content: SizedBox(
           height: 280,
-          width: MediaQuery.of(context).size.width,
+          width: double.maxFinite,
           child: Column(children: [
             Align(
               alignment: Alignment.centerLeft,
