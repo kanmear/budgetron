@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
-class BudgetronTextField extends StatelessWidget {
+class BudgetronSmallTextField extends StatelessWidget {
   final TextEditingController? textController;
   final TextInputType inputType;
   final Function onSubmitted;
   final String hintText;
   final bool autoFocus;
 
-  const BudgetronTextField(
+  const BudgetronSmallTextField(
       {super.key,
       required this.hintText,
       required this.autoFocus,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
@@ -7,13 +8,12 @@ import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/text_button.dart';
-import 'package:budgetron/ui/classes/text_field.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/budget.dart';
-import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/models/entry.dart';
 
 class NewBudgetDialog extends StatefulWidget {
   //FIX change object to EntryCategory (and test everything still works)
@@ -74,7 +74,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                           style: BudgetronFonts.nunitoSize14Weight300),
                     ),
                     const SizedBox(height: 4),
-                    BudgetronTextField(
+                    BudgetronSmallTextField(
                         textController: widget.textController,
                         inputType: TextInputType.number,
                         hintText: "0",
