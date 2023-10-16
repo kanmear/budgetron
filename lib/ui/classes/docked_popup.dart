@@ -5,8 +5,10 @@ import 'package:budgetron/ui/data/fonts.dart';
 class DockedDialog extends StatelessWidget {
   final String title;
   final Widget body;
+  final Widget? keyboard;
 
-  const DockedDialog({super.key, required this.title, required this.body});
+  const DockedDialog(
+      {super.key, required this.title, required this.body, this.keyboard});
 
   @override
   Widget build(BuildContext context) {
@@ -19,25 +21,33 @@ class DockedDialog extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.background,
       alignment: Alignment.bottomCenter,
       insetPadding: EdgeInsets.zero,
-      contentPadding:
-          const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 14),
+      contentPadding: EdgeInsets.zero,
       content: SizedBox(
         width: screenWidth,
         child: Column(mainAxisSize: MainAxisSize.min, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(title, style: BudgetronFonts.nunitoSize18Weight600),
-              IconButton(
-                constraints: const BoxConstraints(),
-                padding: EdgeInsets.zero,
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
+          Container(
+            padding:
+                const EdgeInsets.only(right: 16, left: 16, top: 16, bottom: 14),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(title, style: BudgetronFonts.nunitoSize18Weight600),
+                    IconButton(
+                      constraints: const BoxConstraints(),
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(context),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 24),
+                body
+              ],
+            ),
           ),
-          const SizedBox(height: 24),
-          body,
+          keyboard ?? const SizedBox()
         ]),
       ),
     );
