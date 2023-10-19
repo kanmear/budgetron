@@ -27,8 +27,8 @@ class BudgetronMediumTextField extends StatelessWidget {
     return SizedBox(
       height: 48,
       child: TextField(
-        readOnly: true,
-        showCursor: true,
+        readOnly: readOnly,
+        showCursor: showCursor,
         onSubmitted: (value) => onSubmitted(value),
         controller: textController,
         autofocus: autoFocus,
