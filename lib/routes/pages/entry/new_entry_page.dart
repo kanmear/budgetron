@@ -260,7 +260,7 @@ class EntryValueTextField extends StatelessWidget {
 
     EntryService.createEntry(entry, category);
     if (category.isBudgetTracked) {
-      BudgetService.updateBudgetValue(category.id, value);
+      BudgetService.updateBudgetValue(category.id, double.parse(value));
     }
 
     Navigator.pop(context);

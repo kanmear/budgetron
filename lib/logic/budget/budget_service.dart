@@ -22,10 +22,10 @@ class BudgetService {
     BudgetController.addBudget(budget);
   }
 
-  static void updateBudgetValue(int categoryId, String value) async {
+  static void updateBudgetValue(int categoryId, double delta) async {
     Budget budget = await BudgetController.getBudgetByCategory(categoryId);
     resetBudget(budget);
-    budget.currentValue += double.parse(value);
+    budget.currentValue += delta;
 
     BudgetController.updateBudget(budget);
   }
