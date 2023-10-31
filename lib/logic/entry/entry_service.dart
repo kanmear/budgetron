@@ -1,8 +1,9 @@
-import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/models/category.dart';
+import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/enums/date_period.dart';
+import 'package:budgetron/logic/budget/budget_service.dart';
 
 class EntryService {
   static void createEntry(Entry entry, EntryCategory category) {
@@ -14,15 +15,33 @@ class EntryService {
     EntryController.addEntry(entry);
   }
 
-  static double calculateTotalValue(List<Entry> entries) {
-    if (entries.isNotEmpty) {
-      return entries
-          .map((entry) => entry.value)
-          .reduce((value, element) => value + element)
-          .abs();
+  static void updateEntry(Entry entry, double newValue) {
+    EntryCategory category = entry.category.target!;
+    if (category.isBudgetTracked) {
+      double delta = -(newValue - entry.value);
+      BudgetService.updateBudgetValue(category.id, delta);
     }
 
-    return 0;
+    entry.value = newValue;
+    EntryController.addEntry(entry);
+  }
+
+  static deleteEntry(Entry entry) {
+    EntryCategory category = entry.category.target!;
+    if (category.isBudgetTracked) {
+      BudgetService.updateBudgetValue(category.id, entry.value);
+    }
+
+    EntryController.deleteEntry(entry.id);
+  }
+
+  static double calculateTotalValue(List<Entry> entries) {
+    if (entries.isEmpty) return 0;
+
+    return entries
+        .map((entry) => entry.value)
+        .reduce((value, element) => value + element)
+        .abs();
   }
 
   static void formEntriesData(

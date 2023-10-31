@@ -1,0 +1,113 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/models/category.dart';
+import 'package:budgetron/ui/classes/docked_popup.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/logic/category/category_service.dart';
+import 'package:budgetron/ui/classes/buttons/delete_button.dart';
+import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
+import 'package:budgetron/ui/classes/text_fields/medium_text_field.dart';
+
+class EditEntryDialog extends StatefulWidget {
+  final Entry entry;
+
+  const EditEntryDialog({super.key, required this.entry});
+
+  @override
+  State<EditEntryDialog> createState() => _EditEntryDialogState();
+}
+
+class _EditEntryDialogState extends State<EditEntryDialog> {
+  late final TextEditingController textController =
+      TextEditingController(text: widget.entry.value.toStringAsFixed(2));
+
+  @override
+  Widget build(BuildContext context) {
+    return DockedDialog(
+      title: "Edit entry",
+      body: Column(children: [
+        EntryDetails(entry: widget.entry),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: BudgetronMediumTextField(
+                  textController: textController,
+                  autoFocus: true,
+                  showCursor: false,
+                  readOnly: true,
+                  onSubmitted: (value) => {},
+                  inputType: TextInputType.number),
+            ),
+            const SizedBox(width: 8),
+            DeleteButton(onTap: () => _deleteEntry())
+          ],
+        ),
+      ]),
+      keyboard: BudgetronNumberKeyboard(
+        textController: textController,
+        resolveValueSign: _resolveValueSign,
+        onConfirmAction: _submitEntryChanges,
+      ),
+    );
+  }
+
+  _deleteEntry() {
+    //TODO show popup
+    // EntryService.deleteEntry(widget.entry);
+  }
+
+  bool _resolveValueSign() => widget.entry.category.target!.isExpense;
+
+  _submitEntryChanges(double newValue) =>
+      EntryService.updateEntry(widget.entry, newValue);
+}
+
+class EntryDetails extends StatelessWidget {
+  final Entry entry;
+
+  const EntryDetails({super.key, required this.entry});
+
+  @override
+  Widget build(BuildContext context) {
+    EntryCategory category = entry.category.target!;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.square_rounded,
+                    size: 18,
+                    color: CategoryService.stringToColor(category.color),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(category.name,
+                      style: BudgetronFonts.nunitoSize16Weight600),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(DateFormat.yMMMd().format(entry.dateTime),
+                      style: BudgetronFonts.nunitoSize14Weight400),
+                  const SizedBox(width: 4),
+                  Text("${entry.dateTime.hour}:${entry.dateTime.minute}",
+                      style: BudgetronFonts.nunitoSize14Weight300Gray),
+                ],
+              )
+            ],
+          ),
+        ),
+        const SizedBox(width: 56)
+      ],
+    );
+  }
+}

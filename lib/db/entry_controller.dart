@@ -48,6 +48,8 @@ class EntryController {
 
   static int addEntry(Entry entry) => _getEntryBox().put(entry);
 
+  static bool deleteEntry(int id) => _getEntryBox().remove(id);
+
   static void clearEntries() async {
     _getEntryBox().removeAll();
   }

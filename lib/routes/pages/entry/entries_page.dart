@@ -1,4 +1,3 @@
-import 'package:budgetron/ui/classes/date_period_tab_switch.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +13,8 @@ import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
+import 'package:budgetron/ui/classes/date_period_tab_switch.dart';
+import 'package:budgetron/routes/popups/entry/edit_entry_popup.dart';
 
 class EntriesPage extends StatefulWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
@@ -35,9 +36,7 @@ class _EntriesPageState extends State<EntriesPage> {
         body: Column(
           children: [
             const BudgetronAppBarWithTitle(
-                title: 'Entries',
-                leftIconButton: MenuIconButton(),
-                rightIconButton: EditIconButton()),
+                title: 'Entries', leftIconButton: MenuIconButton()),
             const SizedBox(height: 8),
             BudgetronDatePeriodTabSwitch(
                 valueNotifier: widget.datePeriodNotifier,
@@ -212,38 +211,40 @@ class EntryListTile extends StatelessWidget {
       builder: (context, value, child) {
         return Column(
           children: [
-            _getWrapperWidget(Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: Theme.of(context).colorScheme.surface),
-              padding:
-                  const EdgeInsets.only(left: 8, right: 10, top: 8, bottom: 8),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            _resolveWrapperWidget(
+                context,
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(2),
+                      color: Theme.of(context).colorScheme.surface),
+                  padding: const EdgeInsets.only(
+                      left: 8, right: 10, top: 8, bottom: 8),
+                  child: Column(
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(
-                            Icons.square_rounded,
-                            size: 18,
-                            color:
-                                CategoryService.stringToColor(category.color),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.square_rounded,
+                                size: 18,
+                                color: CategoryService.stringToColor(
+                                    category.color),
+                              ),
+                              const SizedBox(width: 8),
+                              _resolveTileName()
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          _resolveTileName()
+                          Text(
+                            _resolveSum(),
+                            style: BudgetronFonts.nunitoSize16Weight400,
+                          )
                         ],
                       ),
-                      Text(
-                        _resolveSum(),
-                        style: BudgetronFonts.nunitoSize16Weight400,
-                      )
                     ],
                   ),
-                ],
-              ),
-            )),
+                )),
             _expandedView(context),
             const SizedBox(height: 8)
           ],
@@ -252,13 +253,14 @@ class EntryListTile extends StatelessWidget {
     );
   }
 
-  _getWrapperWidget(Widget child) {
-    if (isExpandable && entries.length > 1) {
-      return InkWell(onTap: () => _toggleExpandedView(), child: child);
-    } else {
-      return child;
-    }
-  }
+  _resolveWrapperWidget(BuildContext context, Widget child) => InkWell(
+      onTap: (isExpandable && entries.length > 1)
+          ? () => _toggleExpandedView()
+          : () => showDialog(
+              context: context,
+              builder: (BuildContext context) =>
+                  EditEntryDialog(entry: entries.first)),
+      child: child);
 
   _toggleExpandedView() =>
       isExpandedListenable.value = !isExpandedListenable.value;
@@ -291,7 +293,13 @@ class EntryListTile extends StatelessWidget {
           padding: const EdgeInsets.only(left: 8, right: 10, bottom: 8),
           height: 76,
           child: ListView(scrollDirection: Axis.horizontal, children: [
-            for (var entry in entries) ExpandedEntryTile(entry: entry)
+            for (var entry in entries)
+              Row(
+                children: [
+                  ExpandedEntryTile(entry: entry),
+                  const SizedBox(width: 8)
+                ],
+              )
           ]));
     } else {
       return const SizedBox();
@@ -309,28 +317,27 @@ class ExpandedEntryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-              color: Theme.of(context).colorScheme.background),
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-          child: Column(
-            children: [
-              Text("${entry.dateTime.hour}:${entry.dateTime.minute}",
-                  style: BudgetronFonts.nunitoSize16Weight300Gray,
-                  textAlign: TextAlign.center),
-              const SizedBox(height: 8),
-              Text(entry.value.toStringAsFixed(2),
-                  style: BudgetronFonts.nunitoSize16Weight400,
-                  textAlign: TextAlign.center),
-            ],
-          ),
+    return InkWell(
+      onTap: () => showDialog(
+          context: context,
+          builder: (BuildContext context) => EditEntryDialog(entry: entry)),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(2),
+            color: Theme.of(context).colorScheme.background),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+        child: Column(
+          children: [
+            Text("${entry.dateTime.hour}:${entry.dateTime.minute}",
+                style: BudgetronFonts.nunitoSize16Weight300Gray,
+                textAlign: TextAlign.center),
+            const SizedBox(height: 8),
+            Text(entry.value.toStringAsFixed(2),
+                style: BudgetronFonts.nunitoSize16Weight400,
+                textAlign: TextAlign.center),
+          ],
         ),
-        const SizedBox(width: 8)
-      ],
+      ),
     );
   }
 }
