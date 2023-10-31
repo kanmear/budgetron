@@ -1,8 +1,8 @@
-import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
+import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 import 'number_keyboard.dart';
@@ -95,7 +95,8 @@ class BudgetronKeyboardConfirmKey extends StatelessWidget {
         animation: Listenable.merge([textEditingController, currentOperation]),
         builder: (context, _) {
           if (currentOperation.value == MathOperation.none) {
-            if (keyboardService.isValueInvalid(double.parse(originalValue))) {
+            if (keyboardService
+                .isValueInvalid(double.parse(originalValue).abs())) {
               return BudgetronKeyboardIconKey(
                 icon: const Icon(Icons.check, color: Colors.white),
                 color: BudgetronColors.gray0,
@@ -109,15 +110,10 @@ class BudgetronKeyboardConfirmKey extends StatelessWidget {
               );
             }
           } else {
-            if (keyboardService.isOperationInvalid()) {
-              return BudgetronKeyboardCharKey(
-                  value: '=', color: BudgetronColors.gray0, onTap: () => {});
-            } else {
-              return BudgetronKeyboardCharKey(
-                  value: '=',
-                  color: Theme.of(context).colorScheme.primary,
-                  onTap: () => onOperateAction());
-            }
+            return BudgetronKeyboardCharKey(
+                value: '=',
+                color: Theme.of(context).colorScheme.primary,
+                onTap: () => onOperateAction());
           }
         });
   }

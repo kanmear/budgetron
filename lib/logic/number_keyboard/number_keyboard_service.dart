@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
 
 class NumberKeyboardService {
-  static const int maxValueLength = 15;
+  static const int maxValueLength = 8;
 
   final ValueNotifier<MathOperation> currentOperation;
   final TextEditingController textController;
@@ -13,7 +13,7 @@ class NumberKeyboardService {
       this.textController, this.currentOperation, this.isValueNegative);
 
   appendDigit(String symbol) {
-    String value = textController.text;
+    String value = _getCurrentOperand();
 
     if (value.length <= maxValueLength) {
       if (_isEmptyWithLeadingZero() && !_containsDecimalSeparator()) {
@@ -58,7 +58,7 @@ class NumberKeyboardService {
   }
 
   appendOperation(MathOperation operation, String symbol) {
-    if (_isValueEmpty()) return;
+    if (_isValueEmpty() || double.parse(_getCurrentOperand()) == 0) return;
 
     if (currentOperation.value == MathOperation.none) {
       currentOperation.value = operation;
@@ -66,43 +66,85 @@ class NumberKeyboardService {
     }
   }
 
+  /*
+  Checks if value changes can be submitted:
+  empty field, zero or the same value are not valid.
+   */
   bool isValueInvalid(double originalValue) {
-    String currentValue = textController.text;
-    bool isEmpty = currentValue.isEmpty || currentValue == '-';
+    String currentValue = _getValue();
+    bool isEmpty = currentValue.isEmpty;
     if (isEmpty) return true;
 
     double currentValueDouble = isEmpty ? 0 : double.parse(currentValue);
     return currentValueDouble == 0 || currentValueDouble == originalValue;
   }
 
-  bool isOperationInvalid() {
-    String textValue = textController.text;
+  performOperation() {
+    if (_isOperationInvalid()) {
+      String value = textController.text;
+      textController.text = value.substring(0, value.indexOf(' '));
+      currentOperation.value = MathOperation.none;
+      return;
+    }
+
+    String textValue = _getValue();
+    int separatingPointIndex = textValue.indexOf(' ');
+    double firstOperand =
+        double.parse(textValue.substring(0, separatingPointIndex)) *
+            (isValueNegative ? -1 : 1);
+    double secondOperand = double.parse(
+        textValue.substring(separatingPointIndex + 3, textValue.length));
+
+    textController.text = _resolveExpressionValue(firstOperand, secondOperand);
+    currentOperation.value = MathOperation.none;
+  }
+
+  bool _isOperationInvalid() {
+    String textValue = _getValue();
     String secondOperand =
         textValue.substring(textValue.indexOf(' ') + 3, textValue.length);
     return secondOperand.isEmpty || double.parse(secondOperand) == 0;
   }
 
-  performOperation() {}
+  bool _isValueEmpty() => _getCurrentOperand().isEmpty;
 
-  bool _isValueEmpty() {
-    String value = textController.text;
-    return value.isEmpty || (value.length == 1 && isValueNegative);
-  }
+  bool _containsDecimalSeparator() => _getCurrentOperand().contains('.');
 
-  bool _containsDecimalSeparator() {
-    return textController.text.contains('.');
-  }
-
-  bool _isEmptyWithLeadingZero() {
-    return _isValueEmpty()
-        ? false
-        : textController.text[(isValueNegative ? 1 : 0)] == '0';
-  }
+  bool _isEmptyWithLeadingZero() =>
+      _isValueEmpty() ? false : _getCurrentOperand()[0] == '0';
 
   String _getCurrentOperand() {
-    String value = textController.text;
-    return currentOperation.value == MathOperation.none
-        ? value.substring(0, value.indexOf(' '))
+    String value = _getValue();
+    String currentOperand = currentOperation.value == MathOperation.none
+        ? value
         : value.substring(value.indexOf(' ') + 3, value.length);
+    // print('Current operand: $currentOperand');
+    //TODO FIX this is being called way to often
+    return currentOperand;
+  }
+
+  String _getValue() {
+    return isValueNegative
+        ? textController.text.substring(1)
+        : textController.text;
+  }
+
+  String _resolveExpressionValue(double x, double y) {
+    double value;
+    switch (currentOperation.value) {
+      case MathOperation.multiply:
+        value = x * y;
+        break;
+      case MathOperation.subtract:
+        value = x - y;
+        break;
+      case MathOperation.add:
+        value = x + y;
+        break;
+      default:
+        throw Exception('Not a possible operation value');
+    }
+
+    return value.toStringAsFixed(2);
   }
 }
