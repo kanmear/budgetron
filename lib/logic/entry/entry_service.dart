@@ -7,7 +7,6 @@ import 'package:budgetron/logic/budget/budget_service.dart';
 
 class EntryService {
   static void createEntry(Entry entry, EntryCategory category) {
-    entry.value *= (category.isExpense ? -1 : 1);
     category.usages++;
     CategoryController.updateCategory(category);
 

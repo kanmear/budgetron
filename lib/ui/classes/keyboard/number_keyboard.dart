@@ -8,6 +8,7 @@ class BudgetronNumberKeyboard extends StatelessWidget {
   final ValueNotifier<MathOperation> currentOperation =
       ValueNotifier(MathOperation.none);
   final TextEditingController textController;
+  final Function isSubmitAvailable;
   final Function resolveValueSign;
   final Function onConfirmAction;
 
@@ -17,15 +18,14 @@ class BudgetronNumberKeyboard extends StatelessWidget {
       {super.key,
       required this.textController,
       required this.resolveValueSign,
-      required this.onConfirmAction});
+      required this.onConfirmAction,
+      required this.isSubmitAvailable});
 
   @override
   Widget build(BuildContext context) {
-    final isValueNegative = resolveValueSign();
     final NumberKeyboardService keyboardService = NumberKeyboardService(
-        textController, currentOperation, isValueNegative);
+        textController, currentOperation, resolveValueSign);
 
-    String originalValue = textController.text;
     double keyHeight = MediaQuery.of(context).size.width / 4.0 * ratio;
     Color mainKeyColor = Theme.of(context).colorScheme.tertiary;
     Color secondaryKeyColor = Theme.of(context).colorScheme.primary;
@@ -121,11 +121,11 @@ class BudgetronNumberKeyboard extends StatelessWidget {
                 onTap: () => keyboardService.appendDecimalSeparator()),
             BudgetronKeyboardConfirmKey(
               textEditingController: textController,
-              originalValue: originalValue,
               currentOperation: currentOperation,
               onConfirmAction: onConfirmAction,
               onOperateAction: () => keyboardService.performOperation(),
               keyboardService: keyboardService,
+              isSubmitAvailable: isSubmitAvailable,
             )
           ],
         ),

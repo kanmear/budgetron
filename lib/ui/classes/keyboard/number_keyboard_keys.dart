@@ -76,18 +76,18 @@ class BudgetronKeyboardConfirmKey extends StatelessWidget {
   final ValueListenable<MathOperation> currentOperation;
   final TextEditingController textEditingController;
   final NumberKeyboardService keyboardService;
+  final Function isSubmitAvailable;
   final Function onConfirmAction;
   final Function onOperateAction;
-  final String originalValue;
 
   const BudgetronKeyboardConfirmKey(
       {super.key,
       required this.textEditingController,
-      required this.originalValue,
       required this.currentOperation,
       required this.onConfirmAction,
       required this.onOperateAction,
-      required this.keyboardService});
+      required this.keyboardService,
+      required this.isSubmitAvailable});
 
   @override
   Widget build(BuildContext context) {
@@ -95,18 +95,17 @@ class BudgetronKeyboardConfirmKey extends StatelessWidget {
         animation: Listenable.merge([textEditingController, currentOperation]),
         builder: (context, _) {
           if (currentOperation.value == MathOperation.none) {
-            if (keyboardService
-                .isValueInvalid(double.parse(originalValue).abs())) {
-              return BudgetronKeyboardIconKey(
-                icon: const Icon(Icons.check, color: Colors.white),
-                color: BudgetronColors.gray0,
-                onTap: () => {},
-              );
-            } else {
+            if (isSubmitAvailable(keyboardService)) {
               return BudgetronKeyboardIconKey(
                 icon: const Icon(Icons.check, color: Colors.white),
                 color: BudgetronColors.mainGreen,
                 onTap: () => _submitChanges(context),
+              );
+            } else {
+              return BudgetronKeyboardIconKey(
+                icon: const Icon(Icons.check, color: Colors.white),
+                color: BudgetronColors.gray0,
+                onTap: () => {},
               );
             }
           } else {
@@ -119,8 +118,7 @@ class BudgetronKeyboardConfirmKey extends StatelessWidget {
   }
 
   _submitChanges(BuildContext context) {
-    double value = double.parse(textEditingController.text);
-    onConfirmAction(value);
+    onConfirmAction(textEditingController.text);
     Navigator.pop(context);
   }
 }

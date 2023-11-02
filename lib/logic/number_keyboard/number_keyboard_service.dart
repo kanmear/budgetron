@@ -7,7 +7,7 @@ class NumberKeyboardService {
 
   final ValueNotifier<MathOperation> currentOperation;
   final TextEditingController textController;
-  final bool isValueNegative;
+  final Function isValueNegative;
 
   NumberKeyboardService(
       this.textController, this.currentOperation, this.isValueNegative);
@@ -41,7 +41,7 @@ class NumberKeyboardService {
     } else {
       textController.text = value.substring(0, value.length - 1);
 
-      if (isValueNegative && textController.text.isEmpty) {
+      if (isValueNegative() && textController.text.isEmpty) {
         textController.text = '-';
       }
     }
@@ -67,16 +67,27 @@ class NumberKeyboardService {
   }
 
   /*
-  Checks if value changes can be submitted:
+  Checks if entry value changes can be submitted:
   empty field, zero or the same value are not valid.
    */
-  bool isValueInvalid(double originalValue) {
+  bool isValueUpdateValid(double originalValue) {
     String currentValue = _getValue();
     bool isEmpty = currentValue.isEmpty;
-    if (isEmpty) return true;
+    if (isEmpty) return false;
 
-    double currentValueDouble = isEmpty ? 0 : double.parse(currentValue);
-    return currentValueDouble == 0 || currentValueDouble == originalValue;
+    double currentValueDouble = double.parse(currentValue);
+    return !(currentValueDouble == 0 || currentValueDouble == originalValue);
+  }
+
+  /*
+  Checks if new entry value is valid: empty field or zero are not valid values.
+   */
+  bool isValueValidForCreation() {
+    String currentValue = _getValue();
+    bool isEmpty = currentValue.isEmpty;
+    if (isEmpty) return false;
+
+    return double.parse(currentValue) != 0;
   }
 
   performOperation() {
@@ -91,7 +102,7 @@ class NumberKeyboardService {
     int separatingPointIndex = textValue.indexOf(' ');
     double firstOperand =
         double.parse(textValue.substring(0, separatingPointIndex)) *
-            (isValueNegative ? -1 : 1);
+            (isValueNegative() ? -1 : 1);
     double secondOperand = double.parse(
         textValue.substring(separatingPointIndex + 3, textValue.length));
 
@@ -119,14 +130,15 @@ class NumberKeyboardService {
         ? value
         : value.substring(value.indexOf(' ') + 3, value.length);
     // print('Current operand: $currentOperand');
-    //TODO FIX this is being called way to often
+    //TODO FIX this is being called way too often
     return currentOperand;
   }
 
   String _getValue() {
-    return isValueNegative
-        ? textController.text.substring(1)
-        : textController.text;
+    String value = textController.text;
+    if (value.isEmpty) return value;
+
+    return isValueNegative() ? value.substring(1) : value;
   }
 
   String _resolveExpressionValue(double x, double y) {

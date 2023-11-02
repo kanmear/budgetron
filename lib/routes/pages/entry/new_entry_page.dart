@@ -10,13 +10,16 @@ import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
+import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
+import 'package:budgetron/ui/classes/text_fields/large_text_field.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
+import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 
 class NewEntryPage extends StatefulWidget {
-  //TODO maybe tab should be saved between entries
   final ValueNotifier<EntryCategoryType> tabNotifier =
       ValueNotifier(EntryCategoryType.expense);
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
+  final TextEditingController textController = TextEditingController(text: '-');
 
   NewEntryPage({super.key});
 
@@ -56,7 +59,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
             ),
             EntryValueTextField(
               tabNotifier: widget.tabNotifier,
-              categoryNotifier: widget.categoryNotifier,
+              textController: widget.textController,
             ),
             DateAndCategoryRow(
               setCategoryCallback: (value) => setState(() {
@@ -64,9 +67,32 @@ class _NewEntryPageState extends State<NewEntryPage> {
               }),
               categoryNotifier: widget.categoryNotifier,
               tabNotifier: widget.tabNotifier,
-            )
+            ),
+            BudgetronNumberKeyboard(
+                textController: widget.textController,
+                resolveValueSign: _resolveValueSign,
+                onConfirmAction: _createNewEntry,
+                isSubmitAvailable: _isSubmitAvailable)
           ],
         ));
+  }
+
+  bool _resolveValueSign() =>
+      widget.tabNotifier.value == EntryCategoryType.expense;
+
+  _createNewEntry(String value) {
+    EntryCategory category = widget.categoryNotifier.value!;
+    Entry entry = Entry(value: double.parse(value), dateTime: DateTime.now());
+
+    EntryService.createEntry(entry, category);
+    if (category.isBudgetTracked) {
+      BudgetService.updateBudgetValue(category.id, double.parse(value));
+    }
+  }
+
+  bool _isSubmitAvailable(NumberKeyboardService keyboardService) {
+    return keyboardService.isValueValidForCreation() &&
+        widget.categoryNotifier.value != null;
   }
 }
 
@@ -139,6 +165,8 @@ class CategoryField extends StatefulWidget {
 class _CategoryFieldState extends State<CategoryField> {
   @override
   Widget build(BuildContext context) {
+    _resetCategoryOnTabChange();
+
     return Expanded(
         child: InkWell(
       onTap: () => _navigateToCategorySelection(
@@ -154,9 +182,12 @@ class _CategoryFieldState extends State<CategoryField> {
                 valueListenable: widget.categoryNotifier,
                 builder: (context, value, child) {
                   return widget.categoryNotifier.value == null
-                      ? Text(
-                          "Choose",
-                          style: BudgetronFonts.nunitoSize16Weight600Hint,
+                      ? SizedBox(
+                          height: 24,
+                          child: Text(
+                            "Choose",
+                            style: BudgetronFonts.nunitoSize16Weight600Hint,
+                          ),
                         )
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -188,6 +219,9 @@ class _CategoryFieldState extends State<CategoryField> {
     if (!mounted) return;
     callback.call(result);
   }
+
+  _resetCategoryOnTabChange() => widget.tabNotifier
+      .addListener(() => widget.categoryNotifier.value = null);
 }
 
 class DateField extends StatelessWidget {
@@ -199,70 +233,57 @@ class DateField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
         child: InkWell(
-      onTap: () => {/* TODO add date selection */},
-      child: Padding(
-        padding: const EdgeInsets.only(top: 21, bottom: 21),
-        child: Center(
-            child: Column(
-          children: [
-            Text(
-              "Date",
-              style: BudgetronFonts.nunitoSize14Weight400,
-            ),
-            const SizedBox(height: 6),
-            Text(
-              DateFormat.yMMMd().format(DateTime.now()),
-              style: BudgetronFonts.nunitoSize16Weight600,
-            )
-          ],
-        )),
-      ),
-    ));
+            onTap: () => {/* TODO add date selection */},
+            child: Padding(
+                padding: const EdgeInsets.only(top: 21, bottom: 21),
+                child: Center(
+                    child: Column(children: [
+                  Text("Date", style: BudgetronFonts.nunitoSize14Weight400),
+                  const SizedBox(height: 6),
+                  Text(DateFormat.yMMMd().format(DateTime.now()),
+                      style: BudgetronFonts.nunitoSize16Weight600)
+                ])))));
   }
 }
 
 class EntryValueTextField extends StatelessWidget {
   final ValueNotifier<EntryCategoryType> tabNotifier;
-  final ValueNotifier<EntryCategory?> categoryNotifier;
+  final TextEditingController textController;
 
   const EntryValueTextField({
     super.key,
     required this.tabNotifier,
-    required this.categoryNotifier,
+    required this.textController,
   });
 
   @override
   Widget build(BuildContext context) {
+    _setSignOnTabChange();
+
     return Expanded(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 36.0, right: 36.0),
-          child: TextField(
-              style: BudgetronFonts.robotoSize32Weight400,
-              onSubmitted: (value) => _validateAndSubmit(value, context),
-              onTapOutside: (event) {},
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              decoration: BudgetronUI.inputDecoration()),
-        ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 32, right: 32),
+        child: Center(
+            child: BudgetronLargeTextField(
+                textController: textController,
+                autoFocus: true,
+                onSubmitted: () => {},
+                inputType: TextInputType.number,
+                showCursor: false,
+                readOnly: true)),
       ),
     );
   }
 
-  _validateAndSubmit(String value, BuildContext context) {
-    if (value.isEmpty || categoryNotifier.value == null) {
-      //TODO add some sort of message for user to fill in value and/or category
-      return;
-    }
-
-    EntryCategory category = categoryNotifier.value!;
-    Entry entry = Entry(value: double.parse(value), dateTime: DateTime.now());
-
-    EntryService.createEntry(entry, category);
-    if (category.isBudgetTracked) {
-      BudgetService.updateBudgetValue(category.id, double.parse(value));
-    }
-
-    Navigator.pop(context);
+  _setSignOnTabChange() {
+    tabNotifier.addListener(() {
+      if (tabNotifier.value == EntryCategoryType.expense) {
+        String text = textController.text;
+        textController.text = text.contains('-') ? text : '-$text';
+      } else {
+        String text = textController.text;
+        textController.text = text.contains('-') ? text.substring(1) : text;
+      }
+    });
   }
 }

@@ -10,6 +10,7 @@ import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/buttons/delete_button.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
 import 'package:budgetron/ui/classes/text_fields/medium_text_field.dart';
+import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 
 class EditEntryDialog extends StatefulWidget {
   final Entry entry;
@@ -51,6 +52,7 @@ class _EditEntryDialogState extends State<EditEntryDialog> {
         textController: textController,
         resolveValueSign: _resolveValueSign,
         onConfirmAction: _submitEntryChanges,
+        isSubmitAvailable: _isSubmitAvailable,
       ),
     );
   }
@@ -62,8 +64,12 @@ class _EditEntryDialogState extends State<EditEntryDialog> {
 
   bool _resolveValueSign() => widget.entry.category.target!.isExpense;
 
-  _submitEntryChanges(double newValue) =>
-      EntryService.updateEntry(widget.entry, newValue);
+  _submitEntryChanges(String newValue) =>
+      EntryService.updateEntry(widget.entry, double.parse(newValue));
+
+  bool _isSubmitAvailable(NumberKeyboardService keyboardService) {
+    return keyboardService.isValueUpdateValid(widget.entry.value.abs());
+  }
 }
 
 class EntryDetails extends StatelessWidget {
