@@ -102,13 +102,18 @@ class EntriesListView extends StatelessWidget {
           var day = entryDates[index];
 
           return EntryListTileContainer(
-              entriesMap: entriesMap, day: day, datePeriod: datePeriod);
+            entriesMap: entriesMap,
+            day: day,
+            datePeriod: datePeriod,
+            datePeriodNotifier: datePeriodNotifier,
+          );
         });
   }
 }
 
 class EntryListTileContainer extends StatelessWidget {
   final Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap;
+  final ValueNotifier<DatePeriod> datePeriodNotifier;
   final DatePeriod datePeriod;
   final DateTime day;
 
@@ -117,6 +122,7 @@ class EntryListTileContainer extends StatelessWidget {
     required this.entriesMap,
     required this.day,
     required this.datePeriod,
+    required this.datePeriodNotifier,
   });
 
   @override
@@ -145,9 +151,11 @@ class EntryListTileContainer extends StatelessWidget {
                 Column(children: [
                   for (var key in entries.keys)
                     EntryListTile(
-                        category: key,
-                        entries: entries[key]!,
-                        isExpandable: datePeriod == DatePeriod.day),
+                      category: key,
+                      entries: entries[key]!,
+                      isExpandable: datePeriod == DatePeriod.day,
+                      datePeriodNotifier: datePeriodNotifier,
+                    ),
                 ]),
               ],
             ),
@@ -193,6 +201,7 @@ class EntryListTileContainer extends StatelessWidget {
 
 class EntryListTile extends StatelessWidget {
   final ValueNotifier<bool> isExpandedListenable = ValueNotifier(false);
+  final ValueNotifier<DatePeriod> datePeriodNotifier;
   final EntryCategory category;
   final List<Entry> entries;
   final bool isExpandable;
@@ -202,6 +211,7 @@ class EntryListTile extends StatelessWidget {
     required this.entries,
     required this.category,
     required this.isExpandable,
+    required this.datePeriodNotifier,
   });
 
   @override
@@ -253,14 +263,20 @@ class EntryListTile extends StatelessWidget {
     );
   }
 
-  _resolveWrapperWidget(BuildContext context, Widget child) => InkWell(
-      onTap: (isExpandable && entries.length > 1)
-          ? () => _toggleExpandedView()
-          : () => showDialog(
-              context: context,
-              builder: (BuildContext context) =>
-                  EditEntryDialog(entry: entries.first)),
-      child: child);
+  _resolveWrapperWidget(BuildContext context, Widget child) {
+    if (datePeriodNotifier.value != DatePeriod.day) {
+      return SizedBox(child: child);
+    }
+
+    return InkWell(
+        onTap: (isExpandable && entries.length > 1)
+            ? () => _toggleExpandedView()
+            : () => showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    EditEntryDialog(entry: entries.first)),
+        child: child);
+  }
 
   _toggleExpandedView() =>
       isExpandedListenable.value = !isExpandedListenable.value;
