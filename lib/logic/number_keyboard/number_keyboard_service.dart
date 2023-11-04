@@ -63,6 +63,12 @@ class NumberKeyboardService {
     if (currentOperation.value == MathOperation.none) {
       currentOperation.value = operation;
       textController.text += ' $symbol ';
+    } else {
+      currentOperation.value = operation;
+      String text = textController.text;
+      int operationIndex = text.indexOf(' ') + 1;
+      textController.text =
+          text.replaceRange(operationIndex, operationIndex + 1, symbol);
     }
   }
 
