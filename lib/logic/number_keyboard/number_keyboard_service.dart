@@ -163,6 +163,13 @@ class NumberKeyboardService {
         throw Exception('Not a possible operation value');
     }
 
+    // changing sign of a value should not be possible
+    if (value > 0 && isValueNegative()) {
+      value = -0;
+    } else if (value < 0 && !isValueNegative()) {
+      value = 0;
+    }
+
     return value.toStringAsFixed(2);
   }
 }
