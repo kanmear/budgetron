@@ -86,6 +86,17 @@ class BudgetService {
     }
   }
 
+  static List<int> getDatePeriods(List<Budget> budgets) {
+    List<int> datePeriods = [];
+    for (var budget in budgets) {
+      if (!datePeriods.contains(budget.budgetPeriodIndex)) {
+        datePeriods.add(budget.budgetPeriodIndex);
+      }
+    }
+
+    return datePeriods;
+  }
+
   static DateTime _getPastMonday(DateTime weekStart, {int weekMultiplier = 1}) {
     while (weekStart.weekday != 1) {
       weekStart = DateUtils.addDaysToDate(weekStart, -1);
