@@ -56,6 +56,11 @@ class BudgetronFonts {
       fontSize: 16,
       fontWeight: FontWeight.w400,
       color: BudgetronColors.black);
+  static TextStyle nunitoSize16Weight400White = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: Colors.white);
   static TextStyle nunitoSize16Weight600 = TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontSize: 16,

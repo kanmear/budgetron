@@ -1,3 +1,4 @@
+import 'package:budgetron/routes/popups/entry/delete_entry_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -57,10 +58,10 @@ class _EditEntryDialogState extends State<EditEntryDialog> {
     );
   }
 
-  _deleteEntry() {
-    //TODO show popup
-    // EntryService.deleteEntry(widget.entry);
-  }
+  _deleteEntry() => showDialog(
+      context: context,
+      builder: (BuildContext context) =>
+          DeleteEntryDialog(entry: widget.entry));
 
   bool _resolveValueSign() => widget.entry.category.target!.isExpense;
 
