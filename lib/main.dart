@@ -65,19 +65,29 @@ class _BudgetronState extends State<Budgetron> {
         children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
         onPageChanged: (index) => _updateIndex(index),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: BudgetronColors.background,
-          unselectedItemColor: BudgetronColors.backgroundHalfOpacity,
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: BudgetronColors.black,
-          currentIndex: selectedIndex,
-          onTap: _selectPage,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Entries'),
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.wallet), label: 'Budget'),
-            BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats')
-          ]),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(3)),
+          child: BottomNavigationBar(
+              selectedItemColor: BudgetronColors.background,
+              unselectedItemColor: BudgetronColors.backgroundHalfOpacity,
+              type: BottomNavigationBarType.fixed,
+              backgroundColor: BudgetronColors.black,
+              currentIndex: selectedIndex,
+              onTap: _selectPage,
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.list), label: 'Entries'),
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.wallet), label: 'Budget'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.bar_chart), label: 'Stats')
+              ]),
+        ),
+      ),
     );
   }
 
