@@ -94,6 +94,7 @@ class BudgetService {
       }
     }
 
+    datePeriods.sort((a, b) => a.compareTo(b));
     return datePeriods;
   }
 
