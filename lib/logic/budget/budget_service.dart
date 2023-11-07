@@ -97,6 +97,21 @@ class BudgetService {
     return datePeriods;
   }
 
+  static String calculateRemainingDays(DateTime resetDate) {
+    int remainingDays = resetDate.difference(DateTime.now()).inDays;
+
+    if (remainingDays >= 30) {
+      int remainingMonths = remainingDays ~/ 30;
+      int leftoverDays = remainingDays % 30;
+      return '$remainingMonths ${remainingMonths == 1 ? 'month' : 'months'} '
+          'and $leftoverDays ${leftoverDays == 1 ? 'day' : 'days'} left';
+    }
+
+    return remainingDays == 1
+        ? '$remainingDays day left'
+        : '$remainingDays days left';
+  }
+
   static DateTime _getPastMonday(DateTime weekStart, {int weekMultiplier = 1}) {
     while (weekStart.weekday != 1) {
       weekStart = DateUtils.addDaysToDate(weekStart, -1);
