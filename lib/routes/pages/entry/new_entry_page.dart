@@ -86,7 +86,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
     EntryService.createEntry(entry, category);
     if (category.isBudgetTracked) {
-      BudgetService.updateBudgetValue(category.id, double.parse(value));
+      BudgetService.updateBudgetValue(category.id, double.parse(value).abs());
     }
   }
 
