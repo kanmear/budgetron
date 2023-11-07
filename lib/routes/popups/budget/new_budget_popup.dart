@@ -7,7 +7,7 @@ import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/ui/classes/text_button.dart';
+import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/models/category.dart';

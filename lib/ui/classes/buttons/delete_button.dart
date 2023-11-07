@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//TODO rename to DeleteIconButton and move to icon_buttons folder
 class DeleteButton extends StatelessWidget {
   final Function onTap;
 

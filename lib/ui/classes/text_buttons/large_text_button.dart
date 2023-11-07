@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/colors.dart';
 
-//REFACTOR small button should have 8 padding
+//TODO clean up extra class
 class BudgetronLargeTextButton extends StatelessWidget {
   final Function onTap;
   final String text;

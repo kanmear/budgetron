@@ -5,7 +5,7 @@ import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/budget_controller.dart';
-import 'package:budgetron/ui/classes/text_button.dart';
+import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
