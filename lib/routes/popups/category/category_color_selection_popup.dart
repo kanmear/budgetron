@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/classes/text_button.dart';
+import 'package:budgetron/ui/classes/text_buttons/text_button.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 class CategoryColorDialog extends StatelessWidget {
@@ -87,7 +87,7 @@ class CategoryColorDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: BudgetronTextButton(
+                  child: BudgetronLargeTextButton(
                     text: "Confirm",
                     onTap: () => _validateColorIsChosen(context, colorNotifier),
                     backgroundColor: Theme.of(context).colorScheme.primary,

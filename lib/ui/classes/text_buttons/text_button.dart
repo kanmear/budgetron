@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/ui/data/colors.dart';
 
 //REFACTOR small button should have 8 padding
-class BudgetronTextButton extends StatelessWidget {
+class BudgetronLargeTextButton extends StatelessWidget {
   final Function onTap;
   final String text;
   final TextStyle textStyle;
   final Color backgroundColor;
 
-  const BudgetronTextButton({
+  const BudgetronLargeTextButton({
     super.key,
     required this.text,
     required this.backgroundColor,
