@@ -110,7 +110,8 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   }
 
   Future<List<Object>> _getCategories() async {
-    return await Future(() => CategoryController.getCategories("", null).first);
+    return await Future(
+        () => CategoryController.getUntrackedExpenseCategories().first);
   }
 
   Future<List<String>> _getPeriods() async {

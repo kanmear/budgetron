@@ -23,15 +23,22 @@ class CategoryController {
         .map((query) => query.find());
   }
 
+  static Stream<List<EntryCategory>> getUntrackedExpenseCategories() {
+    return _getCategoryBox()
+        .query(EntryCategory_.isExpense.equals(true) &
+            EntryCategory_.isBudgetTracked.equals(false))
+        .order(EntryCategory_.id, flags: Order.descending)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
   static int addCategory(EntryCategory category) =>
       _getCategoryBox().put(category);
 
   static void updateCategory(EntryCategory category) =>
       _getCategoryBox().put(category);
 
-  static void clearCategories() {
-    _getCategoryBox().removeAll();
-  }
+  static void clearCategories() => _getCategoryBox().removeAll();
 
   static Box<EntryCategory> _getCategoryBox() =>
       ObjectBox.store.box<EntryCategory>();
