@@ -5,6 +5,7 @@ class BudgetronDropdownButton extends StatefulWidget {
   final ValueNotifier<Object?> valueNotifier;
   final Future<List<Object>> items;
   final Function? leading;
+  final String fallbackValue;
   final String hint;
 
   const BudgetronDropdownButton(
@@ -12,7 +13,8 @@ class BudgetronDropdownButton extends StatefulWidget {
       this.leading,
       required this.items,
       required this.hint,
-      required this.valueNotifier});
+      required this.valueNotifier,
+      required this.fallbackValue});
 
   @override
   State<BudgetronDropdownButton> createState() =>
@@ -75,7 +77,14 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                       });
                     });
               } else {
-                return const Text("No data");
+                return Container(
+                    padding: const EdgeInsets.only(left: 8),
+                    width: double.infinity,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(widget.fallbackValue,
+                          style: BudgetronFonts.nunitoSize16Weight400Gray),
+                    ));
               }
             }));
   }

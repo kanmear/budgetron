@@ -18,7 +18,7 @@ import 'package:budgetron/models/entry.dart';
 class NewBudgetDialog extends StatefulWidget {
   //FIX change object to EntryCategory (and test everything still works)
   final ValueNotifier<Object?> categoryNotifier = ValueNotifier(null);
-  final ValueNotifier<String> periodNotifier = ValueNotifier("Month");
+  final ValueNotifier<String> periodNotifier = ValueNotifier('Month');
   final ValueNotifier<bool> switchNotifier = ValueNotifier(true);
   final TextEditingController textController = TextEditingController();
 
@@ -32,11 +32,11 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   @override
   Widget build(BuildContext context) {
     return DockedDialog(
-        title: "New Budget",
+        title: 'New Budget',
         body: Column(children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text("Budget category",
+            child: Text('Budget category',
                 style: BudgetronFonts.nunitoSize14Weight300),
           ),
           const SizedBox(height: 4),
@@ -44,7 +44,8 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
               valueNotifier: widget.categoryNotifier,
               items: _getCategories(),
               leading: _getLeading,
-              hint: "Choose a category to track"),
+              hint: 'Choose a category to track',
+              fallbackValue: 'No more categories to track'),
           const SizedBox(height: 16),
           Row(
             children: [
@@ -53,14 +54,15 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Period",
+                      child: Text('Period',
                           style: BudgetronFonts.nunitoSize14Weight300),
                     ),
                     const SizedBox(height: 4),
                     BudgetronDropdownButton(
                         items: _getPeriods(),
-                        hint: "Choose ",
-                        valueNotifier: widget.periodNotifier)
+                        hint: 'Choose',
+                        valueNotifier: widget.periodNotifier,
+                        fallbackValue: 'Something is broken EC-031')
                   ],
                 ),
               ),
@@ -70,14 +72,14 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text("Target",
+                      child: Text('Target',
                           style: BudgetronFonts.nunitoSize14Weight300),
                     ),
                     const SizedBox(height: 4),
                     BudgetronSmallTextField(
                         textController: widget.textController,
                         inputType: TextInputType.number,
-                        hintText: "0",
+                        hintText: '0',
                         autoFocus: false,
                         onSubmitted: (value) => {})
                   ],
@@ -94,7 +96,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Add budget tracking to the main screen",
+                Text('Add budget tracking to the main screen',
                     style: BudgetronFonts.nunitoSize14Weight400),
                 BudgetronSwitch(switchNotifier: widget.switchNotifier)
               ],
@@ -102,17 +104,15 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
           ),
           const SizedBox(height: 16),
           BudgetronBigTextButton(
-              text: "Add budget",
+              text: 'Add budget',
               backgroundColor: Theme.of(context).colorScheme.primary,
               onTap: () => _addBudget(),
               textStyle: BudgetronFonts.nunitoSize18Weight500White)
         ]));
   }
 
-  Future<List<Object>> _getCategories() async {
-    return await Future(
-        () => CategoryController.getUntrackedExpenseCategories().first);
-  }
+  Future<List<Object>> _getCategories() async => await Future(
+      () => CategoryController.getUntrackedExpenseCategories().first);
 
   Future<List<String>> _getPeriods() async {
     return await Future(() => BudgetService.budgetPeriodStrings);
@@ -126,7 +126,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     ]);
   }
 
-  //TODO add validations
+  //TODO add validations: button should not be clickable if category or target value are empty
   void _addBudget() async {
     EntryCategory category = widget.categoryNotifier.value as EntryCategory;
 
@@ -138,12 +138,15 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     int budgetPeriodIndex = BudgetService.budgetPeriodStrings.indexOf(period);
 
     Budget budget = Budget(
-        targetValue: double.parse(widget.textController.value.text),
+        targetValue: double.parse(widget.textController.text),
         budgetPeriodIndex: budgetPeriodIndex,
         currentValue: EntryService.calculateTotalValue(entries),
         onMainPage: widget.switchNotifier.value,
         resetDate: BudgetService.calculateResetDate(period, datePeriod.first));
 
     BudgetService.createBudget(budget, category);
+    _popDialog();
   }
+
+  void _popDialog() => Navigator.pop(context);
 }
