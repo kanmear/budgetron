@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
@@ -7,7 +8,6 @@ import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/models/category.dart';
@@ -19,7 +19,7 @@ class NewBudgetDialog extends StatefulWidget {
   //FIX change object to EntryCategory (and test everything still works)
   final ValueNotifier<Object?> categoryNotifier = ValueNotifier(null);
   final ValueNotifier<String> periodNotifier = ValueNotifier('Month');
-  final ValueNotifier<bool> switchNotifier = ValueNotifier(true);
+  final ValueNotifier<bool> switchNotifier = ValueNotifier(false);
   final TextEditingController textController = TextEditingController();
 
   NewBudgetDialog({super.key});
@@ -87,7 +87,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
               )
             ],
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 24),
           Container(
             color: Theme.of(context).colorScheme.surface,
             height: 58,
