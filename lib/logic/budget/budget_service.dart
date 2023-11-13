@@ -35,7 +35,7 @@ class BudgetService {
     if (now.isAfter(budget.resetDate)) {
       budget.currentValue = 0;
       budget.resetDate = calculateResetDate(
-          budgetPeriodStrings[budget.budgetPeriodIndex], now);
+          budgetPeriodStrings[budget.budgetPeriodIndex], budget.resetDate);
       return true;
     }
 
