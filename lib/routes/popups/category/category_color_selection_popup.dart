@@ -92,6 +92,8 @@ class CategoryColorDialog extends StatelessWidget {
                     onTap: () => _validateColorIsChosen(context, colorNotifier),
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     textStyle: BudgetronFonts.nunitoSize16Weight400Confirm,
+                    isActive: () => _isValid(colorNotifier),
+                    listenables: [colorNotifier],
                   ),
                 ),
               ],
@@ -105,14 +107,11 @@ class CategoryColorDialog extends StatelessWidget {
     colorNotifier.value = MapEntry(i, j);
   }
 
-  void _validateColorIsChosen(
-      BuildContext context, ValueNotifier<MapEntry<int, int>> colorNotifier) {
-    if (colorNotifier.value.key == -1 || colorNotifier.value.value == -1) {
-      //TODO add validation message
-      return;
-    }
+  void _validateColorIsChosen(BuildContext context,
+          ValueNotifier<MapEntry<int, int>> colorNotifier) =>
+      Navigator.pop(
+          context, colors[colorNotifier.value.key][colorNotifier.value.value]);
 
-    Navigator.pop(
-        context, colors[colorNotifier.value.key][colorNotifier.value.value]);
-  }
+  bool _isValid(ValueNotifier<MapEntry<int, int>> colorNotifier) =>
+      colorNotifier.value.key != -1 && colorNotifier.value.value != -1;
 }

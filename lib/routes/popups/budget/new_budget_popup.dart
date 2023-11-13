@@ -103,11 +103,13 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
             ),
           ),
           const SizedBox(height: 16),
-          BudgetronBigTextButton(
+          BudgetronLargeTextButton(
               text: 'Add budget',
               backgroundColor: Theme.of(context).colorScheme.primary,
               onTap: () => _addBudget(),
-              textStyle: BudgetronFonts.nunitoSize18Weight500White)
+              textStyle: BudgetronFonts.nunitoSize18Weight500White,
+              isActive: _isValid,
+              listenables: [widget.categoryNotifier, widget.textController])
         ]));
   }
 
@@ -126,7 +128,6 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
     ]);
   }
 
-  //TODO add validations: button should not be clickable if category or target value are empty
   void _addBudget() async {
     EntryCategory category = widget.categoryNotifier.value as EntryCategory;
 
@@ -149,4 +150,9 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   }
 
   void _popDialog() => Navigator.pop(context);
+
+  bool _isValid() {
+    return widget.textController.text.isNotEmpty &&
+        widget.categoryNotifier.value != null;
+  }
 }
