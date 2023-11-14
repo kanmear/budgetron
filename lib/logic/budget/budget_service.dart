@@ -30,6 +30,24 @@ class BudgetService {
     BudgetController.updateBudget(budget);
   }
 
+  static void changeBudgetDetails(
+      int budgetId,
+      int newBudgetPeriodIndex,
+      double newTargetValue,
+      double recalculatedCurrentValue,
+      DateTime resetDate,
+      bool isOnMainPage) {
+    Budget budget = BudgetController.getBudget(budgetId);
+
+    budget.targetValue = newTargetValue;
+    budget.budgetPeriodIndex = newBudgetPeriodIndex;
+    budget.currentValue = recalculatedCurrentValue;
+    budget.resetDate = resetDate;
+    budget.onMainPage = isOnMainPage;
+
+    BudgetController.updateBudget(budget);
+  }
+
   static bool resetBudget(Budget budget) {
     DateTime now = DateTime.now();
     if (now.isAfter(budget.resetDate)) {
