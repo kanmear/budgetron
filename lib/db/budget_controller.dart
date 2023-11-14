@@ -43,6 +43,8 @@ class BudgetController {
 
   static void updateBudget(Budget budget) => _getBudgetBox().put(budget);
 
+  static void deleteBudget(int budgetId) => _getBudgetBox().remove(budgetId);
+
   static void clearBudgets() {
     _getBudgetBox().removeAll();
   }

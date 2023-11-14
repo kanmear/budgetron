@@ -22,6 +22,14 @@ class BudgetService {
     BudgetController.addBudget(budget);
   }
 
+  static void deleteBudget(Budget budget) {
+    EntryCategory category = budget.category.target!;
+    category.isBudgetTracked = false;
+    CategoryController.updateCategory(category);
+
+    BudgetController.deleteBudget(budget.id);
+  }
+
   static void updateBudgetValue(int categoryId, double delta) async {
     Budget budget = await BudgetController.getBudgetByCategory(categoryId);
     resetBudget(budget);

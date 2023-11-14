@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
+import 'package:budgetron/routes/popups/budget/delete_budget_popup.dart';
 import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
@@ -141,7 +142,12 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
     return await Future(() => BudgetService.budgetPeriodStrings);
   }
 
-  void _showDeleteBudgetDialog() {}
+  void _showDeleteBudgetDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            DeleteBudgetDialog(budget: widget.budget));
+  }
 
   void _updateBudget() async {
     String period = widget.periodNotifier.value;
