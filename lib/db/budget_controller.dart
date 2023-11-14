@@ -3,17 +3,19 @@ import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/objectbox.g.dart';
 
 class BudgetController {
-  static Stream<List<Budget>> getBudgets({bool? isOnMainPage}) {
-    Condition<Budget>? condition;
-
-    if (isOnMainPage != null) {
-      condition = Budget_.onMainPage.equals(isOnMainPage);
+  static Budget getBudget(int budgetId) {
+    Budget? budget = _getBudgetBox().get(budgetId);
+    if (budget == null) {
+      throw Exception('Budget not found EC-301');
     }
 
-    final builder = _getBudgetBox().query(condition)
-      ..order(Budget_.id, flags: Order.descending);
+    return budget;
+  }
 
-    return builder.watch(triggerImmediately: true).map((query) => query.find());
+  static Stream<List<Budget>> getBudgets() {
+    return (_getBudgetBox().query()..order(Budget_.id, flags: Order.descending))
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
   }
 
   static Stream<List<Budget>> getBudgetsForMainPage() {
