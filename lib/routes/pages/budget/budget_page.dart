@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
-import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
 import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
@@ -26,12 +24,6 @@ class BudgetPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: Column(children: [
-          const BudgetronAppBarWithTitle(
-            title: 'Budgeting',
-            leftIconButton: MenuIconButton(),
-            rightIconButton: EditIconButton(),
-          ),
-          const SizedBox(height: 8),
           BudgetView(tabNotifier: tabNotifier),
         ]),
       ),

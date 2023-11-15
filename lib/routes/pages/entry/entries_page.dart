@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
@@ -35,9 +33,6 @@ class _EntriesPageState extends State<EntriesPage> {
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
-            const BudgetronAppBarWithTitle(
-                title: 'Entries', leftIconButton: MenuIconButton()),
-            const SizedBox(height: 8),
             BudgetronDatePeriodTabSwitch(
                 valueNotifier: widget.datePeriodNotifier,
                 tabs: const [DatePeriod.day, DatePeriod.month]),

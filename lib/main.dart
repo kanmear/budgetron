@@ -1,6 +1,10 @@
 // ignore_for_file: unused_import
 
+import 'dart:io';
+
 import 'package:budgetron/db/mock_data_generator.dart';
+import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/ui/data/icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'db/object_box_helper.dart';
@@ -49,6 +53,8 @@ class Budgetron extends StatefulWidget {
 
 class _BudgetronState extends State<Budgetron> {
   final pageViewController = PageController(initialPage: 1);
+  final List<String> pageTitles = ['Entries', 'Home', 'Budget', 'Stats'];
+  String selectedTitle = 'Home';
   int selectedIndex = 1;
 
   @override
@@ -60,6 +66,15 @@ class _BudgetronState extends State<Budgetron> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.background,
+        leading: const MenuIconButton(),
+        leadingWidth: 48,
+        title: Text(selectedTitle, style: BudgetronFonts.nunitoSize18Weight600),
+        titleSpacing: 0,
+        toolbarHeight: 48,
+      ),
       body: PageView(
         controller: pageViewController,
         children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
@@ -92,6 +107,7 @@ class _BudgetronState extends State<Budgetron> {
   }
 
   void _selectPage(index) {
+    selectedTitle = pageTitles[index];
     pageViewController.animateToPage(index,
         duration: const Duration(milliseconds: 200), curve: Curves.ease);
   }

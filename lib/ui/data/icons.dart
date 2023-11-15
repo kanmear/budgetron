@@ -32,6 +32,9 @@ class MenuIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () => {/* add impl */}, icon: const Icon(Icons.menu));
+      onPressed: () => {/* add impl */},
+      icon: const Icon(Icons.menu),
+      color: Theme.of(context).colorScheme.primary,
+    );
   }
 }
