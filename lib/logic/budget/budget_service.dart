@@ -80,7 +80,7 @@ class BudgetService {
         start = _getPastMonday(end);
         break;
       case 'Two weeks':
-        start = _getPastMonday(end, weekMultiplier: 2);
+        start = _getPastMonday(end);
         break;
       case 'Six months':
         start = DateUtils.addMonthsToMonthDate(end, -6);
@@ -139,11 +139,11 @@ class BudgetService {
         : '$remainingDays days left';
   }
 
-  static DateTime _getPastMonday(DateTime weekStart, {int weekMultiplier = 1}) {
+  static DateTime _getPastMonday(DateTime weekStart) {
     while (weekStart.weekday != 1) {
       weekStart = DateUtils.addDaysToDate(weekStart, -1);
     }
 
-    return DateUtils.addDaysToDate(weekStart, (--weekMultiplier * -7));
+    return DateUtils.addDaysToDate(weekStart, -7);
   }
 }
