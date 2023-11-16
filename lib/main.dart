@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:budgetron/ui/classes/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,6 +78,7 @@ class _BudgetronState extends State<Budgetron> {
                 onTap: () => Scaffold.of(context).openDrawer());
           }),
           title: selectedTitle),
+      drawer: const BudgetronDrawer(),
       body: PageView(
         controller: pageViewController,
         children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
