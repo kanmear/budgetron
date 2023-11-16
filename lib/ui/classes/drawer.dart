@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/routes/pages/category/category_page.dart';
 
 class BudgetronDrawer extends StatelessWidget {
   const BudgetronDrawer({super.key});
@@ -49,8 +50,6 @@ class DrawerEntries extends StatelessWidget {
     );
   }
 
-  void _navigateToCategoriesPage(BuildContext context) {
-    // Navigator.push(
-    //     context, MaterialPageRoute(builder: (context) => CategoriesPage()));
-  }
+  void _navigateToCategoriesPage(BuildContext context) => Navigator.push(
+      context, MaterialPageRoute(builder: (context) => CategoriesPage()));
 }

@@ -8,8 +8,10 @@ class ArrowBackIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: const Icon(Icons.arrow_back_ios_new));
+      onPressed: () => Navigator.pop(context),
+      icon: const Icon(Icons.arrow_back_ios_new),
+      color: Theme.of(context).colorScheme.primary,
+    );
   }
 }
 
@@ -27,12 +29,14 @@ class EditIconButton extends StatelessWidget {
 
 class MenuIconButton extends StatelessWidget {
   //TODO replace iconButton with custom InkWell impl for a rectangular hitbox
-  const MenuIconButton({super.key});
+  final Function onTap;
+
+  const MenuIconButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () => {/* add impl */},
+      onPressed: () => onTap(),
       icon: const Icon(Icons.menu),
       color: Theme.of(context).colorScheme.primary,
     );

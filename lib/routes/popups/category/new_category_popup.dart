@@ -1,4 +1,3 @@
-import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
@@ -6,16 +5,17 @@ import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/radio_list_tile.dart';
+import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 class NewCategoryDialog extends StatefulWidget {
-  final EntryCategoryType entryCategoryType;
+  final EntryCategoryType? entryCategoryType;
 
   const NewCategoryDialog({
     super.key,
-    required this.entryCategoryType,
+    this.entryCategoryType,
   });
 
   @override
@@ -30,7 +30,7 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
   @override
   Widget build(BuildContext context) {
     final ValueNotifier<EntryCategoryType> categoryTypeNotifier =
-        ValueNotifier(widget.entryCategoryType);
+        ValueNotifier(widget.entryCategoryType ?? EntryCategoryType.expense);
 
     return DockedDialog(
         title: "New Category",
