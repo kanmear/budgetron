@@ -2,18 +2,22 @@
 
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'db/object_box_helper.dart';
 import 'package:budgetron/db/mock_data_generator.dart';
+
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
-import 'db/object_box_helper.dart';
-
 import 'package:budgetron/ui/data/colors.dart';
+import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/routes/pages/home/home_page.dart';
 import 'package:budgetron/routes/pages/stats/stats_page.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/routes/pages/budget/budget_page.dart';
+import 'package:budgetron/models/enums/entry_category_type.dart';
+import 'package:budgetron/routes/pages/category/category_page.dart';
 
 late ObjectBox objectBox;
 
@@ -52,9 +56,10 @@ class Budgetron extends StatefulWidget {
 }
 
 class _BudgetronState extends State<Budgetron> {
-  final pageViewController = PageController(initialPage: 1);
   final List<String> pageTitles = ['Entries', 'Home', 'Budget', 'Stats'];
   String selectedTitle = 'Home';
+
+  final pageViewController = PageController(initialPage: 1);
   int selectedIndex = 1;
 
   @override
@@ -66,15 +71,12 @@ class _BudgetronState extends State<Budgetron> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.background,
-        leading: const MenuIconButton(),
-        leadingWidth: 48,
-        title: Text(selectedTitle, style: BudgetronFonts.nunitoSize18Weight600),
-        titleSpacing: 0,
-        toolbarHeight: 48,
-      ),
+      appBar: BudgetronAppBar(
+          leading: Builder(builder: (context) {
+            return MenuIconButton(
+                onTap: () => Scaffold.of(context).openDrawer());
+          }),
+          title: selectedTitle),
       body: PageView(
         controller: pageViewController,
         children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
