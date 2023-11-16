@@ -214,7 +214,8 @@ class _CategoryFieldState extends State<CategoryField> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CategoriesPage(typeFilter: typeFilter)));
+            builder: (context) =>
+                CategorySelectionPage(typeFilter: typeFilter)));
 
     if (!mounted) return;
     callback.call(result);

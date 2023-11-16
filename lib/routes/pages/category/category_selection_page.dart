@@ -4,19 +4,19 @@ import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/search_field.dart';
-import 'package:budgetron/ui/classes/top_bar_with_title.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/popups/category/new_category_popup.dart';
 
-class CategoriesPage extends StatelessWidget {
+class CategorySelectionPage extends StatelessWidget {
   final ValueNotifier<String> nameFilter = ValueNotifier("");
   final EntryCategoryType typeFilter;
 
-  CategoriesPage({
+  CategorySelectionPage({
     super.key,
     required this.typeFilter,
   });
@@ -28,15 +28,11 @@ class CategoriesPage extends StatelessWidget {
         : "Income categories";
 
     return Scaffold(
+        appBar:
+            BudgetronAppBar(leading: const ArrowBackIconButton(), title: title),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
-            BudgetronAppBarWithTitle(
-              title: title,
-              leftIconButton: const ArrowBackIconButton(),
-              rightIconButton: const EditIconButton(),
-            ),
-            const SizedBox(height: 24),
             BudgetronSearchField(
                 hintText: "Search for a category", filter: nameFilter),
             const SizedBox(height: 8),
