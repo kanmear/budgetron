@@ -9,6 +9,7 @@ import 'package:budgetron/ui/classes/search_field.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/popups/category/new_category_popup.dart';
+import 'package:budgetron/routes/popups/category/edit_category_popup.dart';
 
 class CategoriesPage extends StatelessWidget {
   final ValueNotifier<String> nameFilter = ValueNotifier("");
@@ -121,5 +122,8 @@ class CategoriesList extends StatelessWidget {
     );
   }
 
-  void _showEditCategoryDialog(EntryCategory category, BuildContext context) {}
+  void _showEditCategoryDialog(EntryCategory category, BuildContext context) =>
+      showDialog(
+          context: context,
+          builder: (context) => EditCategoryDialog(category: category));
 }
