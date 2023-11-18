@@ -124,7 +124,9 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
   }
 
   void _showDeleteCategoryDialog() {
-    // TODO implement
+    CategoryService.deleteCategory(widget.category.id);
+
+    Navigator.pop(context);
   }
 
   void _updateCategory() {
