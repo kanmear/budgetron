@@ -144,6 +144,6 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
 
     return category.color !=
             CategoryService.colorToString(widget.colorNotifier.value!) ||
-        category.name.toLowerCase() != widget.textController.text.toLowerCase();
+        category.name != widget.textController.text;
   }
 }
