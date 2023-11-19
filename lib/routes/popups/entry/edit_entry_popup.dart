@@ -106,7 +106,7 @@ class EntryDetails extends StatelessWidget {
                   Text(DateFormat.yMMMd().format(entry.dateTime),
                       style: BudgetronFonts.nunitoSize14Weight400),
                   const SizedBox(width: 4),
-                  Text("${entry.dateTime.hour}:${entry.dateTime.minute}",
+                  Text(DateFormat.Hm().format(entry.dateTime),
                       style: BudgetronFonts.nunitoSize14Weight300Gray),
                 ],
               )
