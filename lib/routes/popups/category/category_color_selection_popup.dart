@@ -5,12 +5,54 @@ import 'package:budgetron/ui/data/fonts.dart';
 
 class CategoryColorDialog extends StatelessWidget {
   final List<List<Color>> colors = const [
-    [Colors.amber, Colors.orange, Colors.yellow, Colors.yellowAccent],
-    [Colors.red, Colors.pink, Colors.brown, Colors.redAccent],
-    [Colors.green, Colors.teal, Colors.cyan, Colors.lightGreen],
-    [Colors.amber, Colors.orange, Colors.yellow, Colors.yellowAccent],
-    [Colors.red, Colors.pink, Colors.brown, Colors.redAccent],
-    [Colors.green, Colors.teal, Colors.cyan, Colors.lightGreen]
+    [
+      Color(0xffF44336),
+      Color(0xffE91E63),
+      Color(0xff9C27B0),
+      Color(0xff673AB7),
+      Color(0xff3F51B5),
+      Color(0xff2196F3),
+    ],
+    [
+      Color(0xffEF9A9A),
+      Color(0xffF48FB1),
+      Color(0xffCE93D8),
+      Color(0xffB39DDB),
+      Color(0xff9FA8DA),
+      Color(0xff90CAF9)
+    ],
+    [
+      Color(0xff00BCD4),
+      Color(0xff009688),
+      Color(0xff4CAF50),
+      Color(0xff8BC34A),
+      Color(0xffCDDC39),
+      Color(0xffFFEB3B),
+    ],
+    [
+      Color(0xff80DEEA),
+      Color(0xff80CBC4),
+      Color(0xffA5D6A7),
+      Color(0xffC5E1A5),
+      Color(0xffE6EE9C),
+      Color(0xffFFF59D),
+    ],
+    [
+      Color(0xffFFC107),
+      Color(0xffFF9800),
+      Color(0xffFF5722),
+      Color(0xff795548),
+      Color(0xff607D8B),
+      Color(0xff608b6e),
+    ],
+    [
+      Color(0xffFFE082),
+      Color(0xffFFCC80),
+      Color(0xffFFAB91),
+      Color(0xffBCAAA4),
+      Color(0xffB0BEC5),
+      Color(0xffb0c5b7),
+    ]
   ];
 
   const CategoryColorDialog({super.key});
