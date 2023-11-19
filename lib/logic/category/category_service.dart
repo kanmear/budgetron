@@ -6,8 +6,11 @@ import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 
 class CategoryService {
+  //TODO write tests
   static String colorToString(Color color) {
-    return 'ff${color.value.toRadixString(16).substring(2)}';
+    String string =
+        color.value.toRadixString(16).replaceAll(RegExp('^f{1,2}'), '');
+    return 'ff$string';
   }
 
   static Color stringToColor(String string) {
