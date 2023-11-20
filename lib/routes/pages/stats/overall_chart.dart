@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/data/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
@@ -57,10 +58,37 @@ class OverallChart extends StatelessWidget {
                   ),
                 );
               } else {
-                return const Center(
-                    child: Text(
-                  'No data to display.',
-                ));
+                //FIX code duplication
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(2),
+                        color: Theme.of(context).colorScheme.surface),
+                    padding: const EdgeInsets.only(
+                        top: 12, left: 10, right: 10, bottom: 12),
+                    child: Column(
+                      children: [
+                        ExpenseFilterTabs(isExpenseFilterNotifier),
+                        const SizedBox(height: 20),
+                        BudgetronPieChart(
+                          data: [
+                            PieChartData(
+                                color: BudgetronColors.gray0,
+                                value: 1,
+                                name: '')
+                          ],
+                          child: Center(
+                            child: Text(
+                              'No data to display',
+                              style: BudgetronFonts.nunitoSize18Weight500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               }
             });
       },
