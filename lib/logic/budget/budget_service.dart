@@ -83,7 +83,7 @@ class BudgetService {
         start = _getPastMonday(end);
         break;
       case 'Six months':
-        start = DateUtils.addMonthsToMonthDate(end, -6);
+        start = _getHalfYearStartDate(end);
         break;
       case 'Year':
         start = DateTime(end.year);
@@ -139,11 +139,20 @@ class BudgetService {
         : '$remainingDays days left';
   }
 
+  //FIX 2 weeks desync
   static DateTime _getPastMonday(DateTime weekStart) {
     while (weekStart.weekday != 1) {
       weekStart = DateUtils.addDaysToDate(weekStart, -1);
     }
 
-    return DateUtils.addDaysToDate(weekStart, -7);
+    return weekStart;
+  }
+
+  static DateTime _getHalfYearStartDate(DateTime end) {
+    if (end.month >= 1 && end.month <= 6) {
+      return DateTime(end.year, 1, 1);
+    } else {
+      return DateTime(end.year, 7, 1);
+    }
   }
 }

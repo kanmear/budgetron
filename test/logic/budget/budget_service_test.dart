@@ -18,19 +18,14 @@ void main() {
           [DateTime(2023, 8, 7), DateTime(2023, 8, 8)]);
     });
 
+    // these are the same as for 1 week, only resetDate differs by a week
     test('Date period should be calculated properly (2 weeks)', () {
-      expect(
-          BudgetService.calculateDatePeriod(twoWeeks,
-              end: DateTime(2023, 8, 5)),
-          [DateTime(2023, 7, 24), DateTime(2023, 8, 5)]);
-      expect(
-          BudgetService.calculateDatePeriod(twoWeeks,
-              end: DateTime(2023, 8, 7)),
-          [DateTime(2023, 7, 31), DateTime(2023, 8, 7)]);
-      expect(
-          BudgetService.calculateDatePeriod(twoWeeks,
-              end: DateTime(2023, 8, 8)),
-          [DateTime(2023, 7, 31), DateTime(2023, 8, 8)]);
+      expect(BudgetService.calculateDatePeriod(week, end: DateTime(2023, 8, 5)),
+          [DateTime(2023, 7, 31), DateTime(2023, 8, 5)]);
+      expect(BudgetService.calculateDatePeriod(week, end: DateTime(2023, 8, 7)),
+          [DateTime(2023, 8, 7), DateTime(2023, 8, 7)]);
+      expect(BudgetService.calculateDatePeriod(week, end: DateTime(2023, 8, 8)),
+          [DateTime(2023, 8, 7), DateTime(2023, 8, 8)]);
     });
 
     test('Date period should be calculated properly (month)', () {
@@ -49,15 +44,27 @@ void main() {
       expect(
           BudgetService.calculateDatePeriod(sixMonths,
               end: DateTime(2023, 5, 5)),
-          [DateTime(2022, 11, 1), DateTime(2023, 5, 5)]);
+          [DateTime(2023, 1, 1), DateTime(2023, 5, 5)]);
+      expect(
+          BudgetService.calculateDatePeriod(sixMonths,
+              end: DateTime(2023, 6, 5)),
+          [DateTime(2023, 1, 1), DateTime(2023, 6, 5)]);
+      expect(
+          BudgetService.calculateDatePeriod(sixMonths,
+              end: DateTime(2023, 1, 25)),
+          [DateTime(2023, 1, 1), DateTime(2023, 1, 25)]);
       expect(
           BudgetService.calculateDatePeriod(sixMonths,
               end: DateTime(2023, 8, 10)),
-          [DateTime(2023, 2, 1), DateTime(2023, 8, 10)]);
+          [DateTime(2023, 7, 1), DateTime(2023, 8, 10)]);
       expect(
           BudgetService.calculateDatePeriod(sixMonths,
               end: DateTime(2023, 8, 31)),
-          [DateTime(2023, 2, 1), DateTime(2023, 8, 31)]);
+          [DateTime(2023, 7, 1), DateTime(2023, 8, 31)]);
+      expect(
+          BudgetService.calculateDatePeriod(sixMonths,
+              end: DateTime(2023, 12, 12)),
+          [DateTime(2023, 7, 1), DateTime(2023, 12, 12)]);
     });
 
     test('Date period should be calculated properly (year)', () {
