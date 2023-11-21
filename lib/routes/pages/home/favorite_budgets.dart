@@ -19,7 +19,9 @@ class FavoriteBudgets extends StatelessWidget {
         if (snapshot.data?.isNotEmpty ?? false) {
           return FavoriteBudgetsListView(budgets: snapshot.data!);
         } else {
-          return const Center(child: Text('No fav budgets'));
+          return Center(
+              child: Text('No favorite budgets',
+                  style: BudgetronFonts.nunitoSize16Weight300Gray));
         }
       },
     );

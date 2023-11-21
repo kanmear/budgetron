@@ -43,7 +43,9 @@ class EntriesListView extends StatelessWidget {
             for (var entry in entries) EntryListTile(entry: entry)
           ]);
         } else {
-          return const Center(child: Text('no data'));
+          return Center(
+              child: Text('No entries in database',
+                  style: BudgetronFonts.nunitoSize16Weight300Gray));
         }
       },
     );

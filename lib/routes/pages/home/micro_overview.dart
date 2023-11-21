@@ -49,7 +49,29 @@ class MicroOverview extends StatelessWidget {
               ),
             );
           } else {
-            return const Center(child: Text(''));
+            //FIX remove code duplication
+            return Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TotalValueWithIcon(
+                      icon: const Icon(Icons.trending_up),
+                      name: 'Income',
+                      text: Text('0.00',
+                          style:
+                              BudgetronFonts.nunitoSize18Weight600MainColor)),
+                  const SizedBox(width: 16),
+                  const IncomeRatioCircle(total: 1, income: 0),
+                  const SizedBox(width: 16),
+                  TotalValueWithIcon(
+                      icon: const Icon(Icons.trending_down),
+                      name: 'Expenses',
+                      text: Text('0.00',
+                          style: BudgetronFonts.nunitoSize18Weight600)),
+                ],
+              ),
+            );
           }
         });
   }
