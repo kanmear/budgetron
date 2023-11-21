@@ -44,7 +44,7 @@ class TopSpendingsChart extends StatelessWidget {
                         children: [
                           Align(
                               alignment: Alignment.topLeft,
-                              child: Text('Top spendings',
+                              child: Text('Top expenditures',
                                   style: BudgetronFonts.nunitoSize16Weight400)),
                           const SizedBox(height: 20),
                           Row(
