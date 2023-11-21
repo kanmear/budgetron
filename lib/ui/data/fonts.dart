@@ -5,6 +5,11 @@ import 'package:budgetron/ui/data/colors.dart';
 class BudgetronFonts {
   // for text
   //REFACTOR is it possible to make these fields constant?
+  static TextStyle nunitoSize8Weight300 = TextStyle(
+      fontFamily: GoogleFonts.nunito().fontFamily,
+      fontSize: 8,
+      fontWeight: FontWeight.w300,
+      color: BudgetronColors.black);
   static TextStyle nunitoSize11Weight300 = TextStyle(
       fontFamily: GoogleFonts.nunito().fontFamily,
       fontSize: 11,
