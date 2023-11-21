@@ -77,7 +77,11 @@ class EntriesListView extends StatelessWidget {
                   },
                 );
               } else {
-                return const Center(child: Text("No entries in database"));
+                return Center(
+                    child: Text(
+                  "No entries in database",
+                  style: BudgetronFonts.nunitoSize16Weight300Gray,
+                ));
               }
             }));
   }

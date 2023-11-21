@@ -81,7 +81,7 @@ class OverallChart extends StatelessWidget {
                           child: Center(
                             child: Text(
                               'No data to display',
-                              style: BudgetronFonts.nunitoSize18Weight500,
+                              style: BudgetronFonts.nunitoSize16Weight300Gray,
                             ),
                           ),
                         ),

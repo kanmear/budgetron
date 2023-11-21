@@ -83,8 +83,9 @@ class CategoriesList extends StatelessWidget {
                     );
                   });
             } else {
-              return const Center(
-                child: Text("No categories in database"),
+              return Center(
+                child: Text("No categories in database",
+                    style: BudgetronFonts.nunitoSize16Weight300Gray),
               );
             }
           }),

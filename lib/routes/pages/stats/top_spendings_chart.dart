@@ -3,6 +3,7 @@ import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
+import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -61,10 +62,40 @@ class TopSpendingsChart extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return const Center(
-                      child: Text(
-                    'No data to display.',
-                  ));
+                  //FIX code duplication
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: Theme.of(context).colorScheme.surface),
+                      padding: const EdgeInsets.only(
+                          top: 12, left: 10, right: 10, bottom: 12),
+                      child: Column(
+                        children: [
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Text('Top expenditures',
+                                  style: BudgetronFonts.nunitoSize16Weight400)),
+                          const SizedBox(height: 20),
+                          BudgetronPieChart(
+                              data: [
+                                PieChartData(
+                                    color: BudgetronColors.gray0,
+                                    value: 1,
+                                    name: '')
+                              ],
+                              child: Center(
+                                child: Text(
+                                  'No data to display',
+                                  style:
+                                      BudgetronFonts.nunitoSize16Weight300Gray,
+                                ),
+                              )),
+                        ],
+                      ),
+                    ),
+                  );
                 }
               });
         });

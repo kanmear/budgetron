@@ -89,7 +89,9 @@ class BudgetListView extends StatelessWidget {
                     period: period)
             ]);
           } else {
-            return const Center(child: Text("No budgets in database"));
+            return Center(
+                child: Text('No budgets in database',
+                    style: BudgetronFonts.nunitoSize16Weight300Gray));
           }
         },
       ),
