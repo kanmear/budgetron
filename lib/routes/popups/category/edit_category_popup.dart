@@ -21,6 +21,14 @@ class EditCategoryDialog extends StatefulWidget {
 }
 
 class _EditCategoryDialogState extends State<EditCategoryDialog> {
+  late Future<bool> isCategoryUnused;
+
+  @override
+  initState() {
+    super.initState();
+    isCategoryUnused = CategoryService.isCategoryUnused(widget.category);
+  }
+
   @override
   Widget build(BuildContext context) {
     widget.colorNotifier.value =
@@ -82,45 +90,59 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
   void _setColor(Color value) => widget.colorNotifier.value = value;
 
   Widget _resolveButtons() {
-    if (widget.category.usages == 0) {
-      return Row(
-        children: [
-          Expanded(
-            child: BudgetronLargeTextButton(
-                text: 'Delete',
-                backgroundColor: Theme.of(context).colorScheme.error,
-                onTap: () => _showDeleteCategoryDialog(),
-                textStyle: BudgetronFonts.nunitoSize18Weight500White,
-                isActive: () => true,
-                listenables: const []),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: BudgetronLargeTextButton(
-                text: 'Save',
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                onTap: () => _updateCategory(),
-                textStyle: BudgetronFonts.nunitoSize18Weight500White,
-                isActive: _isValid,
-                listenables: [widget.colorNotifier, widget.textController]),
-          ),
-        ],
-      );
-    } else {
-      return Row(
-        children: [
-          Expanded(
-            child: BudgetronLargeTextButton(
-                text: 'Save',
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                onTap: () => _updateCategory(),
-                textStyle: BudgetronFonts.nunitoSize18Weight500White,
-                isActive: _isValid,
-                listenables: [widget.colorNotifier, widget.textController]),
-          ),
-        ],
-      );
-    }
+    return FutureBuilder(
+        future: isCategoryUnused,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data != null && snapshot.data!) {
+              return Row(
+                children: [
+                  Expanded(
+                    child: BudgetronLargeTextButton(
+                        text: 'Delete',
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                        onTap: () => _showDeleteCategoryDialog(),
+                        textStyle: BudgetronFonts.nunitoSize18Weight500White,
+                        isActive: () => true,
+                        listenables: const []),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: BudgetronLargeTextButton(
+                        text: 'Save',
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        onTap: () => _updateCategory(),
+                        textStyle: BudgetronFonts.nunitoSize18Weight500White,
+                        isActive: _isValid,
+                        listenables: [
+                          widget.colorNotifier,
+                          widget.textController
+                        ]),
+                  ),
+                ],
+              );
+            } else {
+              return Row(
+                children: [
+                  Expanded(
+                    child: BudgetronLargeTextButton(
+                        text: 'Save',
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        onTap: () => _updateCategory(),
+                        textStyle: BudgetronFonts.nunitoSize18Weight500White,
+                        isActive: _isValid,
+                        listenables: [
+                          widget.colorNotifier,
+                          widget.textController
+                        ]),
+                  ),
+                ],
+              );
+            }
+          } else {
+            return const CircularProgressIndicator();
+          }
+        });
   }
 
   void _showDeleteCategoryDialog() {
