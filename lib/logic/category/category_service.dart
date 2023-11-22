@@ -23,8 +23,10 @@ class CategoryService {
   }
 
   static void deleteCategory(int categoryId) async {
-    Budget budget = await BudgetController.getBudgetByCategory(categoryId);
-    BudgetService.deleteBudget(budget);
+    Budget? budget = await BudgetController.getBudgetByCategory(categoryId);
+    if (budget != null) {
+      BudgetService.deleteBudget(budget);
+    }
 
     CategoryController.deleteCategory(categoryId);
   }

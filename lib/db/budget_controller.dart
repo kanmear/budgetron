@@ -25,7 +25,7 @@ class BudgetController {
         .map((query) => query.find());
   }
 
-  static Future<Budget> getBudgetByCategory(int categoryId) async {
+  static Future<Budget?> getBudgetByCategory(int categoryId) async {
     List<Budget> queryResult = (await _getBudgetBox()
         .query(Budget_.category.equals(categoryId))
         .watch(triggerImmediately: true)
@@ -33,7 +33,7 @@ class BudgetController {
         .first);
 
     if (queryResult.isEmpty) {
-      throw Exception('Budget with categoryId: $categoryId not found.');
+      return null;
     }
 
     return queryResult.first;

@@ -31,7 +31,7 @@ class BudgetService {
   }
 
   static void updateBudgetValue(int categoryId, double delta) async {
-    Budget budget = await BudgetController.getBudgetByCategory(categoryId);
+    Budget budget = (await BudgetController.getBudgetByCategory(categoryId))!;
     resetBudget(budget);
     budget.currentValue += delta;
 
