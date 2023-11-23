@@ -1,13 +1,14 @@
+import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/ui/classes/tab_switch.dart';
+import 'package:budgetron/ui/data/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/ui/data/budgetron_ui.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
-import 'package:budgetron/ui/classes/top_bar_with_tabs.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
@@ -31,32 +32,20 @@ class _NewEntryPageState extends State<NewEntryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: const BudgetronAppBar(
+          leading: ArrowBackIconButton(),
+          title: '',
+        ),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
-            BudgetronAppBarWithTabs(
-              tabNotifier: widget.tabNotifier,
-              tabs: Row(
-                children: [
-                  BudgetronTopBarTab(
-                    tabNotifier: widget.tabNotifier,
-                    onTapAction: () =>
-                        {widget.tabNotifier.value = EntryCategoryType.expense},
-                    padding: BudgetronUI.leftTabInAppBar(),
-                    name: 'Expense',
-                    associatedTabValue: EntryCategoryType.expense,
-                  ),
-                  BudgetronTopBarTab(
-                    tabNotifier: widget.tabNotifier,
-                    onTapAction: () =>
-                        {widget.tabNotifier.value = EntryCategoryType.income},
-                    padding: BudgetronUI.rightTabInAppBar(),
-                    name: 'Income',
-                    associatedTabValue: EntryCategoryType.income,
-                  ),
+            BudgetronTabSwitch(
+                valueNotifier: widget.tabNotifier,
+                tabs: const [
+                  EntryCategoryType.expense,
+                  EntryCategoryType.income
                 ],
-              ),
-            ),
+                getTabName: (value) => EntryCategoryMap.getName(value)),
             EntryValueTextField(
               tabNotifier: widget.tabNotifier,
               textController: widget.textController,
