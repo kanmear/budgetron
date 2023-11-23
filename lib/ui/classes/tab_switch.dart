@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
-class BudgetronDatePeriodTabSwitch extends StatelessWidget {
-  final ValueNotifier<DatePeriod> valueNotifier;
-  final List<DatePeriod> tabs;
+class BudgetronTabSwitch extends StatelessWidget {
+  final ValueNotifier<Enum> valueNotifier;
+  final List<Enum> tabs;
+  final Function getTabName;
 
-  const BudgetronDatePeriodTabSwitch(
-      {super.key, required this.valueNotifier, required this.tabs});
+  const BudgetronTabSwitch(
+      {super.key,
+      required this.valueNotifier,
+      required this.tabs,
+      required this.getTabName});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +24,11 @@ class BudgetronDatePeriodTabSwitch extends StatelessWidget {
         height: 42,
         child: Row(
           children: [
-            for (DatePeriod tab in tabs)
-              DatePeriodTab(valueNotifier: valueNotifier, tab: tab)
+            for (var tab in tabs)
+              SwitchTab(
+                  valueNotifier: valueNotifier,
+                  tab: tab,
+                  getTabName: getTabName)
           ],
         ),
       ),
@@ -30,12 +36,16 @@ class BudgetronDatePeriodTabSwitch extends StatelessWidget {
   }
 }
 
-class DatePeriodTab extends StatelessWidget {
-  final ValueNotifier<DatePeriod> valueNotifier;
-  final DatePeriod tab;
+class SwitchTab extends StatelessWidget {
+  final ValueNotifier<Object> valueNotifier;
+  final Enum tab;
+  final Function getTabName;
 
-  const DatePeriodTab(
-      {super.key, required this.valueNotifier, required this.tab});
+  const SwitchTab(
+      {super.key,
+      required this.valueNotifier,
+      required this.tab,
+      required this.getTabName});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +65,7 @@ class DatePeriodTab extends StatelessWidget {
                   color: _resolveColor(isSelected, context)),
               child: Center(
                   child: Text(
-                DatePeriodMap.getName(tab),
+                getTabName(tab),
                 style: _resolveStyle(isSelected),
               )),
             ),
@@ -65,7 +75,7 @@ class DatePeriodTab extends StatelessWidget {
     ));
   }
 
-  void _selectTab(DatePeriod value) {
+  void _selectTab(Enum value) {
     valueNotifier.value = value;
   }
 

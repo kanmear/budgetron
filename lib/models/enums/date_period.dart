@@ -12,7 +12,7 @@ class DatePeriodMap {
       case DatePeriod.year:
         return 'Year';
       default:
-        throw Exception('Not a valide DatePeriod value.');
+        throw Exception('Not a valid DatePeriod value.');
     }
   }
 }

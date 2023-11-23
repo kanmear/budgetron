@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/classes/date_period_tab_switch.dart';
+import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
 import 'overall_chart.dart';
@@ -45,9 +45,10 @@ class StatsView extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          BudgetronDatePeriodTabSwitch(
+          BudgetronTabSwitch(
               valueNotifier: datePeriodNotifier,
-              tabs: const [DatePeriod.month, DatePeriod.year]),
+              tabs: const [DatePeriod.month, DatePeriod.year],
+              getTabName: (value) => DatePeriodMap.getName(value)),
           const SizedBox(height: 24),
           OverallChart(
               datePeriodNotifier: datePeriodNotifier,

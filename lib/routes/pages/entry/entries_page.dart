@@ -5,13 +5,13 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
-import 'package:budgetron/ui/classes/date_period_tab_switch.dart';
 import 'package:budgetron/routes/popups/entry/edit_entry_popup.dart';
 
 class EntriesPage extends StatefulWidget {
@@ -33,9 +33,10 @@ class _EntriesPageState extends State<EntriesPage> {
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
-            BudgetronDatePeriodTabSwitch(
+            BudgetronTabSwitch(
                 valueNotifier: widget.datePeriodNotifier,
-                tabs: const [DatePeriod.day, DatePeriod.month]),
+                tabs: const [DatePeriod.day, DatePeriod.month],
+                getTabName: (value) => DatePeriodMap.getName(value)),
             const SizedBox(height: 16),
             EntriesListView(
               datePeriodNotifier: widget.datePeriodNotifier,
