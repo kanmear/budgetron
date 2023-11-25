@@ -344,7 +344,7 @@ class ExpandedEntryTile extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
         child: Column(
           children: [
-            Text("${entry.dateTime.hour}:${entry.dateTime.minute}",
+            Text(DateFormat.Hm().format(entry.dateTime),
                 style: BudgetronFonts.nunitoSize16Weight300Gray,
                 textAlign: TextAlign.center),
             const SizedBox(height: 8),
