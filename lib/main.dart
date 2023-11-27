@@ -90,10 +90,10 @@ class _BudgetronState extends State<Budgetron> {
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(3)),
           child: BottomNavigationBar(
-              selectedItemColor: BudgetronColors.background,
-              unselectedItemColor: BudgetronColors.backgroundHalfOpacity,
+              selectedItemColor: Theme.of(context).colorScheme.surface,
+              unselectedItemColor: Theme.of(context).colorScheme.tertiary,
               type: BottomNavigationBarType.fixed,
-              backgroundColor: BudgetronColors.black,
+              backgroundColor: Theme.of(context).colorScheme.primary,
               currentIndex: selectedIndex,
               onTap: _selectPage,
               items: const [

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 class BudgetronSmallTextField extends StatelessWidget {
@@ -26,7 +25,7 @@ class BudgetronSmallTextField extends StatelessWidget {
       autofocus: autoFocus,
       keyboardType: inputType,
       style: BudgetronFonts.nunitoSize16Weight400,
-      cursorColor: BudgetronColors.black,
+      cursorColor: Theme.of(context).colorScheme.primary,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: const EdgeInsets.all(8),

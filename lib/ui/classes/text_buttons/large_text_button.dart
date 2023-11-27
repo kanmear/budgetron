@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/colors.dart';
-
 //TODO clean up extra class
 class BudgetronLargeTextButton extends StatelessWidget {
   final List<Listenable> listenables;
@@ -31,7 +29,7 @@ class BudgetronLargeTextButton extends StatelessWidget {
         child: AnimatedBuilder(
           animation: Listenable.merge(listenables),
           builder: (BuildContext context, Widget? child) {
-            Color buttonColor = _resolveColor();
+            Color buttonColor = _resolveColor(context);
 
             return Container(
                 width: double.infinity,
@@ -58,7 +56,8 @@ class BudgetronLargeTextButton extends StatelessWidget {
 
   _resolveAction() => isActive() ? onTap() : {};
 
-  Color _resolveColor() => isActive() ? backgroundColor : BudgetronColors.gray0;
+  Color _resolveColor(BuildContext context) =>
+      isActive() ? backgroundColor : Theme.of(context).colorScheme.outline;
 }
 
 class BudgetronBigTextButton extends StatelessWidget {
@@ -94,11 +93,15 @@ class BudgetronBigTextButton extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: backgroundColor,
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      border: const Border(
-                          top: BorderSide(color: BudgetronColors.black),
-                          bottom: BorderSide(color: BudgetronColors.black),
-                          left: BorderSide(color: BudgetronColors.black),
-                          right: BorderSide(color: BudgetronColors.black))),
+                      border: Border(
+                          top: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                          bottom: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                          left: BorderSide(
+                              color: Theme.of(context).colorScheme.primary),
+                          right: BorderSide(
+                              color: Theme.of(context).colorScheme.primary))),
                   child: Text(
                     text,
                     style: textStyle,

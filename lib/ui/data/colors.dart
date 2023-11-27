@@ -14,14 +14,16 @@ class BudgetronColors {
   static const Color error = Color(0xffff5722);
 
   static ColorScheme budgetronColorScheme = const ColorScheme(
-    primary: BudgetronColors.black,
+    primary: black,
     onPrimary: Colors.white,
-    secondary: BudgetronColors.mainGreen,
-    tertiary: BudgetronColors.gray3,
+    secondary: mainGreen,
+    tertiary: gray3,
+    outline: gray0,
+    outlineVariant: gray4,
     onSecondary: Colors.white,
-    background: BudgetronColors.background,
+    background: background,
     onBackground: Colors.black,
-    surface: BudgetronColors.surface,
+    surface: surface,
     onSurface: Colors.black,
     error: error,
     onError: Colors.white,

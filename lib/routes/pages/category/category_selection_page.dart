@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/category_controller.dart';
@@ -118,7 +117,8 @@ class CategoriesList extends StatelessWidget {
             child: Container(
               height: 1,
               decoration: BoxDecoration(
-                  border: Border.all(color: BudgetronColors.gray0, width: 1)),
+                  border: Border.all(
+                      color: Theme.of(context).colorScheme.outline, width: 1)),
             ),
           ),
         ],

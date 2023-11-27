@@ -1,4 +1,3 @@
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
@@ -74,7 +73,7 @@ class OverallChart extends StatelessWidget {
                         BudgetronPieChart(
                           data: [
                             PieChartData(
-                                color: BudgetronColors.gray0,
+                                color: Theme.of(context).colorScheme.outline,
                                 value: 1,
                                 name: '')
                           ],

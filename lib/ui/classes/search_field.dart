@@ -23,11 +23,11 @@ class _BudgetronSearchFieldState extends State<BudgetronSearchField> {
   void setIconColor(bool focus) {
     if (focus) {
       setState(() {
-        iconColor = BudgetronColors.black;
+        iconColor = Theme.of(context).colorScheme.primary;
       });
     } else if (!focus && widget.filter.value.isEmpty) {
       setState(() {
-        iconColor = BudgetronColors.gray4;
+        iconColor = Theme.of(context).colorScheme.outlineVariant;
       });
     }
   }
@@ -40,7 +40,7 @@ class _BudgetronSearchFieldState extends State<BudgetronSearchField> {
         onFocusChange: (focus) => setIconColor(focus),
         child: TextField(
           style: BudgetronFonts.nunitoSize16Weight600,
-          cursorColor: BudgetronColors.black,
+          cursorColor: Theme.of(context).colorScheme.primary,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.only(top: 13, bottom: 13),
             enabledBorder: OutlineInputBorder(

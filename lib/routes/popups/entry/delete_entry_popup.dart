@@ -2,7 +2,6 @@ import 'package:budgetron/models/entry.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/text_buttons/small_text_button.dart';
 
@@ -31,7 +30,7 @@ class DeleteEntryDialog extends StatelessWidget {
                 child: BudgetronSmallTextButton(
                     text: 'Cancel',
                     backgroundColor: backgroundColor,
-                    borderColor: BudgetronColors.black,
+                    borderColor: Theme.of(context).colorScheme.primary,
                     onTap: () => {Navigator.pop(context)},
                     textStyle: BudgetronFonts.nunitoSize16Weight400),
               ),
@@ -39,8 +38,8 @@ class DeleteEntryDialog extends StatelessWidget {
               Expanded(
                 child: BudgetronSmallTextButton(
                     text: 'Delete',
-                    backgroundColor: BudgetronColors.error,
-                    borderColor: BudgetronColors.error,
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    borderColor: Theme.of(context).colorScheme.error,
                     onTap: () => _deleteEntry(context),
                     textStyle: BudgetronFonts.nunitoSize16Weight400White),
               ),

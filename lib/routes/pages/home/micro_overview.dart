@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 
@@ -94,23 +93,26 @@ class IncomeRatioCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-        painter: IncomeRatioCirclePainter(total: total, income: income),
+        painter: IncomeRatioCirclePainter(
+            context: context, total: total, income: income),
         child: const SizedBox(height: 78, width: 78));
   }
 }
 
 class IncomeRatioCirclePainter extends CustomPainter {
+  final BuildContext context;
   final double total;
   final double income;
 
-  IncomeRatioCirclePainter({required this.total, required this.income});
+  IncomeRatioCirclePainter(
+      {required this.total, required this.income, required this.context});
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint();
     paint.style = PaintingStyle.stroke;
     paint.strokeWidth = 8;
-    paint.color = BudgetronColors.mainGreen;
+    paint.color = Theme.of(context).colorScheme.secondary;
 
     Offset center = Offset(size.width / 2, size.height / 2);
     double radius = 35;
@@ -125,7 +127,7 @@ class IncomeRatioCirclePainter extends CustomPainter {
     radian = (total - income) * 2 * pi / total;
 
     paint.style = PaintingStyle.stroke;
-    paint.color = BudgetronColors.surface;
+    paint.color = Theme.of(context).colorScheme.surface;
 
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
         radian, false, paint);

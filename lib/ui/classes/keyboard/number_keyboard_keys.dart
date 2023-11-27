@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
-import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 import 'number_keyboard.dart';
@@ -98,13 +97,13 @@ class BudgetronKeyboardConfirmKey extends StatelessWidget {
             if (isSubmitAvailable(keyboardService)) {
               return BudgetronKeyboardIconKey(
                 icon: const Icon(Icons.check, color: Colors.white),
-                color: BudgetronColors.mainGreen,
+                color: Theme.of(context).colorScheme.secondary,
                 onTap: () => _submitChanges(context),
               );
             } else {
               return BudgetronKeyboardIconKey(
                 icon: const Icon(Icons.check, color: Colors.white),
-                color: BudgetronColors.gray0,
+                color: Theme.of(context).colorScheme.outline,
                 onTap: () => {},
               );
             }

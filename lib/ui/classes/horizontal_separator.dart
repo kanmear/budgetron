@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
-
-import 'package:budgetron/ui/data/colors.dart';
+import 'package:flutter/material.dart';
 
 class HorizontalSeparator extends StatelessWidget {
   const HorizontalSeparator({super.key});
@@ -10,7 +8,8 @@ class HorizontalSeparator extends StatelessWidget {
     return Container(
       height: 1,
       decoration: BoxDecoration(
-          border: Border.all(color: BudgetronColors.gray0, width: 1)),
+          border: Border.all(
+              color: Theme.of(context).colorScheme.outline, width: 1)),
     );
   }
 }
