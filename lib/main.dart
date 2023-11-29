@@ -111,7 +111,6 @@ class _BudgetronState extends State<Budgetron> {
   }
 
   void _selectPage(index) {
-    selectedTitle = pageTitles[index];
     pageViewController.animateToPage(index,
         duration: const Duration(milliseconds: 200), curve: Curves.ease);
   }
@@ -119,6 +118,7 @@ class _BudgetronState extends State<Budgetron> {
   void _updateIndex(index) {
     setState(() {
       selectedIndex = index;
+      selectedTitle = pageTitles[index];
     });
   }
 }
