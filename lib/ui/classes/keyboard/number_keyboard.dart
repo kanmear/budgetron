@@ -4,27 +4,35 @@ import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 
 import 'number_keyboard_keys.dart';
 
-class BudgetronNumberKeyboard extends StatelessWidget {
-  final ValueNotifier<MathOperation> currentOperation =
-      ValueNotifier(MathOperation.none);
+class BudgetronNumberKeyboard extends StatefulWidget {
   final TextEditingController textController;
   final Function isSubmitAvailable;
   final Function onConfirmAction;
 
   static const double ratio = 0.8;
 
-  BudgetronNumberKeyboard(
+  const BudgetronNumberKeyboard(
       {super.key,
       required this.textController,
       required this.onConfirmAction,
       required this.isSubmitAvailable});
 
   @override
+  State<BudgetronNumberKeyboard> createState() =>
+      _BudgetronNumberKeyboardState();
+}
+
+class _BudgetronNumberKeyboardState extends State<BudgetronNumberKeyboard> {
+  final ValueNotifier<MathOperation> currentOperation =
+      ValueNotifier(MathOperation.none);
+
+  @override
   Widget build(BuildContext context) {
     final NumberKeyboardService keyboardService =
-        NumberKeyboardService(textController, currentOperation);
+        NumberKeyboardService(widget.textController, currentOperation);
 
-    double keyHeight = MediaQuery.of(context).size.width / 4.0 * ratio;
+    double keyHeight =
+        MediaQuery.of(context).size.width / 4.0 * BudgetronNumberKeyboard.ratio;
     Color mainKeyColor = Theme.of(context).colorScheme.tertiary;
     Color secondaryKeyColor = Theme.of(context).colorScheme.primary;
 
@@ -118,12 +126,12 @@ class BudgetronNumberKeyboard extends StatelessWidget {
                 color: mainKeyColor,
                 onTap: () => keyboardService.appendDecimalSeparator()),
             BudgetronKeyboardConfirmKey(
-              textEditingController: textController,
+              textEditingController: widget.textController,
               currentOperation: currentOperation,
-              onConfirmAction: onConfirmAction,
+              onConfirmAction: widget.onConfirmAction,
               onOperateAction: () => keyboardService.performOperation(),
               keyboardService: keyboardService,
-              isSubmitAvailable: isSubmitAvailable,
+              isSubmitAvailable: widget.isSubmitAvailable,
             )
           ],
         ),
