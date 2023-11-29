@@ -22,13 +22,13 @@ class CategoryService {
     ));
   }
 
-  static void deleteCategory(int categoryId) async {
-    Budget? budget = await BudgetController.getBudgetByCategory(categoryId);
-    if (budget != null) {
+  static void deleteCategory(EntryCategory category) async {
+    if (category.isBudgetTracked) {
+      Budget budget = await BudgetController.getBudgetByCategory(category.id);
       BudgetService.deleteBudget(budget);
     }
 
-    CategoryController.deleteCategory(categoryId);
+    CategoryController.deleteCategory(category.id);
   }
 
   static Future<bool> isCategoryUnused(EntryCategory category) async {
