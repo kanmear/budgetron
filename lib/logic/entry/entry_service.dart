@@ -11,6 +11,7 @@ class EntryService {
     CategoryController.updateCategory(category);
 
     entry.category.target = category;
+    if (category.isExpense) entry.value *= -1.0;
     EntryController.addEntry(entry);
   }
 
@@ -21,7 +22,7 @@ class EntryService {
       BudgetService.updateBudgetValue(category.id, delta);
     }
 
-    entry.value = newValue;
+    entry.value = category.isExpense ? -newValue : newValue;
     EntryController.addEntry(entry);
   }
 

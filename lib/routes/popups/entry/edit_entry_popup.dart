@@ -1,4 +1,3 @@
-import 'package:budgetron/routes/popups/entry/delete_entry_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -10,6 +9,7 @@ import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/buttons/delete_button.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
+import 'package:budgetron/routes/popups/entry/delete_entry_popup.dart';
 import 'package:budgetron/ui/classes/text_fields/medium_text_field.dart';
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 
@@ -24,7 +24,7 @@ class EditEntryDialog extends StatefulWidget {
 
 class _EditEntryDialogState extends State<EditEntryDialog> {
   late final TextEditingController textController =
-      TextEditingController(text: widget.entry.value.toStringAsFixed(2));
+      TextEditingController(text: widget.entry.value.abs().toStringAsFixed(2));
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,6 @@ class _EditEntryDialogState extends State<EditEntryDialog> {
       ]),
       keyboard: BudgetronNumberKeyboard(
         textController: textController,
-        resolveValueSign: _resolveValueSign,
         onConfirmAction: _submitEntryChanges,
         isSubmitAvailable: _isSubmitAvailable,
       ),
@@ -62,8 +61,6 @@ class _EditEntryDialogState extends State<EditEntryDialog> {
       context: context,
       builder: (BuildContext context) =>
           DeleteEntryDialog(entry: widget.entry));
-
-  bool _resolveValueSign() => widget.entry.category.target!.isExpense;
 
   _submitEntryChanges(String newValue) =>
       EntryService.updateEntry(widget.entry, double.parse(newValue));

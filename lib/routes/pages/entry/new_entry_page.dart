@@ -1,12 +1,12 @@
-import 'package:budgetron/ui/classes/app_bar.dart';
-import 'package:budgetron/ui/classes/tab_switch.dart';
-import 'package:budgetron/ui/data/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/ui/data/icons.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
@@ -20,7 +20,7 @@ class NewEntryPage extends StatefulWidget {
   final ValueNotifier<EntryCategoryType> tabNotifier =
       ValueNotifier(EntryCategoryType.expense);
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
-  final TextEditingController textController = TextEditingController(text: '-');
+  final TextEditingController textController = TextEditingController(text: '');
 
   NewEntryPage({super.key});
 
@@ -59,15 +59,11 @@ class _NewEntryPageState extends State<NewEntryPage> {
             ),
             BudgetronNumberKeyboard(
                 textController: widget.textController,
-                resolveValueSign: _resolveValueSign,
                 onConfirmAction: _createNewEntry,
                 isSubmitAvailable: _isSubmitAvailable)
           ],
         ));
   }
-
-  bool _resolveValueSign() =>
-      widget.tabNotifier.value == EntryCategoryType.expense;
 
   _createNewEntry(String value) {
     EntryCategory category = widget.categoryNotifier.value!;
@@ -248,8 +244,6 @@ class EntryValueTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _setSignOnTabChange();
-
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left: 32, right: 32),
@@ -263,17 +257,5 @@ class EntryValueTextField extends StatelessWidget {
                 readOnly: true)),
       ),
     );
-  }
-
-  _setSignOnTabChange() {
-    tabNotifier.addListener(() {
-      if (tabNotifier.value == EntryCategoryType.expense) {
-        String text = textController.text;
-        textController.text = text.contains('-') ? text : '-$text';
-      } else {
-        String text = textController.text;
-        textController.text = text.contains('-') ? text.substring(1) : text;
-      }
-    });
   }
 }

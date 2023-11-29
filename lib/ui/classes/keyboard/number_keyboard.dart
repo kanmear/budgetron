@@ -9,7 +9,6 @@ class BudgetronNumberKeyboard extends StatelessWidget {
       ValueNotifier(MathOperation.none);
   final TextEditingController textController;
   final Function isSubmitAvailable;
-  final Function resolveValueSign;
   final Function onConfirmAction;
 
   static const double ratio = 0.8;
@@ -17,14 +16,13 @@ class BudgetronNumberKeyboard extends StatelessWidget {
   BudgetronNumberKeyboard(
       {super.key,
       required this.textController,
-      required this.resolveValueSign,
       required this.onConfirmAction,
       required this.isSubmitAvailable});
 
   @override
   Widget build(BuildContext context) {
-    final NumberKeyboardService keyboardService = NumberKeyboardService(
-        textController, currentOperation, resolveValueSign);
+    final NumberKeyboardService keyboardService =
+        NumberKeyboardService(textController, currentOperation);
 
     double keyHeight = MediaQuery.of(context).size.width / 4.0 * ratio;
     Color mainKeyColor = Theme.of(context).colorScheme.tertiary;

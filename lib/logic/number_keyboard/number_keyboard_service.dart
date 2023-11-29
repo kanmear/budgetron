@@ -7,10 +7,8 @@ class NumberKeyboardService {
 
   final ValueNotifier<MathOperation> currentOperation;
   final TextEditingController textController;
-  final Function isValueNegative;
 
-  NumberKeyboardService(
-      this.textController, this.currentOperation, this.isValueNegative);
+  NumberKeyboardService(this.textController, this.currentOperation);
 
   appendDigit(String symbol) {
     String value = _getCurrentOperand();
@@ -40,10 +38,6 @@ class NumberKeyboardService {
       currentOperation.value = MathOperation.none;
     } else {
       textController.text = value.substring(0, value.length - 1);
-
-      if (isValueNegative() && textController.text.isEmpty) {
-        textController.text = '-';
-      }
     }
   }
 
@@ -107,8 +101,7 @@ class NumberKeyboardService {
     String textValue = _getValue();
     int separatingPointIndex = textValue.indexOf(' ');
     double firstOperand =
-        double.parse(textValue.substring(0, separatingPointIndex)) *
-            (isValueNegative() ? -1 : 1);
+        double.parse(textValue.substring(0, separatingPointIndex));
     double secondOperand = double.parse(
         textValue.substring(separatingPointIndex + 3, textValue.length));
 
@@ -141,10 +134,7 @@ class NumberKeyboardService {
   }
 
   String _getValue() {
-    String value = textController.text;
-    if (value.isEmpty) return value;
-
-    return isValueNegative() ? value.substring(1) : value;
+    return textController.text;
   }
 
   String _resolveExpressionValue(double x, double y) {
@@ -163,10 +153,8 @@ class NumberKeyboardService {
         throw Exception('Not a possible operation value');
     }
 
-    // changing sign of a value should not be possible
-    if (value > 0 && isValueNegative()) {
-      value = -0;
-    } else if (value < 0 && !isValueNegative()) {
+    // going negative should not be possible
+    if (value < 0) {
       value = 0;
     }
 
