@@ -58,11 +58,8 @@ class NumberKeyboardService {
       currentOperation.value = operation;
       textController.text += ' $symbol ';
     } else {
-      currentOperation.value = operation;
-      String text = textController.text;
-      int operationIndex = text.indexOf(' ') + 1;
-      textController.text =
-          text.replaceRange(operationIndex, operationIndex + 1, symbol);
+      performOperation();
+      appendOperation(operation, symbol);
     }
   }
 
@@ -96,6 +93,7 @@ class NumberKeyboardService {
       textController.text = value.substring(0, value.indexOf(' '));
       currentOperation.value = MathOperation.none;
       return;
+      //TODO display to user that operation he is trying to do isn't valid
     }
 
     String textValue = _getValue();
