@@ -172,7 +172,8 @@ class EntryListTileContainer extends StatelessWidget {
     if (entriesMap.keys.first == day) {
       DateTime now = DateTime.now();
 
-      if (day == DateTime(now.year, now.month, now.day)) {
+      if (datePeriod == DatePeriod.day &&
+          day == DateTime(now.year, now.month, now.day)) {
         return Text(
           "Today",
           style: BudgetronFonts.nunitoSize16Weight600,
