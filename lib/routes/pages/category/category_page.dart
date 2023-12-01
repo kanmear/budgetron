@@ -64,13 +64,16 @@ class CategoriesList extends StatelessWidget {
           stream: CategoryController.getCategories("", null),
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {
+              List<EntryCategory> categories = snapshot.data!;
+              categories.sort((a, b) => a.name.compareTo(b.name));
+
               return ValueListenableBuilder(
                   valueListenable: nameFilter,
                   builder: (context, value, child) {
                     return ListView(
                       padding: EdgeInsets.zero,
                       children: [
-                        for (var category in snapshot.data!)
+                        for (var category in categories)
                           if (category.name
                               .toLowerCase()
                               .contains(nameFilter.value.toLowerCase()))
