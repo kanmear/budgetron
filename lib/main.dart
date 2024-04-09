@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
 import 'package:budgetron/ui/classes/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -84,29 +85,57 @@ class _BudgetronState extends State<Budgetron> {
         children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
         onPageChanged: (index) => _updateIndex(index),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-        child: Container(
+      bottomNavigationBar: Container(
+          height: 72,
           clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(3)),
-          child: BottomNavigationBar(
-              selectedItemColor: Theme.of(context).colorScheme.surface,
-              unselectedItemColor: Theme.of(context).colorScheme.tertiary,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              currentIndex: selectedIndex,
-              onTap: _selectPage,
-              items: const [
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.list), label: 'Entries'),
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.wallet), label: 'Budget'),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.bar_chart), label: 'Stats')
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              boxShadow: [
+                BoxShadow(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 12,
+                    offset: const Offset(0, -3))
               ]),
-        ),
-      ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.list),
+                color: selectedIndex == 0
+                    ? Theme.of(context).colorScheme.surface
+                    : Theme.of(context).colorScheme.tertiary,
+                onPressed: () => _selectPage(0),
+              ),
+              IconButton(
+                icon: const Icon(Icons.home),
+                color: selectedIndex == 1
+                    ? Theme.of(context).colorScheme.surface
+                    : Theme.of(context).colorScheme.tertiary,
+                onPressed: () => _selectPage(1),
+              ),
+              InkWell(
+                  onTap: () => _navigateToEntryCreation(context),
+                  child: Icon(Icons.add_circle_outlined,
+                      size: 50, color: Theme.of(context).colorScheme.surface)),
+              IconButton(
+                icon: const Icon(Icons.wallet),
+                color: selectedIndex == 2
+                    ? Theme.of(context).colorScheme.surface
+                    : Theme.of(context).colorScheme.tertiary,
+                onPressed: () => _selectPage(2),
+              ),
+              IconButton(
+                icon: const Icon(Icons.bar_chart),
+                color: selectedIndex == 3
+                    ? Theme.of(context).colorScheme.surface
+                    : Theme.of(context).colorScheme.tertiary,
+                onPressed: () => _selectPage(3),
+              ),
+            ],
+          )),
     );
   }
 
@@ -120,6 +149,14 @@ class _BudgetronState extends State<Budgetron> {
       selectedIndex = index;
       selectedTitle = pageTitles[index];
     });
+  }
+
+  Future<void> _navigateToEntryCreation(BuildContext context) async {
+    //NOTE should it return to Entries page?
+    await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NewEntryPage()));
+
+    if (!mounted) return;
   }
 }
 
