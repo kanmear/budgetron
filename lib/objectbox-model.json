@@ -122,9 +122,28 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "6:9083894278175952157",
+      "lastPropertyId": "2:7932375435173476885",
+      "name": "Settings",
+      "properties": [
+        {
+          "id": "1:1210177256736255455",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7932375435173476885",
+          "name": "currency",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:6482118196163973151",
+  "lastEntityId": "6:9083894278175952157",
   "lastIndexId": "6:5628972956851249347",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",

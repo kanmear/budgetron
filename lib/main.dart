@@ -1,7 +1,10 @@
 // ignore_for_file: unused_import
 
 import 'dart:io';
+import 'globals.dart' as globals;
 
+import 'package:budgetron/db/settings_controller.dart';
+import 'package:budgetron/logic/settings/settings_service.dart';
 import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
 import 'package:budgetron/ui/classes/drawer.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +31,8 @@ Future<void> main() async {
 
   await ObjectBox.init();
 
+  // SettingsController.setupSettings();
+  // globals.currency = await SettingsService.getCurrency();
   // MockDataGenerator.removeAllData();
   // MockDataGenerator.generateRandomEntries();
 

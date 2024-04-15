@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/globals.dart' as globals;
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category.dart';
@@ -131,7 +132,8 @@ class BudgetListTile extends StatelessWidget {
                 const SizedBox(width: 8),
                 const Text('•'),
                 const SizedBox(width: 8),
-                Text(rightString, style: BudgetronFonts.nunitoSize14Weight400),
+                Text("$rightString ${globals.currency}",
+                    style: BudgetronFonts.nunitoSize14Weight400),
               ],
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:budgetron/globals.dart' as globals;
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/db/entry_controller.dart';
@@ -32,7 +33,8 @@ class MicroOverview extends StatelessWidget {
                   TotalValueWithIcon(
                       icon: const Icon(Icons.trending_up),
                       name: 'Income',
-                      text: Text(totalIncome.toStringAsFixed(2),
+                      text: Text(
+                          "${totalIncome.toStringAsFixed(2)} ${globals.currency}",
                           style:
                               BudgetronFonts.nunitoSize18Weight600MainColor)),
                   const SizedBox(width: 16),
@@ -42,7 +44,8 @@ class MicroOverview extends StatelessWidget {
                   TotalValueWithIcon(
                       icon: const Icon(Icons.trending_down),
                       name: 'Expenses',
-                      text: Text(totalExpenses.toStringAsFixed(2),
+                      text: Text(
+                          "${totalExpenses.toStringAsFixed(2)} ${globals.currency}",
                           style: BudgetronFonts.nunitoSize18Weight600)),
                 ],
               ),

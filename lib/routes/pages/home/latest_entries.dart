@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/globals.dart' as globals;
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/db/entry_controller.dart';
@@ -16,7 +17,7 @@ class LatestEntries extends StatelessWidget {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Latest updates',
+              'Latest transactions',
               style: BudgetronFonts.nunitoSize16Weight600,
             ),
           ),
@@ -81,7 +82,7 @@ class EntryListTile extends StatelessWidget {
               entry.category.target!.name,
               style: BudgetronFonts.nunitoSize16Weight400,
             ),
-            Text(entry.value.toStringAsFixed(2),
+            Text("${entry.value.toStringAsFixed(2)} ${globals.currency}",
                 style: BudgetronFonts.nunitoSize16Weight400)
           ]),
         ),

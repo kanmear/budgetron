@@ -1,3 +1,4 @@
+import 'package:budgetron/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -189,12 +190,14 @@ class EntryListTileContainer extends StatelessWidget {
   }
 
   Widget _resolveContainerSumValue(Map<EntryCategory, List<Entry>> entries) {
+    var sum = entries.values
+        .expand((element) => element.toList())
+        .map((e) => e.value)
+        .reduce((value, element) => value + element)
+        .toStringAsFixed(2);
+
     return Text(
-      entries.values
-          .expand((element) => element.toList())
-          .map((e) => e.value)
-          .reduce((value, element) => value + element)
-          .toStringAsFixed(2),
+      "$sum ${globals.currency}",
       style: BudgetronFonts.nunitoSize16Weight600,
     );
   }

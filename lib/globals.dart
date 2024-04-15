@@ -1,0 +1,2 @@
+//settings
+String currency = "USD";

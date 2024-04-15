@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/globals.dart' as globals;
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
@@ -161,7 +162,8 @@ class BudgetronListTile extends StatelessWidget {
               currentValue: currentValue,
               totalValue: targetValue,
               leftString: currentValue.toStringAsFixed(2),
-              rightString: targetValue.toStringAsFixed(0),
+              rightString:
+                  "${targetValue.toStringAsFixed(0)} ${globals.currency}",
             ),
             const SizedBox(height: 2),
             Align(
