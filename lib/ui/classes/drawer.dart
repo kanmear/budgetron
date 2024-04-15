@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/routes/pages/category/category_page.dart';
+import 'package:budgetron/routes/pages/settings/settings_page.dart';
 
 class BudgetronDrawer extends StatelessWidget {
   const BudgetronDrawer({super.key});
@@ -38,18 +39,31 @@ class DrawerEntries extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        InkWell(
-            onTap: () => _navigateToCategoriesPage(context),
-            child: Container(
-              padding: const EdgeInsets.only(top: 8, bottom: 8),
-              child: Text('Categories',
-                  textAlign: TextAlign.start,
-                  style: BudgetronFonts.nunitoSize16Weight600),
-            ))
+        DrawerEntryTile(name: 'Categories', route: CategoriesPage()),
+        const DrawerEntryTile(name: 'Settings', route: SettingsPage())
       ],
     );
   }
+}
 
-  void _navigateToCategoriesPage(BuildContext context) => Navigator.push(
-      context, MaterialPageRoute(builder: (context) => CategoriesPage()));
+class DrawerEntryTile extends StatelessWidget {
+  final String name;
+  final StatelessWidget route;
+
+  const DrawerEntryTile({super.key, required this.name, required this.route});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: () => _navigateToCategoriesPage(context),
+        child: Container(
+          padding: const EdgeInsets.only(top: 8, bottom: 8),
+          child: Text(name,
+              textAlign: TextAlign.start,
+              style: BudgetronFonts.nunitoSize16Weight600),
+        ));
+  }
+
+  void _navigateToCategoriesPage(BuildContext context) =>
+      Navigator.push(context, MaterialPageRoute(builder: (context) => route));
 }

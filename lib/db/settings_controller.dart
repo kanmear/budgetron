@@ -1,7 +1,6 @@
-import 'package:budgetron/objectbox.g.dart';
-
 import 'package:budgetron/db/object_box_helper.dart';
 import 'package:budgetron/models/settings.dart';
+import 'package:budgetron/objectbox.g.dart';
 
 class SettingsController {
   static Stream<List<Settings>> getSettings() {
@@ -13,6 +12,10 @@ class SettingsController {
 
   static void setupSettings() async {
     _getSettingsBox().put(Settings());
+  }
+
+  static void updateSettings(Settings settings) {
+    _getSettingsBox().put(settings);
   }
 
   static Box<Settings> _getSettingsBox() => ObjectBox.store.box<Settings>();

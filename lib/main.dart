@@ -32,7 +32,7 @@ Future<void> main() async {
   await ObjectBox.init();
 
   // SettingsController.setupSettings();
-  // globals.currency = await SettingsService.getCurrency();
+  globals.currency = await SettingsService.getCurrency();
   // MockDataGenerator.removeAllData();
   // MockDataGenerator.generateRandomEntries();
 
