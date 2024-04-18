@@ -1,7 +1,8 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-import 'package:budgetron/globals.dart' as globals;
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/db/entry_controller.dart';
@@ -12,6 +13,8 @@ class MicroOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String currency = Provider.of<AppData>(context).currency;
+
     return StreamBuilder<List<Entry>>(
         stream: _getEntries(),
         builder: (context, snapshot) {
@@ -33,8 +36,7 @@ class MicroOverview extends StatelessWidget {
                   TotalValueWithIcon(
                       icon: const Icon(Icons.trending_up),
                       name: 'Income',
-                      text: Text(
-                          "${totalIncome.toStringAsFixed(2)} ${globals.currency}",
+                      text: Text("${totalIncome.toStringAsFixed(2)} $currency",
                           style:
                               BudgetronFonts.nunitoSize18Weight600MainColor)),
                   const SizedBox(width: 16),
@@ -45,7 +47,7 @@ class MicroOverview extends StatelessWidget {
                       icon: const Icon(Icons.trending_down),
                       name: 'Expenses',
                       text: Text(
-                          "${totalExpenses.toStringAsFixed(2)} ${globals.currency}",
+                          "${totalExpenses.toStringAsFixed(2)} $currency",
                           style: BudgetronFonts.nunitoSize18Weight600)),
                 ],
               ),

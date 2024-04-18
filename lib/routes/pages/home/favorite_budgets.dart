@@ -1,6 +1,7 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/globals.dart' as globals;
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category.dart';
@@ -110,6 +111,8 @@ class BudgetListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String currency = Provider.of<AppData>(context).currency;
+
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
@@ -132,7 +135,7 @@ class BudgetListTile extends StatelessWidget {
                 const SizedBox(width: 8),
                 const Text('•'),
                 const SizedBox(width: 8),
-                Text("$rightString ${globals.currency}",
+                Text("$rightString $currency",
                     style: BudgetronFonts.nunitoSize14Weight400),
               ],
             ),

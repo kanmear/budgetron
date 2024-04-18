@@ -1,6 +1,7 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/globals.dart' as globals;
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
@@ -146,6 +147,7 @@ class BudgetronListTile extends StatelessWidget {
     EntryCategory category = budget.category.target!;
     double currentValue = budget.currentValue;
     double targetValue = budget.targetValue;
+    final currency = Provider.of<AppData>(context).currency;
 
     return InkWell(
       onTap: () => showDialog(
@@ -162,8 +164,7 @@ class BudgetronListTile extends StatelessWidget {
               currentValue: currentValue,
               totalValue: targetValue,
               leftString: currentValue.toStringAsFixed(2),
-              rightString:
-                  "${targetValue.toStringAsFixed(0)} ${globals.currency}",
+              rightString: "${targetValue.toStringAsFixed(0)} $currency",
             ),
             const SizedBox(height: 2),
             Align(

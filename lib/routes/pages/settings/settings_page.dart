@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:budgetron/globals.dart' as globals;
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
-import 'package:budgetron/logic/settings/settings_service.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
+import 'package:budgetron/app_data.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -51,6 +52,7 @@ class _SettingsListState extends State<SettingsList> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('Currency', style: BudgetronFonts.nunitoSize16Weight600),
+              //TODO replace with a separate page (similar to Categories)
               DropdownButton<String>(
                 value: currentValue,
                 items: [
@@ -69,8 +71,8 @@ class _SettingsListState extends State<SettingsList> {
                   setState(() {
                     currentValue = value!;
                   });
-                  SettingsService.setCurrency(value!);
-                  //TODO from somewhere here underlying routes should be redrawn to instantly reflect this change
+                  Provider.of<AppData>(context, listen: false)
+                      .setCurrency(value!);
                 },
               )
             ],

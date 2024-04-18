@@ -1,6 +1,7 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/globals.dart' as globals;
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/db/entry_controller.dart';
@@ -65,6 +66,8 @@ class EntryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currency = Provider.of<AppData>(context).currency;
+
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
@@ -82,7 +85,7 @@ class EntryListTile extends StatelessWidget {
               entry.category.target!.name,
               style: BudgetronFonts.nunitoSize16Weight400,
             ),
-            Text("${entry.value.toStringAsFixed(2)} ${globals.currency}",
+            Text("${entry.value.toStringAsFixed(2)} $currency",
                 style: BudgetronFonts.nunitoSize16Weight400)
           ]),
         ),

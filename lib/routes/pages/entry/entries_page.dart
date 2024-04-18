@@ -1,7 +1,8 @@
-import 'package:budgetron/globals.dart' as globals;
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
@@ -30,6 +31,8 @@ class EntriesPage extends StatefulWidget {
 class _EntriesPageState extends State<EntriesPage> {
   @override
   Widget build(BuildContext context) {
+    String currency = Provider.of<AppData>(context).currency;
+
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
@@ -41,6 +44,7 @@ class _EntriesPageState extends State<EntriesPage> {
             const SizedBox(height: 16),
             EntriesListView(
               datePeriodNotifier: widget.datePeriodNotifier,
+              currency: currency,
             ),
           ],
         ),
@@ -59,10 +63,12 @@ class _EntriesPageState extends State<EntriesPage> {
 
 class EntriesListView extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier;
+  final String currency;
 
   const EntriesListView({
     super.key,
     required this.datePeriodNotifier,
+    required this.currency,
   });
 
   @override
@@ -75,7 +81,7 @@ class EntriesListView extends StatelessWidget {
                 return ValueListenableBuilder(
                   valueListenable: datePeriodNotifier,
                   builder: (context, value, child) {
-                    return _buildListView(snapshot.data!);
+                    return _buildListView(snapshot.data!, currency);
                   },
                 );
               } else {
@@ -88,7 +94,7 @@ class EntriesListView extends StatelessWidget {
             }));
   }
 
-  _buildListView(List<Entry> entries) {
+  _buildListView(List<Entry> entries, String currency) {
     Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
     List<DateTime> entryDates = [];
 
@@ -103,11 +109,11 @@ class EntriesListView extends StatelessWidget {
           var day = entryDates[index];
 
           return EntryListTileContainer(
-            entriesMap: entriesMap,
-            day: day,
-            datePeriod: datePeriod,
-            datePeriodNotifier: datePeriodNotifier,
-          );
+              entriesMap: entriesMap,
+              day: day,
+              datePeriod: datePeriod,
+              datePeriodNotifier: datePeriodNotifier,
+              currency: currency);
         });
   }
 }
@@ -116,6 +122,7 @@ class EntryListTileContainer extends StatelessWidget {
   final Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final DatePeriod datePeriod;
+  final String currency;
   final DateTime day;
 
   const EntryListTileContainer({
@@ -124,6 +131,7 @@ class EntryListTileContainer extends StatelessWidget {
     required this.day,
     required this.datePeriod,
     required this.datePeriodNotifier,
+    required this.currency,
   });
 
   @override
@@ -197,7 +205,7 @@ class EntryListTileContainer extends StatelessWidget {
         .toStringAsFixed(2);
 
     return Text(
-      "$sum ${globals.currency}",
+      "$sum $currency",
       style: BudgetronFonts.nunitoSize16Weight600,
     );
   }

@@ -1,6 +1,7 @@
 // ignore_for_file: unused_import
 
 import 'dart:io';
+
 import 'globals.dart' as globals;
 
 import 'package:budgetron/db/settings_controller.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 import 'db/object_box_helper.dart';
 import 'package:budgetron/db/mock_data_generator.dart';
 
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/colors.dart';
@@ -32,11 +34,14 @@ Future<void> main() async {
   await ObjectBox.init();
 
   // SettingsController.setupSettings();
+  //TODO separate method in Service for setting all data from DB, e.g.
+  //await SettingsService.setData();
   globals.currency = await SettingsService.getCurrency();
   // MockDataGenerator.removeAllData();
   // MockDataGenerator.generateRandomEntries();
 
-  runApp(const MainApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => AppData(), child: const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -90,6 +95,7 @@ class _BudgetronState extends State<Budgetron> {
         children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
         onPageChanged: (index) => _updateIndex(index),
       ),
+      //TODO move into a separate file + refactor
       bottomNavigationBar: Container(
           height: 72,
           clipBehavior: Clip.hardEdge,

@@ -55,7 +55,7 @@ class DrawerEntryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => _navigateToCategoriesPage(context),
+        onTap: () => _navigateToRoute(context),
         child: Container(
           padding: const EdgeInsets.only(top: 8, bottom: 8),
           child: Text(name,
@@ -64,6 +64,6 @@ class DrawerEntryTile extends StatelessWidget {
         ));
   }
 
-  void _navigateToCategoriesPage(BuildContext context) =>
+  void _navigateToRoute(BuildContext context) =>
       Navigator.push(context, MaterialPageRoute(builder: (context) => route));
 }
