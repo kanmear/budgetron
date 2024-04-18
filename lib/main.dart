@@ -19,6 +19,7 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/ui/classes/navigation_bar.dart';
 import 'package:budgetron/routes/pages/home/home_page.dart';
 import 'package:budgetron/routes/pages/stats/stats_page.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
@@ -95,64 +96,11 @@ class _BudgetronState extends State<Budgetron> {
         children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
         onPageChanged: (index) => _updateIndex(index),
       ),
-      //TODO move into a separate file + refactor
-      bottomNavigationBar: Container(
-          height: 72,
-          clipBehavior: Clip.hardEdge,
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              boxShadow: [
-                BoxShadow(
-                    color:
-                        Theme.of(context).colorScheme.primary.withOpacity(0.5),
-                    spreadRadius: 5,
-                    blurRadius: 12,
-                    offset: const Offset(0, -3))
-              ]),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.list),
-                color: selectedIndex == 0
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).colorScheme.tertiary,
-                onPressed: () => _selectPage(0),
-              ),
-              IconButton(
-                icon: const Icon(Icons.home),
-                color: selectedIndex == 1
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).colorScheme.tertiary,
-                onPressed: () => _selectPage(1),
-              ),
-              InkWell(
-                  onTap: () => _navigateToEntryCreation(context),
-                  child: Icon(Icons.add_circle_outlined,
-                      size: 50, color: Theme.of(context).colorScheme.surface)),
-              IconButton(
-                icon: const Icon(Icons.wallet),
-                color: selectedIndex == 2
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).colorScheme.tertiary,
-                onPressed: () => _selectPage(2),
-              ),
-              IconButton(
-                icon: const Icon(Icons.bar_chart),
-                color: selectedIndex == 3
-                    ? Theme.of(context).colorScheme.surface
-                    : Theme.of(context).colorScheme.tertiary,
-                onPressed: () => _selectPage(3),
-              ),
-            ],
-          )),
+      bottomNavigationBar: BudgetronNavigationBar(
+          selectPage: _selectPage,
+          isCurrentlySelected: _isCurrentlySelected,
+          navigateToEntryCreation: _navigateToEntryCreation),
     );
-  }
-
-  void _selectPage(index) {
-    pageViewController.animateToPage(index,
-        duration: const Duration(milliseconds: 200), curve: Curves.ease);
   }
 
   void _updateIndex(index) {
@@ -161,6 +109,13 @@ class _BudgetronState extends State<Budgetron> {
       selectedTitle = pageTitles[index];
     });
   }
+
+  _selectPage(index) {
+    pageViewController.animateToPage(index,
+        duration: const Duration(milliseconds: 200), curve: Curves.ease);
+  }
+
+  bool _isCurrentlySelected(int index) => selectedIndex == index;
 
   Future<void> _navigateToEntryCreation(BuildContext context) async {
     //NOTE should it return to Entries page?
