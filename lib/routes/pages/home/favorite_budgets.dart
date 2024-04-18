@@ -111,7 +111,7 @@ class BudgetListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String currency = Provider.of<AppData>(context).currency;
+    final currency = Provider.of<AppData>(context).currency;
 
     return Container(
       decoration: BoxDecoration(

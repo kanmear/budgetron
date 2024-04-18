@@ -31,7 +31,7 @@ class EntriesPage extends StatefulWidget {
 class _EntriesPageState extends State<EntriesPage> {
   @override
   Widget build(BuildContext context) {
-    String currency = Provider.of<AppData>(context).currency;
+    final currency = Provider.of<AppData>(context).currency;
 
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,

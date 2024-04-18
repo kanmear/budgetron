@@ -110,7 +110,7 @@ class _BudgetronState extends State<Budgetron> {
     });
   }
 
-  _selectPage(index) {
+  void _selectPage(index) {
     pageViewController.animateToPage(index,
         duration: const Duration(milliseconds: 200), curve: Curves.ease);
   }
