@@ -74,6 +74,7 @@ class _BudgetronState extends State<Budgetron> {
 
   final pageViewController = PageController(initialPage: 1);
   int selectedIndex = 1;
+  bool isPageViewAnimating = false;
 
   @override
   void dispose() {
@@ -104,6 +105,8 @@ class _BudgetronState extends State<Budgetron> {
   }
 
   void _updateIndex(index) {
+    if (isPageViewAnimating) return;
+
     setState(() {
       selectedIndex = index;
       selectedTitle = pageTitles[index];
@@ -111,8 +114,15 @@ class _BudgetronState extends State<Budgetron> {
   }
 
   void _selectPage(index) {
-    pageViewController.animateToPage(index,
-        duration: const Duration(milliseconds: 200), curve: Curves.ease);
+    _updateIndex(index);
+
+    isPageViewAnimating = true;
+    pageViewController
+        .animateToPage(index,
+            duration: const Duration(milliseconds: 200), curve: Curves.ease)
+        .then((value) {
+      isPageViewAnimating = false;
+    });
   }
 
   bool _isCurrentlySelected(int index) => selectedIndex == index;
