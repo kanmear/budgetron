@@ -3,13 +3,8 @@
 import 'dart:io';
 
 import 'globals.dart' as globals;
-
-import 'package:budgetron/db/settings_controller.dart';
-import 'package:budgetron/logic/settings/settings_service.dart';
-import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
-import 'package:budgetron/ui/classes/drawer.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
 
 import 'db/object_box_helper.dart';
 import 'package:budgetron/db/mock_data_generator.dart';
@@ -18,13 +13,17 @@ import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/colors.dart';
+import 'package:budgetron/ui/classes/drawer.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/db/settings_controller.dart';
 import 'package:budgetron/ui/classes/navigation_bar.dart';
 import 'package:budgetron/routes/pages/home/home_page.dart';
 import 'package:budgetron/routes/pages/stats/stats_page.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/routes/pages/budget/budget_page.dart';
+import 'package:budgetron/logic/settings/settings_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
+import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
 import 'package:budgetron/routes/pages/category/category_page.dart';
 
 late ObjectBox objectBox;
@@ -34,9 +33,9 @@ Future<void> main() async {
 
   await ObjectBox.init();
 
-  // SettingsController.setupSettings();
+  await SettingsController.setupSettings();
   //TODO separate method in Service for setting all data from DB, e.g.
-  //await SettingsService.setData();
+  //await SettingsService.setDataToGlobals();
   globals.currency = await SettingsService.getCurrency();
   // MockDataGenerator.removeAllData();
   // MockDataGenerator.generateRandomEntries();

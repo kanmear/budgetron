@@ -10,8 +10,11 @@ class SettingsController {
         .map((query) => query.find());
   }
 
-  static void setupSettings() async {
-    _getSettingsBox().put(Settings());
+  static Future<void> setupSettings() async {
+    List<Settings> settings = await getSettings().first;
+    if (settings.isEmpty) {
+      _getSettingsBox().put(Settings());
+    }
   }
 
   static void updateSettings(Settings settings) {
