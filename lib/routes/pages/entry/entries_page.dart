@@ -102,19 +102,32 @@ class EntriesListView extends StatelessWidget {
 
     EntryService.formEntriesData(datePeriod, entries, entriesMap, entryDates);
 
-    return ListView.builder(
-        padding: EdgeInsets.zero,
-        itemCount: entryDates.length,
-        itemBuilder: (context, index) {
-          var day = entryDates[index];
+    return ListView.separated(
+      padding: EdgeInsets.zero,
+      itemCount: entryDates.length,
+      itemBuilder: (context, index) {
+        var day = entryDates[index];
 
-          return EntryListTileContainer(
-              entriesMap: entriesMap,
-              day: day,
-              datePeriod: datePeriod,
-              datePeriodNotifier: datePeriodNotifier,
-              currency: currency);
-        });
+        return EntryListTileContainer(
+            entriesMap: entriesMap,
+            day: day,
+            datePeriod: datePeriod,
+            datePeriodNotifier: datePeriodNotifier,
+            currency: currency);
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Padding(
+          padding: EdgeInsets.only(left: 16, right: 16),
+          child: Column(
+            children: [
+              SizedBox(height: 16),
+              HorizontalSeparator(),
+              SizedBox(height: 16)
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -168,9 +181,6 @@ class EntryListTileContainer extends StatelessWidget {
                 ]),
               ],
             ),
-            const SizedBox(height: 16),
-            const HorizontalSeparator(),
-            const SizedBox(height: 16)
           ],
         ),
       ),
@@ -320,15 +330,14 @@ class EntryListTile extends StatelessWidget {
               color: Theme.of(context).colorScheme.surface),
           padding: const EdgeInsets.only(left: 8, right: 10, bottom: 8),
           height: 76,
-          child: ListView(scrollDirection: Axis.horizontal, children: [
-            for (var entry in entries)
-              Row(
-                children: [
-                  ExpandedEntryTile(entry: entry),
-                  const SizedBox(width: 8)
-                ],
-              )
-          ]));
+          child: ListView.separated(
+            itemCount: entries.length,
+            scrollDirection: Axis.horizontal,
+            separatorBuilder: (BuildContext context, int index) =>
+                const SizedBox(width: 8),
+            itemBuilder: (BuildContext context, int index) =>
+                ExpandedEntryTile(entry: entries[index]),
+          ));
     } else {
       return const SizedBox();
     }
