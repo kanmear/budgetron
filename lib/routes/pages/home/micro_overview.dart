@@ -28,54 +28,9 @@ class MicroOverview extends StatelessWidget {
                 .where((entry) => entry.category.target!.isExpense == true)
                 .toList());
 
-            return Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TotalValueWithIcon(
-                      icon: const Icon(Icons.trending_up),
-                      name: 'Income',
-                      text: Text("${totalIncome.toStringAsFixed(2)} $currency",
-                          style:
-                              BudgetronFonts.nunitoSize18Weight600MainColor)),
-                  const SizedBox(width: 16),
-                  IncomeRatioCircle(
-                      total: totalExpenses + totalIncome, income: totalIncome),
-                  const SizedBox(width: 16),
-                  TotalValueWithIcon(
-                      icon: const Icon(Icons.trending_down),
-                      name: 'Expenses',
-                      text: Text(
-                          "${totalExpenses.toStringAsFixed(2)} $currency",
-                          style: BudgetronFonts.nunitoSize18Weight600)),
-                ],
-              ),
-            );
+            return _getOverview(totalExpenses, totalIncome, currency);
           } else {
-            //FIX remove code duplication
-            return Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TotalValueWithIcon(
-                      icon: const Icon(Icons.trending_up),
-                      name: 'Income',
-                      text: Text('0.00',
-                          style:
-                              BudgetronFonts.nunitoSize18Weight600MainColor)),
-                  const SizedBox(width: 16),
-                  const IncomeRatioCircle(total: 1, income: 0),
-                  const SizedBox(width: 16),
-                  TotalValueWithIcon(
-                      icon: const Icon(Icons.trending_down),
-                      name: 'Expenses',
-                      text: Text('0.00',
-                          style: BudgetronFonts.nunitoSize18Weight600)),
-                ],
-              ),
-            );
+            return _getOverview(0.00, 0.00, currency);
           }
         });
   }
@@ -85,6 +40,31 @@ class MicroOverview extends StatelessWidget {
 
     return EntryController.getEntries(
         period: [DateTime(now.year, now.month), now]);
+  }
+
+  _getOverview(double totalExpenses, double totalIncome, String currency) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          TotalValueWithIcon(
+              icon: const Icon(Icons.trending_up),
+              name: 'Income',
+              text: Text("${totalIncome.toStringAsFixed(2)} $currency",
+                  style: BudgetronFonts.nunitoSize18Weight600MainColor)),
+          const SizedBox(width: 16),
+          IncomeRatioCircle(
+              total: totalExpenses + totalIncome, income: totalIncome),
+          const SizedBox(width: 16),
+          TotalValueWithIcon(
+              icon: const Icon(Icons.trending_down),
+              name: 'Expenses',
+              text: Text("${totalExpenses.toStringAsFixed(2)} $currency",
+                  style: BudgetronFonts.nunitoSize18Weight600)),
+        ],
+      ),
+    );
   }
 }
 
