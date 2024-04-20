@@ -51,5 +51,5 @@ class BudgetronNavigationBar extends StatelessWidget {
   InkWell middleButton(BuildContext context) => InkWell(
       onTap: () => navigateToEntryCreation(context),
       child: Icon(Icons.add_circle_outlined,
-          size: 50, color: Theme.of(context).colorScheme.surface));
+          size: 52, color: Theme.of(context).colorScheme.surface));
 }
