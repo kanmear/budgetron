@@ -16,8 +16,7 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 
 class NewBudgetDialog extends StatefulWidget {
-  //FIX change object to EntryCategory (and test everything still works)
-  final ValueNotifier<Object?> categoryNotifier = ValueNotifier(null);
+  final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
   final ValueNotifier<String> periodNotifier = ValueNotifier('Month');
   final ValueNotifier<bool> switchNotifier = ValueNotifier(false);
   final TextEditingController textController = TextEditingController();
@@ -129,7 +128,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   }
 
   void _addBudget() async {
-    EntryCategory category = widget.categoryNotifier.value as EntryCategory;
+    EntryCategory category = widget.categoryNotifier.value!;
 
     String period = widget.periodNotifier.value;
     List<DateTime> datePeriod = BudgetService.calculateDatePeriod(period);
