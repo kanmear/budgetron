@@ -31,7 +31,7 @@ class BudgetService {
   }
 
   static void updateBudgetValue(int categoryId, double delta) async {
-    Budget budget = (await BudgetController.getBudgetByCategory(categoryId))!;
+    Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
     resetBudget(budget);
     budget.currentValue += delta;
 
@@ -63,6 +63,8 @@ class BudgetService {
       budget.resetDate = calculateResetDate(
           budgetPeriodStrings[budget.budgetPeriodIndex], budget.resetDate);
       return true;
+
+      //TODO save current/total values and period? to history
     }
 
     return false;

@@ -56,7 +56,7 @@ class SwitchTab extends StatelessWidget {
       child: ValueListenableBuilder(
         valueListenable: valueNotifier,
         builder: (BuildContext context, value, Widget? child) {
-          bool isSelected = tab == valueNotifier.value ? true : false;
+          bool isSelected = tab == valueNotifier.value;
           return Padding(
             padding: const EdgeInsets.all(4),
             child: Container(

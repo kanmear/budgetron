@@ -54,7 +54,6 @@ class EntryService {
     }
 
     entryDates.addAll(entriesMap.keys.toList());
-    //APPROACH is this approach optimal?
   }
 
   static void _addEntryToMap(
