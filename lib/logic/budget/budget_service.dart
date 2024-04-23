@@ -60,10 +60,6 @@ class BudgetService {
   static bool resetBudget(Budget budget) {
     DateTime now = DateTime.now();
     if (now.isAfter(budget.resetDate)) {
-      budget.currentValue = 0;
-      budget.resetDate = calculateResetDate(
-          budgetPeriodStrings[budget.budgetPeriodIndex], budget.resetDate);
-
       BudgetHistory budgetHistory = BudgetHistory(
           targetValue: budget.targetValue,
           endValue: budget.currentValue,
@@ -71,6 +67,10 @@ class BudgetService {
           endDate: now);
       budgetHistory.budget.target = budget;
       BudgetController.addBudgetHistory(budgetHistory);
+
+      budget.currentValue = 0;
+      budget.resetDate = calculateResetDate(
+          budgetPeriodStrings[budget.budgetPeriodIndex], budget.resetDate);
 
       return true;
     }

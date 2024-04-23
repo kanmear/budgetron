@@ -86,6 +86,7 @@ class BudgetListContainer extends StatelessWidget {
   }
 
   void _resetBudget(Budget budget) {
+    //REFACTOR this doesn't sit well with me, maybe rewrite updateBudgetValue?
     if (BudgetService.resetBudget(budget)) {
       BudgetController.updateBudget(budget);
     }
