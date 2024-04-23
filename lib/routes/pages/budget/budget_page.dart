@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';

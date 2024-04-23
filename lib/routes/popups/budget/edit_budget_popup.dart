@@ -7,10 +7,10 @@ import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
+import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/switch.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 

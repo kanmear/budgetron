@@ -1,9 +1,9 @@
 import 'dart:ui';
 
-import 'package:budgetron/models/budget.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/db/budget_controller.dart';
+import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 

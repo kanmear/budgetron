@@ -1,7 +1,8 @@
+import 'package:budgetron/models/budget/budget_history.dart';
 import 'package:budgetron/db/category_controller.dart';
+import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/models/budget.dart';
 import 'package:flutter/material.dart';
 
 class BudgetService {
@@ -62,9 +63,16 @@ class BudgetService {
       budget.currentValue = 0;
       budget.resetDate = calculateResetDate(
           budgetPeriodStrings[budget.budgetPeriodIndex], budget.resetDate);
-      return true;
 
-      //TODO save current/total values and period? to history
+      BudgetHistory budgetHistory = BudgetHistory(
+          targetValue: budget.targetValue,
+          endValue: budget.currentValue,
+          budgetPeriodIndex: budget.budgetPeriodIndex,
+          endDate: now);
+      budgetHistory.budget.target = budget;
+      BudgetController.addBudgetHistory(budgetHistory);
+
+      return true;
     }
 
     return false;

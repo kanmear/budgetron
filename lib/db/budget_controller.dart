@@ -1,5 +1,6 @@
+import 'package:budgetron/models/budget/budget_history.dart';
 import 'package:budgetron/db/object_box_helper.dart';
-import 'package:budgetron/models/budget.dart';
+import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/objectbox.g.dart';
 
 class BudgetController {
@@ -49,5 +50,11 @@ class BudgetController {
     _getBudgetBox().removeAll();
   }
 
+  static void addBudgetHistory(BudgetHistory budgetHistory) =>
+      _getBudgetHistoryBox().put(budgetHistory);
+
   static Box<Budget> _getBudgetBox() => ObjectBox.store.box<Budget>();
+
+  static Box<BudgetHistory> _getBudgetHistoryBox() =>
+      ObjectBox.store.box<BudgetHistory>();
 }
