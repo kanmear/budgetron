@@ -7,7 +7,7 @@ class BudgetronRadioListTile extends StatelessWidget {
 
   final Function onChanged;
   final Enum groupValue;
-  final value;
+  final Object value;
 
   const BudgetronRadioListTile(
       {super.key,
