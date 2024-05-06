@@ -4,6 +4,7 @@ import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/objectbox.g.dart';
 
 class EntryController {
+  //TODO remove null checks, add default values for optional arguments instead
   static Stream<List<Entry>> getEntries(
       {List<DateTime>? period,
       List<EntryCategory>? categoryFilter,

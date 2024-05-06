@@ -38,12 +38,14 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
             border: Border.all(color: Theme.of(context).colorScheme.primary),
             borderRadius: const BorderRadius.all(Radius.circular(2))),
         child: FutureBuilder(
+            //REFACTOR why is future builder used for static values?
             future: widget.items,
             builder: (BuildContext context,
                 AsyncSnapshot<List<Object>> dropdownItems) {
               if (dropdownItems.data?.isNotEmpty ?? false) {
                 return DropdownButton(
                     //TODO limit max size of dropdown item container
+                    //FIX selected item isn't highlighted
                     // menuMaxHeight: 260,
                     value: widget.valueNotifier.value,
                     hint: Row(

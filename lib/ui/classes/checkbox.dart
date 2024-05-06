@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//NOTE is not used anywhere
 class ExpenseCheckbox extends StatefulWidget {
   final ValueNotifier<bool> valueNotifier;
 

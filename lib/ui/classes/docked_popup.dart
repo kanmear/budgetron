@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
 
+//REFACTOR rename to budgetron docked dialog for consistency
 class DockedDialog extends StatelessWidget {
   final String title;
   final Widget body;
@@ -47,6 +48,7 @@ class DockedDialog extends StatelessWidget {
               ],
             ),
           ),
+          //REFACTOR instead of null checks can just supply SizedBox when keyboard is not needed
           keyboard ?? const SizedBox()
         ]),
       ),
