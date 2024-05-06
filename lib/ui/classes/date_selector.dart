@@ -137,20 +137,20 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
   _selectDatePeriod(DatePeriod? value) {
     DatePeriod period = value!;
 
-    DateTime startDate;
-    DateTime endDate;
+    DateTime fromDate;
+    DateTime toDate;
     if (period == DatePeriod.month) {
-      startDate = DateTime(now.year, now.month);
-      endDate = BudgetronDateUtils.shiftToEndOfMonth(startDate);
+      fromDate = DateTime(now.year, now.month);
+      toDate = BudgetronDateUtils.shiftToEndOfMonth(fromDate);
     } else {
       //year period
-      startDate = DateTime(now.year);
-      endDate = BudgetronDateUtils.shiftToEndOfYear(startDate);
+      fromDate = DateTime(now.year);
+      toDate = BudgetronDateUtils.shiftToEndOfYear(fromDate);
     }
 
     setState(() {
       widget.datePeriodNotifier.value = period;
-      widget.dateTimeNotifier.value = [startDate, endDate];
+      widget.dateTimeNotifier.value = [fromDate, toDate];
     });
   }
 
@@ -158,22 +158,22 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
     var isMonth = widget.datePeriodNotifier.value == DatePeriod.month;
 
     var dates = widget.dateTimeNotifier.value;
-    var oldStartDate = dates[0];
+    var oldFromDate = dates[0];
 
-    DateTime newStartDate;
-    DateTime newEndDate;
+    DateTime newFromDate;
+    DateTime newToDate;
 
     if (isMonth) {
-      newStartDate = DateUtils.addMonthsToMonthDate(oldStartDate, value);
-      newEndDate = BudgetronDateUtils.shiftToEndOfMonth(newStartDate);
+      newFromDate = DateUtils.addMonthsToMonthDate(oldFromDate, value);
+      newToDate = BudgetronDateUtils.shiftToEndOfMonth(newFromDate);
     } else {
       //year period
-      newStartDate = DateTime(oldStartDate.year + value);
-      newEndDate = BudgetronDateUtils.shiftToEndOfYear(newStartDate);
+      newFromDate = DateTime(oldFromDate.year + value);
+      newToDate = BudgetronDateUtils.shiftToEndOfYear(newFromDate);
     }
 
     setState(() {
-      widget.dateTimeNotifier.value = [newStartDate, newEndDate];
+      widget.dateTimeNotifier.value = [newFromDate, newToDate];
     });
   }
 }

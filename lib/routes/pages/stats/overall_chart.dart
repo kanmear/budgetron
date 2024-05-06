@@ -4,27 +4,25 @@ import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_
 import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 class OverallChart extends StatelessWidget {
-  final ValueNotifier<DatePeriod> datePeriodNotifier;
-  final ValueNotifier<bool> isExpenseFilterNotifier;
-
   const OverallChart(
       {super.key,
-      required this.datePeriodNotifier,
-      required this.isExpenseFilterNotifier});
+      required this.isExpenseFilterNotifier,
+      required this.dateTimeNotifier});
+
+  final ValueNotifier<List<DateTime>> dateTimeNotifier;
+  final ValueNotifier<bool> isExpenseFilterNotifier;
 
   @override
   Widget build(BuildContext context) {
     //HACK animatedBuilder allows listening to multiple values
     return AnimatedBuilder(
-      animation:
-          Listenable.merge([datePeriodNotifier, isExpenseFilterNotifier]),
+      animation: Listenable.merge([isExpenseFilterNotifier, dateTimeNotifier]),
       builder: (BuildContext context, _) {
         return StreamBuilder<List<Entry>>(
             stream: _getEntries(),
@@ -95,16 +93,12 @@ class OverallChart extends StatelessWidget {
   }
 
   Stream<List<Entry>> _getEntries() {
-    DateTime now = DateTime.now();
-    if (datePeriodNotifier.value == DatePeriod.month) {
-      return EntryController.getEntries(
-          isExpense: isExpenseFilterNotifier.value,
-          period: [DateTime(now.year, now.month), now]);
-    } else {
-      return EntryController.getEntries(
-          isExpense: isExpenseFilterNotifier.value,
-          period: [DateTime(now.year), now]);
-    }
+    var fromDate = dateTimeNotifier.value[0];
+    var toDate = dateTimeNotifier.value[1];
+    // print("$fromDate, $toDate");
+
+    return EntryController.getEntries(
+        isExpense: isExpenseFilterNotifier.value, period: [fromDate, toDate]);
   }
 
   List<PieChartData> _getData(List<Object> entries) {

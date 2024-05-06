@@ -1,23 +1,22 @@
-import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/logic/category/category_service.dart';
-import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/models/category.dart';
-import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/models/enums/date_period.dart';
+import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/models/category.dart';
+import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/logic/category/category_service.dart';
+import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
 
 class TopSpendingsChart extends StatelessWidget {
-  final ValueNotifier<DatePeriod> datePeriodNotifier;
+  const TopSpendingsChart({super.key, required this.dateTimeNotifier});
 
-  const TopSpendingsChart({super.key, required this.datePeriodNotifier});
+  final ValueNotifier<List<DateTime>> dateTimeNotifier;
 
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
-        valueListenable: datePeriodNotifier,
+        valueListenable: dateTimeNotifier,
         builder: (context, value, child) {
           return StreamBuilder<List<Entry>>(
               stream: _getEntries(),
@@ -102,15 +101,12 @@ class TopSpendingsChart extends StatelessWidget {
   }
 
   _getEntries() {
-    DateTime now = DateTime.now();
-    if (datePeriodNotifier.value == DatePeriod.month) {
-      return EntryController.getEntries(
-          isExpense: true,
-          period: [DateTime(now.year, now.month), DateTime.now()]);
-    } else {
-      return EntryController.getEntries(
-          isExpense: true, period: [DateTime(now.year), DateTime.now()]);
-    }
+    var fromDate = dateTimeNotifier.value[0];
+    var toDate = dateTimeNotifier.value[1];
+    // print("$fromDate, $toDate");
+
+    return EntryController.getEntries(
+        isExpense: true, period: [fromDate, toDate]);
   }
 
   List<PieChartData> _getData(List<Object> entries) {
