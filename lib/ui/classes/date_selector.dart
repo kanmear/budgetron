@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
+//TODO requires testing
 class DateSelector extends StatelessWidget {
   const DateSelector(
       {super.key,
@@ -123,9 +124,13 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
     DateTime earliestDate = globals.earliestEntryDate;
 
     if (isMonth) {
+      wouldBeDate = DateUtils.addMonthsToMonthDate(wouldBeDate, value);
+      var wouldBeShifted = BudgetronDateUtils.shiftToEndOfMonth(wouldBeDate);
+      var nowShifted = BudgetronDateUtils.shiftToEndOfMonth(now);
+
       return value > 0
-          ? (wouldBeDate.month + value <= now.month)
-          : (wouldBeDate.month + value >= earliestDate.month);
+          ? (wouldBeDate.isBefore(nowShifted))
+          : (wouldBeShifted.isAfter(earliestDate));
     } else {
       //year period
       return value > 0
