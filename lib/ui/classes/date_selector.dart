@@ -97,7 +97,6 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
             Icon(Icons.check_box_outline_blank, color: color),
             Text(_resolveTextValue(),
                 style: BudgetronFonts.nunitoSize16Weight400),
-            const SizedBox(width: 4),
             const Icon(Icons.arrow_drop_down),
             Icon(Icons.check_box_outline_blank, color: color),
           ],
