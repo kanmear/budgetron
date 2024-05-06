@@ -37,8 +37,10 @@ Future<void> main() async {
   //TODO separate method in Service for setting all data from DB, e.g.
   //await SettingsService.setDataToGlobals();
   globals.currency = await SettingsService.getCurrency();
+  globals.earliestEntryDate = await SettingsService.getEarliestEntryDate();
+  //TODO these should be buttons in app in debug mode
   // MockDataGenerator.removeAllData();
-  // MockDataGenerator.generateRandomEntries();
+  // await MockDataGenerator.generateRandomEntries();
 
   runApp(ChangeNotifierProvider(
       create: (context) => AppData(), child: const MainApp()));

@@ -11,6 +11,12 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  DateTime get earliestEntryDate => globals.earliestEntryDate;
+
+  void setEarliestEntryDate(DateTime date) {
+    SettingsService.setEarliestEntryDate(date);
+  }
+
   // Locale _locale = Locale('en', 'US');
   // ThemeData _theme = ThemeData.light();
   //

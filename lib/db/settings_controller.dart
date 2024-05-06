@@ -1,3 +1,4 @@
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/db/object_box_helper.dart';
 import 'package:budgetron/models/settings.dart';
 import 'package:budgetron/objectbox.g.dart';
@@ -14,6 +15,12 @@ class SettingsController {
     List<Settings> settings = await getSettings().first;
     if (settings.isEmpty) {
       _getSettingsBox().put(Settings());
+    } else if (settings[0].earliestEntryDate.isBefore(DateTime(2000))) {
+      var entries = EntryController.getEntries();
+      settings[0].earliestEntryDate = (await entries.first)
+          .reduce((value, element) =>
+              value.dateTime.isBefore(element.dateTime) ? value : element)
+          .dateTime;
     }
   }
 

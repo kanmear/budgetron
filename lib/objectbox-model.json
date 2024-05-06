@@ -125,7 +125,7 @@
     },
     {
       "id": "6:9083894278175952157",
-      "lastPropertyId": "2:7932375435173476885",
+      "lastPropertyId": "3:2064438330457630227",
       "name": "Settings",
       "properties": [
         {
@@ -138,6 +138,11 @@
           "id": "2:7932375435173476885",
           "name": "currency",
           "type": 9
+        },
+        {
+          "id": "3:2064438330457630227",
+          "name": "earliestEntryDate",
+          "type": 10
         }
       ],
       "relations": []

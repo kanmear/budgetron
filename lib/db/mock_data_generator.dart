@@ -10,7 +10,7 @@ import 'package:budgetron/models/category.dart';
 import 'package:budgetron/models/entry.dart';
 
 class MockDataGenerator {
-  static void generateRandomEntries() async {
+  static Future<void> generateRandomEntries() async {
     List<EntryCategory> categories = await _generateCategories();
     DateTime now = DateTime.now();
 
@@ -24,7 +24,7 @@ class MockDataGenerator {
           int categoryIndex = Random().nextInt(categories.length);
 
           EntryService.createEntry(
-              Entry(value: value, dateTime: DateTime(2023, m, d)),
+              Entry(value: value, dateTime: DateTime(now.year, m, d)),
               categories.elementAt(categoryIndex));
         }
       }

@@ -14,6 +14,17 @@ class SettingsService {
     globals.currency = value;
   }
 
+  static Future<DateTime> getEarliestEntryDate() async =>
+      (await _getSettings()).earliestEntryDate;
+
+  static void setEarliestEntryDate(DateTime date) async {
+    Settings settings = await _getSettings();
+    settings.earliestEntryDate = date;
+
+    SettingsController.updateSettings(settings);
+    globals.earliestEntryDate = date;
+  }
+
   static Future<Settings> _getSettings() async {
     return await SettingsController.getSettings()
         .first

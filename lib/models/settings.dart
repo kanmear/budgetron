@@ -4,9 +4,14 @@ import 'package:objectbox/objectbox.dart';
 class Settings {
   int id = 0;
 
+  // customizable settings
+
   // bool isDarkThemeOn;
   // int entryIconId;
   String currency;
 
-  Settings({this.currency = "BYN"});
+  // internal data
+  DateTime earliestEntryDate = DateTime.now();
+
+  Settings({this.currency = ''});
 }
