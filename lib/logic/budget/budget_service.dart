@@ -5,15 +5,23 @@ import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:flutter/material.dart';
 
+enum BudgetPeriod {
+  week(periodIndex: 0, name: 'Week'),
+  month(periodIndex: 1, name: 'Month'),
+  year(periodIndex: 2, name: 'Year');
+
+  final String name;
+  final int periodIndex;
+
+  const BudgetPeriod({required this.name, required this.periodIndex});
+
+  @override
+  toString() => name;
+}
+
 class BudgetService {
-  //REFACTOR use enum for switch
-  static final List<String> budgetPeriodStrings = [
-    "Week",
-    "Two weeks",
-    "Month",
-    "Six months",
-    "Year"
-  ];
+  static BudgetPeriod getPeriodById(int id) =>
+      BudgetPeriod.values.where((p) => p.periodIndex == id).first;
 
   static void createBudget(Budget budget, EntryCategory category) {
     category.isBudgetTracked = true;
@@ -69,8 +77,8 @@ class BudgetService {
       BudgetController.addBudgetHistory(budgetHistory);
 
       budget.currentValue = 0;
-      budget.resetDate = calculateResetDate(
-          budgetPeriodStrings[budget.budgetPeriodIndex], budget.resetDate);
+      budget.resetDate =
+          calculateResetDate(budget.budgetPeriodIndex, budget.resetDate);
 
       return true;
     }
@@ -78,47 +86,41 @@ class BudgetService {
     return false;
   }
 
-  static List<DateTime> calculateDatePeriod(String period, {DateTime? end}) {
+  static List<DateTime> calculateDatePeriod(int periodIndex, {DateTime? end}) {
     end ??= DateTime.now();
+
+    var period = getPeriodById(periodIndex);
     DateTime start;
 
     switch (period) {
-      case 'Month':
+      case BudgetPeriod.month:
         start = DateTime(end.year, end.month);
         break;
-      case 'Week':
+      case BudgetPeriod.week:
         start = _getPastMonday(end);
         break;
-      case 'Two weeks':
-        start = _getPastMonday(end);
-        break;
-      case 'Six months':
-        start = _getHalfYearStartDate(end);
-        break;
-      case 'Year':
+      case BudgetPeriod.year:
         start = DateTime(end.year);
         break;
       default:
-        throw Exception('Not a valid period value.');
+        throw Exception('Not a valid period ID.');
     }
 
     return [start, end];
   }
 
-  static DateTime calculateResetDate(String period, DateTime fromDate) {
+  static DateTime calculateResetDate(int periodIndex, DateTime fromDate) {
+    var period = getPeriodById(periodIndex);
+
     switch (period) {
-      case 'Month':
-        return DateUtils.addMonthsToMonthDate(fromDate, 1);
-      case 'Week':
+      case BudgetPeriod.week:
         return DateUtils.addDaysToDate(fromDate, 7);
-      case 'Two weeks':
-        return DateUtils.addDaysToDate(fromDate, 14);
-      case 'Six months':
-        return DateUtils.addMonthsToMonthDate(fromDate, 6);
-      case 'Year':
+      case BudgetPeriod.month:
+        return DateUtils.addMonthsToMonthDate(fromDate, 1);
+      case BudgetPeriod.year:
         return DateTime(fromDate.year + 1);
       default:
-        throw Exception('Not a valid period value.');
+        throw Exception('Not a valid period ID.');
     }
   }
 
@@ -149,20 +151,11 @@ class BudgetService {
         : '$remainingDays days left';
   }
 
-  //FIX 2 weeks desync
   static DateTime _getPastMonday(DateTime weekStart) {
     while (weekStart.weekday != 1) {
       weekStart = DateUtils.addDaysToDate(weekStart, -1);
     }
 
     return weekStart;
-  }
-
-  static DateTime _getHalfYearStartDate(DateTime end) {
-    if (end.month >= 1 && end.month <= 6) {
-      return DateTime(end.year, 1, 1);
-    } else {
-      return DateTime(end.year, 7, 1);
-    }
   }
 }

@@ -17,7 +17,8 @@ import 'package:budgetron/models/entry.dart';
 class EditBudgetDialog extends StatefulWidget {
   final Budget budget;
   final ValueNotifier<Object?> categoryNotifier = ValueNotifier(null);
-  final ValueNotifier<String> periodNotifier = ValueNotifier('');
+  final ValueNotifier<BudgetPeriod> periodNotifier =
+      ValueNotifier(BudgetPeriod.month);
   final ValueNotifier<bool> switchNotifier = ValueNotifier(true);
   final TextEditingController textController = TextEditingController();
 
@@ -32,7 +33,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
   Widget build(BuildContext context) {
     EntryCategory category = widget.budget.category.target!;
     widget.periodNotifier.value =
-        BudgetService.budgetPeriodStrings[widget.budget.budgetPeriodIndex];
+        BudgetService.getPeriodById(widget.budget.budgetPeriodIndex);
     widget.textController.text = widget.budget.targetValue.toStringAsFixed(0);
     widget.switchNotifier.value = widget.budget.onMainPage;
 
@@ -138,9 +139,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
         ]));
   }
 
-  Future<List<String>> _getPeriods() async {
-    return await Future(() => BudgetService.budgetPeriodStrings);
-  }
+  Future<List<BudgetPeriod>> _getPeriods() async => BudgetPeriod.values;
 
   void _showDeleteBudgetDialog() {
     showDialog(
@@ -150,17 +149,19 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
   }
 
   void _updateBudget() async {
-    String period = widget.periodNotifier.value;
-    List<DateTime> datePeriod = BudgetService.calculateDatePeriod(period);
+    var period = widget.periodNotifier.value;
+    var budgetPeriodIndex = period.periodIndex;
+
+    List<DateTime> datePeriod =
+        BudgetService.calculateDatePeriod(budgetPeriodIndex);
     List<Entry> entries = await EntryController.getEntries(
         period: datePeriod,
         categoryFilter: List.from([widget.budget.category.target!])).first;
 
-    int budgetPeriodIndex = BudgetService.budgetPeriodStrings.indexOf(period);
     double recalculatedCurrentValue = EntryService.calculateTotalValue(entries);
     DateTime resetDate = budgetPeriodIndex == widget.budget.budgetPeriodIndex
         ? widget.budget.resetDate
-        : BudgetService.calculateResetDate(period, datePeriod.first);
+        : BudgetService.calculateResetDate(budgetPeriodIndex, datePeriod.first);
 
     BudgetService.changeBudgetDetails(
         widget.budget.id,
@@ -178,7 +179,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
     return widget.textController.text !=
             budget.targetValue.toStringAsFixed(0) ||
         widget.periodNotifier.value !=
-            BudgetService.budgetPeriodStrings[budget.budgetPeriodIndex] ||
+            BudgetService.getPeriodById(budget.budgetPeriodIndex) ||
         widget.switchNotifier.value != budget.onMainPage;
   }
 

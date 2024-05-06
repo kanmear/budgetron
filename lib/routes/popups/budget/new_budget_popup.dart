@@ -17,7 +17,8 @@ import 'package:budgetron/models/entry.dart';
 
 class NewBudgetDialog extends StatefulWidget {
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
-  final ValueNotifier<String> periodNotifier = ValueNotifier('Month');
+  final ValueNotifier<BudgetPeriod> periodNotifier =
+      ValueNotifier(BudgetPeriod.month);
   final ValueNotifier<bool> switchNotifier = ValueNotifier(false);
   final TextEditingController textController = TextEditingController();
 
@@ -115,8 +116,8 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   Future<List<Object>> _getCategories() async => await Future(
       () => CategoryController.getUntrackedExpenseCategories().first);
 
-  Future<List<String>> _getPeriods() async {
-    return await Future(() => BudgetService.budgetPeriodStrings);
+  Future<List<BudgetPeriod>> _getPeriods() async {
+    return await Future(() => BudgetPeriod.values);
   }
 
   Widget _getLeading(EntryCategory category) {
@@ -130,19 +131,21 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
   void _addBudget() async {
     EntryCategory category = widget.categoryNotifier.value!;
 
-    String period = widget.periodNotifier.value;
-    List<DateTime> datePeriod = BudgetService.calculateDatePeriod(period);
+    var period = widget.periodNotifier.value;
+    int budgetPeriodIndex = period.periodIndex;
+
+    List<DateTime> datePeriod =
+        BudgetService.calculateDatePeriod(budgetPeriodIndex);
     List<Entry> entries = await EntryController.getEntries(
         period: datePeriod, categoryFilter: List.from([category])).first;
-
-    int budgetPeriodIndex = BudgetService.budgetPeriodStrings.indexOf(period);
 
     Budget budget = Budget(
         targetValue: double.parse(widget.textController.text),
         budgetPeriodIndex: budgetPeriodIndex,
         currentValue: EntryService.calculateTotalValue(entries),
         onMainPage: widget.switchNotifier.value,
-        resetDate: BudgetService.calculateResetDate(period, datePeriod.first));
+        resetDate: BudgetService.calculateResetDate(
+            budgetPeriodIndex, datePeriod.first));
 
     BudgetService.createBudget(budget, category);
     _popDialog();
