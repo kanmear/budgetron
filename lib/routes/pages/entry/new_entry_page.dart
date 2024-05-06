@@ -5,6 +5,7 @@ import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category.dart';
+import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
@@ -67,7 +68,9 @@ class _NewEntryPageState extends State<NewEntryPage> {
 
   _createNewEntry(String value) {
     EntryCategory category = widget.categoryNotifier.value!;
-    Entry entry = Entry(value: double.parse(value), dateTime: DateTime.now());
+
+    var date = BudgetronDateUtils.stripMilliseconds(DateTime.now());
+    Entry entry = Entry(value: double.parse(value), dateTime: date);
 
     EntryService.createEntry(entry, category);
     if (category.isBudgetTracked) {

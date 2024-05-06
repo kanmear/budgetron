@@ -12,4 +12,9 @@ class BudgetronDateUtils {
     return DateUtils.addMonthsToMonthDate(startDate, 12)
         .add(const Duration(milliseconds: -1));
   }
+
+  static DateTime stripMilliseconds(DateTime date) {
+    return DateTime(
+        date.year, date.month, date.day, date.hour, date.minute, date.second);
+  }
 }
