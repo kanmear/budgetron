@@ -13,14 +13,16 @@ class SettingsController {
 
   static Future<void> setupSettings() async {
     List<Settings> settings = await getSettings().first;
+
     if (settings.isEmpty) {
       _getSettingsBox().put(Settings());
-    } else if (settings[0].earliestEntryDate.isBefore(DateTime(2000))) {
+    } else {
       var entries = EntryController.getEntries();
-      settings[0].earliestEntryDate = (await entries.first)
+      settings.first.earliestEntryDate = (await entries.first)
           .reduce((value, element) =>
               value.dateTime.isBefore(element.dateTime) ? value : element)
           .dateTime;
+      updateSettings(settings.first);
     }
   }
 
