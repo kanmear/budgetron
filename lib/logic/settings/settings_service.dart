@@ -4,6 +4,13 @@ import 'package:budgetron/db/settings_controller.dart';
 import 'package:budgetron/models/settings.dart';
 
 class SettingsService {
+  static Future<void> loadDataToGlobals() async {
+    Settings settings = await _getSettings();
+
+    globals.currency = settings.currency;
+    globals.earliestEntryDate = settings.earliestEntryDate;
+  }
+
   static Future<String> getCurrency() async => (await _getSettings()).currency;
 
   static void setCurrency(String value) async {

@@ -33,11 +33,11 @@ Future<void> main() async {
 
   await ObjectBox.init();
 
+  //TODO setup should be handled during first app launch
   await SettingsController.setupSettings();
-  //TODO separate method in Service for setting all data from DB, e.g.
-  //await SettingsService.setDataToGlobals();
-  globals.currency = await SettingsService.getCurrency();
-  globals.earliestEntryDate = await SettingsService.getEarliestEntryDate();
+
+  await SettingsService.loadDataToGlobals();
+
   //TODO these should be buttons in app in debug mode
   // MockDataGenerator.removeAllData();
   // await MockDataGenerator.generateRandomEntries();
