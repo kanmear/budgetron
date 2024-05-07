@@ -14,19 +14,16 @@ import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
 class BudgetPage extends StatelessWidget {
-  final ValueNotifier<BudgetTabs> tabNotifier =
-      ValueNotifier(BudgetTabs.budget);
-
-  BudgetPage({super.key});
+  const BudgetPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 16),
+      body: const Padding(
+        padding: EdgeInsets.only(bottom: 16),
         child: Column(children: [
-          BudgetView(tabNotifier: tabNotifier),
+          BudgetView(),
         ]),
       ),
     );
@@ -34,12 +31,7 @@ class BudgetPage extends StatelessWidget {
 }
 
 class BudgetView extends StatelessWidget {
-  const BudgetView({
-    super.key,
-    required this.tabNotifier,
-  });
-
-  final ValueNotifier<BudgetTabs> tabNotifier;
+  const BudgetView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +40,7 @@ class BudgetView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             children: [
-              BudgetListView(
-                tabNotifier: tabNotifier,
-              ),
+              const BudgetListView(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: BudgetronBigTextButton(
@@ -68,9 +58,7 @@ class BudgetView extends StatelessWidget {
 }
 
 class BudgetListView extends StatelessWidget {
-  final ValueNotifier<BudgetTabs> tabNotifier;
-
-  const BudgetListView({super.key, required this.tabNotifier});
+  const BudgetListView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -179,11 +167,9 @@ class BudgetronListTile extends StatelessWidget {
     );
   }
 
-  void _resetBudget(Budget budget) {
+  _resetBudget(Budget budget) {
     if (BudgetService.resetBudget(budget)) {
       BudgetController.updateBudget(budget);
     }
   }
 }
-
-enum BudgetTabs { budget, savings }
