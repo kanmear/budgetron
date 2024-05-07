@@ -218,13 +218,35 @@ class CategoryWithProgressBar extends StatelessWidget {
     return Column(children: [
       const SizedBox(height: 16),
       ListTileWithProgressBar(
-        name: data.name,
-        color: data.color,
+        leading: _getLeading(data),
         currentValue: value,
         totalValue: total,
-        leftString: value.toStringAsFixed(2),
-        rightString: '${(value / total * 100).toStringAsFixed(0)}%',
+        trailing: _getTrailing(value, total),
       )
     ]);
+  }
+
+  Widget _getLeading(PieChartData data) {
+    return Row(
+      children: [
+        Icon(Icons.square_rounded, size: 18, color: data.color),
+        const SizedBox(width: 4),
+        Text(data.name, style: BudgetronFonts.nunitoSize14Weight400),
+      ],
+    );
+  }
+
+  Widget _getTrailing(double value, double total) {
+    return Row(
+      children: [
+        Text(value.toStringAsFixed(2),
+            style: BudgetronFonts.nunitoSize14Weight300),
+        const SizedBox(width: 8),
+        const Text('•'),
+        const SizedBox(width: 8),
+        Text("${(value / total * 100).toStringAsFixed(0)}%",
+            style: BudgetronFonts.nunitoSize14Weight400),
+      ],
+    );
   }
 }

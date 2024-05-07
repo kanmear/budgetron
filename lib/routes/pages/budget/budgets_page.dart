@@ -147,12 +147,10 @@ class BudgetronListTile extends StatelessWidget {
         child: Column(
           children: [
             ListTileWithProgressBar(
-              name: category.name,
-              color: CategoryService.stringToColor(category.color),
+              leading: _getLeading(category),
               currentValue: currentValue,
               totalValue: targetValue,
-              leftString: currentValue.toStringAsFixed(2),
-              rightString: "${targetValue.toStringAsFixed(0)} $currency",
+              trailing: _getTrailing(currentValue, targetValue, currency),
             ),
             const SizedBox(height: 2),
             Align(
@@ -171,5 +169,31 @@ class BudgetronListTile extends StatelessWidget {
     if (BudgetService.resetBudget(budget)) {
       BudgetController.updateBudget(budget);
     }
+  }
+
+  Widget _getLeading(EntryCategory category) {
+    return Row(
+      children: [
+        Icon(Icons.square_rounded,
+            size: 18, color: CategoryService.stringToColor(category.color)),
+        const SizedBox(width: 4),
+        Text(category.name, style: BudgetronFonts.nunitoSize14Weight400),
+      ],
+    );
+  }
+
+  Widget _getTrailing(
+      double currentValue, double targetValue, String currency) {
+    return Row(
+      children: [
+        Text(currentValue.toStringAsFixed(2),
+            style: BudgetronFonts.nunitoSize14Weight300),
+        const SizedBox(width: 8),
+        const Text('•'),
+        const SizedBox(width: 8),
+        Text("${targetValue.toStringAsFixed(0)} $currency",
+            style: BudgetronFonts.nunitoSize14Weight400),
+      ],
+    );
   }
 }
