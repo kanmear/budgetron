@@ -9,7 +9,7 @@ import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/routes/popups/budget/new_budget_popup.dart';
-import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
+import 'package:budgetron/routes/pages/budget/budget_overview_page.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
@@ -138,9 +138,7 @@ class BudgetronListTile extends StatelessWidget {
     final currency = Provider.of<AppData>(context).currency;
 
     return InkWell(
-      onTap: () => showDialog(
-          context: context,
-          builder: (context) => EditBudgetDialog(budget: budget)),
+      onTap: () => _navigateToBudgetOverview(context, budget),
       child: Container(
         color: Theme.of(context).colorScheme.surface,
         padding: const EdgeInsets.all(10),
@@ -170,6 +168,12 @@ class BudgetronListTile extends StatelessWidget {
       BudgetController.updateBudget(budget);
     }
   }
+
+  _navigateToBudgetOverview(BuildContext context, Budget budget) =>
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => BudgetOverviewPage(budget: budget)));
 
   Widget _getLeading(EntryCategory category) {
     return Row(

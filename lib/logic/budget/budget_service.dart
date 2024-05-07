@@ -20,6 +20,7 @@ enum BudgetPeriod {
 }
 
 class BudgetService {
+  //TODO rename to getPeriodByIndex
   static BudgetPeriod getPeriodById(int id) =>
       BudgetPeriod.values.where((p) => p.periodIndex == id).first;
 

@@ -13,6 +13,7 @@ class BudgetronProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
+      //REFACTOR this padding is only needed because of Icons in leading widgets
       padding: const EdgeInsets.only(left: 2, right: 2),
       child: Container(
         height: 4,
