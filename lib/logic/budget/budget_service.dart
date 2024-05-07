@@ -68,13 +68,7 @@ class BudgetService {
   static bool resetBudget(Budget budget) {
     DateTime now = DateTime.now();
     if (now.isAfter(budget.resetDate)) {
-      BudgetHistory budgetHistory = BudgetHistory(
-          targetValue: budget.targetValue,
-          endValue: budget.currentValue,
-          budgetPeriodIndex: budget.budgetPeriodIndex,
-          endDate: now);
-      budgetHistory.budget.target = budget;
-      BudgetController.addBudgetHistory(budgetHistory);
+      _addBudgetHistory(budget, now);
 
       budget.currentValue = 0;
       budget.resetDate =
@@ -157,5 +151,15 @@ class BudgetService {
     }
 
     return weekStart;
+  }
+
+  static _addBudgetHistory(Budget budget, DateTime endDate) {
+    BudgetHistory budgetHistory = BudgetHistory(
+        targetValue: budget.targetValue,
+        endValue: budget.currentValue,
+        budgetPeriodIndex: budget.budgetPeriodIndex,
+        endDate: endDate);
+    budgetHistory.budget.target = budget;
+    BudgetController.addBudgetHistory(budgetHistory);
   }
 }
