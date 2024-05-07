@@ -23,15 +23,15 @@ class BudgetsPage extends StatelessWidget {
       body: const Padding(
         padding: EdgeInsets.only(bottom: 16),
         child: Column(children: [
-          BudgetView(),
+          BudgetsView(),
         ]),
       ),
     );
   }
 }
 
-class BudgetView extends StatelessWidget {
-  const BudgetView({super.key});
+class BudgetsView extends StatelessWidget {
+  const BudgetsView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class BudgetView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, right: 16),
           child: Column(
             children: [
-              const BudgetListView(),
+              const BudgetsListView(),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: BudgetronBigTextButton(
@@ -57,8 +57,8 @@ class BudgetView extends StatelessWidget {
   }
 }
 
-class BudgetListView extends StatelessWidget {
-  const BudgetListView({super.key});
+class BudgetsListView extends StatelessWidget {
+  const BudgetsListView({super.key});
 
   @override
   Widget build(BuildContext context) {
