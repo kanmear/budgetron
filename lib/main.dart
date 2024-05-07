@@ -20,8 +20,8 @@ import 'package:budgetron/ui/classes/navigation_bar.dart';
 import 'package:budgetron/routes/pages/home/home_page.dart';
 import 'package:budgetron/routes/pages/stats/stats_page.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
-import 'package:budgetron/routes/pages/budget/budget_page.dart';
 import 'package:budgetron/logic/settings/settings_service.dart';
+import 'package:budgetron/routes/pages/budget/budgets_page.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
 import 'package:budgetron/routes/pages/category/category_page.dart';
@@ -95,7 +95,12 @@ class _BudgetronState extends State<Budgetron> {
       drawer: const BudgetronDrawer(),
       body: PageView(
         controller: pageViewController,
-        children: [EntriesPage(), const HomePage(), BudgetPage(), StatsPage()],
+        children: [
+          EntriesPage(),
+          const HomePage(),
+          const BudgetsPage(),
+          StatsPage()
+        ],
         onPageChanged: (index) => _updateIndex(index),
       ),
       bottomNavigationBar: BudgetronNavigationBar(

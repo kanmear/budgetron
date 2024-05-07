@@ -13,8 +13,8 @@ import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
-class BudgetPage extends StatelessWidget {
-  const BudgetPage({super.key});
+class BudgetsPage extends StatelessWidget {
+  const BudgetsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
