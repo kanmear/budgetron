@@ -140,6 +140,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
         period: datePeriod, categoryFilter: List.from([category])).first;
 
     Budget budget = Budget(
+        entriesIDs: entries.map((e) => e.id).toList(),
         targetValue: double.parse(widget.textController.text),
         budgetPeriodIndex: budgetPeriodIndex,
         currentValue: EntryService.calculateTotalValue(entries),

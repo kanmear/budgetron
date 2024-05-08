@@ -40,10 +40,39 @@ class BudgetService {
     BudgetController.deleteBudget(budget.id);
   }
 
-  static void updateBudgetValue(int categoryId, double delta) async {
+  static void addEntryToBudget(
+      int categoryId, int entryId, double delta) async {
     Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
+
+    if (budget.isArchived) return;
+
     resetBudget(budget);
     budget.currentValue += delta;
+    budget.entriesIDs.add(entryId);
+
+    BudgetController.updateBudget(budget);
+  }
+
+  static void updateBudget(int categoryId, double delta) async {
+    Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
+
+    if (budget.isArchived) return;
+
+    resetBudget(budget);
+    budget.currentValue += delta;
+
+    BudgetController.updateBudget(budget);
+  }
+
+  static void deleteEntryFromBudget(
+      int categoryId, int entryId, double delta) async {
+    Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
+    budget.entriesIDs.remove(entryId);
+
+    if (!budget.isArchived) {
+      resetBudget(budget);
+      budget.currentValue += delta;
+    }
 
     BudgetController.updateBudget(budget);
   }

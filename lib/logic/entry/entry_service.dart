@@ -6,20 +6,20 @@ import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 
 class EntryService {
-  static void createEntry(Entry entry, EntryCategory category) {
+  static int createEntry(Entry entry, EntryCategory category) {
     category.usages++;
     CategoryController.updateCategory(category);
 
     entry.category.target = category;
     if (category.isExpense) entry.value *= -1.0;
-    EntryController.addEntry(entry);
+    return EntryController.addEntry(entry);
   }
 
   static void updateEntry(Entry entry, double newValue) {
     EntryCategory category = entry.category.target!;
     if (category.isBudgetTracked) {
       double delta = -(newValue - entry.value);
-      BudgetService.updateBudgetValue(category.id, delta);
+      BudgetService.updateBudget(category.id, delta);
     }
 
     entry.value = category.isExpense ? -newValue : newValue;
@@ -29,7 +29,7 @@ class EntryService {
   static deleteEntry(Entry entry) {
     EntryCategory category = entry.category.target!;
     if (category.isBudgetTracked) {
-      BudgetService.updateBudgetValue(category.id, entry.value);
+      BudgetService.deleteEntryFromBudget(category.id, entry.id, entry.value);
     }
 
     EntryController.deleteEntry(entry.id);

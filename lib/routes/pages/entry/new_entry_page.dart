@@ -72,9 +72,10 @@ class _NewEntryPageState extends State<NewEntryPage> {
     var date = BudgetronDateUtils.stripMilliseconds(DateTime.now());
     Entry entry = Entry(value: double.parse(value), dateTime: date);
 
-    EntryService.createEntry(entry, category);
+    var entryId = EntryService.createEntry(entry, category);
     if (category.isBudgetTracked) {
-      BudgetService.updateBudgetValue(category.id, double.parse(value).abs());
+      BudgetService.addEntryToBudget(
+          category.id, entryId, double.parse(value).abs());
     }
   }
 
