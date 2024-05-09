@@ -7,13 +7,11 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
-import 'package:budgetron/ui/classes/floating_action_button.dart';
-import 'package:budgetron/routes/pages/entry/new_entry_page.dart';
+import 'package:budgetron/ui/classes/date_selector_entries.dart';
 import 'package:budgetron/routes/popups/entry/edit_entry_popup.dart';
 
 class EntriesPage extends StatefulWidget {
@@ -35,32 +33,12 @@ class _EntriesPageState extends State<EntriesPage> {
 
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            children: [
-              BudgetronTabSwitch(
-                  valueNotifier: widget.datePeriodNotifier,
-                  tabs: const [DatePeriod.day, DatePeriod.month],
-                  getTabName: (value) => value.toString()),
-              const SizedBox(height: 16),
-              EntriesListView(
-                datePeriodNotifier: widget.datePeriodNotifier,
-                currency: currency,
-              ),
-            ],
-          ),
-        ),
-        floatingActionButton: BudgetronFloatingActionButtonWithPlus(
-          onPressed: () => _navigateToEntryCreation(context),
-        ));
-  }
-
-  Future<void> _navigateToEntryCreation(BuildContext context) async {
-    await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => NewEntryPage()));
-
-    if (!mounted) return;
+        body: Column(children: [
+          EntriesListView(
+              datePeriodNotifier: widget.datePeriodNotifier,
+              currency: currency),
+          DateSelectorEntries(datePeriodNotifier: widget.datePeriodNotifier)
+        ]));
   }
 }
 
@@ -68,11 +46,8 @@ class EntriesListView extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final String currency;
 
-  const EntriesListView({
-    super.key,
-    required this.datePeriodNotifier,
-    required this.currency,
-  });
+  const EntriesListView(
+      {super.key, required this.datePeriodNotifier, required this.currency});
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +57,12 @@ class EntriesListView extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.data?.isNotEmpty ?? false) {
                 return ValueListenableBuilder(
-                  valueListenable: datePeriodNotifier,
-                  builder: (context, value, child) {
-                    return _buildListView(snapshot.data!, currency);
-                  },
-                );
+                    valueListenable: datePeriodNotifier,
+                    builder: (context, value, child) {
+                      return Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: _buildListView(snapshot.data!, currency));
+                    });
               } else {
                 return Center(
                     child: Text(
