@@ -30,6 +30,7 @@ class _BudgetronAppBarState extends State<BudgetronAppBar> {
         leadingWidth: 24,
         title: Text(widget.title,
             style: BudgetronFonts.nunitoSize18Weight600,
+            overflow: TextOverflow.fade,
             key: ValueKey<String>(widget.title)),
         titleSpacing: 8,
         actions: widget.actions,
