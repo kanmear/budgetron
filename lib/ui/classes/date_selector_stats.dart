@@ -8,9 +8,8 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
 //TODO requires testing
-//REFACTOR naming style
-class DateSelector extends StatelessWidget {
-  const DateSelector(
+class DateSelectorStats extends StatelessWidget {
+  const DateSelectorStats(
       {super.key,
       required this.datePeriodNotifier,
       required this.dateTimeNotifier});

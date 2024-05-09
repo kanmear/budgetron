@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/utils/date_utils.dart';
-import 'package:budgetron/ui/classes/date_selector.dart';
+import 'package:budgetron/ui/classes/date_selector_stats.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
 import 'overall_chart.dart';
@@ -72,7 +72,7 @@ class StatsView extends StatelessWidget {
               ],
             ),
           ),
-          DateSelector(
+          DateSelectorStats(
             datePeriodNotifier: datePeriodNotifier,
             dateTimeNotifier: dateTimeNotifier,
           ),
