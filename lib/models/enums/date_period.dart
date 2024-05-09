@@ -1,18 +1,14 @@
-enum DatePeriod { day, week, month, year }
+enum DatePeriod {
+  day(periodIndex: 0, name: 'Day'),
+  week(periodIndex: 1, name: 'Week'),
+  month(periodIndex: 2, name: 'Month'),
+  year(periodIndex: 3, name: 'Year');
 
-class DatePeriodMap {
-  static String getName(DatePeriod datePeriod) {
-    switch (datePeriod) {
-      case DatePeriod.day:
-        return 'Day';
-      case DatePeriod.week:
-        return 'Week';
-      case DatePeriod.month:
-        return 'Month';
-      case DatePeriod.year:
-        return 'Year';
-      default:
-        throw Exception('Not a valid DatePeriod value.');
-    }
-  }
+  final String name;
+  final int periodIndex;
+
+  const DatePeriod({required this.name, required this.periodIndex});
+
+  @override
+  toString() => name;
 }

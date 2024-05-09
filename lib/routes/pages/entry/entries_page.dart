@@ -42,7 +42,7 @@ class _EntriesPageState extends State<EntriesPage> {
               BudgetronTabSwitch(
                   valueNotifier: widget.datePeriodNotifier,
                   tabs: const [DatePeriod.day, DatePeriod.month],
-                  getTabName: (value) => DatePeriodMap.getName(value)),
+                  getTabName: (value) => value.toString()),
               const SizedBox(height: 16),
               EntriesListView(
                 datePeriodNotifier: widget.datePeriodNotifier,

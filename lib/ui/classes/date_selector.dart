@@ -81,8 +81,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
   _dateSelectorItem(DatePeriod period) {
     return Row(children: [
       const SizedBox(width: 8),
-      Text(DatePeriodMap.getName(period),
-          style: BudgetronFonts.nunitoSize16Weight400)
+      Text(period.toString(), style: BudgetronFonts.nunitoSize16Weight400)
     ]);
   }
 
