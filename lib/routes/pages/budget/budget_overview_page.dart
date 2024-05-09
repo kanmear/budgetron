@@ -1,13 +1,20 @@
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:budgetron/app_data.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/models/category.dart';
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/models/budget/budget.dart';
+import 'package:budgetron/models/enums/date_period.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
+import 'package:budgetron/routes/pages/entry/entries_page.dart';
+import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
@@ -19,31 +26,48 @@ class BudgetOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currency = Provider.of<AppData>(context).currency;
+    final ValueNotifier<DatePeriod> datePeriodNotifier = ValueNotifier(
+        BudgetService.getPeriodById(budget.budgetPeriodIndex) ==
+                BudgetPeriod.year
+            ? DatePeriod.month
+            : DatePeriod.day);
 
     var title = "${budget.category.target!.name} Budget";
+    var entriesStream = EntryController.getEntries(
+        ids: budget.entriesIDs, categoryFilter: [budget.category.target!]);
 
     return Scaffold(
-      appBar: BudgetronAppBar(
-          leading: const ArrowBackIconButton(),
-          actions: [
-            EditBudgetIcon(budget: budget),
-            const SizedBox(width: 8),
-            const BudgetMenuIcon()
-          ],
-          title: title),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Column(children: [
-            const BudgetHistoryOverview(),
-            const SizedBox(height: 8),
-            BudgetProgressBar(budget: budget, currency: currency),
-            const SizedBox(height: 24),
-            const AmountOfEntries(),
-            const SizedBox(height: 24),
-            const BudgetEntries()
-          ])),
-    );
+        appBar: BudgetronAppBar(
+            leading: const ArrowBackIconButton(),
+            actions: [
+              EditBudgetIcon(budget: budget),
+              const SizedBox(width: 8),
+              const BudgetMenuIcon()
+            ],
+            title: title),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: StreamBuilder<List<Entry>>(
+                stream: entriesStream,
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<Entry>> snapshot) {
+                  List<Entry> entries = [];
+                  if (snapshot.data?.isNotEmpty ?? false) {
+                    entries = snapshot.data!;
+                  }
+                  return Column(children: [
+                    const BudgetHistoryOverview(),
+                    const SizedBox(height: 8),
+                    BudgetProgressBar(budget: budget, currency: currency),
+                    const SizedBox(height: 24),
+                    AmountOfEntries(amountOfEntries: entries.length),
+                    const SizedBox(height: 24),
+                    BudgetEntries(
+                        entries: entries,
+                        datePeriodNotifier: datePeriodNotifier)
+                  ]);
+                })));
   }
 }
 
@@ -124,7 +148,8 @@ class BudgetProgressBar extends StatelessWidget {
 
   String _resolveRightString(BudgetPeriod budgetPeriod, DateTime now) {
     if (budgetPeriod == BudgetPeriod.month) {
-      return "${DateFormat.MMM().format(budget.resetDate)}, ${DateFormat.y().format(budget.resetDate)}";
+      return "${DateFormat.MMM().format(budget.resetDate)}, "
+          "${DateFormat.y().format(budget.resetDate)}";
     } else {
       // year period
       return DateFormat.y().format(budget.resetDate);
@@ -133,24 +158,69 @@ class BudgetProgressBar extends StatelessWidget {
 }
 
 class AmountOfEntries extends StatelessWidget {
-  const AmountOfEntries({super.key});
+  const AmountOfEntries({super.key, required this.amountOfEntries});
+
+  final int amountOfEntries;
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    return Center(
+        child: Text("$amountOfEntries entries",
+            style: BudgetronFonts.nunitoSize16Weight400Gray));
   }
 }
 
 class BudgetEntries extends StatelessWidget {
-  const BudgetEntries({super.key});
+  const BudgetEntries(
+      {super.key, required this.entries, required this.datePeriodNotifier});
+
+  final ValueNotifier<DatePeriod> datePeriodNotifier;
+  final List<Entry> entries;
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    //REFACTOR copy paste of _buildListView from entries_page.dart
+    Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
+    List<DateTime> entryDates = [];
+    var currency = Provider.of<AppData>(context).currency;
+
+    var datePeriod = datePeriodNotifier.value;
+
+    EntryService.formEntriesData(datePeriod, entries, entriesMap, entryDates);
+
+    return Flexible(
+      child: ListView.separated(
+        padding: EdgeInsets.zero,
+        itemCount: entryDates.length,
+        itemBuilder: (context, index) {
+          var day = entryDates[index];
+
+          return EntryListTileContainer(
+              entriesMap: entriesMap,
+              day: day,
+              datePeriod: datePeriod,
+              datePeriodNotifier: datePeriodNotifier,
+              currency: currency);
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const Padding(
+            padding: EdgeInsets.only(left: 16, right: 16),
+            child: Column(
+              children: [
+                SizedBox(height: 16),
+                HorizontalSeparator(),
+                SizedBox(height: 16)
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 }
 
 //TODO if changes are made, Overview should be reloaded with a new Budget
+//maybe pass a callback that gets called when Save is pressed
 class EditBudgetIcon extends StatelessWidget {
   const EditBudgetIcon({super.key, required this.budget});
 

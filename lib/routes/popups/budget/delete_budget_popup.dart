@@ -55,5 +55,6 @@ class DeleteBudgetDialog extends StatelessWidget {
     BudgetService.deleteBudget(budget);
     Navigator.pop(context);
     Navigator.pop(context);
+    Navigator.pop(context);
   }
 }
