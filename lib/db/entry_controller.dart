@@ -8,6 +8,7 @@ class EntryController {
   static Stream<List<Entry>> getEntries(
       {List<DateTime>? period,
       List<EntryCategory>? categoryFilter,
+      List<int>? ids,
       bool? isExpense}) {
     QueryBuilder<Entry> queryBuilder;
     Condition<Entry>? condition;
@@ -16,6 +17,15 @@ class EntryController {
       condition =
           Entry_.dateTime.greaterOrEqual(period[0].millisecondsSinceEpoch) &
               Entry_.dateTime.lessOrEqual(period[1].millisecondsSinceEpoch);
+    }
+
+    if (ids != null) {
+      var idCondition = Entry_.id.oneOf(ids);
+      if (condition != null) {
+        condition.and(idCondition);
+      } else {
+        condition = idCondition;
+      }
     }
 
     queryBuilder = _getEntryBox().query(condition);
