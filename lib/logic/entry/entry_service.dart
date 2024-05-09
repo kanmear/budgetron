@@ -6,13 +6,17 @@ import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 
 class EntryService {
-  static int createEntry(Entry entry, EntryCategory category) {
+  static void createEntry(Entry entry, EntryCategory category) {
     category.usages++;
     CategoryController.updateCategory(category);
 
     entry.category.target = category;
     if (category.isExpense) entry.value *= -1.0;
-    return EntryController.addEntry(entry);
+
+    var entryId = EntryController.addEntry(entry);
+    if (category.isBudgetTracked) {
+      BudgetService.addEntryToBudget(category.id, entryId, entry.value.abs());
+    }
   }
 
   static void updateEntry(Entry entry, double newValue) {

@@ -9,7 +9,6 @@ import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
@@ -72,11 +71,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
     var date = BudgetronDateUtils.stripMilliseconds(DateTime.now());
     Entry entry = Entry(value: double.parse(value), dateTime: date);
 
-    var entryId = EntryService.createEntry(entry, category);
-    if (category.isBudgetTracked) {
-      BudgetService.addEntryToBudget(
-          category.id, entryId, double.parse(value).abs());
-    }
+    EntryService.createEntry(entry, category);
   }
 
   bool _isSubmitAvailable(NumberKeyboardService keyboardService) {
