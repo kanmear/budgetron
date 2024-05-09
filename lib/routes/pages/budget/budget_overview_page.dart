@@ -170,6 +170,7 @@ class AmountOfEntries extends StatelessWidget {
   }
 }
 
+//TODO should these Entries be editable? this would require Month period rework
 class BudgetEntries extends StatelessWidget {
   const BudgetEntries(
       {super.key, required this.entries, required this.datePeriodNotifier});
@@ -203,15 +204,12 @@ class BudgetEntries extends StatelessWidget {
               currency: currency);
         },
         separatorBuilder: (BuildContext context, int index) {
-          return const Padding(
-            padding: EdgeInsets.only(left: 16, right: 16),
-            child: Column(
-              children: [
-                SizedBox(height: 16),
-                HorizontalSeparator(),
-                SizedBox(height: 16)
-              ],
-            ),
+          return const Column(
+            children: [
+              SizedBox(height: 16),
+              HorizontalSeparator(),
+              SizedBox(height: 16)
+            ],
           );
         },
       ),
