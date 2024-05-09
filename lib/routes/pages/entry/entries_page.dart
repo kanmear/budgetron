@@ -35,18 +35,21 @@ class _EntriesPageState extends State<EntriesPage> {
 
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Column(
-          children: [
-            BudgetronTabSwitch(
-                valueNotifier: widget.datePeriodNotifier,
-                tabs: const [DatePeriod.day, DatePeriod.month],
-                getTabName: (value) => DatePeriodMap.getName(value)),
-            const SizedBox(height: 16),
-            EntriesListView(
-              datePeriodNotifier: widget.datePeriodNotifier,
-              currency: currency,
-            ),
-          ],
+        body: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Column(
+            children: [
+              BudgetronTabSwitch(
+                  valueNotifier: widget.datePeriodNotifier,
+                  tabs: const [DatePeriod.day, DatePeriod.month],
+                  getTabName: (value) => DatePeriodMap.getName(value)),
+              const SizedBox(height: 16),
+              EntriesListView(
+                datePeriodNotifier: widget.datePeriodNotifier,
+                currency: currency,
+              ),
+            ],
+          ),
         ),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
           onPressed: () => _navigateToEntryCreation(context),
@@ -151,38 +154,35 @@ class EntryListTileContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<EntryCategory, List<Entry>> entries = entriesMap[day]!;
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16),
-      child: Container(
-        color: Theme.of(context).colorScheme.background,
-        child: Column(
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _resolveContainerTitle(),
-                      _resolveContainerSumValue(entries)
-                    ],
-                  ),
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _resolveContainerTitle(),
+                    _resolveContainerSumValue(entries)
+                  ],
                 ),
-                const SizedBox(height: 16),
-                Column(children: [
-                  for (var key in entries.keys)
-                    EntryListTile(
-                      category: key,
-                      entries: entries[key]!,
-                      isExpandable: datePeriod == DatePeriod.day,
-                      datePeriodNotifier: datePeriodNotifier,
-                    ),
-                ]),
-              ],
-            ),
-          ],
-        ),
+              ),
+              const SizedBox(height: 16),
+              Column(children: [
+                for (var key in entries.keys)
+                  EntryListTile(
+                    category: key,
+                    entries: entries[key]!,
+                    isExpandable: datePeriod == DatePeriod.day,
+                    datePeriodNotifier: datePeriodNotifier,
+                  ),
+              ]),
+            ],
+          ),
+        ],
       ),
     );
   }
