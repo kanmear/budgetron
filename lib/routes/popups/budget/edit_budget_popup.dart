@@ -33,7 +33,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
   Widget build(BuildContext context) {
     EntryCategory category = widget.budget.category.target!;
     widget.periodNotifier.value =
-        BudgetService.getPeriodById(widget.budget.budgetPeriodIndex);
+        BudgetService.getPeriodByIndex(widget.budget.budgetPeriodIndex);
     widget.textController.text = widget.budget.targetValue.toStringAsFixed(0);
     widget.switchNotifier.value = widget.budget.onMainPage;
 
@@ -179,7 +179,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
     return widget.textController.text !=
             budget.targetValue.toStringAsFixed(0) ||
         widget.periodNotifier.value !=
-            BudgetService.getPeriodById(budget.budgetPeriodIndex) ||
+            BudgetService.getPeriodByIndex(budget.budgetPeriodIndex) ||
         widget.switchNotifier.value != budget.onMainPage;
   }
 

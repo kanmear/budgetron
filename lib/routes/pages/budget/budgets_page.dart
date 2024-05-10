@@ -102,7 +102,7 @@ class BudgetListTileContainer extends StatelessWidget {
       children: [
         Align(
           alignment: Alignment.centerLeft,
-          child: Text(BudgetService.getPeriodById(period).name,
+          child: Text(BudgetService.getPeriodByIndex(period).name,
               style: BudgetronFonts.nunitoSize14Weight400Gray),
         ),
         const SizedBox(height: 8),

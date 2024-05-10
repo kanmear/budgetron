@@ -27,7 +27,7 @@ class BudgetOverviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final currency = Provider.of<AppData>(context).currency;
     final ValueNotifier<DatePeriod> datePeriodNotifier = ValueNotifier(
-        BudgetService.getPeriodById(budget.budgetPeriodIndex) ==
+        BudgetService.getPeriodByIndex(budget.budgetPeriodIndex) ==
                 BudgetPeriod.year
             ? DatePeriod.month
             : DatePeriod.day);
@@ -89,7 +89,8 @@ class BudgetProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final budgetPeriod = BudgetService.getPeriodById(budget.budgetPeriodIndex);
+    final budgetPeriod =
+        BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
     final now = DateTime.now();
 
     return Container(

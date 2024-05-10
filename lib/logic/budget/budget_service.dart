@@ -20,8 +20,7 @@ enum BudgetPeriod {
 }
 
 class BudgetService {
-  //TODO rename to getPeriodByIndex
-  static BudgetPeriod getPeriodById(int id) =>
+  static BudgetPeriod getPeriodByIndex(int id) =>
       BudgetPeriod.values.where((p) => p.periodIndex == id).first;
 
   static void createBudget(Budget budget, EntryCategory category) {
@@ -113,7 +112,7 @@ class BudgetService {
   static List<DateTime> calculateDatePeriod(int periodIndex, {DateTime? end}) {
     end ??= DateTime.now();
 
-    var period = getPeriodById(periodIndex);
+    var period = getPeriodByIndex(periodIndex);
     DateTime start;
 
     switch (period) {
@@ -134,7 +133,7 @@ class BudgetService {
   }
 
   static DateTime calculateResetDate(int periodIndex, DateTime fromDate) {
-    var period = getPeriodById(periodIndex);
+    var period = getPeriodByIndex(periodIndex);
 
     switch (period) {
       case BudgetPeriod.week:
