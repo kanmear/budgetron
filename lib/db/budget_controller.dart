@@ -53,6 +53,14 @@ class BudgetController {
   static void addBudgetHistory(BudgetHistory budgetHistory) =>
       _getBudgetHistoryBox().put(budgetHistory);
 
+  static Stream<List<BudgetHistory>> getBudgetHistories(int budgetId) {
+    return (_getBudgetHistoryBox().query()
+          ..link(BudgetHistory_.budget, Budget_.id.equals(budgetId))
+          ..order(BudgetHistory_.endDate, flags: Order.descending))
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
   static Box<Budget> _getBudgetBox() => ObjectBox.store.box<Budget>();
 
   static Box<BudgetHistory> _getBudgetHistoryBox() =>

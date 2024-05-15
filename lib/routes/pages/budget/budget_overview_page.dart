@@ -7,12 +7,14 @@ import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category.dart';
-import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
+import 'package:budgetron/models/budget/budget_history.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
@@ -56,8 +58,9 @@ class BudgetOverviewPage extends StatelessWidget {
                   if (snapshot.data?.isNotEmpty ?? false) {
                     entries = snapshot.data!;
                   }
+
                   return Column(children: [
-                    const BudgetHistoryOverview(),
+                    BudgetHistoryOverview(budget: budget),
                     const SizedBox(height: 8),
                     BudgetProgressBar(budget: budget, currency: currency),
                     const SizedBox(height: 24),
@@ -72,11 +75,121 @@ class BudgetOverviewPage extends StatelessWidget {
 }
 
 class BudgetHistoryOverview extends StatelessWidget {
-  const BudgetHistoryOverview({super.key});
+  const BudgetHistoryOverview({
+    super.key,
+    required this.budget,
+  });
+
+  final Budget budget;
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    var budgetHistoriesStream = BudgetController.getBudgetHistories(budget.id);
+    BudgetHistory currentBudgetHistory = BudgetHistory(
+        targetValue: budget.targetValue,
+        endValue: budget.currentValue,
+        budgetPeriodIndex: budget.budgetPeriodIndex,
+        endDate: DateTime.now());
+
+    return StreamBuilder(
+        stream: budgetHistoriesStream,
+        builder: (context, snapshot) {
+          if (snapshot.data?.isNotEmpty ?? false) {
+            final List<BudgetHistory> budgetHistories = [currentBudgetHistory];
+            budgetHistories.addAll(snapshot.data!);
+
+            return CustomPaint(
+                foregroundPainter: LinePainter(),
+                child: Container(
+                    height: 220,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(8))),
+                    child: LayoutBuilder(builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      //NOTE 8 is width of separators, 6 is the amount of separators between 7 columns
+                      var columnWidth =
+                          (constraints.maxWidth - (8 * 6)) * (1 / 7);
+
+                      return ListView.separated(
+                          reverse: true,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return BudgetHistoryColumn(
+                                width: columnWidth,
+                                history: budgetHistories[index]);
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(width: 8);
+                          },
+                          itemCount: budgetHistories.length);
+                    })));
+          } else {
+            return Center(
+                child: Text('No histories in database',
+                    style: BudgetronFonts.nunitoSize16Weight300Gray));
+          }
+        });
+  }
+}
+
+class LinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const double padding = 12;
+    const double column100percentHeight = 140;
+    const double lineHeight = column100percentHeight + padding;
+
+    final paint = Paint()
+      ..color = Colors.purple
+      ..strokeWidth = 2.0;
+
+    canvas.drawLine(Offset(padding, size.height - lineHeight),
+        Offset(size.width - padding, size.height - lineHeight), paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+class BudgetHistoryColumn extends StatelessWidget {
+  const BudgetHistoryColumn(
+      {super.key, required this.history, required this.width});
+
+  final BudgetHistory history;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    var endPercentage = (history.endValue / history.targetValue);
+    var height = _resolveHeight(endPercentage);
+
+    return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+            decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: const BorderRadius.all(Radius.circular(8))),
+            width: width,
+            height: height,
+            child: Center(
+                child: Text("${(endPercentage * 100).toStringAsFixed(0)}%",
+                    style: BudgetronFonts.nunitoSize12Weight400Gray))));
+  }
+
+  double _resolveHeight(double endPercentage) {
+    //NOTE 140 is 100%
+    double maxHeight = (220 - (12 * 2));
+    double minHeight = 25;
+    var height = endPercentage * 140;
+    if (height < minHeight) {
+      return minHeight;
+    } else if (height > maxHeight) {
+      return maxHeight;
+    }
+    return height;
   }
 }
 
