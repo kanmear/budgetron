@@ -103,8 +103,8 @@ class BudgetProgressBar extends StatelessWidget {
             ListTileWithProgressBar(
               leading: _getLeading(budget),
               trailing: _getTrailing(budget),
-              currentValue: 10,
-              totalValue: 100,
+              currentValue: budget.currentValue,
+              totalValue: budget.targetValue,
             ),
             const SizedBox(height: 4),
             Row(
