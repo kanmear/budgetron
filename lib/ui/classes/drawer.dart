@@ -4,6 +4,7 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/routes/pages/category/category_page.dart';
 import 'package:budgetron/routes/pages/settings/settings_page.dart';
 
+//FIX spacing
 class BudgetronDrawer extends StatelessWidget {
   const BudgetronDrawer({super.key});
 
@@ -11,18 +12,21 @@ class BudgetronDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Padding(
-        padding: const EdgeInsets.only(left: 8),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             SafeArea(
                 child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
               children: [
-                Text('Budgetron ', style: BudgetronFonts.nunitoSize18Weight600),
-                Text('v0.9', style: BudgetronFonts.nunitoSize18Weight600Gray),
+                Text('Budgetron ', style: BudgetronFonts.nunitoSize32Weight600),
+                Text('v0.9', style: BudgetronFonts.nunitoSize16Weight400Gray),
               ],
             )),
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
             const DrawerEntries()
           ],
         ),
@@ -39,18 +43,60 @@ class DrawerEntries extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        DrawerEntryTile(name: 'Categories', route: CategoriesPage()),
-        const DrawerEntryTile(name: 'Settings', route: SettingsPage())
+        const DrawerEntryTile(
+            name: 'Premium',
+            route: SettingsPage(),
+            icon: Icon(
+              Icons.star,
+              color: Colors.pinkAccent,
+            )),
+        const SizedBox(height: 16),
+        DrawerEntryTile(
+            name: 'Categories',
+            route: CategoriesPage(),
+            icon: const Icon(Icons.list)),
+        DrawerEntryTile(
+            name: 'Category groups',
+            route: CategoriesPage(),
+            icon: const Icon(Icons.list_alt)),
+        DrawerEntryTile(
+            name: 'Accounts',
+            route: CategoriesPage(),
+            icon: const Icon(Icons.credit_card_outlined)),
+        const SizedBox(height: 16),
+        DrawerEntryTile(
+            name: 'Data export',
+            route: CategoriesPage(),
+            icon: const Icon(Icons.output)),
+        DrawerEntryTile(
+            name: 'Backup',
+            route: CategoriesPage(),
+            icon: const Icon(Icons.cloud_upload_rounded)),
+        const SizedBox(height: 16),
+        const DrawerEntryTile(
+            name: 'Settings',
+            route: SettingsPage(),
+            icon: Icon(Icons.settings)),
+        DrawerEntryTile(
+            name: 'Support',
+            route: CategoriesPage(),
+            icon: const Icon(Icons.help)),
+        DrawerEntryTile(
+            name: 'About',
+            route: CategoriesPage(),
+            icon: const Icon(Icons.people)),
       ],
     );
   }
 }
 
 class DrawerEntryTile extends StatelessWidget {
-  final String name;
-  final StatelessWidget route;
+  const DrawerEntryTile(
+      {super.key, required this.name, required this.route, required this.icon});
 
-  const DrawerEntryTile({super.key, required this.name, required this.route});
+  final String name;
+  final Widget icon;
+  final StatelessWidget route;
 
   @override
   Widget build(BuildContext context) {
@@ -58,9 +104,15 @@ class DrawerEntryTile extends StatelessWidget {
         onTap: () => _navigateToRoute(context),
         child: Container(
           padding: const EdgeInsets.only(top: 8, bottom: 8),
-          child: Text(name,
-              textAlign: TextAlign.start,
-              style: BudgetronFonts.nunitoSize16Weight600),
+          child: Row(
+            children: [
+              icon,
+              const SizedBox(width: 8),
+              Text(name,
+                  textAlign: TextAlign.start,
+                  style: BudgetronFonts.nunitoSize16Weight600),
+            ],
+          ),
         ));
   }
 
