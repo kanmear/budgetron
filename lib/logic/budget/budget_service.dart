@@ -99,6 +99,7 @@ class BudgetService {
     if (now.isAfter(budget.resetDate)) {
       _addBudgetHistory(budget, now);
 
+      budget.entriesIDs = [];
       budget.currentValue = 0;
       budget.resetDate =
           calculateResetDate(budget.budgetPeriodIndex, budget.resetDate);
