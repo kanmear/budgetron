@@ -6,7 +6,7 @@ import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 class EditCategoryDialog extends StatefulWidget {

@@ -5,7 +5,7 @@ import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart'
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 

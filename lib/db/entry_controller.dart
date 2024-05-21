@@ -1,5 +1,5 @@
 import 'package:budgetron/db/object_box_helper.dart';
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/objectbox.g.dart';
 

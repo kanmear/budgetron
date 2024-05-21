@@ -6,7 +6,7 @@ import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/entry.dart';
 
 class MockDataGenerator {

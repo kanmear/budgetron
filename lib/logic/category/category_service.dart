@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';

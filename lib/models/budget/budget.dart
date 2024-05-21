@@ -1,6 +1,6 @@
 import 'package:objectbox/objectbox.dart';
 
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 
 @Entity()
 class Budget {

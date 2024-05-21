@@ -2,7 +2,7 @@ import 'package:budgetron/models/budget/budget_history.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/budget_controller.dart';
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:flutter/material.dart';
 
 enum BudgetPeriod {

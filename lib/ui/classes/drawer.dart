@@ -56,7 +56,7 @@ class DrawerEntries extends StatelessWidget {
             route: CategoriesPage(),
             icon: const Icon(Icons.list)),
         DrawerEntryTile(
-            name: 'Category groups',
+            name: 'Groups',
             route: CategoriesPage(),
             icon: const Icon(Icons.list_alt)),
         DrawerEntryTile(

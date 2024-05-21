@@ -7,7 +7,7 @@ import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/radio_list_tile.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/models/category.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 
 class NewCategoryDialog extends StatefulWidget {
