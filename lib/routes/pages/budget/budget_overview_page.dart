@@ -95,7 +95,7 @@ class BudgetHistoryOverview extends StatelessWidget {
         stream: budgetHistoriesStream,
         builder: (context, snapshot) {
           if (snapshot.data?.isNotEmpty ?? false) {
-            final List<BudgetHistory> budgetHistories = [currentBudgetHistory];
+            List<BudgetHistory> budgetHistories = [currentBudgetHistory];
             budgetHistories.addAll(snapshot.data!);
 
             return CustomPaint(
@@ -112,9 +112,14 @@ class BudgetHistoryOverview extends StatelessWidget {
                       //NOTE 8 is width of separators, 6 is the amount of separators between 7 columns
                       var columnWidth =
                           (constraints.maxWidth - (8 * 6)) * (1 / 7);
+                      var isReverse = true;
+                      if (budgetHistories.length <= 7) {
+                        isReverse = false;
+                        budgetHistories = budgetHistories.reversed.toList();
+                      }
 
                       return ListView.separated(
-                          reverse: true,
+                          reverse: isReverse,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             return BudgetHistoryColumn(
