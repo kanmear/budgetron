@@ -198,11 +198,38 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "8:5469569891971862756",
+      "lastPropertyId": "2:6937381489956180155",
+      "name": "CategoryGroup",
+      "properties": [
+        {
+          "id": "1:7234662887906523361",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6937381489956180155",
+          "name": "name",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "8:171540354239470572"
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:1237446207436357635",
+          "name": "categories",
+          "targetId": "4:4368116380135990787"
+        }
+      ]
     }
   ],
-  "lastEntityId": "7:1583697670119084162",
-  "lastIndexId": "7:3030426642169156134",
-  "lastRelationId": "0:0",
+  "lastEntityId": "8:5469569891971862756",
+  "lastIndexId": "8:171540354239470572",
+  "lastRelationId": "1:1237446207436357635",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

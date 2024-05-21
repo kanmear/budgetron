@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/routes/pages/group/group_page.dart';
 import 'package:budgetron/routes/pages/category/category_page.dart';
 import 'package:budgetron/routes/pages/settings/settings_page.dart';
 
@@ -55,10 +56,11 @@ class DrawerEntries extends StatelessWidget {
             name: 'Categories',
             route: CategoriesPage(),
             icon: const Icon(Icons.list)),
-        DrawerEntryTile(
-            name: 'Groups',
-            route: CategoriesPage(),
-            icon: const Icon(Icons.list_alt)),
+        const DrawerEntryTile(
+          name: 'Groups',
+          route: GroupsPage(),
+          icon: Icon(Icons.list_alt),
+        ),
         DrawerEntryTile(
             name: 'Accounts',
             route: CategoriesPage(),

@@ -20,6 +20,7 @@ class CategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        //TODO replace appbar with BudgetronApp bar (and everywhere else)
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Theme.of(context).colorScheme.background,
