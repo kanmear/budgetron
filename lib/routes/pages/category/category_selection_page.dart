@@ -2,95 +2,101 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/db/category_controller.dart';
-import 'package:budgetron/ui/classes/search_field.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/popups/category/new_category_popup.dart';
 
 class CategorySelectionPage extends StatelessWidget {
-  final ValueNotifier<String> nameFilter = ValueNotifier("");
-  final EntryCategoryType typeFilter;
-
   CategorySelectionPage({
     super.key,
-    required this.typeFilter,
+    required this.isMultipleSelection,
+    required this.categoryTypeNotifier,
   });
+
+  final ValueNotifier<EntryCategoryType> categoryTypeNotifier;
+  //REFACTOR can be made const by throwing out initialization of nameFilter
+  final ValueNotifier<String> nameFilter = ValueNotifier('');
+
+  final bool isMultipleSelection;
 
   @override
   Widget build(BuildContext context) {
-    var title = EntryCategoryType.expense == typeFilter
-        ? "Expense categories"
-        : "Income categories";
+    var title = isMultipleSelection ? 'Choose categories' : 'Choose category';
 
     return Scaffold(
         appBar:
             BudgetronAppBar(leading: const ArrowBackIconButton(), title: title),
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Column(
-          children: [
-            BudgetronSearchField(
-                hintText: "Search for a category", filter: nameFilter),
-            const SizedBox(height: 8),
-            CategoriesList(
+        body: Column(children: [
+          //TODO move to appbar
+          // BudgetronSearchField(
+          //     hintText: "Search for a category", filter: nameFilter),
+          BudgetronTabSwitch(
+              valueNotifier: categoryTypeNotifier,
+              tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
+              getTabName: (value) => value.toString()),
+          const SizedBox(height: 24),
+          CategoriesList(
               nameFilter: nameFilter,
-              typeFilter: typeFilter,
-            ),
-          ],
-        ),
+              categoryTypeNotifier: categoryTypeNotifier)
+        ]),
         floatingActionButton: BudgetronFloatingActionButtonWithPlus(
-          onPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) =>
-                  NewCategoryDialog(entryCategoryType: typeFilter)),
-        ));
+            onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => NewCategoryDialog(
+                    entryCategoryType: categoryTypeNotifier.value))));
   }
 }
 
 class CategoriesList extends StatelessWidget {
+  final ValueNotifier<EntryCategoryType> categoryTypeNotifier;
   final ValueNotifier<String> nameFilter;
-  final EntryCategoryType typeFilter;
 
   const CategoriesList({
     super.key,
     required this.nameFilter,
-    required this.typeFilter,
+    required this.categoryTypeNotifier,
   });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: StreamBuilder<List<EntryCategory>>(
-          stream: CategoryController.getCategories("", typeFilter),
-          builder: (context, snapshot) {
-            if (snapshot.data?.isNotEmpty ?? false) {
-              List<EntryCategory> categories = snapshot.data!;
-              categories.sort((a, b) => b.usages.compareTo(a.usages));
+      child: ValueListenableBuilder(
+        valueListenable: categoryTypeNotifier,
+        builder:
+            (BuildContext context, EntryCategoryType value, Widget? child) {
+          return StreamBuilder<List<EntryCategory>>(
+              stream: CategoryController.getCategories('', value),
+              builder: (context, snapshot) {
+                if (snapshot.data?.isNotEmpty ?? false) {
+                  List<EntryCategory> categories = snapshot.data!;
+                  categories.sort((a, b) => b.usages.compareTo(a.usages));
 
-              return ValueListenableBuilder(
-                  valueListenable: nameFilter,
-                  builder: (context, value, child) {
-                    return ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        for (var category in categories)
-                          if (category.name
-                              .toLowerCase()
-                              .contains(nameFilter.value.toLowerCase()))
-                            _categoryListTile(category, context)
-                      ],
-                    );
-                  });
-            } else {
-              return Center(
-                child: Text("No categories in database",
-                    style: BudgetronFonts.nunitoSize16Weight300Gray),
-              );
-            }
-          }),
+                  return ValueListenableBuilder(
+                      valueListenable: nameFilter,
+                      builder: (context, value, child) {
+                        return ListView(padding: EdgeInsets.zero, children: [
+                          for (var category in categories)
+                            if (category.name
+                                .toLowerCase()
+                                .contains(nameFilter.value.toLowerCase()))
+                              _categoryListTile(category, context)
+                        ]);
+                      });
+                } else {
+                  return Center(
+                    child: Text("No categories in database",
+                        style: BudgetronFonts.nunitoSize16Weight300Gray),
+                  );
+                }
+              });
+        },
+      ),
     );
   }
 

@@ -1,14 +1,11 @@
-enum EntryCategoryType { expense, income }
+enum EntryCategoryType {
+  expense(name: 'Expense'),
+  income(name: 'Income');
 
-class EntryCategoryMap {
-  static String getName(EntryCategoryType category) {
-    switch (category) {
-      case EntryCategoryType.expense:
-        return 'Expense';
-      case EntryCategoryType.income:
-        return 'Income';
-      default:
-        throw Exception('Not a valid EntryCategoryType value.');
-    }
-  }
+  final String name;
+
+  const EntryCategoryType({required this.name});
+
+  @override
+  toString() => name;
 }

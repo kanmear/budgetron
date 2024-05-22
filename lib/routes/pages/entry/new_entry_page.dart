@@ -4,10 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/ui/classes/tab_switch.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
@@ -45,7 +45,7 @@ class _NewEntryPageState extends State<NewEntryPage> {
                   EntryCategoryType.expense,
                   EntryCategoryType.income
                 ],
-                getTabName: (value) => EntryCategoryMap.getName(value)),
+                getTabName: (value) => value.toString()),
             EntryValueTextField(
               tabNotifier: widget.tabNotifier,
               textController: widget.textController,
@@ -198,8 +198,9 @@ class _CategoryFieldState extends State<CategoryField> {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                CategorySelectionPage(typeFilter: typeFilter)));
+            builder: (context) => CategorySelectionPage(
+                isMultipleSelection: false,
+                categoryTypeNotifier: widget.tabNotifier)));
 
     if (!mounted) return;
     callback.call(result);
