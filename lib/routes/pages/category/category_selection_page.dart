@@ -54,88 +54,84 @@ class CategorySelectionPage extends StatelessWidget {
 }
 
 class CategoriesList extends StatelessWidget {
-  final ValueNotifier<EntryCategoryType> categoryTypeNotifier;
-  final ValueNotifier<String> nameFilter;
-
   const CategoriesList({
     super.key,
     required this.nameFilter,
     required this.categoryTypeNotifier,
   });
 
+  final ValueNotifier<EntryCategoryType> categoryTypeNotifier;
+  final ValueNotifier<String> nameFilter;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ValueListenableBuilder(
-        valueListenable: categoryTypeNotifier,
-        builder:
-            (BuildContext context, EntryCategoryType value, Widget? child) {
-          return StreamBuilder<List<EntryCategory>>(
-              stream: CategoryController.getCategories('', value),
-              builder: (context, snapshot) {
-                if (snapshot.data?.isNotEmpty ?? false) {
-                  List<EntryCategory> categories = snapshot.data!;
-                  categories.sort((a, b) => b.usages.compareTo(a.usages));
+        child: ValueListenableBuilder(
+            valueListenable: categoryTypeNotifier,
+            builder:
+                (BuildContext context, EntryCategoryType value, Widget? child) {
+              return StreamBuilder<List<EntryCategory>>(
+                  stream: CategoryController.getCategories('', value),
+                  builder: (context, snapshot) {
+                    if (snapshot.data?.isNotEmpty ?? false) {
+                      List<EntryCategory> categories = snapshot.data!;
+                      categories.sort((a, b) => b.usages.compareTo(a.usages));
 
-                  return ValueListenableBuilder(
-                      valueListenable: nameFilter,
-                      builder: (context, value, child) {
-                        return ListView(padding: EdgeInsets.zero, children: [
-                          for (var category in categories)
-                            if (category.name
-                                .toLowerCase()
-                                .contains(nameFilter.value.toLowerCase()))
-                              _categoryListTile(category, context)
-                        ]);
-                      });
-                } else {
-                  return Center(
-                    child: Text("No categories in database",
-                        style: BudgetronFonts.nunitoSize16Weight300Gray),
-                  );
-                }
-              });
-        },
-      ),
-    );
+                      return ValueListenableBuilder(
+                          valueListenable: nameFilter,
+                          builder: (context, value, child) {
+                            return ListView.separated(
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return CategoryListTile(
+                                      category: categories[index]);
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const SizedBox(height: 8);
+                                },
+                                itemCount: categories.length);
+                          });
+                    } else {
+                      return Center(
+                          child: Text("No categories in database",
+                              style: BudgetronFonts.nunitoSize16Weight300Gray));
+                    }
+                  });
+            }));
   }
+}
 
-  InkWell _categoryListTile(EntryCategory category, BuildContext context) {
+class CategoryListTile extends StatelessWidget {
+  const CategoryListTile({super.key, required this.category});
+
+  final EntryCategory category;
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => _selectCategoryAndReturn(category, context),
-      child: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Icon(Icons.square_rounded,
-                        size: 18,
-                        color: CategoryService.stringToColor(category.color)),
-                  ),
-                  Text(
-                    category.name,
-                    style: BudgetronFonts.nunitoSize16Weight400,
-                  )
-                ],
-              )),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: Container(
-              height: 1,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.outline, width: 1)),
-            ),
-          ),
-        ],
-      ),
-    );
+        onTap: () => _selectCategoryAndReturn(category, context),
+        child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.surface),
+            child: Row(children: [
+              Container(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(Icons.square_rounded,
+                    size: 18,
+                    color: CategoryService.stringToColor(category.color)),
+              ),
+              Text(
+                category.name,
+                style: BudgetronFonts.nunitoSize16Weight400,
+              )
+            ])));
   }
 
-  void _selectCategoryAndReturn(EntryCategory category, BuildContext context) {
+  _selectCategoryAndReturn(EntryCategory category, BuildContext context) {
     Navigator.pop(context, category);
   }
 }
