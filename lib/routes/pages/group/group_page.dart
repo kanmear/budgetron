@@ -18,10 +18,10 @@ class GroupsPage extends StatelessWidget {
             leading: ArrowBackIconButton(), title: 'Groups'),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: const Column(children: [SizedBox(height: 8), GroupsList()]),
-        floatingActionButton: BudgetronFloatingActionButtonWithPlus(
+        floatingActionButton: BudgetronFloatingActionButton(
             onPressed: () => showDialog(
                 context: context,
-                builder: (BuildContext context) => const NewGroupDialog())));
+                builder: (BuildContext context) => NewGroupDialog())));
   }
 }
 

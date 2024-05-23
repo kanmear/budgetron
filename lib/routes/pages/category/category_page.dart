@@ -42,7 +42,7 @@ class CategoriesPage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: BudgetronFloatingActionButtonWithPlus(
+        floatingActionButton: BudgetronFloatingActionButton(
           onPressed: () => showDialog(
               context: context,
               builder: (BuildContext context) => const NewCategoryDialog()),

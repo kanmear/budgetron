@@ -199,7 +199,6 @@ class _CategoryFieldState extends State<CategoryField> {
         context,
         MaterialPageRoute(
             builder: (context) => CategorySelectionPage(
-                isMultipleSelection: false,
                 categoryTypeNotifier: widget.tabNotifier)));
 
     if (!mounted) return;
