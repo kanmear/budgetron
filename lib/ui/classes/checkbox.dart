@@ -1,41 +1,29 @@
 import 'package:flutter/material.dart';
 
-//NOTE is not used anywhere
-class ExpenseCheckbox extends StatefulWidget {
+class BudgetronCheckbox extends StatelessWidget {
+  const BudgetronCheckbox({super.key, required this.valueNotifier});
+
   final ValueNotifier<bool> valueNotifier;
 
-  const ExpenseCheckbox({super.key, required this.valueNotifier});
-  @override
-  State<ExpenseCheckbox> createState() => _ExpenseCheckboxState();
-}
-
-class _ExpenseCheckboxState extends State<ExpenseCheckbox> {
-  bool isChecked = false;
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.red;
-      } else {
-        return Colors.blue;
-      }
-    }
+    return SizedBox(
+        width: 20,
+        height: 20,
+        child: ValueListenableBuilder(
+            valueListenable: valueNotifier,
+            builder: (BuildContext context, value, Widget? child) {
+              return Checkbox(
+                  value: value,
+                  checkColor: Colors.white,
+                  fillColor: MaterialStateProperty.resolveWith(
+                      (states) => Theme.of(context).colorScheme.outlineVariant),
+                  onChanged: (bool? value) => _onChanged(value!),
+                  side: BorderSide.none);
+            }));
+  }
 
-    return Checkbox(
-      value: isChecked,
-      checkColor: Colors.white,
-      fillColor: MaterialStateProperty.resolveWith(getColor),
-      onChanged: (bool? value) {
-        setState(() {
-          isChecked = value!;
-          widget.valueNotifier.value = isChecked;
-        });
-      },
-    );
+  void _onChanged(bool value) {
+    valueNotifier.value = value;
   }
 }
