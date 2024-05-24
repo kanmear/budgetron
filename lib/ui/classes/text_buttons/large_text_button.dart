@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-//TODO clean up extra class
 class BudgetronLargeTextButton extends StatelessWidget {
   final List<Listenable> listenables;
   final Function isActive;
@@ -60,6 +59,7 @@ class BudgetronLargeTextButton extends StatelessWidget {
       isActive() ? backgroundColor : Theme.of(context).colorScheme.outline;
 }
 
+//TODO remove this one in favor of LargeButton
 class BudgetronBigTextButton extends StatelessWidget {
   final Function onTap;
   final String text;

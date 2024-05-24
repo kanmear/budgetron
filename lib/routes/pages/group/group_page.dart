@@ -66,7 +66,7 @@ class GroupListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return ListTile(
+        leading: Text(group.name, style: BudgetronFonts.nunitoSize14Weight400));
   }
 }
