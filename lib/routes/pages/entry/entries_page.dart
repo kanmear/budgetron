@@ -305,6 +305,8 @@ class EntryListTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
               color: Theme.of(context).colorScheme.surface),
           padding: const EdgeInsets.only(left: 8, right: 10, bottom: 8),
+          //APPROACH is there a better way to handle 'RenderBox was not laid out'?
+          //HACK height value is take from design
           height: 76,
           child: ListView.separated(
             itemCount: entries.length,

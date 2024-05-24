@@ -5,6 +5,8 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/groups_controller.dart';
 import 'package:budgetron/models/category/group.dart';
+import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/popups/group/new_group_popup.dart';
 
@@ -39,11 +41,12 @@ class GroupsList extends StatelessWidget {
               groups.sort((a, b) => a.name.compareTo(b.name));
 
               return ListView.separated(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
                   itemBuilder: (BuildContext context, int index) {
                     return GroupListTile(group: groups[index]);
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(width: 8);
+                    return const SizedBox(height: 8);
                   },
                   itemCount: groups.length);
             } else {
@@ -55,8 +58,6 @@ class GroupsList extends StatelessWidget {
           }),
     );
   }
-
-  void _goToGroupOverview(CategoryGroup group, BuildContext context) {}
 }
 
 class GroupListTile extends StatelessWidget {
@@ -66,7 +67,73 @@ class GroupListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        leading: Text(group.name, style: BudgetronFonts.nunitoSize14Weight400));
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => _goToGroupOverview(),
+      child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Theme.of(context).colorScheme.surface),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(group.name, style: BudgetronFonts.nunitoSize16Weight400),
+              const SizedBox(height: 8),
+              GroupCategoriesList(categories: group.categories.toList())
+            ],
+          )),
+    );
+  }
+
+  void _goToGroupOverview() {}
+}
+
+class GroupCategoriesList extends StatelessWidget {
+  const GroupCategoriesList({super.key, required this.categories});
+
+  final List<EntryCategory> categories;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        //APPROACH is there a better way to handle 'RenderBox was not laid out'?
+        //HACK height value is take from design
+        //HACK and 1 is subtracted to better align icon with text
+        //YIKES
+        height: 39,
+        child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (BuildContext context, int index) {
+              return GroupCategoryTile(category: categories[index]);
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(width: 8);
+            },
+            itemCount: categories.length));
+  }
+}
+
+class GroupCategoryTile extends StatelessWidget {
+  const GroupCategoryTile({super.key, required this.category});
+
+  final EntryCategory category;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant)),
+        child: Row(children: [
+          Container(
+              padding: const EdgeInsets.only(right: 4),
+              child: Icon(Icons.square_rounded,
+                  size: 18,
+                  color: CategoryService.stringToColor(category.color))),
+          Text(category.name, style: BudgetronFonts.nunitoSize16Weight400)
+        ]));
   }
 }
