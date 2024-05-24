@@ -99,9 +99,7 @@ class GroupCategoriesList extends StatelessWidget {
     return SizedBox(
         //APPROACH is there a better way to handle 'RenderBox was not laid out'?
         //HACK height value is take from design
-        //HACK and 1 is subtracted to better align icon with text
-        //YIKES
-        height: 39,
+        height: 40,
         child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
@@ -114,6 +112,7 @@ class GroupCategoriesList extends StatelessWidget {
   }
 }
 
+//TODO add optional X to remove categories
 class GroupCategoryTile extends StatelessWidget {
   const GroupCategoryTile({super.key, required this.category});
 
@@ -127,7 +126,7 @@ class GroupCategoryTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
             border: Border.all(
                 color: Theme.of(context).colorScheme.outlineVariant)),
-        child: Row(children: [
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
           Container(
               padding: const EdgeInsets.only(right: 4),
               child: Icon(Icons.square_rounded,

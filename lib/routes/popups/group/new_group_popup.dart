@@ -6,6 +6,7 @@ import 'package:budgetron/models/category/group.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/select_button.dart';
+import 'package:budgetron/routes/pages/group/group_page.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
@@ -47,10 +48,13 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
           ValueListenableBuilder(
               valueListenable: textNotifier,
               builder: (BuildContext context, String textValue, _) {
-                return BudgetronSelectButton(
-                    onTap: () =>
-                        _navigateToCategorySelection(context, _setCategories),
-                    text: Text(textValue, style: styleNotifier.value));
+                return Column(children: [
+                  BudgetronSelectButton(
+                      onTap: () =>
+                          _navigateToCategorySelection(context, _setCategories),
+                      text: Text(textValue, style: styleNotifier.value)),
+                  _resolveCategoriesDisplay()
+                ]);
               }),
           const SizedBox(height: 24),
           BudgetronLargeTextButton(
@@ -113,5 +117,24 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
 
     GroupsController.addGroup(group);
     Navigator.pop(context);
+  }
+
+  Widget _resolveCategoriesDisplay() {
+    var categories = widget.categoriesNotifier.value;
+
+    if (categories.isNotEmpty) {
+      return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        const SizedBox(height: 8),
+        SizedBox(
+            //HACK height value is take from design
+            height: 130,
+            child: SingleChildScrollView(
+                child: Wrap(spacing: 8, runSpacing: 8, children: [
+              for (var category in categories)
+                GroupCategoryTile(category: category)
+            ])))
+      ]);
+    }
+    return const SizedBox();
   }
 }
