@@ -12,6 +12,7 @@ import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 
+//TODO check if use of state is necessary here
 class NewGroupDialog extends StatefulWidget {
   NewGroupDialog({super.key});
 
@@ -70,15 +71,8 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
   void _setCategories(List<EntryCategory> groups) {
     setState(() {
       widget.categoriesNotifier.value = groups;
-      if (groups.isNotEmpty) {
-        //FIX 1 category != categories
-        textNotifier.value = "${groups.length} categories chosen";
-        styleNotifier.value = BudgetronFonts.nunitoSize16Weight400;
-      } else {
-        textNotifier.value = 'Choose categories to group';
-        styleNotifier.value = BudgetronFonts.nunitoSize16Weight400Hint;
-      }
     });
+    _updateCategorySelectText(groups.length);
   }
 
   Future<void> _navigateToCategorySelection(
@@ -102,9 +96,8 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
   void _setDefaultValues() {
     setState(() {
       widget.categoriesNotifier.value = [];
-      textNotifier.value = 'Choose categories to group';
-      styleNotifier.value = BudgetronFonts.nunitoSize16Weight400Hint;
     });
+    _updateCategorySelectText(0);
   }
 
   bool _isValid() =>
@@ -131,10 +124,31 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
             child: SingleChildScrollView(
                 child: Wrap(spacing: 8, runSpacing: 8, children: [
               for (var category in categories)
-                GroupCategoryTile(category: category)
+                GroupCategoryTile(
+                    category: category,
+                    isRemovable: true,
+                    onCloseTap: _removeCategory)
             ])))
       ]);
     }
     return const SizedBox();
+  }
+
+  void _removeCategory(EntryCategory category) {
+    setState(() {
+      widget.categoriesNotifier.value.remove(category);
+    });
+    _updateCategorySelectText(widget.categoriesNotifier.value.length);
+  }
+
+  void _updateCategorySelectText(int length) {
+    if (length == 0) {
+      textNotifier.value = 'Choose categories to group';
+      styleNotifier.value = BudgetronFonts.nunitoSize16Weight400Hint;
+    } else {
+      textNotifier.value =
+          "$length ${length == 1 ? 'category' : 'categories'} chosen";
+      styleNotifier.value = BudgetronFonts.nunitoSize16Weight400;
+    }
   }
 }

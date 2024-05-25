@@ -112,11 +112,16 @@ class GroupCategoriesList extends StatelessWidget {
   }
 }
 
-//TODO add optional X to remove categories
 class GroupCategoryTile extends StatelessWidget {
-  const GroupCategoryTile({super.key, required this.category});
+  const GroupCategoryTile(
+      {super.key,
+      required this.category,
+      this.isRemovable = false,
+      this.onCloseTap});
 
   final EntryCategory category;
+  final Function? onCloseTap;
+  final bool isRemovable;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +137,21 @@ class GroupCategoryTile extends StatelessWidget {
               child: Icon(Icons.square_rounded,
                   size: 18,
                   color: CategoryService.stringToColor(category.color))),
-          Text(category.name, style: BudgetronFonts.nunitoSize16Weight400)
+          Text(category.name, style: BudgetronFonts.nunitoSize16Weight400),
+          _resolveTrailing()
         ]));
+  }
+
+  Widget _resolveTrailing() {
+    if (isRemovable) {
+      return Row(children: [
+        const SizedBox(width: 16),
+        GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => onCloseTap!(category),
+            child: const Icon(Icons.close, size: 18))
+      ]);
+    }
+    return const SizedBox();
   }
 }
