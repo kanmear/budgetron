@@ -28,6 +28,7 @@ class BudgetOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currency = Provider.of<AppData>(context).currency;
+    //FIX value notifier is redundant
     final ValueNotifier<DatePeriod> datePeriodNotifier = ValueNotifier(
         BudgetService.getPeriodByIndex(budget.budgetPeriodIndex) ==
                 BudgetPeriod.year
