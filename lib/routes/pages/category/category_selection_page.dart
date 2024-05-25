@@ -13,22 +13,23 @@ import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/popups/category/new_category_popup.dart';
 
 class CategorySelectionPage extends StatelessWidget {
-  CategorySelectionPage({
-    super.key,
-    this.isMultipleSelection = false,
-    required this.categoryTypeNotifier,
-  });
+  CategorySelectionPage(
+      {super.key,
+      this.isMultipleSelection = false,
+      this.categories,
+      required this.categoryTypeNotifier});
 
   final ValueNotifier<EntryCategoryType> categoryTypeNotifier;
   final bool isMultipleSelection;
 
   //REFACTOR can be made const by throwing out initialization of these
   final ValueNotifier<String> nameFilter = ValueNotifier('');
-  final List<EntryCategory> selectedCategories = [];
+  final List<EntryCategory>? categories;
 
   @override
   Widget build(BuildContext context) {
     var title = "Choose ${isMultipleSelection ? 'categories' : 'category'}";
+    List<EntryCategory> selectedCategories = categories ?? [];
 
     return Scaffold(
         appBar:
@@ -49,10 +50,12 @@ class CategorySelectionPage extends StatelessWidget {
               isMultipleSelection: isMultipleSelection,
               selectedCategories: selectedCategories)
         ]),
-        floatingActionButton: _resolveFloatingButton(context));
+        floatingActionButton:
+            _resolveFloatingButton(context, selectedCategories));
   }
 
-  Widget _resolveFloatingButton(BuildContext context) {
+  Widget _resolveFloatingButton(
+      BuildContext context, List<EntryCategory> selectedCategories) {
     if (isMultipleSelection) {
       return BudgetronFloatingActionButton(
           onPressed: () => {Navigator.pop(context, selectedCategories)},

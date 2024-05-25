@@ -82,6 +82,7 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
         MaterialPageRoute(
             builder: (context) => CategorySelectionPage(
                 categoryTypeNotifier: ValueNotifier(EntryCategoryType.expense),
+                categories: widget.categoriesNotifier.value,
                 isMultipleSelection: true)));
 
     if (!mounted) return;
