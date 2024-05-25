@@ -121,6 +121,7 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
         const SizedBox(height: 8),
         SizedBox(
             //HACK height value is take from design
+            //TODO change height dynamically
             height: 130,
             child: SingleChildScrollView(
                 child: Wrap(spacing: 8, runSpacing: 8, children: [
