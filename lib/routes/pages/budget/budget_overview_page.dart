@@ -320,7 +320,6 @@ class BudgetEntries extends StatelessWidget {
               entriesMap: entriesMap,
               day: day,
               datePeriod: datePeriod,
-              datePeriodNotifier: datePeriodNotifier,
               currency: currency);
         },
         separatorBuilder: (BuildContext context, int index) {

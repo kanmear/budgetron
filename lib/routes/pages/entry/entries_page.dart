@@ -91,7 +91,6 @@ class EntriesListView extends StatelessWidget {
             entriesMap: entriesMap,
             day: day,
             datePeriod: datePeriod,
-            datePeriodNotifier: datePeriodNotifier,
             currency: currency);
       },
       separatorBuilder: (BuildContext context, int index) {
@@ -112,7 +111,6 @@ class EntriesListView extends StatelessWidget {
 
 class EntryListTileContainer extends StatelessWidget {
   final Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap;
-  final ValueNotifier<DatePeriod> datePeriodNotifier;
   final DatePeriod datePeriod;
   final String currency;
   final DateTime day;
@@ -122,7 +120,6 @@ class EntryListTileContainer extends StatelessWidget {
     required this.entriesMap,
     required this.day,
     required this.datePeriod,
-    required this.datePeriodNotifier,
     required this.currency,
   });
 
@@ -153,7 +150,7 @@ class EntryListTileContainer extends StatelessWidget {
                     category: key,
                     entries: entries[key]!,
                     isExpandable: datePeriod == DatePeriod.day,
-                    datePeriodNotifier: datePeriodNotifier,
+                    datePeriod: datePeriod,
                   ),
               ]),
             ],
@@ -199,7 +196,7 @@ class EntryListTileContainer extends StatelessWidget {
 
 class EntryListTile extends StatelessWidget {
   final ValueNotifier<bool> isExpandedListenable = ValueNotifier(false);
-  final ValueNotifier<DatePeriod> datePeriodNotifier;
+  final DatePeriod datePeriod;
   final EntryCategory category;
   final List<Entry> entries;
   final bool isExpandable;
@@ -209,7 +206,7 @@ class EntryListTile extends StatelessWidget {
     required this.entries,
     required this.category,
     required this.isExpandable,
-    required this.datePeriodNotifier,
+    required this.datePeriod,
   });
 
   @override
@@ -262,7 +259,7 @@ class EntryListTile extends StatelessWidget {
   }
 
   _resolveWrapperWidget(BuildContext context, Widget child) {
-    if (datePeriodNotifier.value != DatePeriod.day) {
+    if (datePeriod != DatePeriod.day) {
       return SizedBox(child: child);
     }
 
