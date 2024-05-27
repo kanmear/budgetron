@@ -9,6 +9,7 @@ import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/popups/group/new_group_popup.dart';
+import 'package:budgetron/routes/pages/group/group_overview_page.dart';
 
 class GroupsPage extends StatelessWidget {
   const GroupsPage({super.key});
@@ -69,7 +70,7 @@ class GroupListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => _goToGroupOverview(),
+      onTap: () => _goToGroupOverview(context),
       child: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
@@ -86,7 +87,8 @@ class GroupListTile extends StatelessWidget {
     );
   }
 
-  void _goToGroupOverview() {}
+  void _goToGroupOverview(BuildContext context) => Navigator.push(context,
+      MaterialPageRoute(builder: (context) => GroupOverviewPage(group: group)));
 }
 
 class GroupCategoriesList extends StatelessWidget {

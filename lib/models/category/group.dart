@@ -7,6 +7,7 @@ class CategoryGroup {
 
   @Unique()
   String name;
+  //TODO add orderIndex
 
   final categories = ToMany<EntryCategory>();
 
