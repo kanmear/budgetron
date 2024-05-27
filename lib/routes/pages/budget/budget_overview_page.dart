@@ -314,11 +314,11 @@ class BudgetEntries extends StatelessWidget {
         padding: EdgeInsets.zero,
         itemCount: entryDates.length,
         itemBuilder: (context, index) {
-          var day = entryDates[index];
+          var groupingDate = entryDates[index];
 
           return EntryListTileContainer(
-              entriesMap: entriesMap,
-              day: day,
+              entriesToCategoryMap: entriesMap[groupingDate]!,
+              groupingDate: groupingDate,
               datePeriod: datePeriod,
               currency: currency);
         },

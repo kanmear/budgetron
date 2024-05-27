@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/enums/date_period.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
@@ -85,11 +86,11 @@ class EntriesListView extends StatelessWidget {
       padding: EdgeInsets.zero,
       itemCount: entryDates.length,
       itemBuilder: (context, index) {
-        var day = entryDates[index];
+        var groupingDate = entryDates[index];
 
         return EntryListTileContainer(
-            entriesMap: entriesMap,
-            day: day,
+            entriesToCategoryMap: entriesMap[groupingDate]!,
+            groupingDate: groupingDate,
             datePeriod: datePeriod,
             currency: currency);
       },
@@ -110,23 +111,21 @@ class EntriesListView extends StatelessWidget {
 }
 
 class EntryListTileContainer extends StatelessWidget {
-  final Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap;
+  final Map<EntryCategory, List<Entry>> entriesToCategoryMap;
   final DatePeriod datePeriod;
   final String currency;
-  final DateTime day;
+  final DateTime groupingDate;
 
   const EntryListTileContainer({
     super.key,
-    required this.entriesMap,
-    required this.day,
+    required this.entriesToCategoryMap,
+    required this.groupingDate,
     required this.datePeriod,
     required this.currency,
   });
 
   @override
   Widget build(BuildContext context) {
-    Map<EntryCategory, List<Entry>> entries = entriesMap[day]!;
-
     return Container(
       color: Theme.of(context).colorScheme.background,
       child: Column(
@@ -139,16 +138,16 @@ class EntryListTileContainer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _resolveContainerTitle(),
-                    _resolveContainerSumValue(entries)
+                    _resolveContainerSumValue(entriesToCategoryMap)
                   ],
                 ),
               ),
               const SizedBox(height: 16),
               Column(children: [
-                for (var key in entries.keys)
+                for (var category in entriesToCategoryMap.keys)
                   EntryListTile(
-                    category: key,
-                    entries: entries[key]!,
+                    category: category,
+                    entries: entriesToCategoryMap[category]!,
                     isExpandable: datePeriod == DatePeriod.day,
                     datePeriod: datePeriod,
                   ),
@@ -161,22 +160,23 @@ class EntryListTileContainer extends StatelessWidget {
   }
 
   Widget _resolveContainerTitle() {
-    if (entriesMap.keys.first == day) {
-      DateTime now = DateTime.now();
+    //if grouped by day and containers date is today => display today
+    DateTime now = DateTime.now();
 
-      if (datePeriod == DatePeriod.day &&
-          day == DateTime(now.year, now.month, now.day)) {
-        return Text(
-          "Today",
-          style: BudgetronFonts.nunitoSize16Weight600,
-        );
-      }
+    if (datePeriod == DatePeriod.day &&
+        BudgetronDateUtils.stripTime(groupingDate) ==
+            DateTime(now.year, now.month, now.day)) {
+      return Text(
+        "Today",
+        style: BudgetronFonts.nunitoSize16Weight600,
+      );
     }
 
+    //otherwise display date according to DateSelector
     return Text(
         datePeriod == DatePeriod.day
-            ? DateFormat.yMMMd().format(day)
-            : DateFormat.yMMM().format(day),
+            ? DateFormat.yMMMd().format(groupingDate)
+            : DateFormat.yMMM().format(groupingDate),
         style: BudgetronFonts.nunitoSize16Weight600);
   }
 

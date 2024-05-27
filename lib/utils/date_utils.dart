@@ -17,4 +17,7 @@ class BudgetronDateUtils {
     return DateTime(
         date.year, date.month, date.day, date.hour, date.minute, date.second);
   }
+
+  static DateTime stripTime(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
 }
