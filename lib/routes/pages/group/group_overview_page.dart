@@ -1,3 +1,4 @@
+import 'package:budgetron/routes/pages/group/widgets/group_overview_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -62,7 +63,7 @@ class GroupOverviewPage extends StatelessWidget {
                                   .toList();
 
                               return Column(children: [
-                                GroupOverview(group: group),
+                                GroupOverviewChart(entries: modifiedEntries),
                                 const SizedBox(height: 24),
                                 AmountOfEntries(
                                     amountOfEntries: modifiedEntries.length),
@@ -86,17 +87,6 @@ class GroupOverviewPage extends StatelessWidget {
     var endDate = BudgetronDateUtils.shiftToEndOfMonth(now);
 
     return [DateTime(now.year, now.month), endDate];
-  }
-}
-
-class GroupOverview extends StatelessWidget {
-  const GroupOverview({super.key, required this.group});
-
-  final CategoryGroup group;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox();
   }
 }
 
