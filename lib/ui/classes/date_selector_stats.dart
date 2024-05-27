@@ -12,10 +12,12 @@ class DateSelectorStats extends StatelessWidget {
   const DateSelectorStats(
       {super.key,
       required this.datePeriodNotifier,
-      required this.dateTimeNotifier});
+      required this.dateTimeNotifier,
+      required this.periodItems});
 
   final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
+  final List<DatePeriod> periodItems;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +25,9 @@ class DateSelectorStats extends StatelessWidget {
       height: 56,
       color: Theme.of(context).colorScheme.surface,
       child: DatePeriodSelector(
-        datePeriodNotifier: datePeriodNotifier,
-        dateTimeNotifier: dateTimeNotifier,
-      ),
+          datePeriodNotifier: datePeriodNotifier,
+          dateTimeNotifier: dateTimeNotifier,
+          items: periodItems),
     );
   }
 }
@@ -34,17 +36,18 @@ class DatePeriodSelector extends StatefulWidget {
   const DatePeriodSelector(
       {super.key,
       required this.datePeriodNotifier,
-      required this.dateTimeNotifier});
+      required this.dateTimeNotifier,
+      required this.items});
 
   final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
+  final List<DatePeriod> items;
 
   @override
   State<DatePeriodSelector> createState() => _DatePeriodSelectorState();
 }
 
 class _DatePeriodSelectorState extends State<DatePeriodSelector> {
-  var items = [DatePeriod.month, DatePeriod.year];
   var now = DateTime.now();
 
   @override
@@ -59,7 +62,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
         DropdownButton(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           value: widget.datePeriodNotifier.value,
-          items: items.map((DatePeriod period) {
+          items: widget.items.map((DatePeriod period) {
             return DropdownMenuItem<DatePeriod>(
                 value: period, child: _dateSelectorItem(period));
           }).toList(),
@@ -87,7 +90,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
   _dateSelectorDisplayedItem(BuildContext context) {
     var color = Theme.of(context).colorScheme.surface;
 
-    return items.map((period) {
+    return widget.items.map((period) {
       return Align(
         alignment: Alignment.center,
         child: Row(

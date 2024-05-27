@@ -73,9 +73,9 @@ class StatsView extends StatelessWidget {
             ),
           ),
           DateSelectorStats(
-            datePeriodNotifier: datePeriodNotifier,
-            dateTimeNotifier: dateTimeNotifier,
-          ),
+              datePeriodNotifier: datePeriodNotifier,
+              dateTimeNotifier: dateTimeNotifier,
+              periodItems: const [DatePeriod.month, DatePeriod.year]),
         ],
       ),
     );
