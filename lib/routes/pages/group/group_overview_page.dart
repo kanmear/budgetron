@@ -17,6 +17,7 @@ import 'package:budgetron/ui/classes/date_selector_stats.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/pages/group/widgets/group_overview_chart.dart';
 
+//REFACTOR tons of glaring issues
 class GroupOverviewPage extends StatelessWidget {
   GroupOverviewPage({super.key, required this.group});
 
@@ -48,10 +49,12 @@ class GroupOverviewPage extends StatelessWidget {
                       builder: (BuildContext context,
                           AsyncSnapshot<List<Entry>> snapshot) {
                         List<Entry> entries = [];
+                        var isEitherOr = false;
                         if (snapshot.data?.isNotEmpty ?? false) {
+                          //NOTE does this body work in async?
                           entries = snapshot.data!;
+                          isEitherOr = _resolveIfOnlyOneType(entries);
                         }
-                        var isEitherOr = _resolveIfOnlyOneType(entries);
 
                         return AnimatedBuilder(
                             animation: Listenable.merge([
@@ -62,9 +65,15 @@ class GroupOverviewPage extends StatelessWidget {
                             builder: (BuildContext context, Widget? child) {
                               var dates = dateTimeNotifier.value;
                               var modifiedEntries = entries
+                                  //TODO extract this lovecraft horror
                                   .where((entry) =>
-                                      entry.dateTime.isAfter(dates.first) &&
-                                      entry.dateTime.isBefore(dates.last))
+                                      (entry.dateTime.isAfter(dates.first) ||
+                                              entry.dateTime.isAtSameMomentAs(
+                                                  dates.first)) &&
+                                          (entry.dateTime
+                                              .isBefore(dates.last)) ||
+                                      entry.dateTime
+                                          .isAtSameMomentAs(dates.last))
                                   .toList();
 
                               return Column(children: [
@@ -102,8 +111,11 @@ class GroupOverviewPage extends StatelessWidget {
     return [DateTime(now.year, now.month), endDate];
   }
 
-  bool _resolveIfOnlyOneType(List<Entry> entries) =>
-      !entries.any((entry) => !entry.category.target!.isExpense);
+  bool _resolveIfOnlyOneType(List<Entry> entries) {
+    var isExpense = entries.first.category.target!.isExpense;
+    return !entries
+        .any((entry) => entry.category.target!.isExpense != isExpense);
+  }
 }
 
 class GroupAmountOfEntries extends StatelessWidget {

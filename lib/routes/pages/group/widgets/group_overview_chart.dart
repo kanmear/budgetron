@@ -61,28 +61,28 @@ class GroupOverviewChart extends StatelessWidget {
           });
     } else {
       //FIX code duplication
-      return Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16),
-          child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: Theme.of(context).colorScheme.surface),
-              padding: const EdgeInsets.only(
-                  top: 24, left: 10, right: 10, bottom: 12),
-              child: Column(children: [
-                BudgetronPieChart(
-                    data: [
-                      PieChartData(
-                          color: Theme.of(context).colorScheme.outline,
-                          value: 1,
-                          name: '')
-                    ],
-                    child: Center(
-                        child: Text(
-                      'No data to display',
-                      style: BudgetronFonts.nunitoSize16Weight300Gray,
-                    )))
-              ])));
+      //FIX incorrectly displayed
+      //FIX missing tabs
+      return Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+              color: Theme.of(context).colorScheme.surface),
+          padding:
+              const EdgeInsets.only(top: 24, left: 10, right: 10, bottom: 12),
+          child: Column(children: [
+            BudgetronPieChart(
+                data: [
+                  PieChartData(
+                      color: Theme.of(context).colorScheme.outline,
+                      value: 1,
+                      name: '')
+                ],
+                child: Center(
+                    child: Text(
+                  'No data to display',
+                  style: BudgetronFonts.nunitoSize16Weight300Gray,
+                )))
+          ]));
     }
   }
 
