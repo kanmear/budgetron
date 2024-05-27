@@ -1,9 +1,9 @@
-import 'package:budgetron/routes/pages/group/widgets/group_overview_chart.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
@@ -15,7 +15,7 @@ import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/ui/classes/date_selector_stats.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
-import 'package:budgetron/routes/pages/budget/budget_overview_page.dart';
+import 'package:budgetron/routes/pages/group/widgets/group_overview_chart.dart';
 
 class GroupOverviewPage extends StatelessWidget {
   GroupOverviewPage({super.key, required this.group});
@@ -25,6 +25,7 @@ class GroupOverviewPage extends StatelessWidget {
       ValueNotifier(DatePeriod.month);
   final ValueNotifier<List<DateTime>> dateTimeNotifier =
       ValueNotifier(_calculateDates());
+  final ValueNotifier<bool> expenseFilterNotifier = ValueNotifier(true);
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +51,14 @@ class GroupOverviewPage extends StatelessWidget {
                         if (snapshot.data?.isNotEmpty ?? false) {
                           entries = snapshot.data!;
                         }
+                        var isEitherOr = _resolveIfOnlyOneType(entries);
 
                         return AnimatedBuilder(
-                            animation: Listenable.merge(
-                                [datePeriodNotifier, dateTimeNotifier]),
+                            animation: Listenable.merge([
+                              datePeriodNotifier,
+                              dateTimeNotifier,
+                              expenseFilterNotifier
+                            ]),
                             builder: (BuildContext context, Widget? child) {
                               var dates = dateTimeNotifier.value;
                               var modifiedEntries = entries
@@ -63,14 +68,22 @@ class GroupOverviewPage extends StatelessWidget {
                                   .toList();
 
                               return Column(children: [
-                                GroupOverviewChart(entries: modifiedEntries),
+                                GroupOverviewChart(
+                                    entries: modifiedEntries,
+                                    isEitherOr: isEitherOr,
+                                    isExpenseFilterNotifier:
+                                        expenseFilterNotifier),
                                 const SizedBox(height: 24),
-                                AmountOfEntries(
-                                    amountOfEntries: modifiedEntries.length),
+                                GroupAmountOfEntries(
+                                    entries: modifiedEntries,
+                                    isEitherOr: isEitherOr,
+                                    isExpense: expenseFilterNotifier.value),
                                 const SizedBox(height: 24),
                                 GroupEntries(
                                     entries: modifiedEntries,
-                                    datePeriod: datePeriodNotifier.value)
+                                    datePeriod: datePeriodNotifier.value,
+                                    isEitherOr: isEitherOr,
+                                    isExpense: expenseFilterNotifier.value)
                               ]);
                             });
                       }))),
@@ -88,18 +101,59 @@ class GroupOverviewPage extends StatelessWidget {
 
     return [DateTime(now.year, now.month), endDate];
   }
+
+  bool _resolveIfOnlyOneType(List<Entry> entries) =>
+      !entries.any((entry) => !entry.category.target!.isExpense);
+}
+
+class GroupAmountOfEntries extends StatelessWidget {
+  const GroupAmountOfEntries(
+      {super.key,
+      required this.entries,
+      required this.isEitherOr,
+      required this.isExpense});
+
+  final List<Entry> entries;
+  final bool isEitherOr;
+  final bool isExpense;
+
+  @override
+  Widget build(BuildContext context) {
+    var length = isEitherOr
+        ? entries.length
+        : entries
+            .where((entry) => entry.category.target!.isExpense == isExpense)
+            .length;
+
+    return Center(
+        child: Text("$length entries",
+            style: BudgetronFonts.nunitoSize16Weight400Gray));
+  }
 }
 
 class GroupEntries extends StatelessWidget {
   const GroupEntries(
-      {super.key, required this.entries, required this.datePeriod});
+      {super.key,
+      required this.entries,
+      required this.datePeriod,
+      required this.isEitherOr,
+      required this.isExpense});
 
   final DatePeriod datePeriod;
   final List<Entry> entries;
+  final bool isEitherOr;
+  final bool isExpense;
 
   @override
   Widget build(BuildContext context) {
     var currency = Provider.of<AppData>(context).currency;
+
+    var selectedEntries = entries;
+    if (!isEitherOr) {
+      selectedEntries = entries
+          .where((entry) => entry.category.target!.isExpense == isExpense)
+          .toList();
+    }
 
     Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
     List<DateTime> entryDates = [];
@@ -108,7 +162,7 @@ class GroupEntries extends StatelessWidget {
         datePeriod == DatePeriod.month ? DatePeriod.day : DatePeriod.month;
 
     EntryService.formEntriesData(
-        dateGroupPeriod, entries, entriesMap, entryDates);
+        dateGroupPeriod, selectedEntries, entriesMap, entryDates);
 
     return Expanded(
         child: ListView.separated(

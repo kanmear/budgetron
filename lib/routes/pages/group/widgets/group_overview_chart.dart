@@ -9,32 +9,56 @@ import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart'
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
 class GroupOverviewChart extends StatelessWidget {
+  final ValueNotifier<bool> isExpenseFilterNotifier;
   final List<Entry> entries;
+  final bool isEitherOr;
 
-  const GroupOverviewChart({super.key, required this.entries});
+  const GroupOverviewChart(
+      {super.key,
+      required this.entries,
+      required this.isEitherOr,
+      required this.isExpenseFilterNotifier});
 
   @override
   Widget build(BuildContext context) {
     if (entries.isNotEmpty) {
-      double totalValue = EntryService.calculateTotalValue(entries);
-      List<PieChartData> data = _getData(entries);
+      return ValueListenableBuilder(
+          valueListenable: isExpenseFilterNotifier,
+          builder: (BuildContext context, bool isExpense, Widget? child) {
+            var selectedEntries = isEitherOr
+                ? entries
+                : entries
+                    .where((entry) =>
+                        entry.category.target!.isExpense == isExpense)
+                    .toList();
 
-      return Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-              color: Theme.of(context).colorScheme.surface),
-          padding:
-              const EdgeInsets.only(top: 12, left: 10, right: 10, bottom: 12),
-          child: Column(children: [
-            // ExpenseFilterTabs(isExpenseFilterNotifier),
-            const SizedBox(height: 20),
-            BudgetronPieChart(
-              data: data,
-              child: _formChild(totalValue),
-            ),
-            const SizedBox(height: 2),
-            TopThreeCategories(data: data, total: totalValue)
-          ]));
+            double totalValue =
+                EntryService.calculateTotalValue(selectedEntries);
+            List<PieChartData> data = _getData(selectedEntries);
+
+            return Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    color: Theme.of(context).colorScheme.surface),
+                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
+                child: Column(children: [
+                  ExpenseFilterTabs(isExpenseFilterNotifier,
+                      isEnabled: !isEitherOr),
+                  BudgetronPieChart(
+                    data: data.isNotEmpty
+                        ? data
+                        : [
+                            PieChartData(
+                                color: Theme.of(context).colorScheme.outline,
+                                value: 1,
+                                name: '')
+                          ],
+                    child: _formChild(totalValue),
+                  ),
+                  const SizedBox(height: 2),
+                  TopThreeCategories(data: data, total: totalValue)
+                ]));
+          });
     } else {
       //FIX code duplication
       return Padding(
@@ -44,10 +68,8 @@ class GroupOverviewChart extends StatelessWidget {
                   borderRadius: BorderRadius.circular(2),
                   color: Theme.of(context).colorScheme.surface),
               padding: const EdgeInsets.only(
-                  top: 12, left: 10, right: 10, bottom: 12),
+                  top: 24, left: 10, right: 10, bottom: 12),
               child: Column(children: [
-                // ExpenseFilterTabs(isExpenseFilterNotifier),
-                const SizedBox(height: 20),
                 BudgetronPieChart(
                     data: [
                       PieChartData(
@@ -98,23 +120,32 @@ class GroupOverviewChart extends StatelessWidget {
 
 class ExpenseFilterTabs extends StatelessWidget {
   final ValueNotifier<bool> isExpenseFilterNotifier;
+  final bool isEnabled;
 
-  const ExpenseFilterTabs(this.isExpenseFilterNotifier, {super.key});
+  const ExpenseFilterTabs(this.isExpenseFilterNotifier,
+      {super.key, required this.isEnabled});
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: isExpenseFilterNotifier,
-        builder: (BuildContext context, value, Widget? child) {
-          return Align(
-              alignment: Alignment.centerLeft,
-              child: Row(children: [
-                _filterTab(context, const EdgeInsets.only(right: 12),
-                    'Expenses', true),
-                _filterTab(
-                    context, const EdgeInsets.only(left: 12), 'Income', false)
-              ]));
-        });
+    if (!isEnabled) {
+      return const SizedBox(height: 24);
+    }
+
+    return Column(children: [
+      ValueListenableBuilder(
+          valueListenable: isExpenseFilterNotifier,
+          builder: (BuildContext context, value, Widget? child) {
+            return Align(
+                alignment: Alignment.centerLeft,
+                child: Row(children: [
+                  _filterTab(context, const EdgeInsets.only(right: 12),
+                      'Expenses', true),
+                  _filterTab(
+                      context, const EdgeInsets.only(left: 12), 'Income', false)
+                ]));
+          }),
+      const SizedBox(height: 24)
+    ]);
   }
 
   InkWell _filterTab(BuildContext context, EdgeInsetsGeometry padding,
