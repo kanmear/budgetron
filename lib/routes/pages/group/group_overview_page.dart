@@ -64,17 +64,9 @@ class GroupOverviewPage extends StatelessWidget {
                             ]),
                             builder: (BuildContext context, Widget? child) {
                               var dates = dateTimeNotifier.value;
-                              var modifiedEntries = entries
-                                  //TODO extract this lovecraft horror
-                                  .where((entry) =>
-                                      (entry.dateTime.isAfter(dates.first) ||
-                                              entry.dateTime.isAtSameMomentAs(
-                                                  dates.first)) &&
-                                          (entry.dateTime
-                                              .isBefore(dates.last)) ||
-                                      entry.dateTime
-                                          .isAtSameMomentAs(dates.last))
-                                  .toList();
+                              var modifiedEntries =
+                                  EntryService.selectEntriesBetween(
+                                      entries, dates.first, dates.last);
 
                               return Column(children: [
                                 GroupOverviewChart(

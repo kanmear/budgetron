@@ -60,6 +60,16 @@ class EntryService {
     entryDates.addAll(entriesMap.keys.toList());
   }
 
+  static List<Entry> selectEntriesBetween(
+          List<Entry> entries, DateTime earliest, DateTime latest) =>
+      entries
+          .where((entry) =>
+              (entry.dateTime.isAfter(earliest) ||
+                      entry.dateTime.isAtSameMomentAs(earliest)) &&
+                  (entry.dateTime.isBefore(latest)) ||
+              entry.dateTime.isAtSameMomentAs(latest))
+          .toList();
+
   static void _addEntryToMap(
       Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap,
       Entry entry,
