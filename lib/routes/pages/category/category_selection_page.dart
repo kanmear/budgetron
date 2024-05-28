@@ -100,6 +100,7 @@ class CategoriesList extends StatelessWidget {
                           valueListenable: nameFilter,
                           builder: (context, value, child) {
                             return ListView.separated(
+                                //FIX checkbox of last tile can't be seen
                                 padding:
                                     const EdgeInsets.only(left: 16, right: 16),
                                 itemBuilder: (BuildContext context, int index) {

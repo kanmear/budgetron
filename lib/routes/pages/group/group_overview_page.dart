@@ -1,7 +1,6 @@
-import 'package:budgetron/routes/popups/group/edit_group_popup.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:provider/provider.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
@@ -13,9 +12,10 @@ import 'package:budgetron/models/category/group.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/ui/classes/date_selector_groups.dart';
 import 'package:budgetron/routes/pages/entry/entries_page.dart';
-import 'package:budgetron/ui/classes/date_selector_stats.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
+import 'package:budgetron/routes/popups/group/edit_group_popup.dart';
 import 'package:budgetron/routes/pages/group/widgets/group_overview_chart.dart';
 
 //REFACTOR tons of glaring issues
@@ -41,23 +41,32 @@ class GroupOverviewPage extends StatelessWidget {
             actions: [EditGroupIcon(group: group)],
             title: title),
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: Column(children: [
-          Expanded(
-              child: Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: StreamBuilder<List<Entry>>(
-                      stream: entriesStream,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Entry>> snapshot) {
-                        List<Entry> entries = [];
-                        var isEitherOr = false;
-                        if (snapshot.data?.isNotEmpty ?? false) {
-                          //NOTE does this body work in async?
-                          entries = snapshot.data!;
-                          isEitherOr = _resolveIfOnlyOneType(entries);
-                        }
+        body: StreamBuilder<List<Entry>>(
+            stream: entriesStream,
+            builder:
+                (BuildContext context, AsyncSnapshot<List<Entry>> snapshot) {
+              List<Entry> entries = [];
+              var isEitherOr = false;
+              var earliestDate = DateTime.now();
+              if (snapshot.data?.isNotEmpty ?? false) {
+                //NOTE/HACK looks like if these variables are changed outside of
+                //this body, they are not picked up correctly in widgets under
+                entries = snapshot.data!;
+                isEitherOr = _resolveIfOnlyOneType(entries);
 
-                        return AnimatedBuilder(
+                earliestDate = entries
+                    .reduce((value, element) =>
+                        value.dateTime.isBefore(element.dateTime)
+                            ? value
+                            : element)
+                    .dateTime;
+              }
+
+              return Column(children: [
+                Expanded(
+                    child: Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16),
+                        child: AnimatedBuilder(
                             animation: Listenable.merge([
                               datePeriodNotifier,
                               dateTimeNotifier,
@@ -87,13 +96,14 @@ class GroupOverviewPage extends StatelessWidget {
                                     isEitherOr: isEitherOr,
                                     isExpense: expenseFilterNotifier.value)
                               ]);
-                            });
-                      }))),
-          DateSelectorStats(
-              datePeriodNotifier: datePeriodNotifier,
-              dateTimeNotifier: dateTimeNotifier,
-              periodItems: const [DatePeriod.month, DatePeriod.year])
-        ]));
+                            }))),
+                DateSelectorGroups(
+                    datePeriodNotifier: datePeriodNotifier,
+                    dateTimeNotifier: dateTimeNotifier,
+                    periodItems: const [DatePeriod.month, DatePeriod.year],
+                    earliestDate: earliestDate)
+              ]);
+            }));
   }
 
   static List<DateTime> _calculateDates() {
