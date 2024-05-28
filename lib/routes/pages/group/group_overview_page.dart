@@ -1,3 +1,4 @@
+import 'package:budgetron/routes/popups/group/edit_group_popup.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -199,9 +200,9 @@ class EditGroupIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () =>
-          showDialog(context: context, builder: (context) => SizedBox()),
-      // builder: (context) => EditGroupDialog(group: group)),
+      onPressed: () => showDialog(
+          context: context,
+          builder: (context) => EditGroupDialog(group: group)),
       icon: Icon(
         Icons.edit,
         color: Theme.of(context).colorScheme.primary,

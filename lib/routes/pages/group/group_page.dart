@@ -140,18 +140,19 @@ class GroupCategoryTile extends StatelessWidget {
                   size: 18,
                   color: CategoryService.stringToColor(category.color))),
           Text(category.name, style: BudgetronFonts.nunitoSize16Weight400),
-          _resolveTrailing()
+          _resolveTrailing(context)
         ]));
   }
 
-  Widget _resolveTrailing() {
+  Widget _resolveTrailing(BuildContext context) {
     if (isRemovable) {
       return Row(children: [
         const SizedBox(width: 16),
         GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () => onCloseTap!(category),
-            child: const Icon(Icons.close, size: 18))
+            child: Icon(Icons.close,
+                size: 18, color: Theme.of(context).colorScheme.primary))
       ]);
     }
     return const SizedBox();

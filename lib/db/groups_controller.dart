@@ -4,6 +4,15 @@ import 'package:budgetron/db/object_box_helper.dart';
 import 'package:budgetron/objectbox.g.dart';
 
 class GroupsController {
+  static CategoryGroup getGroup(int groupId) {
+    CategoryGroup? group = _getGroupBox().get(groupId);
+    if (group == null) {
+      throw Exception('Group not found EC-302');
+    }
+
+    return group;
+  }
+
   static Stream<List<CategoryGroup>> getGroups() {
     return _getGroupBox()
         .query()
