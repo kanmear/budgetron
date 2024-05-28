@@ -8,6 +8,7 @@ import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/select_button.dart';
 import 'package:budgetron/routes/pages/group/group_page.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
+import 'package:budgetron/routes/popups/group/delete_group_popup.dart';
 import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
@@ -69,13 +70,28 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
                 ]);
               }),
           const SizedBox(height: 24),
-          BudgetronLargeTextButton(
-              text: 'Save',
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              onTap: () => _saveGroup(),
-              textStyle: BudgetronFonts.nunitoSize18Weight500White,
-              isActive: _isValid,
-              listenables: [textController, widget.categoriesNotifier])
+          Row(
+            children: [
+              Expanded(
+                child: BudgetronLargeTextButton(
+                    text: 'Delete',
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    onTap: () => _showDeleteGroupDialog(),
+                    textStyle: BudgetronFonts.nunitoSize18Weight500White,
+                    isActive: () => true,
+                    listenables: [textController, widget.categoriesNotifier]),
+              ),
+              Expanded(
+                child: BudgetronLargeTextButton(
+                    text: 'Save',
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    onTap: () => _saveGroup(),
+                    textStyle: BudgetronFonts.nunitoSize18Weight500White,
+                    isActive: _isValid,
+                    listenables: [textController, widget.categoriesNotifier]),
+              ),
+            ],
+          )
         ]));
   }
 
@@ -154,6 +170,13 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
       if (!newCategories.contains(category)) return true;
     }
     return false;
+  }
+
+  void _showDeleteGroupDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            DeleteGroupDialog(groupId: widget.group.id));
   }
 
   void _setDefaultValues() {

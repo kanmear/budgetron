@@ -23,6 +23,8 @@ class GroupsController {
 
   static int addGroup(CategoryGroup group) => _getGroupBox().put(group);
 
+  static void deleteGroup(int groupId) => _getGroupBox().remove(groupId);
+
   static Box<CategoryGroup> _getGroupBox() =>
       ObjectBox.store.box<CategoryGroup>();
 }
