@@ -40,7 +40,6 @@ class GroupOverviewChart extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(2),
                     color: Theme.of(context).colorScheme.surface),
-                padding: const EdgeInsets.only(left: 10, right: 10, bottom: 12),
                 child: Column(children: [
                   ExpenseFilterTabs(isExpenseFilterNotifier,
                       isEnabled: !isEitherOr),
@@ -135,35 +134,33 @@ class ExpenseFilterTabs extends StatelessWidget {
       ValueListenableBuilder(
           valueListenable: isExpenseFilterNotifier,
           builder: (BuildContext context, value, Widget? child) {
-            return Align(
-                alignment: Alignment.centerLeft,
-                child: Row(children: [
-                  _filterTab(context, const EdgeInsets.only(right: 12),
-                      'Expenses', true),
-                  _filterTab(
-                      context, const EdgeInsets.only(left: 12), 'Income', false)
-                ]));
+            return Padding(
+              padding: const EdgeInsets.all(4),
+              child: Row(children: [
+                _filterTab(context, 'Expenses', true),
+                _filterTab(context, 'Income', false)
+              ]),
+            );
           }),
       const SizedBox(height: 24)
     ]);
   }
 
-  InkWell _filterTab(BuildContext context, EdgeInsetsGeometry padding,
-      String name, bool value) {
-    return InkWell(
-        onTap: () => _updateFilter(value),
-        child: Padding(
-            padding: padding,
-            child: Container(
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                            width: 1,
-                            color: isExpenseFilterNotifier.value == value
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.transparent))),
-                child:
-                    Text(name, style: BudgetronFonts.nunitoSize16Weight400))));
+  Widget _filterTab(BuildContext context, String name, bool value) {
+    return Expanded(
+      child: InkWell(
+          onTap: () => _updateFilter(value),
+          child: Container(
+              padding: const EdgeInsets.only(top: 6, bottom: 6),
+              decoration: BoxDecoration(
+                  color: isExpenseFilterNotifier.value == value
+                      ? Theme.of(context).colorScheme.background
+                      : Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(4)),
+              child: Center(
+                  child: Text(name,
+                      style: BudgetronFonts.nunitoSize16Weight400)))),
+    );
   }
 
   _updateFilter(bool isExpense) {
@@ -186,10 +183,13 @@ class TopThreeCategories extends StatelessWidget {
       topCategories = topCategories.sublist(0, 3);
     }
 
-    return Column(children: [
-      for (PieChartData d in topCategories)
-        CategoryWithProgressBar(data: d, total: total)
-    ]);
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 24),
+      child: Column(children: [
+        for (PieChartData d in topCategories)
+          CategoryWithProgressBar(data: d, total: total)
+      ]),
+    );
   }
 }
 
