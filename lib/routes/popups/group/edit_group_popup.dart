@@ -81,6 +81,7 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
                     isActive: () => true,
                     listenables: [textController, widget.categoriesNotifier]),
               ),
+              const SizedBox(width: 16),
               Expanded(
                 child: BudgetronLargeTextButton(
                     text: 'Save',
