@@ -87,8 +87,10 @@ class GroupListTile extends StatelessWidget {
     );
   }
 
-  void _goToGroupOverview(BuildContext context) => Navigator.push(context,
-      MaterialPageRoute(builder: (context) => GroupOverviewPage(group: group)));
+  void _goToGroupOverview(BuildContext context) => Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => GroupOverviewPage(groupId: group.id)));
 }
 
 class GroupCategoriesList extends StatelessWidget {

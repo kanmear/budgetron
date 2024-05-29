@@ -18,8 +18,10 @@ class EditGroupDialog extends StatefulWidget {
   final ValueNotifier<List<EntryCategory>> categoriesNotifier =
       ValueNotifier([]);
   final CategoryGroup group;
+  final Function onGroupUpdate;
 
-  EditGroupDialog({super.key, required this.group});
+  EditGroupDialog(
+      {super.key, required this.group, required this.onGroupUpdate});
 
   @override
   State<EditGroupDialog> createState() => _EditGroupDialogState();
@@ -154,6 +156,7 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
     group.categories.addAll(widget.categoriesNotifier.value);
 
     GroupsController.addGroup(group);
+    widget.onGroupUpdate();
     Navigator.pop(context);
   }
 
