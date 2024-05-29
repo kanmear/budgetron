@@ -53,13 +53,7 @@ class GroupOverviewPage extends StatelessWidget {
                 //this body, they are not picked up correctly in widgets under
                 entries = snapshot.data!;
                 isEitherOr = _resolveIfOnlyOneType(entries);
-
-                earliestDate = entries
-                    .reduce((value, element) =>
-                        value.dateTime.isBefore(element.dateTime)
-                            ? value
-                            : element)
-                    .dateTime;
+                earliestDate = _getEarliestDate(entries);
               }
 
               return Column(children: [
@@ -77,6 +71,9 @@ class GroupOverviewPage extends StatelessWidget {
                               var modifiedEntries =
                                   EntryService.selectEntriesBetween(
                                       entries, dates.first, dates.last);
+                              //REFACTOR right now each widget below splits
+                              //entries into groups by itself, which triples
+                              //the amount of work; this should be fixed
 
                               return Column(children: [
                                 GroupOverviewChart(
@@ -118,6 +115,13 @@ class GroupOverviewPage extends StatelessWidget {
     var isExpense = entries.first.category.target!.isExpense;
     return !entries
         .any((entry) => entry.category.target!.isExpense != isExpense);
+  }
+
+  DateTime _getEarliestDate(List<Entry> entries) {
+    return entries
+        .reduce((value, element) =>
+            value.dateTime.isBefore(element.dateTime) ? value : element)
+        .dateTime;
   }
 }
 
