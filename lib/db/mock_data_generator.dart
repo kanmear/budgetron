@@ -9,6 +9,7 @@ import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/entry.dart';
 
+//TODO remove
 class MockDataGenerator {
   static Future<void> generateRandomEntries() async {
     List<EntryCategory> categories = await _generateCategories();
