@@ -225,10 +225,123 @@
           "targetId": "4:4368116380135990787"
         }
       ]
+    },
+    {
+      "id": "9:6971380326604414811",
+      "lastPropertyId": "6:3337697882913509668",
+      "name": "Account",
+      "properties": [
+        {
+          "id": "1:2833890386577333046",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5766729776738608010",
+          "name": "name",
+          "type": 9,
+          "flags": 2080,
+          "indexId": "9:8866326117270384035"
+        },
+        {
+          "id": "3:6717888256568236070",
+          "name": "isDefault",
+          "type": 1
+        },
+        {
+          "id": "4:1636375068842710236",
+          "name": "color",
+          "type": 9
+        },
+        {
+          "id": "5:1232045132643485490",
+          "name": "balance",
+          "type": 8
+        },
+        {
+          "id": "6:3337697882913509668",
+          "name": "entriesIDs",
+          "type": 26
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "10:3586997114925938409",
+      "lastPropertyId": "4:6890461548046530281",
+      "name": "Transaction",
+      "properties": [
+        {
+          "id": "1:3187528862113555278",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:9123340512286355758",
+          "name": "value",
+          "type": 8
+        },
+        {
+          "id": "3:3196606013354761645",
+          "name": "dateTime",
+          "type": 10
+        },
+        {
+          "id": "4:6890461548046530281",
+          "name": "accountId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "10:5928171907312160316",
+          "relationTarget": "Account"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "11:1227976960884504166",
+      "lastPropertyId": "5:7380170601276504881",
+      "name": "Transfer",
+      "properties": [
+        {
+          "id": "1:7557259180865531846",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3909899722018857080",
+          "name": "value",
+          "type": 8
+        },
+        {
+          "id": "3:8665742268421128430",
+          "name": "dateTime",
+          "type": 10
+        },
+        {
+          "id": "4:3691821348402266168",
+          "name": "fromAccountId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "11:2721178239535484142",
+          "relationTarget": "Account"
+        },
+        {
+          "id": "5:7380170601276504881",
+          "name": "toAccountId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "12:3270990736694616447",
+          "relationTarget": "Account"
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "8:5469569891971862756",
-  "lastIndexId": "8:171540354239470572",
+  "lastEntityId": "11:1227976960884504166",
+  "lastIndexId": "12:3270990736694616447",
   "lastRelationId": "1:1237446207436357635",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
