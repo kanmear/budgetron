@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/routes/pages/group/group_page.dart';
+import 'package:budgetron/routes/pages/account/accounts_page.dart';
 import 'package:budgetron/routes/pages/category/category_page.dart';
 import 'package:budgetron/routes/pages/settings/settings_page.dart';
 
@@ -63,7 +64,7 @@ class DrawerEntries extends StatelessWidget {
         ),
         DrawerEntryTile(
             name: 'Accounts',
-            route: CategoriesPage(),
+            route: AccountsPage(),
             icon: const Icon(Icons.credit_card_outlined)),
         const SizedBox(height: 16),
         DrawerEntryTile(

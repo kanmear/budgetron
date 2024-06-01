@@ -14,6 +14,7 @@ class CategoryService {
     return 'ff$string';
   }
 
+  //TODO move to a more generic service
   static Color stringToColor(String string) {
     return Color(int.parse(
       string,
