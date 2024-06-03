@@ -94,10 +94,10 @@ class _NewCategoryDialogState extends State<NewCategoryDialog> {
         ]));
   }
 
-  void _setColor(Color value) {
-    setState(() {
-      categoryColor = value;
-    });
+  void _setColor(Color? value) {
+    if (value != null) {
+      setState(() => categoryColor = value);
+    }
   }
 }
 
