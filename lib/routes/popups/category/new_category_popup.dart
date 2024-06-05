@@ -27,7 +27,7 @@ class NewCategoryDialog extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text("Color and category name",
                   style: BudgetronFonts.nunitoSize16Weight400)),
-          const SizedBox(height: 8),
+          const SizedBox(height: 4),
           ColorAndNameSelector(
               textController: textController, colorNotifier: colorNotifier),
           const SizedBox(height: 24),
