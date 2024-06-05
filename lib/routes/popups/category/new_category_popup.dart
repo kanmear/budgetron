@@ -7,9 +7,8 @@ import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/radio_list_tile.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
-import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
+import 'package:budgetron/ui/classes/color_and_name_selector.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
-import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
 
 class NewCategoryDialog extends StatelessWidget {
   final ValueNotifier<EntryCategoryType> categoryTypeNotifier;
@@ -29,37 +28,8 @@ class NewCategoryDialog extends StatelessWidget {
               child: Text("Color and category name",
                   style: BudgetronFonts.nunitoSize16Weight400)),
           const SizedBox(height: 8),
-          Row(children: [
-            InkWell(
-                onTap: () => showDialog(
-                        context: context,
-                        builder: (BuildContext context) =>
-                            const CategoryColorDialog())
-                    .then((value) => _setColor(value)),
-                child: ValueListenableBuilder(
-                    valueListenable: colorNotifier,
-                    builder: (BuildContext context, value, Widget? child) {
-                      return Container(
-                          padding: EdgeInsets.zero,
-                          height: 38,
-                          width: 38,
-                          decoration: BoxDecoration(
-                              color: value ?? Colors.white,
-                              borderRadius: BorderRadius.circular(2),
-                              border: Border.all(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  width: 1.5)),
-                          child: value == null ? const Icon(Icons.add) : null);
-                    })),
-            const SizedBox(width: 8),
-            Expanded(
-                child: BudgetronSmallTextField(
-                    textController: textController,
-                    inputType: TextInputType.text,
-                    hintText: "Enter category name",
-                    autoFocus: false,
-                    onSubmitted: () {}))
-          ]),
+          ColorAndNameSelector(
+              textController: textController, colorNotifier: colorNotifier),
           const SizedBox(height: 24),
           //HACK there should be a better way to do this
           Transform.translate(
@@ -75,10 +45,6 @@ class NewCategoryDialog extends StatelessWidget {
               isActive: _isValid,
               listenables: [textController, colorNotifier])
         ]));
-  }
-
-  void _setColor(Color? value) {
-    if (value != null) colorNotifier.value = value;
   }
 
   void _addCategory(BuildContext context) {
