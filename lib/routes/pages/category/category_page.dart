@@ -1,3 +1,4 @@
+import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
@@ -43,10 +44,11 @@ class CategoriesPage extends StatelessWidget {
           ],
         ),
         floatingActionButton: BudgetronFloatingActionButton(
-          onPressed: () => showDialog(
-              context: context,
-              builder: (BuildContext context) => const NewCategoryDialog()),
-        ));
+            onPressed: () => showDialog(
+                context: context,
+                builder: (BuildContext context) => NewCategoryDialog(
+                    categoryTypeNotifier:
+                        ValueNotifier(EntryCategoryType.expense)))));
   }
 }
 

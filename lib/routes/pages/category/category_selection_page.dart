@@ -65,7 +65,8 @@ class CategorySelectionPage extends StatelessWidget {
         onPressed: () => showDialog(
             context: context,
             builder: (BuildContext context) => NewCategoryDialog(
-                entryCategoryType: categoryTypeNotifier.value)));
+                categoryTypeNotifier:
+                    ValueNotifier(categoryTypeNotifier.value))));
   }
 }
 
