@@ -1,5 +1,6 @@
 import 'package:objectbox/objectbox.dart';
 
+import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/models/category/category.dart';
 
 @Entity()
@@ -8,10 +9,11 @@ class Entry {
 
   double value;
 
-  final category = ToOne<EntryCategory>();
-
   @Property(type: PropertyType.date)
   DateTime dateTime;
+
+  final category = ToOne<EntryCategory>();
+  final account = ToOne<Account>();
 
   Entry({required this.value, required this.dateTime});
 

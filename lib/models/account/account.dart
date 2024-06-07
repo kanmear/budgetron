@@ -6,19 +6,13 @@ class Account {
 
   @Unique()
   String name;
-  bool isDefault;
-
   String color;
-
+  bool isDefault;
   double balance;
-
-  @Property(type: PropertyType.intVector)
-  List<int> entriesIDs;
 
   Account(
       {required this.name,
-      required this.isDefault,
       required this.color,
       required this.balance,
-      this.entriesIDs = const []});
+      required this.isDefault});
 }

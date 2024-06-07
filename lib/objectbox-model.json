@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1841081728629343382",
-      "lastPropertyId": "7:669270188771895921",
+      "lastPropertyId": "8:5379385302569583686",
       "name": "Entry",
       "properties": [
         {
@@ -31,6 +31,14 @@
           "flags": 520,
           "indexId": "4:3488498022012942360",
           "relationTarget": "EntryCategory"
+        },
+        {
+          "id": "8:5379385302569583686",
+          "name": "accountId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "13:3364471179008979769",
+          "relationTarget": "Account"
         }
       ],
       "relations": []
@@ -258,11 +266,6 @@
           "id": "5:1232045132643485490",
           "name": "balance",
           "type": 8
-        },
-        {
-          "id": "6:3337697882913509668",
-          "name": "entriesIDs",
-          "type": 26
         }
       ],
       "relations": []
@@ -341,7 +344,7 @@
     }
   ],
   "lastEntityId": "11:1227976960884504166",
-  "lastIndexId": "12:3270990736694616447",
+  "lastIndexId": "13:3364471179008979769",
   "lastRelationId": "1:1237446207436357635",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -364,7 +367,8 @@
     718943841663284220,
     6892076539601629267,
     693103254549858284,
-    7075193192781967810
+    7075193192781967810,
+    3337697882913509668
   ],
   "retiredRelationUids": [],
   "version": 1
