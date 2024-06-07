@@ -10,7 +10,7 @@ import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/ui/classes/switch.dart';
+import 'package:budgetron/ui/classes/switch_with_text.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
@@ -88,20 +88,9 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
             ],
           ),
           const SizedBox(height: 24),
-          Container(
-            color: Theme.of(context).colorScheme.surface,
-            height: 58,
-            padding: const EdgeInsets.all(10),
-            constraints: const BoxConstraints(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Add budget tracking to the main screen',
-                    style: BudgetronFonts.nunitoSize14Weight400),
-                BudgetronSwitch(switchNotifier: widget.switchNotifier)
-              ],
-            ),
-          ),
+          BudgetronSwitchWithText(
+              switchNotifier: widget.switchNotifier,
+              text: 'Add budget tracking to the main screen'),
           const SizedBox(height: 16),
           BudgetronLargeTextButton(
               text: 'Add budget',
