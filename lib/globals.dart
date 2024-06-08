@@ -5,4 +5,4 @@ String currency = '';
 //internal data
 DateTime earliestEntryDate = DateTime.now();
 
-int defaultAccountId = 0;
+int defaultAccountId = -1;

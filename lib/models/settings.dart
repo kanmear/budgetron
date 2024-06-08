@@ -16,6 +16,6 @@ class Settings {
 
   Settings({
     this.currency = '',
-    this.defaultAccountId = 0,
+    this.defaultAccountId = -1,
   });
 }
