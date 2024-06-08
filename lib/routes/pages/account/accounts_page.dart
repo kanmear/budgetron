@@ -81,12 +81,13 @@ class AccountListTile extends StatelessWidget {
           Row(children: [
             Icon(Icons.square_rounded,
                 size: 18, color: CategoryService.stringToColor(account.color)),
-            const SizedBox(width: 8)
+            const SizedBox(width: 8),
+            Text(account.name, style: BudgetronFonts.nunitoSize16Weight400)
           ]),
           Row(children: [
             Text(account.balance.toStringAsFixed(2),
                 style: BudgetronFonts.nunitoSize16Weight400),
-            Text(currency, style: BudgetronFonts.nunitoSize12Weight400)
+            Text(" $currency", style: BudgetronFonts.nunitoSize12Weight400)
           ])
         ]));
   }
