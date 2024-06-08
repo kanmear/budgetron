@@ -11,6 +11,7 @@ class SettingsService {
     globals.earliestEntryDate = settings.earliestEntryDate;
   }
 
+  //TODO remove separate getters
   static Future<String> getCurrency() async => (await _getSettings()).currency;
 
   static void setCurrency(String value) async {
@@ -21,6 +22,7 @@ class SettingsService {
     globals.currency = value;
   }
 
+  //TODO remove separate getters
   static Future<DateTime> getEarliestEntryDate() async =>
       (await _getSettings()).earliestEntryDate;
 
@@ -30,6 +32,14 @@ class SettingsService {
 
     SettingsController.updateSettings(settings);
     globals.earliestEntryDate = date;
+  }
+
+  static void setDefaultAccountId(int id) async {
+    Settings settings = await _getSettings();
+    settings.defaultAccountId = id;
+
+    SettingsController.updateSettings(settings);
+    globals.defaultAccountId = id;
   }
 
   static Future<Settings> _getSettings() async {

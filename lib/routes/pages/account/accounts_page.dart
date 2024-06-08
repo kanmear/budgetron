@@ -9,6 +9,7 @@ import 'package:budgetron/db/accounts_controller.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
+import 'package:budgetron/routes/popups/account/new_account_popup.dart';
 
 class AccountsPage extends StatelessWidget {
   const AccountsPage({super.key});
@@ -88,15 +89,5 @@ class AccountListTile extends StatelessWidget {
             Text(currency, style: BudgetronFonts.nunitoSize12Weight400)
           ])
         ]));
-  }
-}
-
-class NewAccountDialog extends StatelessWidget {
-  const NewAccountDialog({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
   }
 }

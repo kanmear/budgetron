@@ -6,9 +6,13 @@ import 'package:budgetron/routes/popups/category/category_color_selection_popup.
 class ColorAndNameSelector extends StatelessWidget {
   final TextEditingController textController;
   final ValueNotifier<Color?> colorNotifier;
+  final String hintText;
 
   const ColorAndNameSelector(
-      {super.key, required this.textController, required this.colorNotifier});
+      {super.key,
+      required this.textController,
+      required this.colorNotifier,
+      required this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class ColorAndNameSelector extends StatelessWidget {
           child: BudgetronSmallTextField(
               textController: textController,
               inputType: TextInputType.text,
-              hintText: "Enter category name",
+              hintText: hintText,
               autoFocus: false,
               onSubmitted: () {}))
     ]);

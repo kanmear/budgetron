@@ -29,7 +29,9 @@ class NewCategoryDialog extends StatelessWidget {
                   style: BudgetronFonts.nunitoSize16Weight400)),
           const SizedBox(height: 4),
           ColorAndNameSelector(
-              textController: textController, colorNotifier: colorNotifier),
+              textController: textController,
+              colorNotifier: colorNotifier,
+              hintText: 'Enter category name'),
           const SizedBox(height: 24),
           //HACK there should be a better way to do this
           Transform.translate(

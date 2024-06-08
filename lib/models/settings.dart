@@ -12,6 +12,10 @@ class Settings {
 
   // internal data
   DateTime earliestEntryDate = DateTime.now();
+  int defaultAccountId;
 
-  Settings({this.currency = ''});
+  Settings({
+    this.currency = '',
+    this.defaultAccountId = 0,
+  });
 }

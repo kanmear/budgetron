@@ -13,8 +13,16 @@ class AppData extends ChangeNotifier {
 
   DateTime get earliestEntryDate => globals.earliestEntryDate;
 
+  //TODO set this whenever an entry created with date < this one
   void setEarliestEntryDate(DateTime date) {
     SettingsService.setEarliestEntryDate(date);
+  }
+
+  int get defaultAccountId => globals.defaultAccountId;
+
+  void setDefaultAccountId(int id) {
+    SettingsService.setDefaultAccountId(id);
+    notifyListeners();
   }
 
   // Locale _locale = Locale('en', 'US');
