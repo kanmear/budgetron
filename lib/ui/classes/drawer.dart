@@ -67,14 +67,14 @@ class DrawerEntries extends StatelessWidget {
             route: AccountsPage(),
             icon: const Icon(Icons.credit_card_outlined)),
         const SizedBox(height: 16),
-        DrawerEntryTile(
-            name: 'Data export',
-            route: CategoriesPage(),
-            icon: const Icon(Icons.output)),
-        DrawerEntryTile(
-            name: 'Backup',
-            route: CategoriesPage(),
-            icon: const Icon(Icons.cloud_upload_rounded)),
+        // DrawerEntryTile(
+        //     name: 'Data export',
+        //     route: CategoriesPage(),
+        //     icon: const Icon(Icons.output)),
+        // DrawerEntryTile(
+        //     name: 'Backup',
+        //     route: CategoriesPage(),
+        //     icon: const Icon(Icons.cloud_upload_rounded)),
         const SizedBox(height: 16),
         const DrawerEntryTile(
             name: 'Settings',
