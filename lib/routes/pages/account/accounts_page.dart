@@ -10,6 +10,7 @@ import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
 import 'package:budgetron/routes/popups/account/new_account_popup.dart';
+import 'package:budgetron/routes/popups/account/account_options_popup.dart';
 
 class AccountsPage extends StatelessWidget {
   const AccountsPage({super.key});
@@ -71,24 +72,31 @@ class AccountListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Theme.of(context).colorScheme.surface),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Row(children: [
-            Icon(Icons.square_rounded,
-                size: 18, color: CategoryService.stringToColor(account.color)),
-            const SizedBox(width: 8),
-            Text(account.name, style: BudgetronFonts.nunitoSize16Weight400)
-          ]),
-          Row(children: [
-            Text(account.balance.toStringAsFixed(2),
-                style: BudgetronFonts.nunitoSize16Weight400),
-            Text(" $currency", style: BudgetronFonts.nunitoSize12Weight400)
-          ])
-        ]));
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => showDialog(
+          context: context,
+          builder: (context) => AccountOptionsDialog(account: account)),
+      child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Theme.of(context).colorScheme.surface),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(children: [
+              Icon(Icons.square_rounded,
+                  size: 18,
+                  color: CategoryService.stringToColor(account.color)),
+              const SizedBox(width: 8),
+              Text(account.name, style: BudgetronFonts.nunitoSize16Weight400)
+            ]),
+            Row(children: [
+              Text(account.balance.toStringAsFixed(2),
+                  style: BudgetronFonts.nunitoSize16Weight400),
+              Text(" $currency", style: BudgetronFonts.nunitoSize12Weight400)
+            ])
+          ])),
+    );
   }
 }

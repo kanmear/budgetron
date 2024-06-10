@@ -75,7 +75,7 @@ class DrawerEntries extends StatelessWidget {
         //     name: 'Backup',
         //     route: CategoriesPage(),
         //     icon: const Icon(Icons.cloud_upload_rounded)),
-        const SizedBox(height: 16),
+        // const SizedBox(height: 16),
         const DrawerEntryTile(
             name: 'Settings',
             route: SettingsPage(),
