@@ -1,6 +1,7 @@
 import 'package:budgetron/models/account/account.dart';
 
 import 'package:budgetron/db/object_box_helper.dart';
+import 'package:budgetron/models/account/transfer.dart';
 import 'package:budgetron/objectbox.g.dart';
 
 class AccountsController {
@@ -26,5 +27,8 @@ class AccountsController {
   static void deleteAccount(int accountId) =>
       _getAccountBox().remove(accountId);
 
+  static void addTransfer(Transfer transfer) => _getTransferBox().put(transfer);
+
   static Box<Account> _getAccountBox() => ObjectBox.store.box<Account>();
+  static Box<Transfer> _getTransferBox() => ObjectBox.store.box<Transfer>();
 }

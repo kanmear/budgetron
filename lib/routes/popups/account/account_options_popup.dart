@@ -7,7 +7,9 @@ import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/ui/classes/buttons/button_with_icon.dart';
 import 'package:budgetron/routes/popups/account/edit_account_popup.dart';
+import 'package:budgetron/routes/popups/account/account_transfer_popup.dart';
 
+//TODO update on account change (e.g. balance update after transfer)
 class AccountOptionsDialog extends StatelessWidget {
   final Account account;
 
@@ -39,7 +41,10 @@ class AccountOptionsDialog extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
                 child: ButtonWithIcon(
-                    onTap: () => {},
+                    onTap: () => showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            AccountTransferDialog(account: account)),
                     icon: const Icon(Icons.credit_card),
                     color: Theme.of(context).colorScheme.surface,
                     text: 'Transfer')),

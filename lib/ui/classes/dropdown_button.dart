@@ -2,6 +2,7 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronDropdownButton extends StatefulWidget {
+  //REFACTOR is it possible to not use valuenotifier?
   final ValueNotifier<Object?> valueNotifier;
   final Future<List<Object>> items;
   final Function? leading;
@@ -62,6 +63,7 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                         value: object,
                         child: Row(children: [
                           const SizedBox(width: 8),
+                          //REFACTOR this is a weird way to do this
                           if (widget.leading != null) widget.leading!(object),
                           Text(object.toString(),
                               style: BudgetronFonts.nunitoSize16Weight400)

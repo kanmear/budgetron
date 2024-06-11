@@ -15,4 +15,17 @@ class Account {
       required this.color,
       required this.balance,
       required this.isDefault});
+
+  @override
+  String toString() {
+    return name;
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Account && other.id == id;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, id, 53, 97);
 }
