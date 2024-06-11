@@ -6,6 +6,7 @@ import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/ui/classes/buttons/button_with_icon.dart';
+import 'package:budgetron/routes/popups/account/edit_account_popup.dart';
 
 class AccountOptionsDialog extends StatelessWidget {
   final Account account;
@@ -20,7 +21,10 @@ class AccountOptionsDialog extends StatelessWidget {
           CurrentBalance(account: account),
           const SizedBox(height: 16),
           ButtonWithIcon(
-              onTap: () => {},
+              onTap: () => showDialog(
+                  context: context,
+                  builder: (BuildContext context) =>
+                      EditAccountDialog(account: account)),
               icon: const Icon(Icons.edit),
               color: Theme.of(context).colorScheme.surface,
               text: 'Edit'),

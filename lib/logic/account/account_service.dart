@@ -9,6 +9,12 @@ class AccountService {
     if (account.isDefault) setDefaultAccount(accountId);
   }
 
+  static void updateAccount(Account account) {
+    AccountsController.addAccount(account);
+
+    if (account.isDefault) setDefaultAccount(account.id);
+  }
+
   static void setDefaultAccount(int id) =>
       SettingsService.setDefaultAccountId(id);
 }
