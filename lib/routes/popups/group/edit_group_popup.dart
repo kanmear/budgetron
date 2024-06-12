@@ -5,7 +5,7 @@ import 'package:budgetron/db/groups_controller.dart';
 import 'package:budgetron/models/category/group.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/category/category.dart';
-import 'package:budgetron/ui/classes/select_button.dart';
+import 'package:budgetron/ui/classes/multi_select_button.dart';
 import 'package:budgetron/routes/pages/group/group_page.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/routes/popups/group/delete_group_popup.dart';
@@ -64,7 +64,7 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
               valueListenable: textNotifier,
               builder: (BuildContext context, String textValue, _) {
                 return Column(children: [
-                  BudgetronSelectButton(
+                  BudgetronMultiSelectButton(
                       onTap: () =>
                           _navigateToCategorySelection(context, _setCategories),
                       text: Text(textValue, style: styleNotifier.value)),

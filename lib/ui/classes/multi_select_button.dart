@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-class BudgetronSelectButton extends StatelessWidget {
+//REFACTOR move outer part of this widget from (new_group_popup and edit_group_popup) to here
+class BudgetronMultiSelectButton extends StatelessWidget {
   final Function onTap;
   final Text text;
 
-  const BudgetronSelectButton(
+  const BudgetronMultiSelectButton(
       {super.key, required this.onTap, required this.text});
 
   @override
