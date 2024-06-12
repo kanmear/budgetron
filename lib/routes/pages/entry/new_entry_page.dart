@@ -40,12 +40,9 @@ class _NewEntryPageState extends State<NewEntryPage> {
         body: Column(
           children: [
             BudgetronTabSwitch(
-                valueNotifier: widget.tabNotifier,
-                tabs: const [
-                  EntryCategoryType.expense,
-                  EntryCategoryType.income
-                ],
-                getTabName: (value) => value.toString()),
+              valueNotifier: widget.tabNotifier,
+              tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
+            ),
             EntryValueTextField(
               tabNotifier: widget.tabNotifier,
               textController: widget.textController,

@@ -40,9 +40,9 @@ class CategorySelectionPage extends StatelessWidget {
           // BudgetronSearchField(
           //     hintText: "Search for a category", filter: nameFilter),
           BudgetronTabSwitch(
-              valueNotifier: categoryTypeNotifier,
-              tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
-              getTabName: (value) => value.toString()),
+            valueNotifier: categoryTypeNotifier,
+            tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
+          ),
           const SizedBox(height: 24),
           CategoriesList(
               nameFilter: nameFilter,
