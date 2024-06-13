@@ -15,3 +15,15 @@ class Transaction {
 
   Transaction({required this.value, required this.dateTime});
 }
+
+enum TransactionType {
+  credit(name: 'Credit'),
+  debit(name: 'Debit');
+
+  final String name;
+
+  const TransactionType({required this.name});
+
+  @override
+  toString() => name;
+}

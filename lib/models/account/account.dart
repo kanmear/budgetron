@@ -1,7 +1,8 @@
+import 'package:budgetron/utils/interfaces.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class Account {
+class Account implements Selectable {
   int id = 0;
 
   @Unique()
@@ -28,4 +29,7 @@ class Account {
 
   @override
   int get hashCode => Object.hash(name, id, 53, 97);
+
+  @override
+  String getColor() => color;
 }

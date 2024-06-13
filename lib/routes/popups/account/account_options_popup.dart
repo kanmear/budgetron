@@ -5,9 +5,11 @@ import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
+import 'package:budgetron/models/account/transaction.dart';
 import 'package:budgetron/ui/classes/buttons/button_with_icon.dart';
 import 'package:budgetron/routes/popups/account/edit_account_popup.dart';
 import 'package:budgetron/routes/popups/account/account_transfer_popup.dart';
+import 'package:budgetron/routes/pages/account/account_transaction_page.dart';
 
 //TODO update on account change (e.g. balance update after transfer)
 class AccountOptionsDialog extends StatelessWidget {
@@ -53,19 +55,34 @@ class AccountOptionsDialog extends StatelessWidget {
           Row(children: [
             Expanded(
                 child: ButtonWithIcon(
-                    onTap: () => {},
+                    onTap: () => _navigateToTransferPage(
+                          context,
+                          TransactionType.debit,
+                        ),
                     icon: const Icon(Icons.trending_up),
                     color: Theme.of(context).colorScheme.secondary,
                     text: 'Debit')),
             const SizedBox(width: 16),
             Expanded(
                 child: ButtonWithIcon(
-                    onTap: () => {},
+                    onTap: () => _navigateToTransferPage(
+                          context,
+                          TransactionType.credit,
+                        ),
                     icon: const Icon(Icons.trending_down),
                     color: Theme.of(context).colorScheme.error,
                     text: 'Credit'))
           ])
         ]));
+  }
+
+  void _navigateToTransferPage(
+      BuildContext context, TransactionType transactionType) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => AccountTransactionPage(
+                transactionType: transactionType, account: account)));
   }
 }
 
