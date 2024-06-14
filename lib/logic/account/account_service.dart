@@ -1,7 +1,8 @@
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/db/accounts_controller.dart';
-import 'package:budgetron/logic/settings/settings_service.dart';
 import 'package:budgetron/models/account/transfer.dart';
+import 'package:budgetron/models/account/transaction.dart';
+import 'package:budgetron/logic/settings/settings_service.dart';
 
 class AccountService {
   static void createAccount(Account account) {
@@ -26,6 +27,14 @@ class AccountService {
     AccountsController.addAccount(toAccount);
 
     AccountsController.addTransfer(transfer);
+  }
+
+  static void createTransaction(Transaction transaction) {
+    Account receiverAccount = transaction.account.target!;
+    receiverAccount.balance += transaction.value;
+    AccountsController.addAccount(receiverAccount);
+
+    AccountsController.addTransaction(transaction);
   }
 
   static void setDefaultAccount(int id) =>

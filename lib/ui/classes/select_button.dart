@@ -26,7 +26,7 @@ class BudgetronSelectButton extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(2),
                 border: Border.all(
-                    width: 1.5, color: Theme.of(context).colorScheme.primary)),
+                    width: 1, color: Theme.of(context).colorScheme.primary)),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

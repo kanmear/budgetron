@@ -1,8 +1,9 @@
 import 'package:budgetron/models/account/account.dart';
 
+import 'package:budgetron/objectbox.g.dart';
 import 'package:budgetron/db/object_box_helper.dart';
 import 'package:budgetron/models/account/transfer.dart';
-import 'package:budgetron/objectbox.g.dart';
+import 'package:budgetron/models/account/transaction.dart';
 
 class AccountsController {
   static Account getAccount(int accountId) {
@@ -29,6 +30,11 @@ class AccountsController {
 
   static void addTransfer(Transfer transfer) => _getTransferBox().put(transfer);
 
+  static void addTransaction(Transaction transaction) =>
+      _getTransactionBox().put(transaction);
+
   static Box<Account> _getAccountBox() => ObjectBox.store.box<Account>();
   static Box<Transfer> _getTransferBox() => ObjectBox.store.box<Transfer>();
+  static Box<Transaction> _getTransactionBox() =>
+      ObjectBox.store.box<Transaction>();
 }

@@ -117,6 +117,7 @@ class BudgetronKeyboardConfirmKey extends StatelessWidget {
   }
 
   _submitChanges(BuildContext context) {
+    //REFACTOR textEditingController being passed here is wrong
     onConfirmAction(textEditingController.text);
     Navigator.pop(context);
   }
