@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class BudgetronDateUtils {
+  static List<DateTime> calculatePairOfDates() {
+    var now = DateTime.now();
+    //TODO should account for date period; add after implementing Settings
+    var endDate = BudgetronDateUtils.shiftToEndOfMonth(now);
+
+    return [DateTime(now.year, now.month), endDate];
+  }
+
   static DateTime shiftToEndOfMonth(DateTime date) {
     var startDate = DateTime(date.year, date.month);
     return DateUtils.addMonthsToMonthDate(startDate, 1)

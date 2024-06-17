@@ -26,7 +26,7 @@ class GroupOverviewPage extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.month);
   final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(_calculateDates());
+      ValueNotifier(BudgetronDateUtils.calculatePairOfDates());
   final ValueNotifier<bool> expenseFilterNotifier = ValueNotifier(true);
 
   @override
@@ -114,14 +114,6 @@ class GroupOverviewPage extends StatelessWidget {
                 }));
       },
     );
-  }
-
-  static List<DateTime> _calculateDates() {
-    //TODO should account for date period; add after implementing Settings
-    var now = DateTime.now();
-    var endDate = BudgetronDateUtils.shiftToEndOfMonth(now);
-
-    return [DateTime(now.year, now.month), endDate];
   }
 
   bool _resolveIfOnlyOneType(List<Entry> entries) {

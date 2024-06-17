@@ -11,7 +11,7 @@ class StatsPage extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.month);
   final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(_calculateDates());
+      ValueNotifier(BudgetronDateUtils.calculatePairOfDates());
   //TODO check that isExpense is needed here and not in overall chart after finishing Stats
   final ValueNotifier<bool> isExpenseFilterNotifier = ValueNotifier(true);
 
@@ -32,14 +32,6 @@ class StatsPage extends StatelessWidget {
             ),
           ],
         ));
-  }
-
-  static List<DateTime> _calculateDates() {
-    //TODO should account for date period; add after implementing Settings
-    var now = DateTime.now();
-    var endDate = BudgetronDateUtils.shiftToEndOfMonth(now);
-
-    return [DateTime(now.year, now.month), endDate];
   }
 }
 
