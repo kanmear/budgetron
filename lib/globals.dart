@@ -5,6 +5,8 @@ String currency = '';
 //internal data
 DateTime earliestEntryDate = DateTime.now();
 
+bool legacyDateSelector = false;
+
 int defaultAccountId = -1;
 
 int defaultDatePeriodEntries = 0;

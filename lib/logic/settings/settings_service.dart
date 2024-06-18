@@ -42,6 +42,14 @@ class SettingsService {
     globals.defaultAccountId = id;
   }
 
+  static void setLegacyDateSelector(bool isLegacy) async {
+    Settings settings = await _getSettings();
+    settings.legacyDateSelector = isLegacy;
+
+    SettingsController.updateSettings(settings);
+    globals.legacyDateSelector = isLegacy;
+  }
+
   static void setDefaultDatePeriodEntries(int id) async {
     Settings settings = await _getSettings();
     settings.defaultDatePeriodEntries = id;

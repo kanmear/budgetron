@@ -16,6 +16,15 @@ class AppData extends ChangeNotifier {
   //TODO set this whenever an entry created with date < this one
   void setEarliestEntryDate(DateTime date) {
     SettingsService.setEarliestEntryDate(date);
+    notifyListeners();
+  }
+
+  bool get legacyDateSelector => globals.legacyDateSelector;
+
+  //TODO set this whenever an entry created with date < this one
+  void setLegacyDateSelector(bool isLegacy) {
+    SettingsService.setLegacyDateSelector(isLegacy);
+    notifyListeners();
   }
 
   int get defaultAccountId => globals.defaultAccountId;

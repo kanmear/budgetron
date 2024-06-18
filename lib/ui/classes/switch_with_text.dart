@@ -17,6 +17,7 @@ class BudgetronSwitchWithText extends StatefulWidget {
 class _BudgetronSwitchWithTextState extends State<BudgetronSwitchWithText> {
   @override
   Widget build(BuildContext context) {
+    //REFACTOR maybe Row and Container with decorations could be separate
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),

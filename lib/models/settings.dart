@@ -13,6 +13,8 @@ class Settings {
   // internal data
   DateTime earliestEntryDate = DateTime.now();
 
+  bool legacyDateSelector;
+
   int defaultAccountId;
 
   int defaultDatePeriodEntries;
@@ -22,6 +24,7 @@ class Settings {
   Settings({
     this.currency = '',
     this.defaultAccountId = -1,
+    this.legacyDateSelector = false,
     this.defaultDatePeriodEntries = 0,
     this.defaultDatePeriodStats = 2,
     this.defaultDatePeriodGroups = 2,
