@@ -6,3 +6,7 @@ String currency = '';
 DateTime earliestEntryDate = DateTime.now();
 
 int defaultAccountId = -1;
+
+int defaultDatePeriodEntries = 0;
+int defaultDatePeriodStats = 2;
+int defaultDatePeriodGroups = 2;

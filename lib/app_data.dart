@@ -25,6 +25,27 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  int get defaultDatePeriodEntries => globals.defaultDatePeriodEntries;
+
+  void setDefaultDatePeriodEntries(int id) {
+    SettingsService.setDefaultDatePeriodEntries(id);
+    notifyListeners();
+  }
+
+  int get defaultDatePeriodStats => globals.defaultDatePeriodStats;
+
+  void setDefaultDatePeriodStats(int id) {
+    SettingsService.setDefaultDatePeriodStats(id);
+    notifyListeners();
+  }
+
+  int get defaultDatePeriodGroups => globals.defaultDatePeriodGroups;
+
+  void setDefaultDatePeriodGroups(int id) {
+    SettingsService.setDefaultDatePeriodGroups(id);
+    notifyListeners();
+  }
+
   // Locale _locale = Locale('en', 'US');
   // ThemeData _theme = ThemeData.light();
   //

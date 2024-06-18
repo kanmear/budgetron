@@ -42,6 +42,30 @@ class SettingsService {
     globals.defaultAccountId = id;
   }
 
+  static void setDefaultDatePeriodEntries(int id) async {
+    Settings settings = await _getSettings();
+    settings.defaultDatePeriodEntries = id;
+
+    SettingsController.updateSettings(settings);
+    globals.defaultDatePeriodEntries = id;
+  }
+
+  static void setDefaultDatePeriodStats(int id) async {
+    Settings settings = await _getSettings();
+    settings.defaultDatePeriodStats = id;
+
+    SettingsController.updateSettings(settings);
+    globals.defaultDatePeriodStats = id;
+  }
+
+  static void setDefaultDatePeriodGroups(int id) async {
+    Settings settings = await _getSettings();
+    settings.defaultDatePeriodGroups = id;
+
+    SettingsController.updateSettings(settings);
+    globals.defaultDatePeriodGroups = id;
+  }
+
   static Future<Settings> _getSettings() async {
     return await SettingsController.getSettings()
         .first

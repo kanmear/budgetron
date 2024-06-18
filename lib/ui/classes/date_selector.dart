@@ -7,9 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
-//TODO requires testing
-class DateSelectorStats extends StatelessWidget {
-  const DateSelectorStats(
+class DateSelector extends StatelessWidget {
+  const DateSelector(
       {super.key,
       required this.datePeriodNotifier,
       required this.dateTimeNotifier,
@@ -112,22 +111,32 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
 
     if (widget.datePeriodNotifier.value == DatePeriod.month) {
       return DateFormat.MMM().format(date);
+    } else if (widget.datePeriodNotifier.value == DatePeriod.day) {
+      return DateFormat.MMMd().format(date);
     } else {
+      // year period
       return DateFormat.y().format(date);
     }
   }
 
   bool _resolveEnabled(int value) {
     //REFACTOR is it possible to reduce this to 1 call per build?
-    var isMonth = widget.datePeriodNotifier.value == DatePeriod.month;
     var wouldBeDate = widget.dateTimeNotifier.value[0];
 
     DateTime earliestDate = globals.earliestEntryDate;
 
-    if (isMonth) {
+    if (widget.datePeriodNotifier.value == DatePeriod.month) {
       wouldBeDate = DateUtils.addMonthsToMonthDate(wouldBeDate, value);
       var wouldBeShifted = BudgetronDateUtils.shiftToEndOfMonth(wouldBeDate);
       var nowShifted = BudgetronDateUtils.shiftToEndOfMonth(now);
+
+      return value > 0
+          ? (wouldBeDate.isBefore(nowShifted))
+          : (wouldBeShifted.isAfter(earliestDate));
+    } else if (widget.datePeriodNotifier.value == DatePeriod.day) {
+      wouldBeDate = DateUtils.addDaysToDate(wouldBeDate, value);
+      var wouldBeShifted = BudgetronDateUtils.shiftToEndOfDay(wouldBeDate);
+      var nowShifted = BudgetronDateUtils.shiftToEndOfDay(now);
 
       return value > 0
           ? (wouldBeDate.isBefore(nowShifted))
@@ -148,6 +157,9 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
     if (period == DatePeriod.month) {
       fromDate = DateTime(now.year, now.month);
       toDate = BudgetronDateUtils.shiftToEndOfMonth(fromDate);
+    } else if (period == DatePeriod.day) {
+      fromDate = DateTime(now.year, now.month, now.day);
+      toDate = BudgetronDateUtils.shiftToEndOfDay(fromDate);
     } else {
       //year period
       fromDate = DateTime(now.year);
@@ -161,17 +173,18 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
   }
 
   _selectDate(int value) {
-    var isMonth = widget.datePeriodNotifier.value == DatePeriod.month;
-
     var dates = widget.dateTimeNotifier.value;
     var oldFromDate = dates[0];
 
     DateTime newFromDate;
     DateTime newToDate;
 
-    if (isMonth) {
+    if (widget.datePeriodNotifier.value == DatePeriod.month) {
       newFromDate = DateUtils.addMonthsToMonthDate(oldFromDate, value);
       newToDate = BudgetronDateUtils.shiftToEndOfMonth(newFromDate);
+    } else if (widget.datePeriodNotifier.value == DatePeriod.day) {
+      newFromDate = DateUtils.addDaysToDate(oldFromDate, value);
+      newToDate = BudgetronDateUtils.shiftToEndOfDay(newFromDate);
     } else {
       //year period
       newFromDate = DateTime(oldFromDate.year + value);

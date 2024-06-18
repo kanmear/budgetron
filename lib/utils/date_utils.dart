@@ -1,12 +1,53 @@
+import 'package:budgetron/globals.dart' as globals;
+
 import 'package:flutter/material.dart';
 
-class BudgetronDateUtils {
-  static List<DateTime> calculatePairOfDates() {
-    var now = DateTime.now();
-    //TODO should account for date period; add after implementing Settings
-    var endDate = BudgetronDateUtils.shiftToEndOfMonth(now);
+import 'package:budgetron/utils/enums.dart';
+import 'package:budgetron/models/enums/date_period.dart';
 
-    return [DateTime(now.year, now.month), endDate];
+class BudgetronDateUtils {
+  static List<DateTime> getDatesInPeriod(BudgetronPage page) {
+    switch (page) {
+      case BudgetronPage.entries:
+        return _calculatePairOfDates(DatePeriod.values
+            .where((p) => p.periodIndex == globals.defaultDatePeriodEntries)
+            .first);
+      case BudgetronPage.stats:
+        return _calculatePairOfDates(DatePeriod.values
+            .where((p) => p.periodIndex == globals.defaultDatePeriodStats)
+            .first);
+      case BudgetronPage.groups:
+        return _calculatePairOfDates(DatePeriod.values
+            .where((p) => p.periodIndex == globals.defaultDatePeriodGroups)
+            .first);
+      default:
+        throw Exception('Not a valid app page.');
+    }
+  }
+
+  static List<DateTime> _calculatePairOfDates(DatePeriod datePeriod) {
+    var now = DateTime.now();
+    DateTime endDate;
+
+    switch (datePeriod) {
+      case DatePeriod.day:
+        endDate = BudgetronDateUtils.shiftToEndOfDay(now);
+        return [DateTime(now.year, now.month, now.day), endDate];
+      case DatePeriod.month:
+        endDate = BudgetronDateUtils.shiftToEndOfMonth(now);
+        return [DateTime(now.year, now.month), endDate];
+      case DatePeriod.year:
+        endDate = BudgetronDateUtils.shiftToEndOfYear(now);
+        return [DateTime(now.year), endDate];
+      default:
+        throw Exception('Not a valid date period.');
+    }
+  }
+
+  static DateTime shiftToEndOfDay(DateTime date) {
+    var startDate = DateTime(date.year, date.month, date.day);
+    return DateUtils.addDaysToDate(startDate, 1)
+        .add(const Duration(milliseconds: -1));
   }
 
   static DateTime shiftToEndOfMonth(DateTime date) {

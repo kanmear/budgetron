@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/app_data.dart';
+import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/utils/date_utils.dart';
@@ -10,14 +11,16 @@ import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/ui/classes/date_selector.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
-import 'package:budgetron/ui/classes/date_selector_entries.dart';
 import 'package:budgetron/routes/popups/entry/edit_entry_popup.dart';
 
 class EntriesPage extends StatefulWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.day);
+  final ValueNotifier<List<DateTime>> dateTimeNotifier =
+      ValueNotifier(BudgetronDateUtils.getDatesInPeriod(BudgetronPage.entries));
 
   EntriesPage({
     super.key,
@@ -36,45 +39,65 @@ class _EntriesPageState extends State<EntriesPage> {
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(children: [
           EntriesListView(
+              dateTimeNotifier: widget.dateTimeNotifier,
               datePeriodNotifier: widget.datePeriodNotifier,
               currency: currency),
-          DateSelectorEntries(datePeriodNotifier: widget.datePeriodNotifier)
+          DateSelector(
+            datePeriodNotifier: widget.datePeriodNotifier,
+            dateTimeNotifier: widget.dateTimeNotifier,
+            periodItems: const [
+              DatePeriod.day,
+              DatePeriod.month,
+              DatePeriod.year
+            ],
+          )
         ]));
   }
 }
 
 class EntriesListView extends StatelessWidget {
+  final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final String currency;
 
   const EntriesListView(
-      {super.key, required this.datePeriodNotifier, required this.currency});
+      {super.key,
+      required this.dateTimeNotifier,
+      required this.currency,
+      required this.datePeriodNotifier});
 
   @override
   Widget build(BuildContext context) {
     return Flexible(
-        child: StreamBuilder<List<Entry>>(
-            stream: EntryController.getEntries(),
-            builder: (context, snapshot) {
-              if (snapshot.data?.isNotEmpty ?? false) {
-                return ValueListenableBuilder(
-                    valueListenable: datePeriodNotifier,
-                    builder: (context, value, child) {
-                      return Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16),
-                          child: _buildListView(snapshot.data!, currency));
-                    });
-              } else {
-                return Center(
-                    child: Text(
-                  "No entries in database",
-                  style: BudgetronFonts.nunitoSize16Weight300Gray,
-                ));
-              }
+        child: ValueListenableBuilder(
+            valueListenable: dateTimeNotifier,
+            builder: (context, value, child) {
+              return Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: StreamBuilder<List<Entry>>(
+                      stream: _getEntries(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data?.isNotEmpty ?? false) {
+                          return _buildListView(snapshot.data!, currency);
+                        } else {
+                          return Center(
+                              child: Text(
+                            'No entries for this period',
+                            style: BudgetronFonts.nunitoSize16Weight300Gray,
+                          ));
+                        }
+                      }));
             }));
   }
 
-  _buildListView(List<Entry> entries, String currency) {
+  Stream<List<Entry>> _getEntries() {
+    var fromDate = dateTimeNotifier.value[0];
+    var toDate = dateTimeNotifier.value[1];
+
+    return EntryController.getEntries(period: [fromDate, toDate]);
+  }
+
+  Widget _buildListView(List<Entry> entries, String currency) {
     Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
     List<DateTime> entryDates = [];
 

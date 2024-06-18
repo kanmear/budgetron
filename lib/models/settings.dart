@@ -12,10 +12,18 @@ class Settings {
 
   // internal data
   DateTime earliestEntryDate = DateTime.now();
+
   int defaultAccountId;
+
+  int defaultDatePeriodEntries;
+  int defaultDatePeriodStats;
+  int defaultDatePeriodGroups;
 
   Settings({
     this.currency = '',
     this.defaultAccountId = -1,
+    this.defaultDatePeriodEntries = 0,
+    this.defaultDatePeriodStats = 2,
+    this.defaultDatePeriodGroups = 2,
   });
 }

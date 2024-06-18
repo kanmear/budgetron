@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/utils/date_utils.dart';
-import 'package:budgetron/ui/classes/date_selector_stats.dart';
+import 'package:budgetron/ui/classes/date_selector.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
 import 'overall_chart.dart';
@@ -11,7 +12,7 @@ class StatsPage extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.month);
   final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(BudgetronDateUtils.calculatePairOfDates());
+      ValueNotifier(BudgetronDateUtils.getDatesInPeriod(BudgetronPage.stats));
   //TODO check that isExpense is needed here and not in overall chart after finishing Stats
   final ValueNotifier<bool> isExpenseFilterNotifier = ValueNotifier(true);
 
@@ -64,7 +65,7 @@ class StatsView extends StatelessWidget {
               ],
             ),
           ),
-          DateSelectorStats(
+          DateSelector(
               datePeriodNotifier: datePeriodNotifier,
               dateTimeNotifier: dateTimeNotifier,
               periodItems: const [DatePeriod.month, DatePeriod.year]),

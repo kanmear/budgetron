@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
-//REFACTOR a lot of similarity with date selector for stats
-class DateSelectorEntries extends StatelessWidget {
-  const DateSelectorEntries({super.key, required this.datePeriodNotifier});
+class LegacyDateSelector extends StatelessWidget {
+  const LegacyDateSelector({super.key, required this.datePeriodNotifier});
 
   final ValueNotifier<DatePeriod> datePeriodNotifier;
 

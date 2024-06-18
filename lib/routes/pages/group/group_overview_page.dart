@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
+import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
@@ -26,7 +27,7 @@ class GroupOverviewPage extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.month);
   final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(BudgetronDateUtils.calculatePairOfDates());
+      ValueNotifier(BudgetronDateUtils.getDatesInPeriod(BudgetronPage.groups));
   final ValueNotifier<bool> expenseFilterNotifier = ValueNotifier(true);
 
   @override
