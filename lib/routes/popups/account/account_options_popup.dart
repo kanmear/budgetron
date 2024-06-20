@@ -8,6 +8,7 @@ import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/account/transaction.dart';
 import 'package:budgetron/ui/classes/buttons/button_with_icon.dart';
 import 'package:budgetron/routes/popups/account/edit_account_popup.dart';
+import 'package:budgetron/routes/pages/account/account_operations_page.dart';
 import 'package:budgetron/routes/popups/account/account_transfer_popup.dart';
 import 'package:budgetron/routes/pages/account/account_transaction_page.dart';
 
@@ -36,7 +37,7 @@ class AccountOptionsDialog extends StatelessWidget {
           Row(children: [
             Expanded(
                 child: ButtonWithIcon(
-                    onTap: () => {},
+                    onTap: () => _navigateToOperationsPage(context),
                     icon: const Icon(Icons.list),
                     color: Theme.of(context).colorScheme.surface,
                     text: 'Operations')),
@@ -81,8 +82,15 @@ class AccountOptionsDialog extends StatelessWidget {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (BuildContext context) => AccountTransactionPage(
+            builder: (context) => AccountTransactionPage(
                 transactionType: transactionType, account: account)));
+  }
+
+  void _navigateToOperationsPage(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AccountOperationsPage(account: account)));
   }
 }
 

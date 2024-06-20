@@ -33,6 +33,31 @@ class AccountsController {
   static void addTransaction(Transaction transaction) =>
       _getTransactionBox().put(transaction);
 
+  static getTransactionsInPeriod(int accountId, List<DateTime> dates) {
+    var periodCondition =
+        Transaction_.dateTime.greaterOrEqual(dates[0].millisecondsSinceEpoch) &
+            Transaction_.dateTime.lessOrEqual(dates[1].millisecondsSinceEpoch);
+    var accountCondition = Transaction_.account.equals(accountId);
+
+    return _getTransactionBox()
+        .query(accountCondition & periodCondition)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
+  static getTransfersInPeriod(int accountId, List<DateTime> dates) {
+    var periodCondition =
+        Transfer_.dateTime.greaterOrEqual(dates[0].millisecondsSinceEpoch) &
+            Transfer_.dateTime.lessOrEqual(dates[1].millisecondsSinceEpoch);
+    var accountCondition = Transfer_.fromAccount.equals(accountId) |
+        Transfer_.toAccount.equals(accountId);
+
+    return _getTransferBox()
+        .query(accountCondition & periodCondition)
+        .watch(triggerImmediately: true)
+        .map((query) => query.find());
+  }
+
   static Box<Account> _getAccountBox() => ObjectBox.store.box<Account>();
   static Box<Transfer> _getTransferBox() => ObjectBox.store.box<Transfer>();
   static Box<Transaction> _getTransactionBox() =>
