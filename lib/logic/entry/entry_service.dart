@@ -54,7 +54,7 @@ class EntryService {
       Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap,
       List<DateTime> entryDates) {
     for (var entry in entries) {
-      _addEntryToMap(entriesMap, entry, datePeriod);
+      addEntryToMap(entriesMap, entry, datePeriod);
     }
 
     entryDates.addAll(entriesMap.keys.toList());
@@ -70,7 +70,7 @@ class EntryService {
               entry.dateTime.isAtSameMomentAs(latest))
           .toList();
 
-  static void _addEntryToMap(
+  static void addEntryToMap(
       Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap,
       Entry entry,
       DatePeriod datePeriod) {

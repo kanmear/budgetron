@@ -17,7 +17,9 @@ import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/popups/entry/edit_entry_popup.dart';
 
+//TODO check if stateful widget is not needed
 class EntriesPage extends StatefulWidget {
+  //TODO make settings entry for default datePeriod
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.day);
   final ValueNotifier<List<DateTime>> dateTimeNotifier =

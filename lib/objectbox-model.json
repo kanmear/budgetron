@@ -143,7 +143,7 @@
     },
     {
       "id": "6:9083894278175952157",
-      "lastPropertyId": "3:2064438330457630227",
+      "lastPropertyId": "8:726246260283058766",
       "name": "Settings",
       "properties": [
         {
@@ -161,6 +161,31 @@
           "id": "3:2064438330457630227",
           "name": "earliestEntryDate",
           "type": 10
+        },
+        {
+          "id": "4:8589463183449705779",
+          "name": "legacyDateSelector",
+          "type": 1
+        },
+        {
+          "id": "5:8808498948436527575",
+          "name": "defaultAccountId",
+          "type": 6
+        },
+        {
+          "id": "6:1910696972272446084",
+          "name": "defaultDatePeriodEntries",
+          "type": 6
+        },
+        {
+          "id": "7:7294452702959799442",
+          "name": "defaultDatePeriodStats",
+          "type": 6
+        },
+        {
+          "id": "8:726246260283058766",
+          "name": "defaultDatePeriodGroups",
+          "type": 6
         }
       ],
       "relations": []

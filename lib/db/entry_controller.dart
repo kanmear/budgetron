@@ -9,7 +9,8 @@ class EntryController {
       {List<DateTime>? period,
       List<EntryCategory>? categoryFilter,
       List<int>? ids,
-      bool? isExpense}) {
+      bool? isExpense,
+      int? accountId}) {
     QueryBuilder<Entry> queryBuilder;
     Condition<Entry>? condition;
 
@@ -38,6 +39,10 @@ class EntryController {
     if (isExpense != null) {
       queryBuilder.link(
           Entry_.category, EntryCategory_.isExpense.equals(isExpense));
+    }
+
+    if (accountId != null) {
+      queryBuilder.link(Entry_.account, Account_.id.equals(accountId));
     }
 
     queryBuilder.order(Entry_.dateTime, flags: Order.descending);
