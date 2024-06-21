@@ -18,9 +18,8 @@ class BudgetronTabSwitch extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(8),
                 color: Theme.of(context).colorScheme.surface),
-            height: 42,
             child: Row(children: [
               for (var tab in tabs)
                 SwitchTab(valueNotifier: valueNotifier, tab: tab)
@@ -52,11 +51,14 @@ class SwitchTab extends StatelessWidget {
                       padding: const EdgeInsets.all(4),
                       child: Container(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2),
+                            borderRadius: BorderRadius.circular(4),
                             color: _resolveColor(isSelected, context)),
                         child: Center(
-                            child: Text(tab.toString(),
-                                style: _resolveStyle(isSelected))),
+                            child: Padding(
+                          padding: const EdgeInsets.only(top: 6, bottom: 6),
+                          child: Text(tab.toString(),
+                              style: _resolveStyle(isSelected)),
+                        )),
                       ));
                 })));
   }
