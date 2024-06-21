@@ -84,7 +84,9 @@ class AccountService {
     Set<DateTime> setOfDates = Set.from(entriesMap.keys);
     setOfDates.addAll(otherOperationsMap.keys);
 
-    entryDates.addAll(setOfDates);
+    var sortedDates = setOfDates.toList();
+    sortedDates.sort((a, b) => b.compareTo(a));
+    entryDates.addAll(sortedDates);
   }
 
   static void _addOperationToMap(Map<DateTime, List<Listable>> operationsMap,
