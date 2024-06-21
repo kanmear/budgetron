@@ -42,21 +42,40 @@ class AccountService {
   static void createTransfer(Transfer transfer) {
     Account fromAccount = transfer.fromAccount.target!;
     fromAccount.balance -= transfer.value;
+
+    _updateEarliestDate(fromAccount, transfer.dateTime);
     AccountsController.addAccount(fromAccount);
 
     Account toAccount = transfer.toAccount.target!;
     toAccount.balance += transfer.value;
+
+    _updateEarliestDate(toAccount, transfer.dateTime);
     AccountsController.addAccount(toAccount);
 
     AccountsController.addTransfer(transfer);
   }
 
   static void createTransaction(Transaction transaction) {
-    Account receiverAccount = transaction.account.target!;
-    receiverAccount.balance += transaction.value;
-    AccountsController.addAccount(receiverAccount);
+    Account account = transaction.account.target!;
+    account.balance += transaction.value;
+
+    _updateEarliestDate(account, transaction.dateTime);
+    AccountsController.addAccount(account);
 
     AccountsController.addTransaction(transaction);
+  }
+
+  static void updateEarliestDate(Account account, DateTime operationDate) {
+    if (_updateEarliestDate(account, operationDate)) updateAccount(account);
+  }
+
+  static bool _updateEarliestDate(Account account, DateTime operationDate) {
+    if (!operationDate.isBefore(account.earliestOperationDate)) {
+      return false;
+    }
+
+    account.earliestOperationDate = operationDate;
+    return true;
   }
 
   static getTransactionsInPeriod(int accountId, List<DateTime> dates) {

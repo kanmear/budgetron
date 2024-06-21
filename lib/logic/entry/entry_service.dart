@@ -4,6 +4,7 @@ import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
+import 'package:budgetron/logic/account/account_service.dart';
 
 class EntryService {
   static void createEntry(Entry entry, EntryCategory category) {
@@ -16,6 +17,10 @@ class EntryService {
     var entryId = EntryController.addEntry(entry);
     if (category.isBudgetTracked) {
       BudgetService.addEntryToBudget(category.id, entryId, entry.value.abs());
+    }
+
+    if (entry.account.target != null) {
+      AccountService.updateEarliestDate(entry.account.target!, entry.dateTime);
     }
   }
 
