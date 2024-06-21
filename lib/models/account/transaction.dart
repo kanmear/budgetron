@@ -22,14 +22,20 @@ class Transaction implements Listable {
   String toString() => 'Transaction';
 }
 
-enum TransactionType {
-  credit(name: 'Credit'),
-  debit(name: 'Debit');
+//TODO figure out where enums should be, because CategoryType is not bundled with Category
+enum TransactionType implements TabValue {
+  credit(name: 'Credit', value: false),
+  debit(name: 'Debit', value: true);
 
   final String name;
 
-  const TransactionType({required this.name});
+  final bool value;
+
+  const TransactionType({required this.name, required this.value});
 
   @override
   toString() => name;
+
+  @override
+  getValue() => value;
 }

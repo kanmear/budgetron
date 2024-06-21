@@ -10,9 +10,9 @@ import 'package:budgetron/ui/classes/select_button.dart';
 import 'package:budgetron/models/account/transaction.dart';
 import 'package:budgetron/logic/account/account_service.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
-import 'package:budgetron/ui/classes/text_fields/large_text_field.dart';
 import 'package:budgetron/routes/pages/account/account_selection_page.dart';
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
+import 'package:budgetron/routes/pages/entry/widgets/entry_value_input_field.dart';
 
 class AccountTransactionPage extends StatelessWidget {
   final ValueNotifier<TransactionType> tabNotifier =
@@ -37,14 +37,16 @@ class AccountTransactionPage extends StatelessWidget {
     accountNotifier.value = account;
 
     return Scaffold(
-        appBar:
-            const BudgetronAppBar(leading: ArrowBackIconButton(), title: ''),
+        appBar: const BudgetronAppBar(
+          leading: ArrowBackIconButton(),
+          title: '',
+        ),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(children: [
           BudgetronTabSwitch(
               valueNotifier: tabNotifier,
               tabs: const [TransactionType.debit, TransactionType.credit]),
-          TransactionValueTextField(
+          EntryValueInputField(
             tabNotifier: tabNotifier,
             textController: textController,
           ),
@@ -105,32 +107,4 @@ class AccountTransactionPage extends StatelessWidget {
 
   bool _isSubmitAvailable(NumberKeyboardService keyboardService) =>
       keyboardService.isValueValidForCreation();
-}
-
-class TransactionValueTextField extends StatelessWidget {
-  final ValueNotifier<TransactionType> tabNotifier;
-  final TextEditingController textController;
-
-  const TransactionValueTextField({
-    super.key,
-    required this.tabNotifier,
-    required this.textController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 32, right: 32),
-        child: Center(
-            child: BudgetronLargeTextField(
-                textController: textController,
-                autoFocus: true,
-                onSubmitted: () => {},
-                inputType: TextInputType.number,
-                showCursor: false,
-                readOnly: true)),
-      ),
-    );
-  }
 }
