@@ -1,5 +1,7 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/date_selector.dart';
@@ -50,6 +52,8 @@ class StatsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final earliestDate = Provider.of<AppData>(context).earliestEntryDate;
+
     return Expanded(
       child: Column(
         children: [
@@ -68,6 +72,7 @@ class StatsView extends StatelessWidget {
           DateSelector(
               datePeriodNotifier: datePeriodNotifier,
               dateTimeNotifier: dateTimeNotifier,
+              earliestDate: earliestDate,
               periodItems: const [DatePeriod.month, DatePeriod.year]),
         ],
       ),

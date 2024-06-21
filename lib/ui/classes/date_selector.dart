@@ -1,4 +1,3 @@
-import 'package:budgetron/globals.dart' as globals;
 import 'package:budgetron/utils/date_utils.dart';
 
 import 'package:intl/intl.dart';
@@ -12,11 +11,13 @@ class DateSelector extends StatelessWidget {
       {super.key,
       required this.datePeriodNotifier,
       required this.dateTimeNotifier,
-      required this.periodItems});
+      required this.periodItems,
+      required this.earliestDate});
 
   final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final List<DatePeriod> periodItems;
+  final DateTime earliestDate;
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +27,7 @@ class DateSelector extends StatelessWidget {
       child: DatePeriodSelector(
           datePeriodNotifier: datePeriodNotifier,
           dateTimeNotifier: dateTimeNotifier,
+          earliestDate: earliestDate,
           items: periodItems),
     );
   }
@@ -36,11 +38,13 @@ class DatePeriodSelector extends StatefulWidget {
       {super.key,
       required this.datePeriodNotifier,
       required this.dateTimeNotifier,
-      required this.items});
+      required this.items,
+      required this.earliestDate});
 
   final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final List<DatePeriod> items;
+  final DateTime earliestDate;
 
   @override
   State<DatePeriodSelector> createState() => _DatePeriodSelectorState();
@@ -123,8 +127,6 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
     //REFACTOR is it possible to reduce this to 1 call per build?
     var wouldBeDate = widget.dateTimeNotifier.value[0];
 
-    DateTime earliestDate = globals.earliestEntryDate;
-
     if (widget.datePeriodNotifier.value == DatePeriod.month) {
       wouldBeDate = DateUtils.addMonthsToMonthDate(wouldBeDate, value);
       var wouldBeShifted = BudgetronDateUtils.shiftToEndOfMonth(wouldBeDate);
@@ -132,7 +134,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
 
       return value > 0
           ? (wouldBeDate.isBefore(nowShifted))
-          : (wouldBeShifted.isAfter(earliestDate));
+          : (wouldBeShifted.isAfter(widget.earliestDate));
     } else if (widget.datePeriodNotifier.value == DatePeriod.day) {
       wouldBeDate = DateUtils.addDaysToDate(wouldBeDate, value);
       var wouldBeShifted = BudgetronDateUtils.shiftToEndOfDay(wouldBeDate);
@@ -140,12 +142,12 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
 
       return value > 0
           ? (wouldBeDate.isBefore(nowShifted))
-          : (wouldBeShifted.isAfter(earliestDate));
+          : (wouldBeShifted.isAfter(widget.earliestDate));
     } else {
       //year period
       return value > 0
           ? (wouldBeDate.year + value <= now.year)
-          : (wouldBeDate.year + value >= earliestDate.year);
+          : (wouldBeDate.year + value >= widget.earliestDate.year);
     }
   }
 

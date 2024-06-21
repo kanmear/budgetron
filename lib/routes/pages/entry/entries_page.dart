@@ -47,17 +47,18 @@ class _EntriesPageState extends State<EntriesPage> {
               datePeriodNotifier: widget.datePeriodNotifier,
               currency: appData.currency,
               isLegacy: isLegacy),
-          _resolveDateSelector(isLegacy)
+          _resolveDateSelector(isLegacy, appData.earliestEntryDate)
         ]));
   }
 
-  Widget _resolveDateSelector(bool legacyDateSelector) {
+  Widget _resolveDateSelector(bool legacyDateSelector, DateTime earliestDate) {
     if (legacyDateSelector) {
       return LegacyDateSelector(datePeriodNotifier: widget.datePeriodNotifier);
     } else {
       return DateSelector(
         datePeriodNotifier: widget.datePeriodNotifier,
         dateTimeNotifier: widget.dateTimeNotifier,
+        earliestDate: earliestDate,
         periodItems: const [DatePeriod.day, DatePeriod.month, DatePeriod.year],
       );
     }

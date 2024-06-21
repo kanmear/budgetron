@@ -1,5 +1,3 @@
-import 'package:budgetron/globals.dart' as globals;
-
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -57,6 +55,7 @@ class AccountOperationsPage extends StatelessWidget {
       return DateSelector(
         datePeriodNotifier: datePeriodNotifier,
         dateTimeNotifier: dateTimeNotifier,
+        earliestDate: account.earliestOperationDate,
         periodItems: const [DatePeriod.day, DatePeriod.month, DatePeriod.year],
       );
     }
@@ -130,8 +129,7 @@ class OperationsListView extends StatelessWidget {
   }
 
   Stream<List<Listable>> _getOperations() {
-    //TODO this should use Account.earliestOperationDate instead
-    var fromDate = globals.earliestEntryDate;
+    var fromDate = account.earliestOperationDate;
     var toDate = DateTime.now();
 
     return AccountService.getOperationsInPeriod(account.id, [fromDate, toDate]);
