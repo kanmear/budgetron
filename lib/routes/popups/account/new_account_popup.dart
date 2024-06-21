@@ -74,7 +74,8 @@ class NewAccountDialog extends StatelessWidget {
         name: nameTextController.text,
         color: color,
         balance: balance,
-        isDefault: isDefault);
+        isDefault: isDefault,
+        earliestOperationDate: DateTime.now());
 
     AccountService.createAccount(account);
     Navigator.pop(context);

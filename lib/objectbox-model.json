@@ -261,7 +261,7 @@
     },
     {
       "id": "9:6971380326604414811",
-      "lastPropertyId": "6:3337697882913509668",
+      "lastPropertyId": "7:8911840057741883354",
       "name": "Account",
       "properties": [
         {
@@ -291,6 +291,11 @@
           "id": "5:1232045132643485490",
           "name": "balance",
           "type": 8
+        },
+        {
+          "id": "7:8911840057741883354",
+          "name": "earliestOperationDate",
+          "type": 10
         }
       ],
       "relations": []

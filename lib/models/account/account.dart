@@ -11,11 +11,15 @@ class Account implements Selectable {
   bool isDefault;
   double balance;
 
+  @Property(type: PropertyType.date)
+  DateTime earliestOperationDate;
+
   Account(
       {required this.name,
       required this.color,
       required this.balance,
-      required this.isDefault});
+      required this.isDefault,
+      required this.earliestOperationDate});
 
   @override
   String toString() {
