@@ -69,6 +69,7 @@ class AccountTransactionPage extends StatelessWidget {
                 ])
               ])),
           const SizedBox(height: 16),
+          //REFACTOR move isKeyboardOn inside BudgetronNumberKeyboard
           ValueListenableBuilder(
             valueListenable: isKeyboardOnNotifier,
             builder: (context, isKeyboardOn, _) {

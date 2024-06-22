@@ -56,6 +56,8 @@ class NewEntryPage extends StatelessWidget {
                 dateNotifier: dateNotifier,
                 timeNotifier: timeNotifier),
             const SizedBox(height: 16),
+            //TODO replace with a button so that doesn't happen:
+            //isSubmitAvailable doesn't fire when tab is changed and category is dropped
             BudgetronNumberKeyboard(
                 textController: textController,
                 onConfirmAction: _createNewEntry,
