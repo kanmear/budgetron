@@ -7,7 +7,10 @@ class Account implements Selectable {
 
   @Unique()
   String name;
+
+  @override
   String color;
+
   bool isDefault;
   double balance;
 
@@ -33,7 +36,4 @@ class Account implements Selectable {
 
   @override
   int get hashCode => Object.hash(name, id, 53, 97);
-
-  @override
-  String getColor() => color;
 }

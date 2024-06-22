@@ -1,15 +1,18 @@
+import 'package:budgetron/utils/interfaces.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class EntryCategory {
+class EntryCategory implements Selectable {
   int id = 0;
 
   @Unique()
   String name;
 
+  @override
+  String color;
+
   bool isBudgetTracked;
   bool isExpense;
-  String color;
   int usages;
 
   EntryCategory(

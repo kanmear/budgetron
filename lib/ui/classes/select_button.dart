@@ -6,6 +6,7 @@ import 'package:budgetron/logic/category/category_service.dart';
 
 class BudgetronSelectButton extends StatelessWidget {
   final ValueNotifier<Selectable?> valueNotifier;
+  final Widget? defaultValue;
   final String hintText;
   final Function onTap;
 
@@ -13,7 +14,8 @@ class BudgetronSelectButton extends StatelessWidget {
       {super.key,
       required this.onTap,
       required this.valueNotifier,
-      required this.hintText});
+      required this.hintText,
+      this.defaultValue});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,9 @@ class BudgetronSelectButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SelectedItem(
-                      valueNotifier: valueNotifier, hintText: hintText),
+                      valueNotifier: valueNotifier,
+                      hintText: hintText,
+                      defaultValue: defaultValue),
                   Icon(Icons.arrow_right,
                       color: Theme.of(context).colorScheme.primary)
                 ])));
@@ -40,10 +44,14 @@ class BudgetronSelectButton extends StatelessWidget {
 
 class SelectedItem extends StatelessWidget {
   final ValueNotifier<Selectable?> valueNotifier;
+  final Widget? defaultValue;
   final String hintText;
 
   const SelectedItem(
-      {super.key, required this.valueNotifier, required this.hintText});
+      {super.key,
+      required this.valueNotifier,
+      required this.hintText,
+      this.defaultValue});
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +59,16 @@ class SelectedItem extends StatelessWidget {
         valueListenable: valueNotifier,
         builder: (context, value, _) {
           if (value == null) {
+            if (defaultValue != null) {
+              return defaultValue!;
+            }
+
             return Text(hintText,
                 style: BudgetronFonts.nunitoSize16Weight400Hint);
           } else {
             return Row(children: [
               Icon(Icons.square_rounded,
-                  size: 18,
-                  color: CategoryService.stringToColor(value.getColor())),
+                  size: 18, color: CategoryService.stringToColor(value.color)),
               const SizedBox(width: 4),
               Text(value.toString(),
                   style: BudgetronFonts.nunitoSize16Weight400)

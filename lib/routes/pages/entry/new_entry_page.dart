@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/ui/classes/tab_switch.dart';
+import 'package:budgetron/ui/classes/time_button.dart';
+import 'package:budgetron/models/account/account.dart';
+import 'package:budgetron/ui/classes/date_button.dart';
 import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/ui/classes/select_button.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
+import 'package:budgetron/routes/pages/account/account_selection_page.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 import 'package:budgetron/routes/pages/entry/widgets/entry_value_input_field.dart';
 
-class NewEntryPage extends StatefulWidget {
+class NewEntryPage extends StatelessWidget {
   final ValueNotifier<EntryCategoryType> tabNotifier =
       ValueNotifier(EntryCategoryType.expense);
+  final ValueNotifier<Account?> accountNotifier = ValueNotifier(null);
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
   final TextEditingController textController = TextEditingController(text: '0');
+  final ValueNotifier<DateTime> dateNotifier = ValueNotifier(DateTime.now());
+  final ValueNotifier<TimeOfDay> timeNotifier = ValueNotifier(TimeOfDay.now());
+  final ValueNotifier<bool> isKeyboardOnNotifier = ValueNotifier(true);
 
   NewEntryPage({super.key});
 
-  @override
-  State<NewEntryPage> createState() => _NewEntryPageState();
-}
-
-class _NewEntryPageState extends State<NewEntryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,190 +41,134 @@ class _NewEntryPageState extends State<NewEntryPage> {
         body: Column(
           children: [
             BudgetronTabSwitch(
-              valueNotifier: widget.tabNotifier,
+              valueNotifier: tabNotifier,
               tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
             ),
             EntryValueInputField(
-              tabNotifier: widget.tabNotifier,
-              textController: widget.textController,
+              tabNotifier: tabNotifier,
+              textController: textController,
             ),
-            DateAndCategoryRow(
-              setCategoryCallback: (value) => setState(() {
-                widget.categoryNotifier.value = value;
-              }),
-              categoryNotifier: widget.categoryNotifier,
-              tabNotifier: widget.tabNotifier,
-            ),
+            EntryParameters(
+                tabNotifier: tabNotifier,
+                categoryNotifier: categoryNotifier,
+                accountNotifier: accountNotifier,
+                isKeyboardOnNotifier: isKeyboardOnNotifier,
+                dateNotifier: dateNotifier,
+                timeNotifier: timeNotifier),
+            const SizedBox(height: 16),
             BudgetronNumberKeyboard(
-                textController: widget.textController,
+                textController: textController,
                 onConfirmAction: _createNewEntry,
                 isSubmitAvailable: _isSubmitAvailable)
           ],
         ));
   }
 
-  _createNewEntry(String value) {
-    EntryCategory category = widget.categoryNotifier.value!;
+  void _createNewEntry(String value) {
+    EntryCategory category = categoryNotifier.value!;
 
-    var date = BudgetronDateUtils.stripMilliseconds(DateTime.now());
+    var dateValue = dateNotifier.value;
+    var timeValue = timeNotifier.value;
+    var date = DateTime(dateValue.year, dateValue.month, dateValue.day,
+        timeValue.hour, timeValue.minute);
     Entry entry = Entry(value: double.parse(value), dateTime: date);
+    if (accountNotifier.value != null) {
+      entry.account.target = accountNotifier.value;
+    }
 
     EntryService.createEntry(entry, category);
   }
 
   bool _isSubmitAvailable(NumberKeyboardService keyboardService) {
     return keyboardService.isValueValidForCreation() &&
-        widget.categoryNotifier.value != null;
+        categoryNotifier.value != null;
   }
 }
 
-class DateAndCategoryRow extends StatelessWidget {
+class EntryParameters extends StatefulWidget {
   final ValueNotifier<EntryCategoryType> tabNotifier;
+  final ValueNotifier<Account?> accountNotifier;
   final ValueNotifier<EntryCategory?> categoryNotifier;
-  final Function setCategoryCallback;
 
-  const DateAndCategoryRow({
-    super.key,
-    required this.setCategoryCallback,
-    required this.categoryNotifier,
-    required this.tabNotifier,
-  });
+  final ValueNotifier<DateTime> dateNotifier;
+  final ValueNotifier<TimeOfDay> timeNotifier;
+
+  final ValueNotifier<bool> isKeyboardOnNotifier;
+
+  const EntryParameters(
+      {super.key,
+      required this.tabNotifier,
+      required this.accountNotifier,
+      required this.categoryNotifier,
+      required this.dateNotifier,
+      required this.timeNotifier,
+      required this.isKeyboardOnNotifier});
 
   @override
-  Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const DateField(),
-          const VerticalSeparator(),
-          CategoryField(
-            setCategoryCallback: setCategoryCallback,
-            categoryNotifier: categoryNotifier,
-            tabNotifier: tabNotifier,
-          )
-        ],
-      ),
-    );
-  }
+  State<EntryParameters> createState() => _EntryParametersState();
 }
 
-class VerticalSeparator extends StatelessWidget {
-  const VerticalSeparator({
-    super.key,
-  });
-
+class _EntryParametersState extends State<EntryParameters> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 21, bottom: 21),
-      child: Container(
-        width: 1,
-        decoration: BoxDecoration(
-            border: Border.all(
-                color: Theme.of(context).colorScheme.primary, width: 1)),
-      ),
-    );
-  }
-}
-
-class CategoryField extends StatefulWidget {
-  final ValueNotifier<EntryCategoryType> tabNotifier;
-  final ValueNotifier<EntryCategory?> categoryNotifier;
-  final Function setCategoryCallback;
-
-  const CategoryField({
-    super.key,
-    required this.setCategoryCallback,
-    required this.categoryNotifier,
-    required this.tabNotifier,
-  });
-
-  @override
-  State<CategoryField> createState() => _CategoryFieldState();
-}
-
-class _CategoryFieldState extends State<CategoryField> {
-  @override
-  Widget build(BuildContext context) {
-    _resetCategoryOnTabChange();
-
-    return Expanded(
-        child: InkWell(
-      onTap: () => _navigateToCategorySelection(
-          context, widget.setCategoryCallback, widget.tabNotifier.value),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 21, bottom: 21),
-        child: Center(
-            child: Column(
+        padding: const EdgeInsets.only(left: 16, right: 16),
+        child: Column(
           children: [
-            Text("Category", style: BudgetronFonts.nunitoSize14Weight400),
-            const SizedBox(height: 6),
-            ValueListenableBuilder(
-                valueListenable: widget.categoryNotifier,
-                builder: (context, value, child) {
-                  return widget.categoryNotifier.value == null
-                      ? SizedBox(
-                          height: 24,
-                          child: Text(
-                            "Choose",
-                            style: BudgetronFonts.nunitoSize16Weight600Hint,
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.square_rounded,
-                                color: CategoryService.stringToColor(
-                                    widget.categoryNotifier.value!.color)),
-                            const SizedBox(width: 6),
-                            Text(
-                              widget.categoryNotifier.value!.name,
-                              style: BudgetronFonts.nunitoSize16Weight600,
-                            ),
-                          ],
-                        );
-                }),
+            Row(children: [
+              Expanded(
+                child: ValueListenableBuilder(
+                  valueListenable: widget.tabNotifier,
+                  builder: (context, value, _) {
+                    widget.categoryNotifier.value = null;
+
+                    return BudgetronSelectButton(
+                        onTap: () => _navigateToCategorySelection(context),
+                        valueNotifier: widget.categoryNotifier,
+                        hintText: 'Select category');
+                  },
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: BudgetronSelectButton(
+                    onTap: () => _navigateToAccountSelection(context),
+                    valueNotifier: widget.accountNotifier,
+                    defaultValue: Text('No account',
+                        style: BudgetronFonts.nunitoSize16Weight400),
+                    hintText: ''),
+              )
+            ]),
+            const SizedBox(height: 16),
+            Row(children: [
+              BudgetronDateButton(
+                  dateNotifier: widget.dateNotifier,
+                  isKeyboardOnNotifier: widget.isKeyboardOnNotifier),
+              const SizedBox(width: 16),
+              BudgetronTimeButton(
+                  timeNotifier: widget.timeNotifier,
+                  isKeyboardOnNotifier: widget.isKeyboardOnNotifier)
+            ]),
           ],
-        )),
-      ),
-    ));
+        ));
   }
 
-  Future<void> _navigateToCategorySelection(BuildContext context,
-      Function callback, EntryCategoryType typeFilter) async {
+  Future<void> _navigateToCategorySelection(BuildContext context) async {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => CategorySelectionPage(
                 categoryTypeNotifier: widget.tabNotifier)));
 
-    if (!mounted) return;
-    callback.call(result);
+    if (!mounted || result == null) return;
+    widget.categoryNotifier.value = result;
   }
 
-  _resetCategoryOnTabChange() => widget.tabNotifier
-      .addListener(() => widget.categoryNotifier.value = null);
-}
+  Future<void> _navigateToAccountSelection(BuildContext context) async {
+    final result = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AccountSelectionPage()));
 
-class DateField extends StatelessWidget {
-  const DateField({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: InkWell(
-            onTap: () => {/* TODO add date selection */},
-            child: Padding(
-                padding: const EdgeInsets.only(top: 21, bottom: 21),
-                child: Center(
-                    child: Column(children: [
-                  Text("Date", style: BudgetronFonts.nunitoSize14Weight400),
-                  const SizedBox(height: 6),
-                  Text(DateFormat.yMMMd().format(DateTime.now()),
-                      style: BudgetronFonts.nunitoSize16Weight600)
-                ])))));
+    if (!mounted || result == null) return;
+    widget.accountNotifier.value = result;
   }
 }

@@ -1,5 +1,5 @@
 abstract class Selectable {
-  String getColor();
+  late String color;
   //String getIcon();
 }
 
