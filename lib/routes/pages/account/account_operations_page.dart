@@ -292,24 +292,29 @@ class OperationListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          color: Theme.of(context).colorScheme.surface),
-      padding: const EdgeInsets.only(left: 8, right: 10, top: 8, bottom: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            operation.toString(),
-            style: BudgetronFonts.nunitoSize16Weight400,
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+              color: Theme.of(context).colorScheme.surface),
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                operation.toString(),
+                style: BudgetronFonts.nunitoSize16Weight400,
+              ),
+              Text(
+                operation.value.toStringAsFixed(2),
+                style: BudgetronFonts.nunitoSize16Weight400,
+              )
+            ],
           ),
-          Text(
-            operation.value.toStringAsFixed(2),
-            style: BudgetronFonts.nunitoSize16Weight400,
-          )
-        ],
-      ),
+        ),
+        const SizedBox(height: 8)
+      ],
     );
   }
 }

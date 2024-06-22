@@ -284,8 +284,7 @@ class EntryListTile extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(2),
                       color: Theme.of(context).colorScheme.surface),
-                  padding: const EdgeInsets.only(
-                      left: 8, right: 10, top: 8, bottom: 8),
+                  padding: const EdgeInsets.all(12),
                   child: Column(
                     children: [
                       Row(
@@ -313,6 +312,7 @@ class EntryListTile extends StatelessWidget {
                   ),
                 )),
             _expandedView(context),
+            //REFACTOR replace with listview.separated
             const SizedBox(height: 8)
           ],
         );
