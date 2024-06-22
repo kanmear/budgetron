@@ -104,11 +104,12 @@ class _ValueTextFieldState extends State<ValueTextField> {
   void _onChanged() {
     //TODO test interactions with keyboard
     String value = widget.textController.text;
-    if (value.length != 1 && value.startsWith('0')) {
+    if (value.length != 1 && value.startsWith('0') && !value.contains('.')) {
       widget.textController.text = value.substring(1);
     } else if (value.isEmpty) {
+      //FIX sometimes does not work
       widget.textController.text = '0';
-    } else if (double.tryParse(value) == 0) {
+    } else if (double.tryParse(value) == 0 && !value.contains('.')) {
       widget.textController.text = '0';
     }
   }

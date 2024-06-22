@@ -156,6 +156,6 @@ class NumberKeyboardService {
       value = 0;
     }
 
-    return value.toStringAsFixed(2);
+    return value == 0 ? '0' : value.toStringAsFixed(2);
   }
 }
