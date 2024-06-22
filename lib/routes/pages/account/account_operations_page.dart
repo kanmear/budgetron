@@ -256,12 +256,22 @@ class OperationListTileContainer extends StatelessWidget {
       );
     }
 
-    //otherwise display date according to DateSelector
-    return Text(
-        datePeriod == DatePeriod.day
-            ? DateFormat.yMMMd().format(groupingDate)
-            : DateFormat.yMMM().format(groupingDate),
-        style: BudgetronFonts.nunitoSize16Weight600);
+    String text;
+    switch (datePeriod) {
+      case DatePeriod.day:
+        text = DateFormat.yMMMd().format(groupingDate);
+        break;
+      case DatePeriod.month:
+        text = DateFormat.yMMM().format(groupingDate);
+        break;
+      case DatePeriod.year:
+        text = DateFormat.y().format(groupingDate);
+        break;
+      default:
+        throw Exception('Not a valid date period.');
+    }
+
+    return Text(text, style: BudgetronFonts.nunitoSize16Weight600);
   }
 
   Widget _resolveContainerSumValue() {

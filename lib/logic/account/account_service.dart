@@ -110,9 +110,20 @@ class AccountService {
 
   static void _addOperationToMap(Map<DateTime, List<Listable>> operationsMap,
       Listable operation, DatePeriod datePeriod) {
-    DateTime dateTime = datePeriod == DatePeriod.day
-        ? BudgetronDateUtils.stripTime(operation.dateTime)
-        : DateTime(operation.dateTime.year, operation.dateTime.month);
+    DateTime dateTime;
+    switch (datePeriod) {
+      case DatePeriod.day:
+        dateTime = BudgetronDateUtils.stripTime(operation.dateTime);
+        break;
+      case DatePeriod.month:
+        dateTime = DateTime(operation.dateTime.year, operation.dateTime.month);
+        break;
+      case DatePeriod.year:
+        dateTime = DateTime(operation.dateTime.year);
+        break;
+      default:
+        throw Exception('Not a valid date period.');
+    }
 
     if (operationsMap.containsKey(dateTime)) {
       List<Listable> currentOperations = operationsMap[dateTime]!;

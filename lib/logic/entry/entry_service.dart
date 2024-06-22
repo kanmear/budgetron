@@ -1,8 +1,9 @@
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/enums/date_period.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/account/account_service.dart';
 
@@ -79,10 +80,21 @@ class EntryService {
       Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap,
       Entry entry,
       DatePeriod datePeriod) {
-    DateTime dateTime = datePeriod == DatePeriod.day
-        ? DateTime(
-            entry.dateTime.year, entry.dateTime.month, entry.dateTime.day)
-        : DateTime(entry.dateTime.year, entry.dateTime.month);
+    DateTime dateTime;
+    switch (datePeriod) {
+      case DatePeriod.day:
+        dateTime = BudgetronDateUtils.stripTime(entry.dateTime);
+        break;
+      case DatePeriod.month:
+        dateTime = DateTime(entry.dateTime.year, entry.dateTime.month);
+        break;
+      case DatePeriod.year:
+        dateTime = DateTime(entry.dateTime.year);
+        break;
+      default:
+        throw Exception('Not a valid date period.');
+    }
+
     EntryCategory category = entry.category.target!;
 
     if (entriesMap.containsKey(dateTime)) {
