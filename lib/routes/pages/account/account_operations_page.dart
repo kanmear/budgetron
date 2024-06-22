@@ -165,6 +165,7 @@ class OperationsListView extends StatelessWidget {
             otherOperationsMap.containsKey(groupingDate)
                 ? otherOperationsMap[groupingDate]!
                 : [];
+        operationsOrEmpty.sort((a, b) => b.dateTime.compareTo(a.dateTime));
 
         return OperationListTileContainer(
             entriesToCategoryMap: entriesOrEmpty,
