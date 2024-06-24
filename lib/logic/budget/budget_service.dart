@@ -97,7 +97,7 @@ class BudgetService {
   static bool resetBudget(Budget budget) {
     DateTime now = DateTime.now();
     if (now.isAfter(budget.resetDate)) {
-      _addBudgetHistory(budget, now);
+      _addBudgetHistory(budget, budget.resetDate);
 
       budget.entriesIDs = [];
       budget.currentValue = 0;
