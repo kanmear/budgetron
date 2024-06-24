@@ -85,6 +85,9 @@ class EntryService {
       case DatePeriod.day:
         dateTime = BudgetronDateUtils.stripTime(entry.dateTime);
         break;
+      case DatePeriod.week:
+        dateTime = BudgetronDateUtils.stripTime(entry.dateTime);
+        break;
       case DatePeriod.month:
         dateTime = DateTime(entry.dateTime.year, entry.dateTime.month);
         break;

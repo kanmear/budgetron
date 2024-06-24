@@ -239,6 +239,9 @@ class EntryListTileContainer extends StatelessWidget {
       case DatePeriod.day:
         text = DateFormat.yMMMd().format(groupingDate);
         break;
+      case DatePeriod.week:
+        text = DateFormat.yMMMd().format(groupingDate);
+        break;
       case DatePeriod.month:
         text = DateFormat.yMMM().format(groupingDate);
         break;
