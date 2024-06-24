@@ -93,39 +93,35 @@ class BudgetHistoryOverview extends StatelessWidget {
             List<BudgetHistory> budgetHistories = [currentBudgetHistory];
             budgetHistories.addAll(snapshot.data!);
 
-            return CustomPaint(
-                foregroundPainter: LinePainter(),
-                child: Container(
-                    height: 220,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(8))),
-                    child: LayoutBuilder(builder:
-                        (BuildContext context, BoxConstraints constraints) {
-                      //NOTE 8 is width of separators, 6 is the amount of separators between 7 columns
-                      var columnWidth =
-                          (constraints.maxWidth - (8 * 6)) * (1 / 7);
-                      var isReverse = true;
-                      if (budgetHistories.length <= 7) {
-                        isReverse = false;
-                        budgetHistories = budgetHistories.reversed.toList();
-                      }
+            return Container(
+                height: 220,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+                  //NOTE 8 is width of separators, 6 is the amount of separators between 7 columns
+                  var columnWidth = (constraints.maxWidth - (8 * 6)) * (1 / 7);
+                  var isReverse = true;
+                  if (budgetHistories.length <= 7) {
+                    isReverse = false;
+                    budgetHistories = budgetHistories.reversed.toList();
+                  }
 
-                      return ListView.separated(
-                          reverse: isReverse,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index) {
-                            return BudgetHistoryColumn(
-                                width: columnWidth,
-                                history: budgetHistories[index]);
-                          },
-                          separatorBuilder: (BuildContext context, int index) {
-                            return const SizedBox(width: 8);
-                          },
-                          itemCount: budgetHistories.length);
-                    })));
+                  return ListView.separated(
+                      reverse: isReverse,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        return BudgetHistoryColumn(
+                            width: columnWidth,
+                            history: budgetHistories[index]);
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(width: 8);
+                      },
+                      itemCount: budgetHistories.length);
+                }));
           } else {
             return Center(
                 child: Text('No histories in database',
@@ -133,25 +129,6 @@ class BudgetHistoryOverview extends StatelessWidget {
           }
         });
   }
-}
-
-class LinePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    const double padding = 12;
-    const double column100percentHeight = 140;
-    const double lineHeight = column100percentHeight + padding;
-
-    final paint = Paint()
-      ..color = Colors.purple
-      ..strokeWidth = 2.0;
-
-    canvas.drawLine(Offset(padding, size.height - lineHeight),
-        Offset(size.width - padding, size.height - lineHeight), paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
 class BudgetHistoryColumn extends StatelessWidget {
@@ -168,15 +145,27 @@ class BudgetHistoryColumn extends StatelessWidget {
 
     return Align(
         alignment: Alignment.bottomCenter,
-        child: Container(
-            decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: const BorderRadius.all(Radius.circular(8))),
-            width: width,
-            height: height,
-            child: Center(
-                child: Text("${(endPercentage * 100).toStringAsFixed(0)}%",
-                    style: BudgetronFonts.nunitoSize12Weight400Gray))));
+        child: Stack(
+          alignment: AlignmentDirectional.bottomEnd,
+          children: [
+            Container(
+              width: width,
+              height: 140,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.outline,
+                  borderRadius: const BorderRadius.all(Radius.circular(8))),
+            ),
+            Container(
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: const BorderRadius.all(Radius.circular(8))),
+                width: width,
+                height: height,
+                child: Center(
+                    child: Text("${(endPercentage * 100).toStringAsFixed(0)}%",
+                        style: BudgetronFonts.nunitoSize12Weight400Gray))),
+          ],
+        ));
   }
 
   double _resolveHeight(double endPercentage) {
@@ -339,17 +328,14 @@ class EditBudgetIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => showDialog(
-          context: context,
-          builder: (context) => EditBudgetDialog(budget: budget)),
-      icon: Icon(
-        Icons.edit,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(),
-    );
+    return GestureDetector(
+        onTap: () => showDialog(
+            context: context,
+            builder: (context) => EditBudgetDialog(budget: budget)),
+        child: Icon(
+          Icons.edit,
+          color: Theme.of(context).colorScheme.primary,
+        ));
   }
 }
 
@@ -358,11 +344,9 @@ class BudgetMenuIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () => {},
-      icon: Icon(Icons.more_vert, color: Theme.of(context).colorScheme.primary),
-      padding: EdgeInsets.zero,
-      constraints: const BoxConstraints(),
-    );
+    return GestureDetector(
+        onTap: () => {},
+        child: Icon(Icons.more_vert,
+            color: Theme.of(context).colorScheme.primary));
   }
 }
