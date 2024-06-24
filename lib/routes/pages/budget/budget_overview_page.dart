@@ -28,12 +28,8 @@ class BudgetOverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final currency = Provider.of<AppData>(context).currency;
-    //FIX value notifier is redundant
-    final ValueNotifier<DatePeriod> datePeriodNotifier = ValueNotifier(
-        BudgetService.getPeriodByIndex(budget.budgetPeriodIndex) ==
-                BudgetPeriod.year
-            ? DatePeriod.month
-            : DatePeriod.day);
+    final BudgetPeriod datePeriod =
+        BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
 
     var title = "${budget.category.target!.name} Budget";
     var entriesStream = EntryController.getEntries(
@@ -67,9 +63,7 @@ class BudgetOverviewPage extends StatelessWidget {
                     const SizedBox(height: 24),
                     AmountOfEntries(amountOfEntries: entries.length),
                     const SizedBox(height: 24),
-                    BudgetEntries(
-                        entries: entries,
-                        datePeriodNotifier: datePeriodNotifier)
+                    BudgetEntries(entries: entries, budgetPeriod: datePeriod)
                   ]);
                 })));
   }
@@ -293,9 +287,9 @@ class AmountOfEntries extends StatelessWidget {
 //TODO should these Entries be editable? this would require Month period rework
 class BudgetEntries extends StatelessWidget {
   const BudgetEntries(
-      {super.key, required this.entries, required this.datePeriodNotifier});
+      {super.key, required this.entries, required this.budgetPeriod});
 
-  final ValueNotifier<DatePeriod> datePeriodNotifier;
+  final BudgetPeriod budgetPeriod;
   final List<Entry> entries;
 
   @override
@@ -305,8 +299,8 @@ class BudgetEntries extends StatelessWidget {
     List<DateTime> entryDates = [];
     var currency = Provider.of<AppData>(context).currency;
 
-    var datePeriod = datePeriodNotifier.value;
-
+    var datePeriod =
+        DatePeriod.values.firstWhere((e) => e.name == budgetPeriod.name);
     EntryService.formEntriesData(datePeriod, entries, entriesMap, entryDates);
 
     return Flexible(
