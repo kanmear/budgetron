@@ -3,6 +3,7 @@ import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/utils/date_utils.dart';
 import 'package:flutter/material.dart';
 
 enum BudgetPeriod {
@@ -121,7 +122,7 @@ class BudgetService {
         start = DateTime(end.year, end.month);
         break;
       case BudgetPeriod.week:
-        start = _getPastMonday(end);
+        start = BudgetronDateUtils.getPastMonday(end);
         break;
       case BudgetPeriod.year:
         start = DateTime(end.year);
@@ -173,14 +174,6 @@ class BudgetService {
     return remainingDays == 1
         ? '$remainingDays day left'
         : '$remainingDays days left';
-  }
-
-  static DateTime _getPastMonday(DateTime weekStart) {
-    while (weekStart.weekday != 1) {
-      weekStart = DateUtils.addDaysToDate(weekStart, -1);
-    }
-
-    return weekStart;
   }
 
   static _addBudgetHistory(Budget budget, DateTime endDate) {
