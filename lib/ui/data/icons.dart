@@ -18,15 +18,20 @@ class ArrowBackIconButton extends StatelessWidget {
   }
 }
 
-class EditIconButton extends StatelessWidget {
-  const EditIconButton({
+//TODO use whenever instead of inplace widgets
+class CustomIconButton extends StatelessWidget {
+  final Function onTap;
+  final Icon icon;
+
+  const CustomIconButton({
     super.key,
+    required this.onTap,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        onPressed: () => {/* add impl */}, icon: const Icon(Icons.edit));
+    return GestureDetector(onTap: () => onTap(), child: icon);
   }
 }
 

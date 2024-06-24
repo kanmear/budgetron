@@ -20,6 +20,7 @@ import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
+//TODO if changes are made, Overview should be reloaded with a new Budget
 class BudgetOverviewPage extends StatelessWidget {
   const BudgetOverviewPage({super.key, required this.budget});
 
@@ -39,9 +40,19 @@ class BudgetOverviewPage extends StatelessWidget {
         appBar: BudgetronAppBar(
             leading: const ArrowBackIconButton(),
             actions: [
-              EditBudgetIcon(budget: budget),
+              CustomIconButton(
+                  onTap: () => showDialog(
+                      context: context,
+                      builder: (context) => EditBudgetDialog(budget: budget)),
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).colorScheme.primary,
+                  )),
               const SizedBox(width: 8),
-              const BudgetMenuIcon()
+              CustomIconButton(
+                  onTap: () => {},
+                  icon: Icon(Icons.more_vert,
+                      color: Theme.of(context).colorScheme.primary))
             ],
             title: title),
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -316,37 +327,5 @@ class BudgetEntries extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-//TODO if changes are made, Overview should be reloaded with a new Budget
-//maybe pass a callback that gets called when Save is pressed
-class EditBudgetIcon extends StatelessWidget {
-  const EditBudgetIcon({super.key, required this.budget});
-
-  final Budget budget;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => showDialog(
-            context: context,
-            builder: (context) => EditBudgetDialog(budget: budget)),
-        child: Icon(
-          Icons.edit,
-          color: Theme.of(context).colorScheme.primary,
-        ));
-  }
-}
-
-class BudgetMenuIcon extends StatelessWidget {
-  const BudgetMenuIcon({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => {},
-        child: Icon(Icons.more_vert,
-            color: Theme.of(context).colorScheme.primary));
   }
 }
