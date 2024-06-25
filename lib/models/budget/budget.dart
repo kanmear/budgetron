@@ -13,6 +13,7 @@ class Budget {
   //index of budget period string values
   int budgetPeriodIndex;
 
+  //TODO use field in Entries instead
   @Property(type: PropertyType.intVector)
   List<int> entriesIDs;
 

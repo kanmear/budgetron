@@ -44,12 +44,20 @@ class BudgetronDateUtils {
     }
   }
 
-  static DateTime getPastMonday(DateTime weekStart) {
-    while (weekStart.weekday != 1) {
-      weekStart = DateUtils.addDaysToDate(weekStart, -1);
+  static DateTime shiftToStartOfWeek(DateTime date) {
+    while (date.weekday != 1) {
+      date = DateUtils.addDaysToDate(date, -1);
     }
 
-    return weekStart;
+    return date;
+  }
+
+  static DateTime shiftToStartOfMonth(DateTime date) {
+    return DateTime(date.year, date.month);
+  }
+
+  static DateTime shiftToStartOfYear(DateTime date) {
+    return DateTime(date.year);
   }
 
   static DateTime shiftToEndOfDay(DateTime date) {

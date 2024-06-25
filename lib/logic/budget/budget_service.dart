@@ -122,7 +122,7 @@ class BudgetService {
         start = DateTime(end.year, end.month);
         break;
       case BudgetPeriod.week:
-        start = BudgetronDateUtils.getPastMonday(end);
+        start = BudgetronDateUtils.shiftToStartOfWeek(end);
         break;
       case BudgetPeriod.year:
         start = DateTime(end.year);

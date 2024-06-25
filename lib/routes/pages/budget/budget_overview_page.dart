@@ -6,6 +6,7 @@ import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
+import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/entry_controller.dart';
@@ -31,6 +32,14 @@ class BudgetOverviewPage extends StatelessWidget {
     final currency = Provider.of<AppData>(context).currency;
     final BudgetPeriod datePeriod =
         BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
+
+    BudgetHistory currentBudgetHistory = BudgetHistory(
+        targetValue: budget.targetValue,
+        endValue: budget.currentValue,
+        budgetPeriodIndex: budget.budgetPeriodIndex,
+        endDate: budget.resetDate);
+    final ValueNotifier<BudgetHistory> budgetHistoryNotifier =
+        ValueNotifier(currentBudgetHistory);
 
     var title = "${budget.category.target!.name} Budget";
     var entriesStream = EntryController.getEntries(
@@ -68,9 +77,14 @@ class BudgetOverviewPage extends StatelessWidget {
                   }
 
                   return Column(children: [
-                    BudgetHistoryOverview(budget: budget),
+                    BudgetHistoryOverview(
+                        budget: budget,
+                        budgetHistoryNotifier: budgetHistoryNotifier,
+                        currentBudgetHistory: currentBudgetHistory),
                     const SizedBox(height: 8),
-                    BudgetProgressBar(budget: budget, currency: currency),
+                    BudgetProgressBar(
+                        budgetHistoryNotifier: budgetHistoryNotifier,
+                        currency: currency),
                     const SizedBox(height: 24),
                     AmountOfEntries(amountOfEntries: entries.length),
                     const SizedBox(height: 24),
@@ -81,84 +95,87 @@ class BudgetOverviewPage extends StatelessWidget {
 }
 
 class BudgetHistoryOverview extends StatelessWidget {
+  final ValueNotifier<BudgetHistory> budgetHistoryNotifier;
+  final BudgetHistory currentBudgetHistory;
+  final Budget budget;
+
   const BudgetHistoryOverview({
     super.key,
     required this.budget,
+    required this.budgetHistoryNotifier,
+    required this.currentBudgetHistory,
   });
-
-  final Budget budget;
 
   @override
   Widget build(BuildContext context) {
     var budgetHistoriesStream = BudgetController.getBudgetHistories(budget.id);
-    BudgetHistory currentBudgetHistory = BudgetHistory(
-        targetValue: budget.targetValue,
-        endValue: budget.currentValue,
-        budgetPeriodIndex: budget.budgetPeriodIndex,
-        endDate: DateTime.now());
 
     return StreamBuilder(
         stream: budgetHistoriesStream,
         builder: (context, snapshot) {
+          List<BudgetHistory> budgetHistories = [currentBudgetHistory];
           if (snapshot.data?.isNotEmpty ?? false) {
-            List<BudgetHistory> budgetHistories = [currentBudgetHistory];
             budgetHistories.addAll(snapshot.data!);
-
-            return Container(
-                height: 220,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surface,
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
-                child: LayoutBuilder(builder:
-                    (BuildContext context, BoxConstraints constraints) {
-                  //NOTE 8 is width of separators, 6 is the amount of separators between 7 columns
-                  var columnWidth = (constraints.maxWidth - (8 * 6)) * (1 / 7);
-                  var isReverse = true;
-                  if (budgetHistories.length <= 7) {
-                    isReverse = false;
-                    budgetHistories = budgetHistories.reversed.toList();
-                  }
-
-                  return ListView.separated(
-                      reverse: isReverse,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (BuildContext context, int index) {
-                        return BudgetHistoryColumn(
-                            width: columnWidth,
-                            history: budgetHistories[index]);
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(width: 8);
-                      },
-                      itemCount: budgetHistories.length);
-                }));
-          } else {
-            return Center(
-                child: Text('No histories in database',
-                    style: BudgetronFonts.nunitoSize16Weight300Gray));
           }
+
+          return Container(
+              height: 220,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: const BorderRadius.all(Radius.circular(8))),
+              child: LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                //NOTE 8 is width of separators, 6 is the amount of separators between 7 columns
+                var columnWidth = (constraints.maxWidth - (8 * 6)) * (1 / 7);
+                var isReverse = true;
+                if (budgetHistories.length <= 7) {
+                  isReverse = false;
+                  budgetHistories = budgetHistories.reversed.toList();
+                }
+
+                return ListView.separated(
+                    reverse: isReverse,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      var history = budgetHistories[index];
+
+                      return BudgetHistoryColumn(
+                          width: columnWidth,
+                          history: history,
+                          budgetHistoryNotifier: budgetHistoryNotifier);
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(width: 8);
+                    },
+                    itemCount: budgetHistories.length);
+              }));
         });
   }
 }
 
 class BudgetHistoryColumn extends StatelessWidget {
   const BudgetHistoryColumn(
-      {super.key, required this.history, required this.width});
+      {super.key,
+      required this.history,
+      required this.width,
+      required this.budgetHistoryNotifier});
 
+  final ValueNotifier<BudgetHistory> budgetHistoryNotifier;
   final BudgetHistory history;
   final double width;
 
   @override
   Widget build(BuildContext context) {
-    var endPercentage = (history.endValue / history.targetValue);
-    var height = _resolveHeight(endPercentage);
+    final endToTargetRatio = history.endValue / history.targetValue;
+    final height = _resolveHeight(endToTargetRatio);
+    final isOverspent = endToTargetRatio > 1.0;
 
-    return Align(
-        alignment: Alignment.bottomCenter,
-        child: Stack(
-          alignment: AlignmentDirectional.bottomEnd,
-          children: [
+    return GestureDetector(
+      onTap: () => budgetHistoryNotifier.value = history,
+      child: Align(
+          alignment: Alignment.bottomCenter,
+          child: Stack(alignment: AlignmentDirectional.bottomEnd, children: [
             Container(
               width: width,
               height: 140,
@@ -166,17 +183,35 @@ class BudgetHistoryColumn extends StatelessWidget {
                   color: Theme.of(context).colorScheme.outline,
                   borderRadius: const BorderRadius.all(Radius.circular(8))),
             ),
-            Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: const BorderRadius.all(Radius.circular(8))),
-                width: width,
-                height: height,
-                child: Center(
-                    child: Text("${(endPercentage * 100).toStringAsFixed(0)}%",
-                        style: BudgetronFonts.nunitoSize12Weight400Gray))),
-          ],
-        ));
+            ValueListenableBuilder(
+                valueListenable: budgetHistoryNotifier,
+                builder: (context, selectedHistory, _) {
+                  final isSelected = history == selectedHistory;
+                  final colorScheme = Theme.of(context).colorScheme;
+                  final color = isSelected
+                      ? (isOverspent
+                          ? colorScheme.error
+                          : colorScheme.secondary)
+                      : colorScheme.primary;
+                  final textColor = colorScheme.primary;
+
+                  return Container(
+                      decoration: BoxDecoration(
+                          color: color,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
+                      width: width,
+                      height: height,
+                      child: Center(
+                          child: isSelected
+                              ? Text(
+                                  "${(endToTargetRatio * 100).toStringAsFixed(0)}%",
+                                  style: BudgetronFonts.nunitoSize12Weight400
+                                      .apply(color: textColor))
+                              : const SizedBox()));
+                })
+          ])),
+    );
   }
 
   double _resolveHeight(double endPercentage) {
@@ -194,81 +229,104 @@ class BudgetHistoryColumn extends StatelessWidget {
 }
 
 class BudgetProgressBar extends StatelessWidget {
-  const BudgetProgressBar(
-      {super.key, required this.budget, required this.currency});
-
-  final Budget budget;
+  final ValueNotifier<BudgetHistory> budgetHistoryNotifier;
   final String currency;
+
+  const BudgetProgressBar({
+    super.key,
+    required this.budgetHistoryNotifier,
+    required this.currency,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final budgetPeriod =
-        BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
-    final now = DateTime.now();
-
     return Container(
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(8))),
         padding: const EdgeInsets.all(12),
-        child: Column(
-          children: [
-            ListTileWithProgressBar(
-              leading: _getLeading(budget),
-              trailing: _getTrailing(budget),
-              currentValue: budget.currentValue,
-              totalValue: budget.targetValue,
-            ),
-            const SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(_resolveLeftString(budgetPeriod, now),
+        child: ValueListenableBuilder(
+          valueListenable: budgetHistoryNotifier,
+          builder: (BuildContext context, selectedHistory, _) {
+            final budgetPeriod = BudgetService.getPeriodByIndex(
+                selectedHistory.budgetPeriodIndex);
+
+            final value = selectedHistory.endValue;
+            final targetValue = selectedHistory.targetValue;
+
+            final endDate = selectedHistory.endDate;
+
+            return Column(children: [
+              ListTileWithProgressBar(
+                leading: _getLeading(value),
+                trailing: _getTrailing(targetValue),
+                currentValue: value,
+                totalValue: targetValue,
+              ),
+              const SizedBox(height: 4),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text(_resolveLeftString(endDate, budgetPeriod),
                     style: BudgetronFonts.nunitoSize12Weight400),
-                Text(_resolveRightString(budgetPeriod, now),
+                Text(_resolveRightString(endDate, budgetPeriod),
                     style: BudgetronFonts.nunitoSize12Weight400)
-              ],
-            )
-          ],
+              ])
+            ]);
+          },
         ));
   }
 
-  Widget _getLeading(Budget budget) {
+  Widget _getLeading(double value) {
     return Row(children: [
-      Text(budget.currentValue.toStringAsFixed(2),
+      Text(value.toStringAsFixed(2),
           style: BudgetronFonts.nunitoSize16Weight400),
       const SizedBox(width: 2),
       Text(currency, style: BudgetronFonts.nunitoSize12Weight400),
     ]);
   }
 
-  Widget _getTrailing(Budget budget) {
+  Widget _getTrailing(double value) {
     return Row(children: [
-      Text(budget.targetValue.toStringAsFixed(0),
+      Text(value.toStringAsFixed(0),
           style: BudgetronFonts.nunitoSize16Weight400Gray),
       const SizedBox(width: 2),
       Text(currency, style: BudgetronFonts.nunitoSize12Weight400Gray),
     ]);
   }
 
-  String _resolveLeftString(BudgetPeriod budgetPeriod, DateTime now) {
-    if (budgetPeriod == BudgetPeriod.month) {
-      return "${DateFormat.MMM().format(now)}, ${DateFormat.y().format(now)}";
-    } else {
-      // year period
-      return DateFormat.y().format(now);
+  //calculates and formats start date from end date and budget period
+  String _resolveLeftString(DateTime endDate, BudgetPeriod budgetPeriod) {
+    DateTime startDate;
+
+    switch (budgetPeriod) {
+      case BudgetPeriod.week:
+        startDate = _getPreviousMonday(endDate);
+        return "${DateFormat.MMMd().format(startDate)}, ${DateFormat.y().format(startDate)}";
+      case BudgetPeriod.month:
+        startDate = BudgetronDateUtils.shiftToStartOfMonth(endDate);
+        return "${DateFormat.MMMd().format(startDate)}, ${DateFormat.y().format(startDate)}";
+      case BudgetPeriod.year:
+        startDate = BudgetronDateUtils.shiftToStartOfYear(endDate);
+        return DateFormat.y().format(startDate);
+      default:
+        throw Exception('Not a valid budget period.');
     }
   }
 
-  String _resolveRightString(BudgetPeriod budgetPeriod, DateTime now) {
-    if (budgetPeriod == BudgetPeriod.month) {
-      return "${DateFormat.MMM().format(budget.resetDate)}, "
-          "${DateFormat.y().format(budget.resetDate)}";
-    } else {
-      // year period
-      return DateFormat.y().format(budget.resetDate);
+  String _resolveRightString(DateTime endDate, BudgetPeriod budgetPeriod) {
+    switch (budgetPeriod) {
+      case BudgetPeriod.week:
+        return "${DateFormat.MMMd().format(endDate)}, ${DateFormat.y().format(endDate)}";
+      case BudgetPeriod.month:
+        return "${DateFormat.MMMd().format(endDate)}, ${DateFormat.y().format(endDate)}";
+      case BudgetPeriod.year:
+        return DateFormat.y().format(endDate);
+      default:
+        throw Exception('Not a valid budget period.');
     }
   }
+
+  DateTime _getPreviousMonday(DateTime date) =>
+      BudgetronDateUtils.shiftToStartOfWeek(DateUtils.addDaysToDate(date, -1));
 }
 
 class AmountOfEntries extends StatelessWidget {
