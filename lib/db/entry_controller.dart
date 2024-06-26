@@ -1,13 +1,17 @@
 import 'package:budgetron/db/object_box_helper.dart';
+import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/objectbox.g.dart';
 
 class EntryController {
+  static Entry getEntry(int id) => _getEntryBox().get(id)!;
+
   //TODO remove null checks, add default values for optional arguments instead
   static Stream<List<Entry>> getEntries(
       {List<DateTime>? period,
       List<EntryCategory>? categoryFilter,
+      Budget? budgetFilter,
       List<int>? ids,
       bool? isExpense,
       int? accountId}) {
@@ -30,6 +34,10 @@ class EntryController {
     }
 
     queryBuilder = _getEntryBox().query(condition);
+
+    if (budgetFilter != null) {
+      queryBuilder.link(Entry_.budget, Budget_.id.equals(budgetFilter.id));
+    }
 
     if (categoryFilter != null) {
       queryBuilder.link(Entry_.category,

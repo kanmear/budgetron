@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:1841081728629343382",
-      "lastPropertyId": "8:5379385302569583686",
+      "lastPropertyId": "9:4715470489942148689",
       "name": "Entry",
       "properties": [
         {
@@ -39,6 +39,14 @@
           "flags": 520,
           "indexId": "13:3364471179008979769",
           "relationTarget": "Account"
+        },
+        {
+          "id": "9:4715470489942148689",
+          "name": "budgetId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "14:2033601001623941340",
+          "relationTarget": "Budget"
         }
       ],
       "relations": []
@@ -129,11 +137,6 @@
           "type": 10
         },
         {
-          "id": "9:1375554142722865047",
-          "name": "entriesIDs",
-          "type": 26
-        },
-        {
           "id": "10:4015399903462571734",
           "name": "isArchived",
           "type": 1
@@ -192,7 +195,7 @@
     },
     {
       "id": "7:1583697670119084162",
-      "lastPropertyId": "6:1738043438302690391",
+      "lastPropertyId": "8:9007357595868799442",
       "name": "BudgetHistory",
       "properties": [
         {
@@ -207,16 +210,6 @@
           "type": 8
         },
         {
-          "id": "3:90232823342177995",
-          "name": "endValue",
-          "type": 8
-        },
-        {
-          "id": "4:3311510652078939078",
-          "name": "budgetPeriodIndex",
-          "type": 6
-        },
-        {
           "id": "5:2802649796829162268",
           "name": "endDate",
           "type": 10
@@ -228,6 +221,16 @@
           "flags": 520,
           "indexId": "7:3030426642169156134",
           "relationTarget": "Budget"
+        },
+        {
+          "id": "7:1910862631369383898",
+          "name": "startDate",
+          "type": 10
+        },
+        {
+          "id": "8:9007357595868799442",
+          "name": "budgetPeriodIndex",
+          "type": 6
         }
       ],
       "relations": []
@@ -374,7 +377,7 @@
     }
   ],
   "lastEntityId": "11:1227976960884504166",
-  "lastIndexId": "13:3364471179008979769",
+  "lastIndexId": "14:2033601001623941340",
   "lastRelationId": "1:1237446207436357635",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
@@ -398,7 +401,10 @@
     6892076539601629267,
     693103254549858284,
     7075193192781967810,
-    3337697882913509668
+    3337697882913509668,
+    1375554142722865047,
+    90232823342177995,
+    3311510652078939078
   ],
   "retiredRelationUids": [],
   "version": 1

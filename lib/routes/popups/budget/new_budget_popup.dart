@@ -129,7 +129,6 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
         period: datePeriod, categoryFilter: List.from([category])).first;
 
     Budget budget = Budget(
-        entriesIDs: entries.map((e) => e.id).toList(),
         targetValue: double.parse(widget.textController.text),
         budgetPeriodIndex: budgetPeriodIndex,
         currentValue: EntryService.calculateTotalValue(entries),
@@ -137,7 +136,11 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
         resetDate: BudgetService.calculateResetDate(
             budgetPeriodIndex, datePeriod.first));
 
-    BudgetService.createBudget(budget, category);
+    int budgetId = BudgetService.createBudget(budget, category);
+    for (var entry in entries) {
+      entry.budget.targetId = budgetId;
+      EntryController.addEntry(entry);
+    }
     _popDialog();
   }
 

@@ -1,6 +1,7 @@
 import 'package:objectbox/objectbox.dart';
 
 import 'package:budgetron/utils/interfaces.dart';
+import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/models/category/category.dart';
 
@@ -17,6 +18,7 @@ class Entry implements Listable {
 
   final category = ToOne<EntryCategory>();
   final account = ToOne<Account>();
+  final budget = ToOne<Budget>();
 
   Entry({required this.value, required this.dateTime});
 

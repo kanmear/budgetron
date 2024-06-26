@@ -6,7 +6,6 @@ import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
-import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/entry_controller.dart';
@@ -33,64 +32,77 @@ class BudgetOverviewPage extends StatelessWidget {
     final BudgetPeriod datePeriod =
         BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
 
+    final endDate = budget.resetDate;
+    final periodIndex = budget.budgetPeriodIndex;
     BudgetHistory currentBudgetHistory = BudgetHistory(
         targetValue: budget.targetValue,
-        endValue: budget.currentValue,
         budgetPeriodIndex: budget.budgetPeriodIndex,
-        endDate: budget.resetDate);
+        startDate: BudgetService.calculateStartDate(endDate, periodIndex),
+        endDate: endDate);
     final ValueNotifier<BudgetHistory> budgetHistoryNotifier =
         ValueNotifier(currentBudgetHistory);
 
     var title = "${budget.category.target!.name} Budget";
-    var entriesStream = EntryController.getEntries(
-        ids: budget.entriesIDs, categoryFilter: [budget.category.target!]);
 
     return Scaffold(
         appBar: BudgetronAppBar(
             leading: const ArrowBackIconButton(),
             actions: [
-              CustomIconButton(
-                  onTap: () => showDialog(
-                      context: context,
-                      builder: (context) => EditBudgetDialog(budget: budget)),
-                  icon: Icon(
-                    Icons.edit,
-                    color: Theme.of(context).colorScheme.primary,
-                  )),
+              BudgetEditIcon(budget: budget),
               const SizedBox(width: 8),
-              CustomIconButton(
-                  onTap: () => {},
-                  icon: Icon(Icons.more_vert,
-                      color: Theme.of(context).colorScheme.primary))
+              const BudgetOptionsIcon(),
             ],
             title: title),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Padding(
             padding: const EdgeInsets.only(left: 16, right: 16),
-            child: StreamBuilder<List<Entry>>(
-                stream: entriesStream,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<Entry>> snapshot) {
-                  List<Entry> entries = [];
-                  if (snapshot.data?.isNotEmpty ?? false) {
-                    entries = snapshot.data!;
-                  }
+            child: Column(children: [
+              BudgetHistoryOverview(
+                  budget: budget,
+                  budgetHistoryNotifier: budgetHistoryNotifier,
+                  currentBudgetHistory: currentBudgetHistory),
+              const SizedBox(height: 8),
+              ValueListenableBuilder(
+                  valueListenable: budgetHistoryNotifier,
+                  builder: (context, selectedHistory, _) {
+                    return StreamBuilder(
+                        stream: _getEntries([
+                          selectedHistory.startDate,
+                          selectedHistory.endDate
+                        ]),
+                        builder: (context, snapshot) {
+                          List<Entry> entries = [];
+                          if (snapshot.data?.isNotEmpty ?? false) {
+                            entries = snapshot.data!;
+                          }
 
-                  return Column(children: [
-                    BudgetHistoryOverview(
-                        budget: budget,
-                        budgetHistoryNotifier: budgetHistoryNotifier,
-                        currentBudgetHistory: currentBudgetHistory),
-                    const SizedBox(height: 8),
-                    BudgetProgressBar(
-                        budgetHistoryNotifier: budgetHistoryNotifier,
-                        currency: currency),
-                    const SizedBox(height: 24),
-                    AmountOfEntries(amountOfEntries: entries.length),
-                    const SizedBox(height: 24),
-                    BudgetEntries(entries: entries, budgetPeriod: datePeriod)
-                  ]);
-                })));
+                          final value =
+                              EntryService.calculateTotalValue(entries);
+
+                          return Expanded(
+                            child: Column(children: [
+                              BudgetProgressBar(
+                                  history: selectedHistory,
+                                  value: value,
+                                  currency: currency),
+                              const SizedBox(height: 24),
+                              AmountOfEntries(amountOfEntries: entries.length),
+                              const SizedBox(height: 24),
+                              BudgetEntries(
+                                  entries: entries, budgetPeriod: datePeriod)
+                            ]),
+                          );
+                        });
+                  })
+            ])));
+  }
+
+  Stream<List<Entry>> _getEntries(List<DateTime> period) {
+    return EntryController.getEntries(
+      period: period,
+      categoryFilter: [budget.category.target!],
+      budgetFilter: budget,
+    );
   }
 }
 
@@ -141,9 +153,11 @@ class BudgetHistoryOverview extends StatelessWidget {
                       var history = budgetHistories[index];
 
                       return BudgetHistoryColumn(
-                          width: columnWidth,
-                          history: history,
-                          budgetHistoryNotifier: budgetHistoryNotifier);
+                        columnWidth: columnWidth,
+                        budget: budget,
+                        history: history,
+                        budgetHistoryNotifier: budgetHistoryNotifier,
+                      );
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(width: 8);
@@ -155,29 +169,29 @@ class BudgetHistoryOverview extends StatelessWidget {
 }
 
 class BudgetHistoryColumn extends StatelessWidget {
-  const BudgetHistoryColumn(
-      {super.key,
-      required this.history,
-      required this.width,
-      required this.budgetHistoryNotifier});
-
   final ValueNotifier<BudgetHistory> budgetHistoryNotifier;
   final BudgetHistory history;
-  final double width;
+  final Budget budget;
+
+  final double columnWidth;
+
+  const BudgetHistoryColumn({
+    super.key,
+    required this.history,
+    required this.columnWidth,
+    required this.budgetHistoryNotifier,
+    required this.budget,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final endToTargetRatio = history.endValue / history.targetValue;
-    final height = _resolveHeight(endToTargetRatio);
-    final isOverspent = endToTargetRatio > 1.0;
-
     return GestureDetector(
       onTap: () => budgetHistoryNotifier.value = history,
       child: Align(
           alignment: Alignment.bottomCenter,
           child: Stack(alignment: AlignmentDirectional.bottomEnd, children: [
             Container(
-              width: width,
+              width: columnWidth,
               height: 140,
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.outline,
@@ -186,29 +200,44 @@ class BudgetHistoryColumn extends StatelessWidget {
             ValueListenableBuilder(
                 valueListenable: budgetHistoryNotifier,
                 builder: (context, selectedHistory, _) {
-                  final isSelected = history == selectedHistory;
-                  final colorScheme = Theme.of(context).colorScheme;
-                  final color = isSelected
-                      ? (isOverspent
-                          ? colorScheme.error
-                          : colorScheme.secondary)
-                      : colorScheme.primary;
-                  final textColor = colorScheme.primary;
+                  return StreamBuilder(
+                      stream: _getEntries([history.startDate, history.endDate]),
+                      builder: (context, snapshot) {
+                        List<Entry> entries = [];
+                        if (snapshot.data?.isNotEmpty ?? false) {
+                          entries = snapshot.data!;
+                        }
 
-                  return Container(
-                      decoration: BoxDecoration(
-                          color: color,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8))),
-                      width: width,
-                      height: height,
-                      child: Center(
-                          child: isSelected
-                              ? Text(
-                                  "${(endToTargetRatio * 100).toStringAsFixed(0)}%",
-                                  style: BudgetronFonts.nunitoSize12Weight400
-                                      .apply(color: textColor))
-                              : const SizedBox()));
+                        final value = EntryService.calculateTotalValue(entries);
+                        final endToTargetRatio = value / history.targetValue;
+                        final height = _resolveHeight(endToTargetRatio);
+                        final isOverspent = endToTargetRatio > 1.0;
+
+                        final isSelected = history == selectedHistory;
+                        final colorScheme = Theme.of(context).colorScheme;
+                        final color = isSelected
+                            ? (isOverspent
+                                ? colorScheme.error
+                                : colorScheme.secondary)
+                            : colorScheme.primary;
+                        final textColor = colorScheme.primary;
+
+                        return Container(
+                            decoration: BoxDecoration(
+                                color: color,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(8))),
+                            width: columnWidth,
+                            height: height,
+                            child: Center(
+                                child: isSelected
+                                    ? Text(
+                                        "${(endToTargetRatio * 100).toStringAsFixed(0)}%",
+                                        style: BudgetronFonts
+                                            .nunitoSize12Weight400
+                                            .apply(color: textColor))
+                                    : const SizedBox()));
+                      });
                 })
           ])),
     );
@@ -226,53 +255,52 @@ class BudgetHistoryColumn extends StatelessWidget {
     }
     return height;
   }
+
+  Stream<List<Entry>> _getEntries(List<DateTime> period) {
+    return EntryController.getEntries(
+      period: period,
+      categoryFilter: [budget.category.target!],
+      budgetFilter: budget,
+    );
+  }
 }
 
 class BudgetProgressBar extends StatelessWidget {
-  final ValueNotifier<BudgetHistory> budgetHistoryNotifier;
+  final BudgetHistory history;
+  final double value;
   final String currency;
 
   const BudgetProgressBar({
     super.key,
-    required this.budgetHistoryNotifier,
+    required this.history,
+    required this.value,
     required this.currency,
   });
 
   @override
   Widget build(BuildContext context) {
+    final targetValue = history.targetValue;
+
     return Container(
         decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: const BorderRadius.all(Radius.circular(8))),
         padding: const EdgeInsets.all(12),
-        child: ValueListenableBuilder(
-          valueListenable: budgetHistoryNotifier,
-          builder: (BuildContext context, selectedHistory, _) {
-            final budgetPeriod = BudgetService.getPeriodByIndex(
-                selectedHistory.budgetPeriodIndex);
-
-            final value = selectedHistory.endValue;
-            final targetValue = selectedHistory.targetValue;
-
-            final endDate = selectedHistory.endDate;
-
-            return Column(children: [
-              ListTileWithProgressBar(
-                leading: _getLeading(value),
-                trailing: _getTrailing(targetValue),
-                currentValue: value,
-                totalValue: targetValue,
-              ),
-              const SizedBox(height: 4),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text(_resolveLeftString(endDate, budgetPeriod),
-                    style: BudgetronFonts.nunitoSize12Weight400),
-                Text(_resolveRightString(endDate, budgetPeriod),
-                    style: BudgetronFonts.nunitoSize12Weight400)
-              ])
-            ]);
-          },
-        ));
+        child: Column(children: [
+          ListTileWithProgressBar(
+            leading: _getLeading(value),
+            trailing: _getTrailing(targetValue),
+            currentValue: value,
+            totalValue: targetValue,
+          ),
+          const SizedBox(height: 4),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(_formatDate(history.startDate),
+                style: BudgetronFonts.nunitoSize12Weight400),
+            Text(_formatDate(history.endDate),
+                style: BudgetronFonts.nunitoSize12Weight400)
+          ])
+        ]));
   }
 
   Widget _getLeading(double value) {
@@ -293,40 +321,9 @@ class BudgetProgressBar extends StatelessWidget {
     ]);
   }
 
-  //calculates and formats start date from end date and budget period
-  String _resolveLeftString(DateTime endDate, BudgetPeriod budgetPeriod) {
-    DateTime startDate;
-
-    switch (budgetPeriod) {
-      case BudgetPeriod.week:
-        startDate = _getPreviousMonday(endDate);
-        return "${DateFormat.MMMd().format(startDate)}, ${DateFormat.y().format(startDate)}";
-      case BudgetPeriod.month:
-        startDate = BudgetronDateUtils.shiftToStartOfMonth(endDate);
-        return "${DateFormat.MMMd().format(startDate)}, ${DateFormat.y().format(startDate)}";
-      case BudgetPeriod.year:
-        startDate = BudgetronDateUtils.shiftToStartOfYear(endDate);
-        return DateFormat.y().format(startDate);
-      default:
-        throw Exception('Not a valid budget period.');
-    }
+  String _formatDate(DateTime startDate) {
+    return "${DateFormat.MMMd().format(startDate)}, ${DateFormat.y().format(startDate)}";
   }
-
-  String _resolveRightString(DateTime endDate, BudgetPeriod budgetPeriod) {
-    switch (budgetPeriod) {
-      case BudgetPeriod.week:
-        return "${DateFormat.MMMd().format(endDate)}, ${DateFormat.y().format(endDate)}";
-      case BudgetPeriod.month:
-        return "${DateFormat.MMMd().format(endDate)}, ${DateFormat.y().format(endDate)}";
-      case BudgetPeriod.year:
-        return DateFormat.y().format(endDate);
-      default:
-        throw Exception('Not a valid budget period.');
-    }
-  }
-
-  DateTime _getPreviousMonday(DateTime date) =>
-      BudgetronDateUtils.shiftToStartOfWeek(DateUtils.addDaysToDate(date, -1));
 }
 
 class AmountOfEntries extends StatelessWidget {
@@ -385,5 +382,35 @@ class BudgetEntries extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class BudgetOptionsIcon extends StatelessWidget {
+  const BudgetOptionsIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomIconButton(
+        onTap: () => {},
+        icon: Icon(Icons.more_vert,
+            color: Theme.of(context).colorScheme.primary));
+  }
+}
+
+class BudgetEditIcon extends StatelessWidget {
+  final Budget budget;
+
+  const BudgetEditIcon({super.key, required this.budget});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomIconButton(
+        onTap: () => showDialog(
+            context: context,
+            builder: (context) => EditBudgetDialog(budget: budget)),
+        icon: Icon(
+          Icons.edit,
+          color: Theme.of(context).colorScheme.primary,
+        ));
   }
 }

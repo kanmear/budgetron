@@ -8,10 +8,11 @@ class BudgetHistory {
 
   double targetValue;
 
-  double endValue;
-
-  //index of budget period string values
+  //index of budget period
   int budgetPeriodIndex;
+
+  @Property(type: PropertyType.date)
+  DateTime startDate;
 
   @Property(type: PropertyType.date)
   DateTime endDate;
@@ -20,7 +21,7 @@ class BudgetHistory {
 
   BudgetHistory(
       {required this.targetValue,
-      required this.endValue,
       required this.budgetPeriodIndex,
+      required this.startDate,
       required this.endDate});
 }

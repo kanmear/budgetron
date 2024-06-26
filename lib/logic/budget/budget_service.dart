@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+
+import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/budget/budget_history.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/utils/date_utils.dart';
-import 'package:flutter/material.dart';
 
 enum BudgetPeriod {
   week(periodIndex: 0, name: 'Week'),
@@ -24,18 +27,23 @@ class BudgetService {
   static BudgetPeriod getPeriodByIndex(int id) =>
       BudgetPeriod.values.where((p) => p.periodIndex == id).first;
 
-  static void createBudget(Budget budget, EntryCategory category) {
+  static int createBudget(Budget budget, EntryCategory category) {
     category.isBudgetTracked = true;
     CategoryController.updateCategory(category);
 
     budget.category.target = category;
-    BudgetController.addBudget(budget);
+    return BudgetController.addBudget(budget);
   }
 
-  static void deleteBudget(Budget budget) {
+  static void deleteBudget(Budget budget) async {
     EntryCategory category = budget.category.target!;
     category.isBudgetTracked = false;
     CategoryController.updateCategory(category);
+
+    var histories = await BudgetController.getBudgetHistories(budget.id).first;
+    for (var history in histories) {
+      BudgetController.deleteHistory(history.id);
+    }
 
     BudgetController.deleteBudget(budget.id);
   }
@@ -48,7 +56,10 @@ class BudgetService {
 
     resetBudget(budget);
     budget.currentValue += delta;
-    budget.entriesIDs.add(entryId);
+
+    Entry entry = EntryController.getEntry(entryId);
+    entry.budget.target = budget;
+    EntryController.addEntry(entry);
 
     BudgetController.updateBudget(budget);
   }
@@ -64,10 +75,14 @@ class BudgetService {
     BudgetController.updateBudget(budget);
   }
 
-  static void deleteEntryFromBudget(
+  static Future<void> deleteEntryFromBudget(
       int categoryId, int entryId, double delta) async {
     Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
-    budget.entriesIDs.remove(entryId);
+
+    Entry entry = EntryController.getEntry(entryId);
+    entry.budget.target = null;
+    entry.budget.targetId = null;
+    EntryController.addEntry(entry);
 
     if (!budget.isArchived) {
       resetBudget(budget);
@@ -100,7 +115,6 @@ class BudgetService {
     if (now.isAfter(budget.resetDate)) {
       _addBudgetHistory(budget, budget.resetDate);
 
-      budget.entriesIDs = [];
       budget.currentValue = 0;
       budget.resetDate =
           calculateResetDate(budget.budgetPeriodIndex, budget.resetDate);
@@ -111,6 +125,7 @@ class BudgetService {
     return false;
   }
 
+  //TODO optional argument is only needed for testing, any way to remove and keep tests?
   static List<DateTime> calculateDatePeriod(int periodIndex, {DateTime? end}) {
     end ??= DateTime.now();
 
@@ -176,13 +191,29 @@ class BudgetService {
         : '$remainingDays days left';
   }
 
-  static _addBudgetHistory(Budget budget, DateTime endDate) {
+  static _addBudgetHistory(Budget budget, DateTime resetDate) {
     BudgetHistory budgetHistory = BudgetHistory(
         targetValue: budget.targetValue,
-        endValue: budget.currentValue,
         budgetPeriodIndex: budget.budgetPeriodIndex,
-        endDate: endDate);
+        startDate: calculateStartDate(resetDate, budget.budgetPeriodIndex),
+        endDate: resetDate);
     budgetHistory.budget.target = budget;
+
     BudgetController.addBudgetHistory(budgetHistory);
+  }
+
+  static DateTime calculateStartDate(DateTime endDate, int periodIndex) {
+    var period = getPeriodByIndex(periodIndex);
+
+    switch (period) {
+      case BudgetPeriod.week:
+        return DateUtils.addDaysToDate(endDate, -7);
+      case BudgetPeriod.month:
+        return DateUtils.addMonthsToMonthDate(endDate, -1);
+      case BudgetPeriod.year:
+        return DateTime(endDate.year - 1);
+      default:
+        throw Exception('Not a valid period ID.');
+    }
   }
 }

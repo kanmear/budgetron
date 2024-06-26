@@ -53,6 +53,8 @@ class BudgetController {
   static void addBudgetHistory(BudgetHistory budgetHistory) =>
       _getBudgetHistoryBox().put(budgetHistory);
 
+  static void deleteHistory(int id) => _getBudgetHistoryBox().remove(id);
+
   static Stream<List<BudgetHistory>> getBudgetHistories(int budgetId) {
     return (_getBudgetHistoryBox().query()
           ..link(BudgetHistory_.budget, Budget_.id.equals(budgetId))

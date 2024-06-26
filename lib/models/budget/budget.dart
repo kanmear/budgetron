@@ -13,10 +13,6 @@ class Budget {
   //index of budget period string values
   int budgetPeriodIndex;
 
-  //TODO use field in Entries instead
-  @Property(type: PropertyType.intVector)
-  List<int> entriesIDs;
-
   @Property(type: PropertyType.date)
   DateTime resetDate;
 
@@ -31,6 +27,5 @@ class Budget {
       required this.budgetPeriodIndex,
       required this.onMainPage,
       required this.resetDate,
-      this.isArchived = false,
-      this.entriesIDs = const []});
+      this.isArchived = false});
 }

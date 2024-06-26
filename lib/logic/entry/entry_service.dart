@@ -36,10 +36,11 @@ class EntryService {
     EntryController.addEntry(entry);
   }
 
-  static deleteEntry(Entry entry) {
+  static deleteEntry(Entry entry) async {
     EntryCategory category = entry.category.target!;
     if (category.isBudgetTracked) {
-      BudgetService.deleteEntryFromBudget(category.id, entry.id, entry.value);
+      await BudgetService.deleteEntryFromBudget(
+          category.id, entry.id, entry.value);
     }
 
     EntryController.deleteEntry(entry.id);
