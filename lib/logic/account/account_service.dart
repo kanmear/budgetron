@@ -21,9 +21,15 @@ class AccountService {
   }
 
   static void updateAccount(Account account) {
-    AccountsController.addAccount(account);
+    var wasDefault = AccountsController.getAccount(account.id).isDefault;
 
-    if (account.isDefault) setDefaultAccount(account.id);
+    if (account.isDefault && !wasDefault) {
+      setDefaultAccount(account.id);
+    } else if (!account.isDefault && wasDefault) {
+      SettingsService.setDefaultAccountId(-1);
+    }
+
+    AccountsController.addAccount(account);
   }
 
   static Stream<List<Listable>> getOperationsInPeriod(
@@ -135,6 +141,14 @@ class AccountService {
     }
   }
 
-  static void setDefaultAccount(int id) =>
-      SettingsService.setDefaultAccountId(id);
+  static void setDefaultAccount(int id) async {
+    SettingsService.setDefaultAccountId(id);
+
+    var accounts = await AccountsController.getAccounts().first;
+    var accountsToUpdate = accounts.where((a) => a.id != id).toList();
+    for (var acc in accountsToUpdate) {
+      acc.isDefault = false;
+    }
+    AccountsController.putAccounts(accountsToUpdate);
+  }
 }
