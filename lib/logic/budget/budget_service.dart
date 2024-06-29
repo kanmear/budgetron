@@ -77,7 +77,7 @@ class BudgetService {
 
   static Future<void> deleteEntryFromBudget(
       int categoryId, int entryId, double delta) async {
-    Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
+    Budget budget = await BudgetController.getBudgetByCategory(categoryId);
 
     Entry entry = EntryController.getEntry(entryId);
     entry.budget.target = null;
@@ -90,6 +90,19 @@ class BudgetService {
     }
 
     BudgetController.updateBudget(budget);
+
+    var histories = await BudgetController.getBudgetHistories(budget.id).first;
+    if (histories.isEmpty) return;
+    for (var history in histories) {
+      //FIX possible time slip
+      if (entry.dateTime.isBefore(history.endDate) &&
+          entry.dateTime.isAfter(history.startDate)) {
+        history.endValue += delta;
+
+        BudgetController.addBudgetHistory(history);
+        return;
+      }
+    }
   }
 
   static void changeBudgetDetails(
@@ -194,6 +207,7 @@ class BudgetService {
   static _addBudgetHistory(Budget budget, DateTime resetDate) {
     BudgetHistory budgetHistory = BudgetHistory(
         targetValue: budget.targetValue,
+        endValue: budget.currentValue,
         budgetPeriodIndex: budget.budgetPeriodIndex,
         startDate: calculateStartDate(resetDate, budget.budgetPeriodIndex),
         endDate: resetDate);

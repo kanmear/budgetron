@@ -195,7 +195,7 @@
     },
     {
       "id": "7:1583697670119084162",
-      "lastPropertyId": "8:9007357595868799442",
+      "lastPropertyId": "9:4154354984130286849",
       "name": "BudgetHistory",
       "properties": [
         {
@@ -231,6 +231,11 @@
           "id": "8:9007357595868799442",
           "name": "budgetPeriodIndex",
           "type": 6
+        },
+        {
+          "id": "9:4154354984130286849",
+          "name": "endValue",
+          "type": 8
         }
       ],
       "relations": []

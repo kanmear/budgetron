@@ -7,6 +7,7 @@ class BudgetHistory {
   int id = 0;
 
   double targetValue;
+  double endValue;
 
   //index of budget period
   int budgetPeriodIndex;
@@ -21,6 +22,7 @@ class BudgetHistory {
 
   BudgetHistory(
       {required this.targetValue,
+      required this.endValue,
       required this.budgetPeriodIndex,
       required this.startDate,
       required this.endDate});

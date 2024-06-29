@@ -36,6 +36,7 @@ class BudgetOverviewPage extends StatelessWidget {
     final periodIndex = budget.budgetPeriodIndex;
     BudgetHistory currentBudgetHistory = BudgetHistory(
         targetValue: budget.targetValue,
+        endValue: budget.currentValue,
         budgetPeriodIndex: budget.budgetPeriodIndex,
         startDate: BudgetService.calculateStartDate(endDate, periodIndex),
         endDate: endDate);
@@ -154,7 +155,6 @@ class BudgetHistoryOverview extends StatelessWidget {
 
                       return BudgetHistoryColumn(
                         columnWidth: columnWidth,
-                        budget: budget,
                         history: history,
                         budgetHistoryNotifier: budgetHistoryNotifier,
                       );
@@ -171,7 +171,6 @@ class BudgetHistoryOverview extends StatelessWidget {
 class BudgetHistoryColumn extends StatelessWidget {
   final ValueNotifier<BudgetHistory> budgetHistoryNotifier;
   final BudgetHistory history;
-  final Budget budget;
 
   final double columnWidth;
 
@@ -180,11 +179,16 @@ class BudgetHistoryColumn extends StatelessWidget {
     required this.history,
     required this.columnWidth,
     required this.budgetHistoryNotifier,
-    required this.budget,
   });
 
   @override
   Widget build(BuildContext context) {
+    final endToTargetRatio = history.endValue / history.targetValue;
+    final height = _resolveHeight(endToTargetRatio);
+    final isOverspent = endToTargetRatio > 1.0;
+
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: () => budgetHistoryNotifier.value = history,
       child: Align(
@@ -200,44 +204,28 @@ class BudgetHistoryColumn extends StatelessWidget {
             ValueListenableBuilder(
                 valueListenable: budgetHistoryNotifier,
                 builder: (context, selectedHistory, _) {
-                  return StreamBuilder(
-                      stream: _getEntries([history.startDate, history.endDate]),
-                      builder: (context, snapshot) {
-                        List<Entry> entries = [];
-                        if (snapshot.data?.isNotEmpty ?? false) {
-                          entries = snapshot.data!;
-                        }
+                  final isSelected = history == selectedHistory;
+                  final color = isSelected
+                      ? (isOverspent
+                          ? colorScheme.error
+                          : colorScheme.secondary)
+                      : colorScheme.primary;
+                  final textColor = colorScheme.primary;
 
-                        final value = EntryService.calculateTotalValue(entries);
-                        final endToTargetRatio = value / history.targetValue;
-                        final height = _resolveHeight(endToTargetRatio);
-                        final isOverspent = endToTargetRatio > 1.0;
-
-                        final isSelected = history == selectedHistory;
-                        final colorScheme = Theme.of(context).colorScheme;
-                        final color = isSelected
-                            ? (isOverspent
-                                ? colorScheme.error
-                                : colorScheme.secondary)
-                            : colorScheme.primary;
-                        final textColor = colorScheme.primary;
-
-                        return Container(
-                            decoration: BoxDecoration(
-                                color: color,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(8))),
-                            width: columnWidth,
-                            height: height,
-                            child: Center(
-                                child: isSelected
-                                    ? Text(
-                                        "${(endToTargetRatio * 100).toStringAsFixed(0)}%",
-                                        style: BudgetronFonts
-                                            .nunitoSize12Weight400
-                                            .apply(color: textColor))
-                                    : const SizedBox()));
-                      });
+                  return Container(
+                      decoration: BoxDecoration(
+                          color: color,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8))),
+                      width: columnWidth,
+                      height: height,
+                      child: Center(
+                          child: isSelected
+                              ? Text(
+                                  "${(endToTargetRatio * 100).toStringAsFixed(0)}%",
+                                  style: BudgetronFonts.nunitoSize12Weight400
+                                      .apply(color: textColor))
+                              : const SizedBox()));
                 })
           ])),
     );
@@ -254,14 +242,6 @@ class BudgetHistoryColumn extends StatelessWidget {
       return maxHeight;
     }
     return height;
-  }
-
-  Stream<List<Entry>> _getEntries(List<DateTime> period) {
-    return EntryController.getEntries(
-      period: period,
-      categoryFilter: [budget.category.target!],
-      budgetFilter: budget,
-    );
   }
 }
 

@@ -7,7 +7,6 @@ class Budget {
   int id = 0;
 
   double targetValue;
-
   double currentValue;
 
   //index of budget period string values
