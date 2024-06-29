@@ -20,85 +20,94 @@ import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
-//TODO if changes are made, Overview should be reloaded with a new Budget
 class BudgetOverviewPage extends StatelessWidget {
-  const BudgetOverviewPage({super.key, required this.budget});
+  final ValueNotifier<bool> updateNotifier = ValueNotifier(false);
+  final int budgetId;
 
-  final Budget budget;
+  BudgetOverviewPage({super.key, required this.budgetId});
 
   @override
   Widget build(BuildContext context) {
-    final currency = Provider.of<AppData>(context).currency;
-    final BudgetPeriod datePeriod =
-        BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
+    return ValueListenableBuilder(
+        valueListenable: updateNotifier,
+        builder: (context, update, _) {
+          final budget = BudgetController.getBudget(budgetId);
 
-    final endDate = budget.resetDate;
-    final periodIndex = budget.budgetPeriodIndex;
-    BudgetHistory currentBudgetHistory = BudgetHistory(
-        targetValue: budget.targetValue,
-        endValue: budget.currentValue,
-        budgetPeriodIndex: budget.budgetPeriodIndex,
-        startDate: BudgetService.calculateStartDate(endDate, periodIndex),
-        endDate: endDate);
-    final ValueNotifier<BudgetHistory> budgetHistoryNotifier =
-        ValueNotifier(currentBudgetHistory);
+          final currency = Provider.of<AppData>(context).currency;
+          final BudgetPeriod datePeriod =
+              BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
 
-    var title = "${budget.category.target!.name} Budget";
+          final endDate = budget.resetDate;
+          final periodIndex = budget.budgetPeriodIndex;
+          BudgetHistory currentBudgetHistory = BudgetHistory(
+              targetValue: budget.targetValue,
+              endValue: budget.currentValue,
+              budgetPeriodIndex: budget.budgetPeriodIndex,
+              startDate: BudgetService.calculateStartDate(endDate, periodIndex),
+              endDate: endDate);
+          final ValueNotifier<BudgetHistory> budgetHistoryNotifier =
+              ValueNotifier(currentBudgetHistory);
 
-    return Scaffold(
-        appBar: BudgetronAppBar(
-            leading: const ArrowBackIconButton(),
-            actions: [
-              BudgetEditIcon(budget: budget),
-              const SizedBox(width: 8),
-              const BudgetOptionsIcon(),
-            ],
-            title: title),
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: Column(children: [
-              BudgetHistoryOverview(
-                  budget: budget,
-                  budgetHistoryNotifier: budgetHistoryNotifier,
-                  currentBudgetHistory: currentBudgetHistory),
-              const SizedBox(height: 8),
-              ValueListenableBuilder(
-                  valueListenable: budgetHistoryNotifier,
-                  builder: (context, selectedHistory, _) {
-                    return StreamBuilder(
-                        stream: _getEntries([
-                          selectedHistory.startDate,
-                          selectedHistory.endDate
-                        ]),
-                        builder: (context, snapshot) {
-                          List<Entry> entries = [];
-                          if (snapshot.data?.isNotEmpty ?? false) {
-                            entries = snapshot.data!;
-                          }
+          var title = "${budget.category.target!.name} Budget";
 
-                          final value =
-                              EntryService.calculateTotalValue(entries);
+          return Scaffold(
+              appBar: BudgetronAppBar(
+                  leading: const ArrowBackIconButton(),
+                  actions: [
+                    BudgetEditIcon(
+                        budget: budget, updateNotifier: updateNotifier),
+                    const SizedBox(width: 8),
+                    const BudgetOptionsIcon(),
+                  ],
+                  title: title),
+              backgroundColor: Theme.of(context).colorScheme.background,
+              body: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: Column(children: [
+                    BudgetHistoryOverview(
+                        budget: budget,
+                        budgetHistoryNotifier: budgetHistoryNotifier,
+                        currentBudgetHistory: currentBudgetHistory),
+                    const SizedBox(height: 8),
+                    ValueListenableBuilder(
+                        valueListenable: budgetHistoryNotifier,
+                        builder: (context, selectedHistory, _) {
+                          return StreamBuilder(
+                              stream: _getEntries([
+                                selectedHistory.startDate,
+                                selectedHistory.endDate
+                              ], budget),
+                              builder: (context, snapshot) {
+                                List<Entry> entries = [];
+                                if (snapshot.data?.isNotEmpty ?? false) {
+                                  entries = snapshot.data!;
+                                }
 
-                          return Expanded(
-                            child: Column(children: [
-                              BudgetProgressBar(
-                                  history: selectedHistory,
-                                  value: value,
-                                  currency: currency),
-                              const SizedBox(height: 24),
-                              AmountOfEntries(amountOfEntries: entries.length),
-                              const SizedBox(height: 24),
-                              BudgetEntries(
-                                  entries: entries, budgetPeriod: datePeriod)
-                            ]),
-                          );
-                        });
-                  })
-            ])));
+                                final value =
+                                    EntryService.calculateTotalValue(entries);
+
+                                return Expanded(
+                                  child: Column(children: [
+                                    BudgetProgressBar(
+                                        history: selectedHistory,
+                                        value: value,
+                                        currency: currency),
+                                    const SizedBox(height: 24),
+                                    AmountOfEntries(
+                                        amountOfEntries: entries.length),
+                                    const SizedBox(height: 24),
+                                    BudgetEntries(
+                                        entries: entries,
+                                        budgetPeriod: datePeriod)
+                                  ]),
+                                );
+                              });
+                        })
+                  ])));
+        });
   }
 
-  Stream<List<Entry>> _getEntries(List<DateTime> period) {
+  Stream<List<Entry>> _getEntries(List<DateTime> period, Budget budget) {
     return EntryController.getEntries(
       period: period,
       categoryFilter: [budget.category.target!],
@@ -378,16 +387,19 @@ class BudgetOptionsIcon extends StatelessWidget {
 }
 
 class BudgetEditIcon extends StatelessWidget {
+  final ValueNotifier<bool> updateNotifier;
   final Budget budget;
 
-  const BudgetEditIcon({super.key, required this.budget});
+  const BudgetEditIcon(
+      {super.key, required this.budget, required this.updateNotifier});
 
   @override
   Widget build(BuildContext context) {
     return CustomIconButton(
         onTap: () => showDialog(
             context: context,
-            builder: (context) => EditBudgetDialog(budget: budget)),
+            builder: (context) => EditBudgetDialog(
+                budget: budget, updateNotifier: updateNotifier)),
         icon: Icon(
           Icons.edit,
           color: Theme.of(context).colorScheme.primary,

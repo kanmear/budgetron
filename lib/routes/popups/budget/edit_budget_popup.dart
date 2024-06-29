@@ -22,7 +22,13 @@ class EditBudgetDialog extends StatefulWidget {
   final ValueNotifier<bool> switchNotifier = ValueNotifier(true);
   final TextEditingController textController = TextEditingController();
 
-  EditBudgetDialog({super.key, required this.budget});
+  final ValueNotifier<bool> updateNotifier;
+
+  EditBudgetDialog({
+    super.key,
+    required this.budget,
+    required this.updateNotifier,
+  });
 
   @override
   State<EditBudgetDialog> createState() => _EditBudgetDialogState();
@@ -172,5 +178,8 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
         widget.switchNotifier.value != budget.onMainPage;
   }
 
-  void _popDialog() => Navigator.pop(context);
+  void _popDialog() {
+    Navigator.pop(context);
+    widget.updateNotifier.value = !widget.updateNotifier.value;
+  }
 }

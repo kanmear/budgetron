@@ -145,7 +145,7 @@ class BudgetronListTile extends StatelessWidget {
     final currency = Provider.of<AppData>(context).currency;
 
     return InkWell(
-      onTap: () => _navigateToBudgetOverview(context, budget),
+      onTap: () => _navigateToBudgetOverview(context, budget.id),
       child: Container(
         color: Theme.of(context).colorScheme.surface,
         padding: const EdgeInsets.all(10),
@@ -176,11 +176,11 @@ class BudgetronListTile extends StatelessWidget {
     }
   }
 
-  _navigateToBudgetOverview(BuildContext context, Budget budget) =>
+  _navigateToBudgetOverview(BuildContext context, int budgetId) =>
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => BudgetOverviewPage(budget: budget)));
+              builder: (context) => BudgetOverviewPage(budgetId: budgetId)));
 
   Widget _getLeading(EntryCategory category) {
     return Row(
