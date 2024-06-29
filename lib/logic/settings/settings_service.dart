@@ -9,6 +9,10 @@ class SettingsService {
 
     globals.currency = settings.currency;
     globals.earliestEntryDate = settings.earliestEntryDate;
+    globals.defaultAccountId = settings.defaultAccountId;
+    // globals.defaultDatePeriodEntries = settings.defaultDatePeriodEntries;
+    // globals.defaultDatePeriodGroups = settings.defaultDatePeriodGroups;
+    // globals.defaultDatePeriodStats = settings.defaultDatePeriodStats;
   }
 
   //TODO remove separate getters

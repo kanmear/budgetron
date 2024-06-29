@@ -1,3 +1,5 @@
+import 'package:budgetron/app_data.dart';
+import 'package:budgetron/db/accounts_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/models/entry.dart';
@@ -17,6 +19,7 @@ import 'package:budgetron/routes/pages/account/account_selection_page.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 import 'package:budgetron/routes/pages/entry/widgets/entry_value_input_field.dart';
+import 'package:provider/provider.dart';
 
 class NewEntryPage extends StatelessWidget {
   final ValueNotifier<EntryCategoryType> tabNotifier =
@@ -113,6 +116,15 @@ class EntryParameters extends StatefulWidget {
 class _EntryParametersState extends State<EntryParameters> {
   @override
   Widget build(BuildContext context) {
+    final accountId = Provider.of<AppData>(context).defaultAccountId;
+
+    Widget? defaultValue =
+        Text('No account', style: BudgetronFonts.nunitoSize16Weight400);
+    if (accountId > 0) {
+      widget.accountNotifier.value = AccountsController.getAccount(accountId);
+      defaultValue = null;
+    }
+
     return Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
@@ -136,8 +148,7 @@ class _EntryParametersState extends State<EntryParameters> {
                 child: BudgetronSelectButton(
                     onTap: () => _navigateToAccountSelection(context),
                     valueNotifier: widget.accountNotifier,
-                    defaultValue: Text('No account',
-                        style: BudgetronFonts.nunitoSize16Weight400),
+                    defaultValue: defaultValue,
                     hintText: ''),
               )
             ]),
