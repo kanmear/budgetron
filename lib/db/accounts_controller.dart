@@ -25,9 +25,6 @@ class AccountsController {
 
   static int addAccount(Account account) => _getAccountBox().put(account);
 
-  static void putAccounts(List<Account> accounts) =>
-      _getAccountBox().putMany(accounts);
-
   static void deleteAccount(int accountId) =>
       _getAccountBox().remove(accountId);
 

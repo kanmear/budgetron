@@ -145,10 +145,13 @@ class AccountService {
     SettingsService.setDefaultAccountId(id);
 
     var accounts = await AccountsController.getAccounts().first;
-    var accountsToUpdate = accounts.where((a) => a.id != id).toList();
-    for (var acc in accountsToUpdate) {
-      acc.isDefault = false;
+    for (var account in accounts) {
+      if (account.isDefault && account.id != id) {
+        account.isDefault = false;
+        AccountsController.addAccount(account);
+
+        return;
+      }
     }
-    AccountsController.putAccounts(accountsToUpdate);
   }
 }
