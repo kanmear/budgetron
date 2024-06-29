@@ -64,27 +64,39 @@ class BudgetsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: StreamBuilder<List<Budget>>(
-        stream: BudgetController.getBudgets(),
-        builder: (context, snapshot) {
-          if (snapshot.data?.isNotEmpty ?? false) {
-            final List<Budget> budgets = snapshot.data!;
-            List<int> datePeriods = BudgetService.getDatePeriods(budgets);
+          stream: BudgetController.getBudgets(),
+          builder: (context, snapshot) {
+            if (snapshot.data?.isNotEmpty ?? false) {
+              final List<Budget> budgets = snapshot.data!;
+              List<int> datePeriods =
+                  BudgetPeriod.values.map((e) => e.periodIndex).toList();
 
-            return ListView(padding: EdgeInsets.zero, children: [
-              for (var period in datePeriods)
-                BudgetListTileContainer(
-                    budgets: budgets
+              return ListView.separated(
+                  itemCount: datePeriods.length,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (BuildContext context, int index) {
+                    var period = datePeriods[index];
+                    var periodBudgets = budgets
                         .where((budget) => budget.budgetPeriodIndex == period)
-                        .toList(),
-                    period: period)
-            ]);
-          } else {
-            return Center(
-                child: Text('No budgets in database',
-                    style: BudgetronFonts.nunitoSize16Weight300Gray));
-          }
-        },
-      ),
+                        .toList();
+                    if (periodBudgets.isEmpty) return const SizedBox();
+
+                    return BudgetListTileContainer(
+                        budgets: budgets
+                            .where(
+                                (budget) => budget.budgetPeriodIndex == period)
+                            .toList(),
+                        period: period);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const SizedBox(height: 24);
+                  });
+            } else {
+              return Center(
+                  child: Text('No budgets in database',
+                      style: BudgetronFonts.nunitoSize16Weight300Gray));
+            }
+          }),
     );
   }
 }
@@ -98,26 +110,21 @@ class BudgetListTileContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Text(BudgetService.getPeriodByIndex(period).name,
-              style: BudgetronFonts.nunitoSize14Weight400Gray),
-        ),
-        const SizedBox(height: 8),
-        Column(
-          children: [
-            for (var budget in budgets)
-              Column(children: [
-                BudgetronListTile(budget: budget),
-                const SizedBox(height: 8)
-              ])
-          ],
-        ),
-        const SizedBox(height: 24)
-      ],
-    );
+    return Column(children: [
+      Align(
+        alignment: Alignment.centerLeft,
+        child: Text(BudgetService.getPeriodByIndex(period).name,
+            style: BudgetronFonts.nunitoSize14Weight400Gray),
+      ),
+      const SizedBox(height: 8),
+      Column(children: [
+        for (var budget in budgets)
+          Column(children: [
+            BudgetronListTile(budget: budget),
+            const SizedBox(height: 8)
+          ])
+      ])
+    ]);
   }
 }
 

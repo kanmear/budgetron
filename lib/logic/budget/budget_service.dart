@@ -177,18 +177,6 @@ class BudgetService {
     }
   }
 
-  static List<int> getDatePeriods(List<Budget> budgets) {
-    List<int> datePeriods = [];
-    for (var budget in budgets) {
-      if (!datePeriods.contains(budget.budgetPeriodIndex)) {
-        datePeriods.add(budget.budgetPeriodIndex);
-      }
-    }
-
-    datePeriods.sort((a, b) => a.compareTo(b));
-    return datePeriods;
-  }
-
   static String calculateRemainingDays(DateTime resetDate) {
     int remainingDays = resetDate.difference(DateTime.now()).inDays;
 
