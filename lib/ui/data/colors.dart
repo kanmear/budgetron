@@ -6,6 +6,9 @@ class BudgetronColors {
   static const Color gray3 = Color(0xff4f4f4f);
   static const Color gray0 = Color(0xffe0e0e0);
 
+  static const Color gray1 = Color(0xffe4e4e4);
+  static const Color gray2 = Color(0xffe4e4e4);
+
   static const Color background = Color(0xfff7f7f7);
   static const Color backgroundHalfOpacity = Color(0x80f7f7f7);
   static const Color surface = Color(0xffffffff);
@@ -20,7 +23,7 @@ class BudgetronColors {
     tertiary: gray3,
     outline: gray0,
     outlineVariant: gray4,
-    onSecondary: Colors.white,
+    onSecondary: gray1,
     background: background,
     onBackground: Colors.black,
     surface: surface,

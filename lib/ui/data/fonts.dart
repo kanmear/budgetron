@@ -150,6 +150,16 @@ class BudgetronFonts {
       color: BudgetronColors.background);
 
   // for input fields
+  static TextStyle robotoSize24Weight400Disabled = TextStyle(
+      fontFamily: GoogleFonts.roboto().fontFamily,
+      fontSize: 24,
+      fontWeight: FontWeight.w400,
+      color: BudgetronColors.gray4);
+  static TextStyle robotoSize24Weight400 = TextStyle(
+      fontFamily: GoogleFonts.roboto().fontFamily,
+      fontSize: 24,
+      fontWeight: FontWeight.w400,
+      color: Colors.black);
   static TextStyle robotoSize30Weight400White = TextStyle(
       fontFamily: GoogleFonts.roboto().fontFamily,
       fontSize: 30,

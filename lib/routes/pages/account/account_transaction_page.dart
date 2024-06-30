@@ -33,6 +33,11 @@ class AccountTransactionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<MathOperation> currentOperationNotifier =
+        ValueNotifier(MathOperation.none);
+    final NumberKeyboardService keyboardService =
+        NumberKeyboardService(textController, currentOperationNotifier);
+
     tabNotifier.value = transactionType;
     accountNotifier.value = account;
 
@@ -76,8 +81,9 @@ class AccountTransactionPage extends StatelessWidget {
               return isKeyboardOn
                   ? BudgetronNumberKeyboard(
                       textController: textController,
-                      onConfirmAction: _createNewTransaction,
-                      isSubmitAvailable: _isSubmitAvailable)
+                      keyboardService: keyboardService,
+                      currentOperationNotifier: currentOperationNotifier,
+                    )
                   : const SizedBox();
             },
           )

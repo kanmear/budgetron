@@ -9,23 +9,16 @@ import 'number_keyboard.dart';
 class BudgetronKeyboardKey extends StatelessWidget {
   final Function onTap;
   final Widget child;
-  final Color color;
 
   const BudgetronKeyboardKey(
-      {super.key,
-      required this.child,
-      required this.color,
-      required this.onTap});
+      {super.key, required this.child, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
         onTap: () => onTap(),
-        child: Container(
-          decoration: BoxDecoration(color: color),
-          child: Center(child: child),
-        ),
+        child: Center(child: child),
       ),
     );
   }
@@ -33,92 +26,71 @@ class BudgetronKeyboardKey extends StatelessWidget {
 
 class BudgetronKeyboardCharKey extends StatelessWidget {
   final Function onTap;
-  final String value;
-  final Color color;
+  final String char;
 
-  const BudgetronKeyboardCharKey(
-      {super.key,
-      required this.value,
-      required this.onTap,
-      required this.color});
+  const BudgetronKeyboardCharKey({
+    super.key,
+    required this.char,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BudgetronKeyboardKey(
         onTap: onTap,
-        color: color,
         child: Text(
-          value,
-          style: BudgetronFonts.robotoSize30Weight400White,
+          char,
+          style: BudgetronFonts.robotoSize24Weight400,
         ));
   }
 }
 
 class BudgetronKeyboardIconKey extends StatelessWidget {
   final Function onTap;
-  final Color color;
   final Icon icon;
 
-  const BudgetronKeyboardIconKey(
-      {super.key,
-      required this.icon,
-      required this.color,
-      required this.onTap});
+  const BudgetronKeyboardIconKey({
+    super.key,
+    required this.icon,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BudgetronKeyboardKey(onTap: onTap, color: color, child: icon);
+    return BudgetronKeyboardKey(onTap: onTap, child: icon);
   }
 }
 
-class BudgetronKeyboardConfirmKey extends StatelessWidget {
-  final ValueListenable<MathOperation> currentOperation;
+class BudgetronKeyboardOperateKey extends StatelessWidget {
+  final ValueListenable<MathOperation> operationNotifier;
   final TextEditingController textEditingController;
   final NumberKeyboardService keyboardService;
-  final Function isSubmitAvailable;
-  final Function onConfirmAction;
-  final Function onOperateAction;
 
-  const BudgetronKeyboardConfirmKey(
-      {super.key,
-      required this.textEditingController,
-      required this.currentOperation,
-      required this.onConfirmAction,
-      required this.onOperateAction,
-      required this.keyboardService,
-      required this.isSubmitAvailable});
+  const BudgetronKeyboardOperateKey({
+    super.key,
+    required this.textEditingController,
+    required this.operationNotifier,
+    required this.keyboardService,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-        animation: Listenable.merge([textEditingController, currentOperation]),
+        animation: Listenable.merge([textEditingController, operationNotifier]),
         builder: (context, _) {
-          if (currentOperation.value == MathOperation.none) {
-            if (isSubmitAvailable(keyboardService)) {
-              return BudgetronKeyboardIconKey(
-                icon: const Icon(Icons.check, color: Colors.white),
-                color: Theme.of(context).colorScheme.secondary,
-                onTap: () => _submitChanges(context),
-              );
-            } else {
-              return BudgetronKeyboardIconKey(
-                icon: const Icon(Icons.check, color: Colors.white),
-                color: Theme.of(context).colorScheme.outline,
-                onTap: () => {},
-              );
-            }
+          final isOperationActive =
+              operationNotifier.value != MathOperation.none;
+
+          if (isOperationActive) {
+            return BudgetronKeyboardKey(
+                onTap: () => keyboardService.performOperation(),
+                child: Text('=', style: BudgetronFonts.robotoSize24Weight400));
           } else {
-            return BudgetronKeyboardCharKey(
-                value: '=',
-                color: Theme.of(context).colorScheme.primary,
-                onTap: () => onOperateAction());
+            return BudgetronKeyboardKey(
+                onTap: () => {},
+                child: Text('=',
+                    style: BudgetronFonts.robotoSize24Weight400Disabled));
           }
         });
-  }
-
-  _submitChanges(BuildContext context) {
-    //REFACTOR textEditingController being passed here is wrong
-    onConfirmAction(textEditingController.text);
-    Navigator.pop(context);
   }
 }

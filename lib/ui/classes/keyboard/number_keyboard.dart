@@ -6,16 +6,15 @@ import 'number_keyboard_keys.dart';
 
 class BudgetronNumberKeyboard extends StatefulWidget {
   final TextEditingController textController;
-  final Function isSubmitAvailable;
-  final Function onConfirmAction;
+  final NumberKeyboardService keyboardService;
+  final ValueNotifier<MathOperation> currentOperationNotifier;
 
-  static const double ratio = 0.8;
-
-  const BudgetronNumberKeyboard(
-      {super.key,
-      required this.textController,
-      required this.onConfirmAction,
-      required this.isSubmitAvailable});
+  const BudgetronNumberKeyboard({
+    super.key,
+    required this.textController,
+    required this.keyboardService,
+    required this.currentOperationNotifier,
+  });
 
   @override
   State<BudgetronNumberKeyboard> createState() =>
@@ -23,120 +22,117 @@ class BudgetronNumberKeyboard extends StatefulWidget {
 }
 
 class _BudgetronNumberKeyboardState extends State<BudgetronNumberKeyboard> {
-  final ValueNotifier<MathOperation> currentOperation =
-      ValueNotifier(MathOperation.none);
-
   @override
   Widget build(BuildContext context) {
-    final NumberKeyboardService keyboardService =
-        NumberKeyboardService(widget.textController, currentOperation);
+    final keyboardService = widget.keyboardService;
 
-    double keyHeight =
-        MediaQuery.of(context).size.width / 4.0 * BudgetronNumberKeyboard.ratio;
-    Color mainKeyColor = Theme.of(context).colorScheme.tertiary;
-    Color secondaryKeyColor = Theme.of(context).colorScheme.primary;
+    double keyHeight = 50;
 
-    return Column(children: [
-      SizedBox(
-        height: keyHeight,
-        child: Row(
-          children: [
-            BudgetronKeyboardCharKey(
-                value: '1',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('1')),
-            BudgetronKeyboardCharKey(
-                value: '2',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('2')),
-            BudgetronKeyboardCharKey(
-                value: '3',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('3')),
-            BudgetronKeyboardCharKey(
-                value: '×',
-                color: secondaryKeyColor,
-                onTap: () => keyboardService.appendOperation(
-                    MathOperation.multiply, '×'))
-          ],
-        ),
+    final colorScheme = Theme.of(context).colorScheme;
+    Color leftPartColor = colorScheme.onSecondary;
+    Color rightPartColor = Theme.of(context).colorScheme.surface;
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 16),
+      child: Stack(
+        alignment: AlignmentDirectional.topStart,
+        children: [
+          Positioned.fill(
+            child: Row(children: [
+              Flexible(
+                  flex: 3,
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: leftPartColor,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              bottomLeft: Radius.circular(8))))),
+              Flexible(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: rightPartColor,
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(8),
+                              bottomRight: Radius.circular(8))))),
+            ]),
+          ),
+          Column(children: [
+            SizedBox(
+              height: keyHeight,
+              child: Row(
+                children: [
+                  BudgetronKeyboardCharKey(
+                      char: '1', onTap: () => keyboardService.appendDigit('1')),
+                  BudgetronKeyboardCharKey(
+                      char: '2', onTap: () => keyboardService.appendDigit('2')),
+                  BudgetronKeyboardCharKey(
+                      char: '3', onTap: () => keyboardService.appendDigit('3')),
+                  BudgetronKeyboardCharKey(
+                      char: '×',
+                      onTap: () => keyboardService.appendOperation(
+                          MathOperation.multiply, '×'))
+                ],
+              ),
+            ),
+            SizedBox(
+              height: keyHeight,
+              child: Row(
+                children: [
+                  BudgetronKeyboardCharKey(
+                      char: '4', onTap: () => keyboardService.appendDigit('4')),
+                  BudgetronKeyboardCharKey(
+                      char: '5', onTap: () => keyboardService.appendDigit('5')),
+                  BudgetronKeyboardCharKey(
+                      char: '6', onTap: () => keyboardService.appendDigit('6')),
+                  BudgetronKeyboardCharKey(
+                      char: '–',
+                      onTap: () => keyboardService.appendOperation(
+                          MathOperation.subtract, '–'))
+                ],
+              ),
+            ),
+            SizedBox(
+              height: keyHeight,
+              child: Row(
+                children: [
+                  BudgetronKeyboardCharKey(
+                      char: '7', onTap: () => keyboardService.appendDigit('7')),
+                  BudgetronKeyboardCharKey(
+                      char: '8', onTap: () => keyboardService.appendDigit('8')),
+                  BudgetronKeyboardCharKey(
+                      char: '9', onTap: () => keyboardService.appendDigit('9')),
+                  BudgetronKeyboardCharKey(
+                      char: '+',
+                      onTap: () => keyboardService.appendOperation(
+                          MathOperation.add, '+'))
+                ],
+              ),
+            ),
+            SizedBox(
+              height: keyHeight,
+              child: Row(
+                children: [
+                  BudgetronKeyboardIconKey(
+                      icon: Icon(Icons.keyboard_backspace,
+                          color: Theme.of(context).colorScheme.primary),
+                      onTap: () => keyboardService.deleteSymbol()),
+                  BudgetronKeyboardCharKey(
+                      char: '0', onTap: () => keyboardService.appendZero()),
+                  BudgetronKeyboardCharKey(
+                      char: '.',
+                      onTap: () => keyboardService.appendDecimalSeparator()),
+                  BudgetronKeyboardOperateKey(
+                    textEditingController: widget.textController,
+                    operationNotifier: widget.currentOperationNotifier,
+                    keyboardService: keyboardService,
+                  )
+                ],
+              ),
+            ),
+          ])
+        ],
       ),
-      SizedBox(
-        height: keyHeight,
-        child: Row(
-          children: [
-            BudgetronKeyboardCharKey(
-                value: '4',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('4')),
-            BudgetronKeyboardCharKey(
-                value: '5',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('5')),
-            BudgetronKeyboardCharKey(
-                value: '6',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('6')),
-            BudgetronKeyboardCharKey(
-                value: '–',
-                color: secondaryKeyColor,
-                onTap: () => keyboardService.appendOperation(
-                    MathOperation.subtract, '–'))
-          ],
-        ),
-      ),
-      SizedBox(
-        height: keyHeight,
-        child: Row(
-          children: [
-            BudgetronKeyboardCharKey(
-                value: '7',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('7')),
-            BudgetronKeyboardCharKey(
-                value: '8',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('8')),
-            BudgetronKeyboardCharKey(
-                value: '9',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDigit('9')),
-            BudgetronKeyboardCharKey(
-                value: '+',
-                color: secondaryKeyColor,
-                onTap: () =>
-                    keyboardService.appendOperation(MathOperation.add, '+'))
-          ],
-        ),
-      ),
-      SizedBox(
-        height: keyHeight,
-        child: Row(
-          children: [
-            BudgetronKeyboardIconKey(
-                icon: const Icon(Icons.keyboard_backspace, color: Colors.white),
-                color: mainKeyColor,
-                onTap: () => keyboardService.deleteSymbol()),
-            BudgetronKeyboardCharKey(
-                value: '0',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendZero()),
-            BudgetronKeyboardCharKey(
-                value: '.',
-                color: mainKeyColor,
-                onTap: () => keyboardService.appendDecimalSeparator()),
-            BudgetronKeyboardConfirmKey(
-              textEditingController: widget.textController,
-              currentOperation: currentOperation,
-              onConfirmAction: widget.onConfirmAction,
-              onOperateAction: () => keyboardService.performOperation(),
-              keyboardService: keyboardService,
-              isSubmitAvailable: widget.isSubmitAvailable,
-            )
-          ],
-        ),
-      ),
-    ]);
+    );
   }
 }
 

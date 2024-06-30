@@ -1,7 +1,7 @@
-import 'package:budgetron/app_data.dart';
-import 'package:budgetron/db/accounts_controller.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/data/fonts.dart';
@@ -10,16 +10,17 @@ import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/ui/classes/time_button.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/ui/classes/date_button.dart';
+import 'package:budgetron/db/accounts_controller.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/select_button.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
+import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/routes/pages/account/account_selection_page.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 import 'package:budgetron/routes/pages/entry/widgets/entry_value_input_field.dart';
-import 'package:provider/provider.dart';
 
 class NewEntryPage extends StatelessWidget {
   final ValueNotifier<EntryCategoryType> tabNotifier =
@@ -35,6 +36,11 @@ class NewEntryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ValueNotifier<MathOperation> currentOperationNotifier =
+        ValueNotifier(MathOperation.none);
+    final NumberKeyboardService keyboardService =
+        NumberKeyboardService(textController, currentOperationNotifier);
+
     return Scaffold(
         appBar: const BudgetronAppBar(
           leading: ArrowBackIconButton(),
@@ -62,9 +68,26 @@ class NewEntryPage extends StatelessWidget {
             //TODO replace with a button so that doesn't happen:
             //isSubmitAvailable doesn't fire when tab is changed and category is dropped
             BudgetronNumberKeyboard(
-                textController: textController,
-                onConfirmAction: _createNewEntry,
-                isSubmitAvailable: _isSubmitAvailable)
+              keyboardService: keyboardService,
+              textController: textController,
+              currentOperationNotifier: currentOperationNotifier,
+            ),
+            const SizedBox(height: 16),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16),
+              child: BudgetronLargeTextButton(
+                  text: 'Create entry',
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  onTap: () => _createNewEntry(textController.text),
+                  textStyle: BudgetronFonts.nunitoSize18Weight500White,
+                  isActive: () => _isValid(keyboardService),
+                  listenables: [
+                    textController,
+                    categoryNotifier,
+                    currentOperationNotifier
+                  ]),
+            ),
+            const SizedBox(height: 16)
           ],
         ));
   }
@@ -84,9 +107,10 @@ class NewEntryPage extends StatelessWidget {
     EntryService.createEntry(entry, category);
   }
 
-  bool _isSubmitAvailable(NumberKeyboardService keyboardService) {
-    return keyboardService.isValueValidForCreation() &&
-        categoryNotifier.value != null;
+  bool _isValid(NumberKeyboardService keyboardService) {
+    return double.tryParse(textController.text) != 0 &&
+        categoryNotifier.value != null &&
+        keyboardService.isValueValidForCreation();
   }
 }
 

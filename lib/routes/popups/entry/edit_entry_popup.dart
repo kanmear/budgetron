@@ -8,7 +8,6 @@ import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/buttons/delete_button.dart';
-import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
 import 'package:budgetron/routes/popups/entry/delete_entry_popup.dart';
 import 'package:budgetron/ui/classes/text_fields/medium_text_field.dart';
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
@@ -49,11 +48,7 @@ class _EditEntryDialogState extends State<EditEntryDialog> {
           ],
         ),
       ]),
-      keyboard: BudgetronNumberKeyboard(
-        textController: textController,
-        onConfirmAction: _submitEntryChanges,
-        isSubmitAvailable: _isSubmitAvailable,
-      ),
+      // keyboard: BudgetronNumberKeyboard(textController: textController),
     );
   }
 
