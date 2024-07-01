@@ -35,11 +35,9 @@ class DockedDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(title, style: BudgetronFonts.nunitoSize18Weight600),
-                    IconButton(
-                      constraints: const BoxConstraints(),
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(Icons.close),
-                      onPressed: () => Navigator.pop(context),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Icon(Icons.close, size: 24),
                     )
                   ],
                 ),
