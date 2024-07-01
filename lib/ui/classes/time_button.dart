@@ -22,11 +22,14 @@ class BudgetronTimeButton extends StatelessWidget {
         child: ValueListenableBuilder(
           valueListenable: timeNotifier,
           builder: (context, timeValue, _) {
+            var hour = timeValue.hour.toString().padLeft(2, '0');
+            var minute = timeValue.minute.toString().padLeft(2, '0');
+
             return ButtonWithIcon(
                 onTap: () => _selectTime(context),
                 icon: const Icon(Icons.access_time),
                 color: Theme.of(context).colorScheme.background,
-                text: "${timeValue.hour}:${timeValue.minute}");
+                text: "$hour:$minute");
           },
         ),
       ),
