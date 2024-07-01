@@ -7,7 +7,7 @@ class BudgetronAppBar extends StatefulWidget implements PreferredSizeWidget {
       {super.key,
       required this.leading,
       required this.title,
-      this.actions = const [SizedBox()]});
+      this.actions = const []});
 
   final List<Widget> actions;
   final Widget leading;

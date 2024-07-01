@@ -64,19 +64,6 @@ class NumberKeyboardService {
   }
 
   /*
-  Checks if entry value changes can be submitted:
-  empty field, zero or the same value are not valid.
-   */
-  bool isValueUpdateValid(double originalValue) {
-    String currentValue = _getValue();
-    bool isEmpty = currentValue.isEmpty;
-    if (isEmpty) return false;
-
-    double currentValueDouble = double.parse(currentValue);
-    return !(currentValueDouble == 0 || currentValueDouble == originalValue);
-  }
-
-  /*
   Checks if new entry value is valid: empty field or zero are not valid values.
    */
   bool isValueValidForCreation() {

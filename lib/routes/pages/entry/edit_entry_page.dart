@@ -16,42 +16,62 @@ import 'package:budgetron/ui/classes/select_button.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/keyboard/number_keyboard.dart';
+import 'package:budgetron/routes/popups/entry/delete_entry_popup.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/routes/pages/account/account_selection_page.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
 import 'package:budgetron/routes/pages/entry/widgets/entry_value_input_field.dart';
 
-class NewEntryPage extends StatelessWidget {
+class EditEntryPage extends StatelessWidget {
+  final Entry entry;
+
+  final TextEditingController textController = TextEditingController();
   final ValueNotifier<EntryCategoryType> tabNotifier =
       ValueNotifier(EntryCategoryType.expense);
-  final ValueNotifier<Account?> accountNotifier = ValueNotifier(null);
   final ValueNotifier<EntryCategory?> categoryNotifier = ValueNotifier(null);
-  final TextEditingController textController = TextEditingController(text: '0');
+  final ValueNotifier<Account?> accountNotifier = ValueNotifier(null);
   final ValueNotifier<DateTime> dateNotifier = ValueNotifier(DateTime.now());
   final ValueNotifier<TimeOfDay> timeNotifier = ValueNotifier(TimeOfDay.now());
   final ValueNotifier<bool> isKeyboardOnNotifier = ValueNotifier(true);
 
-  NewEntryPage({super.key});
+  EditEntryPage({super.key, required this.entry});
 
   @override
   Widget build(BuildContext context) {
+    final categoryType = entry.category.target!.isExpense
+        ? EntryCategoryType.expense
+        : EntryCategoryType.income;
+
+    tabNotifier.value = categoryType;
+    textController.text = entry.value.abs().toStringAsFixed(2);
+    categoryNotifier.value = entry.category.target!;
+    if (entry.account.target != null) {
+      accountNotifier.value = entry.account.target!;
+    }
+
+    final entryDateTime = entry.dateTime;
+    dateNotifier.value = entryDateTime;
+    timeNotifier.value =
+        TimeOfDay(hour: entryDateTime.hour, minute: entryDateTime.minute);
+
     final ValueNotifier<MathOperation> currentOperationNotifier =
         ValueNotifier(MathOperation.none);
     final NumberKeyboardService keyboardService =
         NumberKeyboardService(textController, currentOperationNotifier);
 
     return Scaffold(
-        appBar: const BudgetronAppBar(
-          leading: ArrowBackIconButton(),
-          title: '',
+        appBar: BudgetronAppBar(
+          leading: const ArrowBackIconButton(),
+          title: 'Edit entry',
+          actions: [EntryDeleteIcon(entry: entry)],
         ),
         backgroundColor: Theme.of(context).colorScheme.background,
         body: Column(
           children: [
-            BudgetronTabSwitch(
-              valueNotifier: tabNotifier,
+            BudgetronDisabledTabSwitch(
               tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
+              selectedTab: categoryType,
             ),
             EntryValueInputField(
               tabNotifier: tabNotifier,
@@ -74,14 +94,17 @@ class NewEntryPage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: BudgetronLargeTextButton(
-                  text: 'Create entry',
+                  text: 'Update entry',
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  onTap: () => _createNewEntry(context),
+                  onTap: () => _updateEntry(context),
                   textStyle: BudgetronFonts.nunitoSize18Weight500White,
                   isActive: () => _isValid(keyboardService),
                   listenables: [
                     textController,
                     categoryNotifier,
+                    accountNotifier,
+                    dateNotifier,
+                    timeNotifier,
                     currentOperationNotifier
                   ]),
             ),
@@ -90,27 +113,37 @@ class NewEntryPage extends StatelessWidget {
         ));
   }
 
-  void _createNewEntry(BuildContext context) {
-    var value = textController.text;
-    EntryCategory category = categoryNotifier.value!;
-
-    var dateValue = dateNotifier.value;
-    var timeValue = timeNotifier.value;
-    var date = DateTime(dateValue.year, dateValue.month, dateValue.day,
-        timeValue.hour, timeValue.minute);
-    Entry entry = Entry(value: double.parse(value), dateTime: date);
-    if (accountNotifier.value != null) {
-      entry.account.target = accountNotifier.value;
-    }
-
-    EntryService.createEntry(entry, category);
-    Navigator.pop(context);
+  void _updateEntry(BuildContext context) {
+    EntryService.updateEntry(entry, double.parse(textController.text));
   }
 
   bool _isValid(NumberKeyboardService keyboardService) {
-    return double.tryParse(textController.text) != 0 &&
-        categoryNotifier.value != null &&
-        keyboardService.isValueValidForCreation();
+    return categoryNotifier.value != entry.category.target ||
+        accountNotifier.value != entry.account.target ||
+        _isDateUpdated() ||
+        (_isValueUpdated() && keyboardService.isValueValidForCreation());
+  }
+
+  bool _isValueUpdated() {
+    var newValue = double.tryParse(textController.text);
+    if (newValue == null) return false;
+
+    return !(newValue == 0 || newValue == entry.value.abs());
+  }
+
+  bool _isDateUpdated() {
+    var oldDateFull = entry.dateTime;
+    var oldDate =
+        DateTime(oldDateFull.year, oldDateFull.month, oldDateFull.day);
+
+    var newDateFull = dateNotifier.value;
+    var newDate =
+        DateTime(newDateFull.year, newDateFull.month, newDateFull.day);
+
+    var oldTime = TimeOfDay(hour: oldDateFull.hour, minute: oldDateFull.minute);
+    var newTime = timeNotifier.value;
+
+    return oldDate != newDate || oldTime != newTime;
   }
 }
 
@@ -155,18 +188,10 @@ class _EntryParametersState extends State<EntryParameters> {
           children: [
             Row(children: [
               Expanded(
-                child: ValueListenableBuilder(
-                  valueListenable: widget.tabNotifier,
-                  builder: (context, value, _) {
-                    widget.categoryNotifier.value = null;
-
-                    return BudgetronSelectButton(
-                        onTap: () => _navigateToCategorySelection(context),
-                        valueNotifier: widget.categoryNotifier,
-                        hintText: 'Select category');
-                  },
-                ),
-              ),
+                  child: BudgetronSelectButton(
+                      onTap: () => _navigateToCategorySelection(context),
+                      valueNotifier: widget.categoryNotifier,
+                      hintText: 'Select category')),
               const SizedBox(width: 16),
               Expanded(
                 child: BudgetronSelectButton(
@@ -207,5 +232,23 @@ class _EntryParametersState extends State<EntryParameters> {
 
     if (!mounted || result == null) return;
     widget.accountNotifier.value = result;
+  }
+}
+
+class EntryDeleteIcon extends StatelessWidget {
+  final Entry entry;
+
+  const EntryDeleteIcon({super.key, required this.entry});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomIconButton(
+        onTap: () => showDialog(
+            context: context,
+            builder: (context) => DeleteEntryDialog(entry: entry)),
+        icon: Icon(
+          Icons.delete,
+          color: Theme.of(context).colorScheme.primary,
+        ));
   }
 }

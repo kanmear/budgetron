@@ -15,7 +15,7 @@ import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/date_selector_legacy.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
-import 'package:budgetron/routes/popups/entry/edit_entry_popup.dart';
+import 'package:budgetron/routes/pages/entry/edit_entry_page.dart';
 
 //TODO check if stateful widget is not needed
 class EntriesPage extends StatefulWidget {
@@ -344,7 +344,7 @@ class EntryListTile extends StatelessWidget {
             : () => showDialog(
                 context: context,
                 builder: (BuildContext context) =>
-                    EditEntryDialog(entry: entries.first)),
+                    EditEntryPage(entry: entries.first)),
         child: child);
   }
 
@@ -407,7 +407,7 @@ class ExpandedEntryTile extends StatelessWidget {
     return InkWell(
       onTap: () => showDialog(
           context: context,
-          builder: (BuildContext context) => EditEntryDialog(entry: entry)),
+          builder: (BuildContext context) => EditEntryPage(entry: entry)),
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),

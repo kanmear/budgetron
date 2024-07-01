@@ -17,20 +17,32 @@ class EntryService {
 
     var entryId = EntryController.addEntry(entry);
     if (category.isBudgetTracked) {
+      //FIX check that entry date falls into current budget period
       BudgetService.addEntryToBudget(category.id, entryId, entry.value.abs());
     }
 
     if (entry.account.target != null) {
+      //FIX add entry value to account balance
       AccountService.updateEarliestDate(entry.account.target!, entry.dateTime);
     }
   }
 
   static void updateEntry(Entry entry, double newValue) {
+    var previousEntry = EntryController.getEntry(entry.id);
+    if (entry.account.target != previousEntry.account.target ||
+        entry.category.target != previousEntry.category.target) {
+      deleteEntry(previousEntry);
+      createEntry(entry, entry.category.target!);
+
+      return;
+    }
+
     EntryCategory category = entry.category.target!;
     if (category.isBudgetTracked) {
       double delta = -(newValue - entry.value);
       BudgetService.updateBudget(category.id, delta);
     }
+    //FIX remove entry value from account balance
 
     entry.value = category.isExpense ? -newValue : newValue;
     EntryController.addEntry(entry);
