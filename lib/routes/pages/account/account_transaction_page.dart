@@ -1,3 +1,5 @@
+import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
+import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
@@ -50,7 +52,7 @@ class AccountTransactionPage extends StatelessWidget {
         body: Column(children: [
           BudgetronTabSwitch(
               valueNotifier: tabNotifier,
-              tabs: const [TransactionType.debit, TransactionType.credit]),
+              tabs: const [TransactionType.credit, TransactionType.debit]),
           EntryValueInputField(
             tabNotifier: tabNotifier,
             textController: textController,
@@ -86,7 +88,19 @@ class AccountTransactionPage extends StatelessWidget {
                     )
                   : const SizedBox();
             },
-          )
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16),
+            child: BudgetronLargeTextButton(
+                text: 'Create transaction',
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                onTap: () => _createNewTransaction(context),
+                textStyle: BudgetronFonts.nunitoSize18Weight500White,
+                isActive: () => _isValid(keyboardService),
+                listenables: [textController, currentOperationNotifier]),
+          ),
+          const SizedBox(height: 16)
         ]));
   }
 
@@ -97,7 +111,7 @@ class AccountTransactionPage extends StatelessWidget {
     if (result != null) accountNotifier.value = result;
   }
 
-  void _createNewTransaction(String text) {
+  void _createNewTransaction(BuildContext context) {
     var value = double.parse(textController.text) *
         (tabNotifier.value == TransactionType.debit ? 1 : -1);
 
@@ -110,8 +124,9 @@ class AccountTransactionPage extends StatelessWidget {
     transaction.account.target = accountNotifier.value;
 
     AccountService.createTransaction(transaction);
+    Navigator.pop(context);
   }
 
-  bool _isSubmitAvailable(NumberKeyboardService keyboardService) =>
+  bool _isValid(NumberKeyboardService keyboardService) =>
       keyboardService.isValueValidForCreation();
 }
