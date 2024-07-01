@@ -57,7 +57,7 @@ class EditAccountDialog extends StatelessWidget {
               textController: balanceTextController,
               hintText: '',
               autoFocus: false,
-              onSubmitted: () => {},
+              onSubmitted: (value) => {},
               inputType: TextInputType.number),
           const SizedBox(height: 24),
           BudgetronSwitchWithText(
@@ -92,14 +92,14 @@ class EditAccountDialog extends StatelessWidget {
   }
 
   bool _isValid() {
+    var balance = double.tryParse(balanceTextController.text);
+    if (balance == null) return false;
+
     Color originalColor = CategoryService.stringToColor(account.color);
 
     return (nameTextController.text != account.name &&
             nameTextController.text.isNotEmpty) ||
-        double.parse(balanceTextController.text.isEmpty
-                ? '0'
-                : balanceTextController.text) !=
-            account.balance ||
+        balance != account.balance ||
         colorNotifier.value != originalColor ||
         defaultNotifier.value != account.isDefault;
   }

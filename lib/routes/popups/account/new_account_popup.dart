@@ -44,7 +44,7 @@ class NewAccountDialog extends StatelessWidget {
               textController: balanceTextController,
               hintText: '',
               autoFocus: false,
-              onSubmitted: () => {},
+              onSubmitted: (value) => {},
               inputType: TextInputType.number),
           const SizedBox(height: 24),
           BudgetronSwitchWithText(
@@ -81,8 +81,12 @@ class NewAccountDialog extends StatelessWidget {
     Navigator.pop(context);
   }
 
-  bool _isValid() =>
-      nameTextController.text.isNotEmpty &&
-      balanceTextController.text.isNotEmpty &&
-      colorNotifier.value != null;
+  bool _isValid() {
+    var balance = double.tryParse(balanceTextController.text);
+    if (balance == null) return false;
+
+    return nameTextController.text.isNotEmpty &&
+        balanceTextController.text.isNotEmpty &&
+        colorNotifier.value != null;
+  }
 }
