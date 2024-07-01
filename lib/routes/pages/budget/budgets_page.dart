@@ -73,7 +73,6 @@ class BudgetsListView extends StatelessWidget {
 
               return ListView.separated(
                   itemCount: datePeriods.length,
-                  padding: EdgeInsets.zero,
                   itemBuilder: (BuildContext context, int index) {
                     var period = datePeriods[index];
                     var periodBudgets = budgets
@@ -81,15 +80,21 @@ class BudgetsListView extends StatelessWidget {
                         .toList();
                     if (periodBudgets.isEmpty) return const SizedBox();
 
-                    return BudgetListTileContainer(
-                        budgets: budgets
-                            .where(
-                                (budget) => budget.budgetPeriodIndex == period)
-                            .toList(),
-                        period: period);
+                    return Column(
+                      children: [
+                        BudgetListTileContainer(
+                            budgets: budgets
+                                .where((budget) =>
+                                    budget.budgetPeriodIndex == period)
+                                .toList(),
+                            period: period),
+                        const SizedBox(height: 16)
+                      ],
+                    );
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 24);
+                    //REFACTOR .separated is not needed
+                    return const SizedBox();
                   });
             } else {
               return Center(
@@ -147,7 +152,9 @@ class BudgetronListTile extends StatelessWidget {
     return InkWell(
       onTap: () => _navigateToBudgetOverview(context, budget.id),
       child: Container(
-        color: Theme.of(context).colorScheme.surface,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Theme.of(context).colorScheme.surface),
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
