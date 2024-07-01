@@ -78,7 +78,7 @@ class NewEntryPage extends StatelessWidget {
               child: BudgetronLargeTextButton(
                   text: 'Create entry',
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  onTap: () => _createNewEntry(textController.text),
+                  onTap: () => _createNewEntry(context),
                   textStyle: BudgetronFonts.nunitoSize18Weight500White,
                   isActive: () => _isValid(keyboardService),
                   listenables: [
@@ -92,7 +92,8 @@ class NewEntryPage extends StatelessWidget {
         ));
   }
 
-  void _createNewEntry(String value) {
+  void _createNewEntry(BuildContext context) {
+    var value = textController.text;
     EntryCategory category = categoryNotifier.value!;
 
     var dateValue = dateNotifier.value;
@@ -105,6 +106,7 @@ class NewEntryPage extends StatelessWidget {
     }
 
     EntryService.createEntry(entry, category);
+    Navigator.pop(context);
   }
 
   bool _isValid(NumberKeyboardService keyboardService) {
