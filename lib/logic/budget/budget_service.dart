@@ -183,8 +183,14 @@ class BudgetService {
     if (remainingDays >= 30) {
       int remainingMonths = remainingDays ~/ 30;
       int leftoverDays = remainingDays % 30;
-      return '$remainingMonths ${remainingMonths == 1 ? 'month' : 'months'} '
-          'and $leftoverDays ${leftoverDays == 1 ? 'day' : 'days'} left';
+
+      if (leftoverDays != 0) {
+        return '$remainingMonths ${remainingMonths == 1 ? 'month' : 'months'} '
+            'and $leftoverDays ${leftoverDays == 1 ? 'day' : 'days'} left';
+      } else {
+        return "$remainingMonths ${remainingMonths == 1 ? 'month' : 'months'} "
+            "left";
+      }
     }
 
     return remainingDays == 1
