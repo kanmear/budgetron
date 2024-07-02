@@ -295,7 +295,7 @@ class EntryListTile extends StatelessWidget {
                 context,
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(2),
+                      borderRadius: BorderRadius.circular(8),
                       color: Theme.of(context).colorScheme.surface),
                   padding: const EdgeInsets.all(12),
                   child: Column(
@@ -410,15 +410,15 @@ class ExpandedEntryTile extends StatelessWidget {
           builder: (BuildContext context) => EditEntryPage(entry: entry)),
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
+            borderRadius: BorderRadius.circular(12),
             color: Theme.of(context).colorScheme.background),
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(DateFormat.Hm().format(entry.dateTime),
                 style: BudgetronFonts.nunitoSize16Weight300Gray,
                 textAlign: TextAlign.center),
-            const SizedBox(height: 8),
             Text(entry.value.toStringAsFixed(2),
                 style: BudgetronFonts.nunitoSize16Weight400,
                 textAlign: TextAlign.center),
