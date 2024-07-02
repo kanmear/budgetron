@@ -32,6 +32,21 @@ class AccountService {
     AccountsController.addAccount(account);
   }
 
+  static void addEntryToAccount(Account account, Entry entry) {
+    account.balance += entry.value;
+    AccountsController.addAccount(account);
+
+    updateEarliestDate(account, entry.dateTime);
+  }
+
+  static Future<void> deleteEntryFromAccount(
+      Account account, Entry entry) async {
+    account.balance -= entry.value;
+    AccountsController.addAccount(account);
+
+    //TODO update earliest date
+  }
+
   static Stream<List<Listable>> getOperationsInPeriod(
       int accountId, List<DateTime> dates) {
     Stream<List<Listable>> entries = EntryController.getEntries(

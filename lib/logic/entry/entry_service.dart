@@ -22,8 +22,7 @@ class EntryService {
     }
 
     if (entry.account.target != null) {
-      //FIX add entry value to account balance
-      AccountService.updateEarliestDate(entry.account.target!, entry.dateTime);
+      AccountService.addEntryToAccount(entry.account.target!, entry);
     }
   }
 
@@ -42,7 +41,6 @@ class EntryService {
       double delta = -(newValue - entry.value);
       BudgetService.updateBudget(category.id, delta);
     }
-    //FIX remove entry value from account balance
 
     entry.value = category.isExpense ? -newValue : newValue;
     EntryController.addEntry(entry);
@@ -53,6 +51,10 @@ class EntryService {
     if (category.isBudgetTracked) {
       await BudgetService.deleteEntryFromBudget(
           category.id, entry.id, entry.value);
+    }
+
+    if (entry.account.target != null) {
+      await AccountService.deleteEntryFromAccount(entry.account.target!, entry);
     }
 
     EntryController.deleteEntry(entry.id);
