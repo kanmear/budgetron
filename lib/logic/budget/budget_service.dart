@@ -49,10 +49,17 @@ class BudgetService {
   }
 
   static void addEntryToBudget(
-      int categoryId, int entryId, double delta) async {
+    int categoryId,
+    int entryId,
+    double delta,
+    DateTime date,
+  ) async {
     Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
 
     if (budget.isArchived) return;
+    if (!(date.isAfter(budget.startDate) && date.isBefore(budget.resetDate))) {
+      return;
+    }
 
     resetBudget(budget);
     budget.currentValue += delta;
@@ -117,6 +124,7 @@ class BudgetService {
     budget.targetValue = newTargetValue;
     budget.budgetPeriodIndex = newBudgetPeriodIndex;
     budget.currentValue = recalculatedCurrentValue;
+    budget.startDate = calculateStartDate(resetDate, newBudgetPeriodIndex);
     budget.resetDate = resetDate;
     budget.onMainPage = isOnMainPage;
 
@@ -131,6 +139,8 @@ class BudgetService {
       budget.currentValue = 0;
       budget.resetDate =
           calculateResetDate(budget.budgetPeriodIndex, budget.resetDate);
+      budget.startDate =
+          calculateStartDate(budget.resetDate, budget.budgetPeriodIndex);
 
       return true;
     }

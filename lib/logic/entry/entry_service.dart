@@ -17,8 +17,8 @@ class EntryService {
 
     var entryId = EntryController.addEntry(entry);
     if (category.isBudgetTracked) {
-      //FIX check that entry date falls into current budget period
-      BudgetService.addEntryToBudget(category.id, entryId, entry.value.abs());
+      BudgetService.addEntryToBudget(
+          category.id, entryId, entry.value.abs(), entry.dateTime);
     }
 
     if (entry.account.target != null) {

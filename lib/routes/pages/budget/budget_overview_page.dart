@@ -37,14 +37,12 @@ class BudgetOverviewPage extends StatelessWidget {
           final BudgetPeriod datePeriod =
               BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
 
-          final endDate = budget.resetDate;
-          final periodIndex = budget.budgetPeriodIndex;
           BudgetHistory currentBudgetHistory = BudgetHistory(
               targetValue: budget.targetValue,
               endValue: budget.currentValue,
               budgetPeriodIndex: budget.budgetPeriodIndex,
-              startDate: BudgetService.calculateStartDate(endDate, periodIndex),
-              endDate: endDate);
+              startDate: budget.startDate,
+              endDate: budget.resetDate);
           final ValueNotifier<BudgetHistory> budgetHistoryNotifier =
               ValueNotifier(currentBudgetHistory);
 

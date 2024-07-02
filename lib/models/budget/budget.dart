@@ -12,6 +12,9 @@ class Budget {
   //index of budget period string values
   int budgetPeriodIndex;
 
+  //REFACTOR move dates out of budgets
+  @Property(type: PropertyType.date)
+  DateTime startDate;
   @Property(type: PropertyType.date)
   DateTime resetDate;
 
@@ -25,6 +28,7 @@ class Budget {
       required this.currentValue,
       required this.budgetPeriodIndex,
       required this.onMainPage,
+      required this.startDate,
       required this.resetDate,
       this.isArchived = false});
 }

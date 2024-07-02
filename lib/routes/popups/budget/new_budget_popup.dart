@@ -133,6 +133,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
         budgetPeriodIndex: budgetPeriodIndex,
         currentValue: EntryService.calculateTotalValue(entries),
         onMainPage: widget.switchNotifier.value,
+        startDate: datePeriod.first,
         resetDate: BudgetService.calculateResetDate(
             budgetPeriodIndex, datePeriod.first));
 

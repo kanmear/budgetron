@@ -94,7 +94,7 @@
     },
     {
       "id": "5:6482118196163973151",
-      "lastPropertyId": "10:4015399903462571734",
+      "lastPropertyId": "11:6004246412171870440",
       "name": "Budget",
       "properties": [
         {
@@ -140,6 +140,11 @@
           "id": "10:4015399903462571734",
           "name": "isArchived",
           "type": 1
+        },
+        {
+          "id": "11:6004246412171870440",
+          "name": "startDate",
+          "type": 10
         }
       ],
       "relations": []
