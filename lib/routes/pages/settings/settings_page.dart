@@ -5,6 +5,7 @@ import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
+import 'package:budgetron/routes/pages/settings/style_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -12,6 +13,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //TODO replace with budgetron app bar
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -40,7 +42,10 @@ class SettingsList extends StatelessWidget {
 
     final widgets = [
       SettingsListTile(
-          onTap: () => {},
+          onTap: () => {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const StylePage()))
+              },
           iconData: Icons.color_lens_outlined,
           topText: 'Style and appearance',
           bottomText: 'Theme and icons'),

@@ -16,7 +16,13 @@ class BudgetronColors {
   static const Color mainGreen = Color(0xffcddc39);
   static const Color error = Color(0xffff5722);
 
-  static ColorScheme budgetronColorScheme = const ColorScheme(
+  static const Color surface0 = Color(0xffF1F1F1);
+  static const Color surface1 = Color(0xffFFFFFF);
+  static const Color surface2 = Color(0xffE4E4E4);
+  static const Color surface3 = Color(0xffD7D7D7);
+  static const Color surface4 = Color(0xffCBCBCB);
+
+  static ColorScheme lightColorScheme = const ColorScheme(
     primary: black,
     onPrimary: Colors.white,
     secondary: mainGreen,
@@ -25,6 +31,23 @@ class BudgetronColors {
     outlineVariant: gray4,
     onSecondary: gray1,
     background: background,
+    onBackground: Colors.black,
+    surface: surface,
+    onSurface: Colors.black,
+    error: error,
+    onError: Colors.white,
+    brightness: Brightness.light,
+  );
+
+  static ColorScheme darkColorScheme = const ColorScheme(
+    primary: black,
+    onPrimary: Colors.white,
+    secondary: mainGreen,
+    tertiary: gray3,
+    outline: gray0,
+    outlineVariant: gray4,
+    onSecondary: gray1,
+    background: Colors.pink,
     onBackground: Colors.black,
     surface: surface,
     onSurface: Colors.black,

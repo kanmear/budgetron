@@ -43,20 +43,27 @@ Future<void> main() async {
   // await MockDataGenerator.generateRandomEntries();
 
   runApp(ChangeNotifierProvider(
-      create: (context) => AppData(), child: const MainApp()));
+      create: (context) => AppData(),
+      child: Consumer<AppData>(builder: (context, appData, _) {
+        return MainApp(
+          themeMode: appData.themeMode,
+        );
+      })));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  final ThemeMode themeMode;
+
+  const MainApp({super.key, required this.themeMode});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => AppState(),
-        child: MaterialApp(
-          theme: ThemeData(colorScheme: BudgetronColors.budgetronColorScheme),
-          home: const Budgetron(),
-        ));
+    return MaterialApp(
+      themeMode: themeMode,
+      theme: ThemeData(colorScheme: BudgetronColors.lightColorScheme),
+      darkTheme: ThemeData(colorScheme: BudgetronColors.darkColorScheme),
+      home: const Budgetron(),
+    );
   }
 }
 

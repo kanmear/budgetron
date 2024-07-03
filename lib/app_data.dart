@@ -1,9 +1,32 @@
 import 'globals.dart' as globals;
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/logic/settings/settings_service.dart';
 
 class AppData extends ChangeNotifier {
+  late ThemeMode _themeMode = ThemeMode.light;
+  late ColorScheme _darkScheme = BudgetronColors.darkColorScheme;
+  late ColorScheme _lightScheme = BudgetronColors.lightColorScheme;
+
+  ThemeMode get themeMode => _themeMode;
+  void setThemeMode(ThemeMode value) {
+    _themeMode = value;
+    notifyListeners();
+  }
+
+  ColorScheme get darkScheme => _darkScheme;
+  void setDarkScheme(ColorScheme value) {
+    _darkScheme = value;
+    notifyListeners();
+  }
+
+  ColorScheme get lightScheme => _lightScheme;
+  void setLightScheme(ColorScheme value) {
+    _lightScheme = value;
+    notifyListeners();
+  }
+
   String get currency => globals.currency;
 
   void setCurrency(String value) {
