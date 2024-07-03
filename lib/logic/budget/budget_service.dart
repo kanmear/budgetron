@@ -57,18 +57,22 @@ class BudgetService {
     Budget budget = (await BudgetController.getBudgetByCategory(categoryId));
 
     if (budget.isArchived) return;
-    if (!(date.isAfter(budget.startDate) && date.isBefore(budget.resetDate))) {
-      return;
+    if (date.isBefore(budget.resetDate)) {
+      if (date.isAfter(budget.startDate)) {
+        // entry is created in the live budget period
+        resetBudget(budget);
+        budget.currentValue += delta;
+
+        Entry entry = EntryController.getEntry(entryId);
+        entry.budget.target = budget;
+        EntryController.addEntry(entry);
+
+        BudgetController.updateBudget(budget);
+      } else {
+        // entry is created in the budget histories period
+        await _updateHistories(budget.id, delta, date);
+      }
     }
-
-    resetBudget(budget);
-    budget.currentValue += delta;
-
-    Entry entry = EntryController.getEntry(entryId);
-    entry.budget.target = budget;
-    EntryController.addEntry(entry);
-
-    BudgetController.updateBudget(budget);
   }
 
   static void updateBudget(int categoryId, double delta) async {
@@ -83,27 +87,29 @@ class BudgetService {
   }
 
   static Future<void> deleteEntryFromBudget(
-      int categoryId, int entryId, double delta) async {
+      int categoryId, int entryId, double delta, DateTime date) async {
     Budget budget = await BudgetController.getBudgetByCategory(categoryId);
-
-    Entry entry = EntryController.getEntry(entryId);
-    entry.budget.target = null;
-    entry.budget.targetId = null;
-    EntryController.addEntry(entry);
 
     if (!budget.isArchived) {
       resetBudget(budget);
-      budget.currentValue += delta;
+      budget.currentValue -= delta;
     }
 
     BudgetController.updateBudget(budget);
 
-    var histories = await BudgetController.getBudgetHistories(budget.id).first;
+    await _updateHistories(budget.id, delta, date);
+  }
+
+  static Future<void> _updateHistories(
+    int budgetId,
+    double delta,
+    DateTime date,
+  ) async {
+    var histories = await BudgetController.getBudgetHistories(budgetId).first;
     if (histories.isEmpty) return;
     for (var history in histories) {
       //FIX possible time slip
-      if (entry.dateTime.isBefore(history.endDate) &&
-          entry.dateTime.isAfter(history.startDate)) {
+      if (date.isBefore(history.endDate) && date.isAfter(history.startDate)) {
         history.endValue += delta;
 
         BudgetController.addBudgetHistory(history);

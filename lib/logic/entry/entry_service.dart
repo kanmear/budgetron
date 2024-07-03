@@ -50,7 +50,7 @@ class EntryService {
     EntryCategory category = entry.category.target!;
     if (category.isBudgetTracked) {
       await BudgetService.deleteEntryFromBudget(
-          category.id, entry.id, entry.value);
+          category.id, entry.id, entry.value.abs(), entry.dateTime);
     }
 
     if (entry.account.target != null) {
