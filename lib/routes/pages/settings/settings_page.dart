@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
+import 'package:budgetron/ui/classes/horizontal_separator.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -37,18 +38,92 @@ class SettingsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
 
+    final widgets = [
+      SettingsListTile(
+          onTap: () => {},
+          iconData: Icons.color_lens_outlined,
+          topText: 'Style and appearance',
+          bottomText: 'Theme and icons'),
+      SettingsListTile(
+          onTap: () => {},
+          iconData: Icons.color_lens_outlined,
+          topText: 'Language'),
+    ];
+
     return Expanded(
         child: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: Column(
-              children: [
-                CurrencySelector(appData: appData),
-                DateModeSelector(appData: appData),
-              ],
-            )));
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
+            child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return widgets[index];
+                },
+                separatorBuilder: (context, _) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 16, bottom: 16),
+                    child: HorizontalSeparator(),
+                  );
+                },
+                itemCount: widgets.length)));
   }
 }
 
+class SettingsListTile extends StatelessWidget {
+  final IconData iconData;
+  final Function onTap;
+  final String topText;
+  final String bottomText;
+
+  const SettingsListTile(
+      {super.key,
+      required this.iconData,
+      required this.topText,
+      required this.onTap,
+      this.bottomText = ''});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textColumn = [
+      Text(
+        topText,
+        style: BudgetronFonts.nunitoSize16Weight400,
+      )
+    ];
+
+    final isNotEmpty = bottomText.isNotEmpty;
+    if (isNotEmpty) {
+      textColumn.add(Text(
+        bottomText,
+        style: BudgetronFonts.nunitoSize16Weight300Gray,
+      ));
+    }
+
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: SizedBox(
+        height: 48,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(children: [
+              Icon(iconData, color: colorScheme.primary),
+              const SizedBox(width: 8),
+              Column(
+                  mainAxisAlignment: isNotEmpty
+                      ? MainAxisAlignment.spaceBetween
+                      : MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: textColumn),
+            ]),
+            Icon(Icons.arrow_right, color: colorScheme.primary),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//REFACTOR into proper widgets
 class CurrencySelector extends StatefulWidget {
   final AppData appData;
 
