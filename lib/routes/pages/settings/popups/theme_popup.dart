@@ -1,4 +1,3 @@
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
@@ -47,6 +46,8 @@ class ThemeRadioButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
     return ValueListenableBuilder(
       valueListenable: themeNotifier,
       builder: (context, selectedTheme, _) {
@@ -56,14 +57,14 @@ class ThemeRadioButton extends StatelessWidget {
               groupValue: selectedTheme,
               value: theme,
               onChanged: (value) => _changeTheme(value!),
-              activeColor: Theme.of(context).colorScheme.primary,
+              activeColor: themeData.colorScheme.primary,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               visualDensity: const VisualDensity(
                   horizontal: VisualDensity.minimumDensity,
                   vertical: VisualDensity.minimumDensity),
             ),
             const SizedBox(width: 6),
-            Text(theme.name, style: BudgetronFonts.nunitoSize16Weight400),
+            Text(theme.name, style: themeData.textTheme.bodyMedium),
           ],
         );
       },

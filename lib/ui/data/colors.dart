@@ -1,58 +1,64 @@
 import 'package:flutter/material.dart';
 
 class BudgetronColors {
-  static const Color black = Color(0xff2a2a2a);
-  static const Color gray4 = Color(0xffbdbdbd);
-  static const Color gray3 = Color(0xff4f4f4f);
-  static const Color gray0 = Color(0xffe0e0e0);
+  static const Color lightSurface0 = Color(0xffF1F1F1);
+  static const Color lightSurface1 = Color(0xffFFFFFF);
+  static const Color lightSurface2 = Color(0xffE4E4E4);
+  static const Color lightSurface3 = Color(0xffD7D7D7);
+  static const Color lightSurface4 = Color(0xffCBCBCB);
 
-  static const Color gray1 = Color(0xffe4e4e4);
-  static const Color gray2 = Color(0xffe4e4e4);
+  static const Color lightPrimary = Color(0xff232323);
+  static const Color lightSecondary = Color(0xffCDDC39);
 
-  static const Color background = Color(0xfff7f7f7);
-  static const Color backgroundHalfOpacity = Color(0x80f7f7f7);
-  static const Color surface = Color(0xffffffff);
+  static const Color darkSurface0 = Color(0xff232323);
+  static const Color darkSurface1 = Color(0xff313131);
+  static const Color darkSurface2 = Color(0xff3E3E3E);
+  static const Color darkSurface3 = Color(0xff4B4B4B);
+  static const Color darkSurface4 = Color(0xff575757);
 
-  static const Color mainGreen = Color(0xffcddc39);
-  static const Color error = Color(0xffff5722);
+  static const Color darkPrimary = Color(0xffFFFFFF);
+  static const Color darkSecondary = Color(0xffE6EE9C);
 
-  static const Color surface0 = Color(0xffF1F1F1);
-  static const Color surface1 = Color(0xffFFFFFF);
-  static const Color surface2 = Color(0xffE4E4E4);
-  static const Color surface3 = Color(0xffD7D7D7);
-  static const Color surface4 = Color(0xffCBCBCB);
+  static const Color buttonText = Color(0xff232323);
+  static const Color tertiary = Color(0xffB39DDB);
+  static const Color error = Color(0xffFFAB91);
+  static const Color white = Color(0xffFFFFFF);
 
   static ColorScheme lightColorScheme = const ColorScheme(
-    primary: black,
-    onPrimary: Colors.white,
-    secondary: mainGreen,
-    tertiary: gray3,
-    outline: gray0,
-    outlineVariant: gray4,
-    onSecondary: gray1,
-    background: background,
-    onBackground: Colors.black,
-    surface: surface,
-    onSurface: Colors.black,
+    primary: lightPrimary,
+    //NOTE onPrimary is what text buttons use
+    onPrimary: buttonText,
+    secondary: lightSecondary,
+    onSecondary: buttonText,
+    tertiary: tertiary,
+    surface: lightSurface0,
+    onSurface: lightPrimary,
+    surfaceContainerLowest: lightSurface1,
+    surfaceContainerLow: lightSurface2,
+    surfaceContainer: lightSurface3,
+    surfaceContainerHigh: lightSurface4,
+    //NOTE tint is used as a crutch for additional color complements
+    surfaceTint: lightSurface0,
     error: error,
-    onError: Colors.white,
+    onError: buttonText,
     brightness: Brightness.light,
   );
 
   static ColorScheme darkColorScheme = const ColorScheme(
-    primary: black,
-    onPrimary: Colors.white,
-    secondary: mainGreen,
-    tertiary: gray3,
-    outline: gray0,
-    outlineVariant: gray4,
-    onSecondary: gray1,
-    background: Colors.pink,
-    onBackground: Colors.black,
-    surface: surface,
-    onSurface: Colors.black,
+    primary: darkPrimary,
+    onPrimary: buttonText,
+    secondary: darkSecondary,
+    onSecondary: buttonText,
+    tertiary: tertiary,
+    surface: darkSurface0,
+    onSurface: darkPrimary,
+    surfaceContainerLowest: darkSurface1,
+    surfaceContainerLow: darkSurface2,
+    surfaceContainer: darkSurface3,
+    surfaceContainerHigh: darkSurface4,
+    surfaceTint: darkSurface0,
     error: error,
-    onError: Colors.white,
+    onError: buttonText,
     brightness: Brightness.light,
   );
 }

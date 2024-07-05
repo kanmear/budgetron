@@ -16,17 +16,13 @@ class BudgetronDateButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
-            border: Border.all(color: Theme.of(context).colorScheme.primary)),
         padding: EdgeInsets.zero,
         child: ValueListenableBuilder(
           valueListenable: dateNotifier,
           builder: (context, dateValue, _) {
             return ButtonWithIcon(
                 onTap: () => _selectDate(context),
-                icon: const Icon(Icons.calendar_month),
-                color: Theme.of(context).colorScheme.background,
+                iconData: Icons.calendar_month,
                 text: DateFormat.yMMMd().format(dateValue));
           },
         ),

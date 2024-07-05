@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/utils/interfaces.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 
@@ -28,7 +27,8 @@ class BudgetronSelectButton extends StatelessWidget {
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(2),
                 border: Border.all(
-                    width: 1, color: Theme.of(context).colorScheme.primary)),
+                    width: 1,
+                    color: Theme.of(context).colorScheme.surfaceContainerHigh)),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -55,6 +55,8 @@ class SelectedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ValueListenableBuilder(
         valueListenable: valueNotifier,
         builder: (context, value, _) {
@@ -64,14 +66,14 @@ class SelectedItem extends StatelessWidget {
             }
 
             return Text(hintText,
-                style: BudgetronFonts.nunitoSize16Weight400Hint);
+                style: theme.textTheme.bodyMedium!
+                    .apply(color: theme.colorScheme.surfaceContainerHigh));
           } else {
             return Row(children: [
               Icon(Icons.square_rounded,
                   size: 18, color: CategoryService.stringToColor(value.color)),
               const SizedBox(width: 4),
-              Text(value.toString(),
-                  style: BudgetronFonts.nunitoSize16Weight400)
+              Text(value.toString(), style: theme.textTheme.bodyMedium)
             ]);
           }
         });

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/groups_controller.dart';
 import 'package:budgetron/models/category/group.dart';
@@ -19,7 +18,7 @@ class GroupsPage extends StatelessWidget {
     return Scaffold(
         appBar: const BudgetronAppBar(
             leading: ArrowBackIconButton(), title: 'Groups'),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: const Column(children: [SizedBox(height: 8), GroupsList()]),
         floatingActionButton: BudgetronFloatingActionButton(
             onPressed: () => showDialog(
@@ -33,6 +32,8 @@ class GroupsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Expanded(
       child: StreamBuilder<List<CategoryGroup>>(
           stream: GroupsController.getGroups(),
@@ -53,7 +54,8 @@ class GroupsList extends StatelessWidget {
             } else {
               return Center(
                 child: Text('No groups in database',
-                    style: BudgetronFonts.nunitoSize16Weight300Gray),
+                    style: theme.textTheme.bodyMedium!
+                        .apply(color: theme.colorScheme.surfaceContainerHigh)),
               );
             }
           }),
@@ -62,12 +64,14 @@ class GroupsList extends StatelessWidget {
 }
 
 class GroupListTile extends StatelessWidget {
-  const GroupListTile({super.key, required this.group});
-
   final CategoryGroup group;
+
+  const GroupListTile({super.key, required this.group});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => _goToGroupOverview(context),
@@ -75,11 +79,11 @@ class GroupListTile extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Theme.of(context).colorScheme.surface),
+              color: theme.colorScheme.surfaceContainerLowest),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(group.name, style: BudgetronFonts.nunitoSize16Weight400),
+              Text(group.name, style: theme.textTheme.bodyMedium),
               const SizedBox(height: 8),
               GroupCategoriesList(categories: group.categories.toList())
             ],
@@ -100,6 +104,8 @@ class GroupCategoriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return SizedBox(
         //APPROACH is there a better way to handle 'RenderBox was not laid out'?
         //HACK height value is take from design
@@ -107,7 +113,8 @@ class GroupCategoriesList extends StatelessWidget {
         child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
-              return GroupCategoryTile(category: categories[index]);
+              return GroupCategoryTile(
+                  category: categories[index], theme: theme);
             },
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(width: 8);
@@ -121,11 +128,13 @@ class GroupCategoryTile extends StatelessWidget {
       {super.key,
       required this.category,
       this.isRemovable = false,
-      this.onCloseTap});
+      this.onCloseTap,
+      required this.theme});
 
   final EntryCategory category;
   final Function? onCloseTap;
   final bool isRemovable;
+  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -133,15 +142,14 @@ class GroupCategoryTile extends StatelessWidget {
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            border: Border.all(
-                color: Theme.of(context).colorScheme.outlineVariant)),
+            border: Border.all(color: theme.colorScheme.surfaceContainerLow)),
         child: Row(mainAxisSize: MainAxisSize.min, children: [
           Container(
               padding: const EdgeInsets.only(right: 4),
               child: Icon(Icons.square_rounded,
                   size: 18,
                   color: CategoryService.stringToColor(category.color))),
-          Text(category.name, style: BudgetronFonts.nunitoSize16Weight400),
+          Text(category.name, style: theme.textTheme.bodyMedium),
           _resolveTrailing(context)
         ]));
   }
@@ -153,8 +161,8 @@ class GroupCategoryTile extends StatelessWidget {
         GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () => onCloseTap!(category),
-            child: Icon(Icons.close,
-                size: 18, color: Theme.of(context).colorScheme.primary))
+            child:
+                Icon(Icons.close, size: 18, color: theme.colorScheme.primary))
       ]);
     }
     return const SizedBox();

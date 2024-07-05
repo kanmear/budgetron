@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/ui/classes/checkbox.dart';
 import 'package:budgetron/ui/classes/tab_switch.dart';
@@ -34,7 +33,7 @@ class CategorySelectionPage extends StatelessWidget {
     return Scaffold(
         appBar:
             BudgetronAppBar(leading: const ArrowBackIconButton(), title: title),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(children: [
           //TODO move search to appbar
           // BudgetronSearchField(
@@ -56,10 +55,12 @@ class CategorySelectionPage extends StatelessWidget {
 
   Widget _resolveFloatingButton(
       BuildContext context, List<EntryCategory> selectedCategories) {
+    final theme = Theme.of(context);
+
     if (isMultipleSelection) {
       return BudgetronFloatingActionButton(
           onPressed: () => {Navigator.pop(context, selectedCategories)},
-          icon: const Icon(Icons.check));
+          icon: Icon(Icons.check, color: theme.colorScheme.primary));
     }
     return BudgetronFloatingActionButton(
         onPressed: () => showDialog(
@@ -85,6 +86,8 @@ class CategoriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Expanded(
         child: ValueListenableBuilder(
             valueListenable: categoryTypeNotifier,
@@ -108,7 +111,8 @@ class CategoriesList extends StatelessWidget {
                                   return CategoryListTile(
                                       category: categories[index],
                                       isMultipleSelection: isMultipleSelection,
-                                      selectedCategories: selectedCategories);
+                                      selectedCategories: selectedCategories,
+                                      theme: theme);
                                 },
                                 separatorBuilder:
                                     (BuildContext context, int index) {
@@ -119,7 +123,9 @@ class CategoriesList extends StatelessWidget {
                     } else {
                       return Center(
                           child: Text("No categories in database",
-                              style: BudgetronFonts.nunitoSize16Weight300Gray));
+                              style: theme.textTheme.bodyMedium!.apply(
+                                  color:
+                                      theme.colorScheme.surfaceContainerHigh)));
                     }
                   });
             }));
@@ -131,12 +137,14 @@ class CategoryListTile extends StatelessWidget {
       {super.key,
       required this.category,
       required this.isMultipleSelection,
-      required this.selectedCategories});
+      required this.selectedCategories,
+      required this.theme});
 
   final ValueNotifier<bool> valueNotifier = ValueNotifier(false);
   final List<EntryCategory> selectedCategories;
   final EntryCategory category;
   final bool isMultipleSelection;
+  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +165,7 @@ class CategoryListTile extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.surface),
+                color: theme.colorScheme.surfaceContainerLowest),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -168,8 +176,7 @@ class CategoryListTile extends StatelessWidget {
                             size: 18,
                             color:
                                 CategoryService.stringToColor(category.color))),
-                    Text(category.name,
-                        style: BudgetronFonts.nunitoSize16Weight400)
+                    Text(category.name, style: theme.textTheme.bodyMedium)
                   ]),
                   _resolveTrailing()
                 ])));

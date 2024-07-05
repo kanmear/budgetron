@@ -3,7 +3,6 @@ import 'package:budgetron/utils/date_utils.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
 class DateSelector extends StatelessWidget {
@@ -21,14 +20,17 @@ class DateSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       height: 56,
-      color: Theme.of(context).colorScheme.surface,
+      color: theme.colorScheme.surfaceContainerHigh,
       child: DatePeriodSelector(
           datePeriodNotifier: datePeriodNotifier,
           dateTimeNotifier: dateTimeNotifier,
           earliestDate: earliestDate,
-          items: periodItems),
+          items: periodItems,
+          theme: theme),
     );
   }
 }
@@ -39,12 +41,14 @@ class DatePeriodSelector extends StatefulWidget {
       required this.datePeriodNotifier,
       required this.dateTimeNotifier,
       required this.items,
-      required this.earliestDate});
+      required this.earliestDate,
+      required this.theme});
 
   final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final List<DatePeriod> items;
   final DateTime earliestDate;
+  final ThemeData theme;
 
   @override
   State<DatePeriodSelector> createState() => _DatePeriodSelectorState();
@@ -86,12 +90,12 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
   _dateSelectorItem(DatePeriod period) {
     return Row(children: [
       const SizedBox(width: 8),
-      Text(period.toString(), style: BudgetronFonts.nunitoSize16Weight400)
+      Text(period.toString(), style: widget.theme.textTheme.bodyMedium)
     ]);
   }
 
   _dateSelectorDisplayedItem(BuildContext context) {
-    var color = Theme.of(context).colorScheme.surface;
+    var color = widget.theme.colorScheme.surfaceContainerHigh;
 
     return widget.items.map((period) {
       return Align(
@@ -100,9 +104,9 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
           children: [
             //HACK invisible icons to inflate width of menu button
             Icon(Icons.check_box_outline_blank, color: color),
-            Text(_resolveTextValue(),
-                style: BudgetronFonts.nunitoSize16Weight400),
-            const Icon(Icons.arrow_drop_down),
+            Text(_resolveTextValue(), style: widget.theme.textTheme.bodyMedium),
+            Icon(Icons.arrow_drop_down,
+                color: widget.theme.colorScheme.primary),
             Icon(Icons.check_box_outline_blank, color: color),
           ],
         ),

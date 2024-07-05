@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
 class LegacyDateSelector extends StatelessWidget {
@@ -12,7 +11,7 @@ class LegacyDateSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
+          color: Theme.of(context).colorScheme.surfaceContainerHigh,
           //TODO set a shadow
           // boxShadow: [
           //   BoxShadow(
@@ -58,14 +57,17 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
   }
 
   _dateSelectorItem(DatePeriod period) {
+    final theme = Theme.of(context);
+
     return Row(children: [
       const SizedBox(width: 8),
-      Text(period.toString(), style: BudgetronFonts.nunitoSize16Weight400)
+      Text(period.toString(), style: theme.textTheme.bodyMedium)
     ]);
   }
 
   _dateSelectorDisplayedItem(BuildContext context) {
-    var color = Theme.of(context).colorScheme.surface;
+    final theme = Theme.of(context);
+    var color = theme.colorScheme.surfaceContainerHigh;
 
     return items.map((period) {
       return Align(
@@ -73,8 +75,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
           child: Row(children: [
             //HACK invisible icons to inflate width of menu button
             Icon(Icons.check_box_outline_blank, color: color),
-            Text(_resolveTextValue(),
-                style: BudgetronFonts.nunitoSize16Weight400),
+            Text(_resolveTextValue(), style: theme.textTheme.bodyMedium),
             const Icon(Icons.arrow_drop_down),
             Icon(Icons.check_box_outline_blank, color: color)
           ]));

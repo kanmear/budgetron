@@ -2,7 +2,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/account/transaction.dart';
@@ -30,16 +29,14 @@ class AccountOptionsDialog extends StatelessWidget {
                   context: context,
                   builder: (BuildContext context) =>
                       EditAccountDialog(account: account)),
-              icon: const Icon(Icons.edit),
-              color: Theme.of(context).colorScheme.surface,
+              iconData: Icons.edit,
               text: 'Edit'),
           const SizedBox(height: 16),
           Row(children: [
             Expanded(
                 child: ButtonWithIcon(
                     onTap: () => _navigateToOperationsPage(context),
-                    icon: const Icon(Icons.list),
-                    color: Theme.of(context).colorScheme.surface,
+                    iconData: Icons.list,
                     text: 'Operations')),
             const SizedBox(width: 16),
             Expanded(
@@ -48,8 +45,7 @@ class AccountOptionsDialog extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) =>
                             AccountTransferDialog(account: account)),
-                    icon: const Icon(Icons.credit_card),
-                    color: Theme.of(context).colorScheme.surface,
+                    iconData: Icons.credit_card,
                     text: 'Transfer')),
           ]),
           const SizedBox(height: 16),
@@ -60,8 +56,7 @@ class AccountOptionsDialog extends StatelessWidget {
                           context,
                           TransactionType.debit,
                         ),
-                    icon: const Icon(Icons.trending_up),
-                    color: Theme.of(context).colorScheme.secondary,
+                    iconData: Icons.trending_up,
                     text: 'Debit')),
             const SizedBox(width: 16),
             Expanded(
@@ -70,8 +65,7 @@ class AccountOptionsDialog extends StatelessWidget {
                           context,
                           TransactionType.credit,
                         ),
-                    icon: const Icon(Icons.trending_down),
-                    color: Theme.of(context).colorScheme.error,
+                    iconData: Icons.trending_down,
                     text: 'Credit'))
           ])
         ]));
@@ -101,20 +95,22 @@ class CurrentBalance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final currency = Provider.of<AppData>(context).currency;
 
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Theme.of(context).colorScheme.primary)),
+            border: Border.all(color: theme.colorScheme.primary)),
         padding: const EdgeInsets.all(12),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('Current balance', style: BudgetronFonts.nunitoSize16Weight400),
+          Text('Current balance', style: theme.textTheme.bodyMedium),
           Row(children: [
             Text(account.balance.toStringAsFixed(2),
-                style: BudgetronFonts.nunitoSize16Weight400),
-            Text(" $currency", style: BudgetronFonts.nunitoSize12Weight400)
+                style: theme.textTheme.bodyMedium),
+            Text(" $currency", style: theme.textTheme.titleSmall)
           ])
         ]));
   }

@@ -7,7 +7,6 @@ import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 
 class OverallChart extends StatelessWidget {
   const OverallChart(
@@ -20,6 +19,8 @@ class OverallChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     //HACK animatedBuilder allows listening to multiple values
     return AnimatedBuilder(
       animation: Listenable.merge([isExpenseFilterNotifier, dateTimeNotifier]),
@@ -37,7 +38,9 @@ class OverallChart extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: Theme.of(context).colorScheme.surface),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerLowest),
                     padding: const EdgeInsets.only(
                         top: 12, left: 10, right: 10, bottom: 12),
                     child: Column(
@@ -46,7 +49,7 @@ class OverallChart extends StatelessWidget {
                         const SizedBox(height: 20),
                         BudgetronPieChart(
                           data: data,
-                          child: _formChild(totalValue),
+                          child: _formChild(totalValue, context),
                         ),
                         const SizedBox(height: 2),
                         TopThreeCategories(data: data, total: totalValue)
@@ -61,7 +64,9 @@ class OverallChart extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(2),
-                        color: Theme.of(context).colorScheme.surface),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerLowest),
                     padding: const EdgeInsets.only(
                         top: 12, left: 10, right: 10, bottom: 12),
                     child: Column(
@@ -78,7 +83,9 @@ class OverallChart extends StatelessWidget {
                           child: Center(
                             child: Text(
                               'No data to display',
-                              style: BudgetronFonts.nunitoSize16Weight300Gray,
+                              style: theme.textTheme.bodyMedium!.apply(
+                                  color:
+                                      theme.colorScheme.surfaceContainerHigh),
                             ),
                           ),
                         ),
@@ -124,11 +131,11 @@ class OverallChart extends StatelessWidget {
     return data.values.toList();
   }
 
-  Widget _formChild(double value) {
+  Widget _formChild(double value, BuildContext context) {
     return Center(
       child: Text(
         value.toStringAsFixed(2),
-        style: BudgetronFonts.nunitoSize22Weight500,
+        style: Theme.of(context).textTheme.headlineLarge,
       ),
     );
   }
@@ -160,6 +167,8 @@ class ExpenseFilterTabs extends StatelessWidget {
 
   InkWell _filterTab(BuildContext context, EdgeInsetsGeometry padding,
       String name, bool value) {
+    final theme = Theme.of(context);
+
     return InkWell(
         onTap: () => _updateFilter(value),
         child: Padding(
@@ -170,9 +179,9 @@ class ExpenseFilterTabs extends StatelessWidget {
                     bottom: BorderSide(
                         width: 1,
                         color: isExpenseFilterNotifier.value == value
-                            ? Theme.of(context).colorScheme.primary
+                            ? theme.colorScheme.primary
                             : Colors.transparent))),
-            child: Text(name, style: BudgetronFonts.nunitoSize16Weight400),
+            child: Text(name, style: theme.textTheme.headlineMedium),
           ),
         ));
   }
@@ -213,39 +222,40 @@ class CategoryWithProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     double value = data.value;
 
     return Column(children: [
       const SizedBox(height: 16),
       ListTileWithProgressBar(
-        leading: _getLeading(data),
+        leading: _getLeading(data, theme),
         currentValue: value,
         totalValue: total,
-        trailing: _getTrailing(value, total),
+        trailing: _getTrailing(value, total, theme),
       )
     ]);
   }
 
-  Widget _getLeading(PieChartData data) {
+  Widget _getLeading(PieChartData data, ThemeData theme) {
     return Row(
       children: [
         Icon(Icons.square_rounded, size: 18, color: data.color),
         const SizedBox(width: 4),
-        Text(data.name, style: BudgetronFonts.nunitoSize14Weight400),
+        Text(data.name, style: theme.textTheme.bodyMedium),
       ],
     );
   }
 
-  Widget _getTrailing(double value, double total) {
+  Widget _getTrailing(double value, double total, ThemeData theme) {
     return Row(
       children: [
-        Text(value.toStringAsFixed(2),
-            style: BudgetronFonts.nunitoSize14Weight300),
+        Text(value.toStringAsFixed(2), style: theme.textTheme.labelMedium),
         const SizedBox(width: 8),
         const Text('•'),
         const SizedBox(width: 8),
         Text("${(value / total * 100).toStringAsFixed(0)}%",
-            style: BudgetronFonts.nunitoSize14Weight400),
+            style: theme.textTheme.labelMedium),
       ],
     );
   }

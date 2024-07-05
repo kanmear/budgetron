@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/ui/classes/tab_switch.dart';
 import 'package:budgetron/ui/classes/time_button.dart';
@@ -66,7 +65,7 @@ class EditEntryPage extends StatelessWidget {
           title: 'Edit entry',
           actions: [EntryDeleteIcon(entry: entry)],
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(
           children: [
             BudgetronDisabledTabSwitch(
@@ -97,7 +96,6 @@ class EditEntryPage extends StatelessWidget {
                   text: 'Update entry',
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   onTap: () => _updateEntry(context),
-                  textStyle: BudgetronFonts.nunitoSize18Weight500White,
                   isActive: () => _isValid(keyboardService),
                   listenables: [
                     textController,
@@ -173,10 +171,12 @@ class EntryParameters extends StatefulWidget {
 class _EntryParametersState extends State<EntryParameters> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final accountId = Provider.of<AppData>(context).defaultAccountId;
 
     Widget? defaultValue =
-        Text('No account', style: BudgetronFonts.nunitoSize16Weight400);
+        Text('No account', style: theme.textTheme.bodyMedium);
     if (accountId > 0) {
       widget.accountNotifier.value = AccountsController.getAccount(accountId);
       defaultValue = null;

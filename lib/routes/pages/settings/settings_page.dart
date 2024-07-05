@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -14,16 +15,11 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       //TODO replace with budgetron app bar
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Theme.of(context).colorScheme.background,
-        leading: const ArrowBackIconButton(),
-        leadingWidth: 48,
-        title: Text('Settings', style: BudgetronFonts.nunitoSize18Weight600),
-        titleSpacing: 0,
-        toolbarHeight: 48,
+      appBar: const BudgetronAppBar(
+        title: 'Settings',
+        leading: ArrowBackIconButton(),
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: const Column(
         children: [
           SettingsList(),
@@ -87,11 +83,13 @@ class SettingsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+
+    final colorScheme = theme.colorScheme;
     final textColumn = [
       Text(
         topText,
-        style: BudgetronFonts.nunitoSize16Weight400,
+        style: theme.textTheme.bodyMedium,
       )
     ];
 
@@ -99,7 +97,8 @@ class SettingsListTile extends StatelessWidget {
     if (isNotEmpty) {
       textColumn.add(Text(
         bottomText,
-        style: BudgetronFonts.nunitoSize16Weight300Gray,
+        style: theme.textTheme.labelMedium!
+            .apply(color: colorScheme.surfaceContainerHigh),
       ));
     }
 

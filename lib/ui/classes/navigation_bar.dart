@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/data/colors.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronNavigationBar extends StatelessWidget {
@@ -13,19 +14,19 @@ class BudgetronNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const color = BudgetronColors.lightPrimary;
+
     return Container(
         height: 72,
         clipBehavior: Clip.hardEdge,
         padding: const EdgeInsets.only(left: 20, right: 20),
-        decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            boxShadow: [
-              BoxShadow(
-                  color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 12,
-                  offset: const Offset(0, -3))
-            ]),
+        decoration: BoxDecoration(color: color, boxShadow: [
+          BoxShadow(
+              color: color.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 12,
+              offset: const Offset(0, -3))
+        ]),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -41,15 +42,14 @@ class BudgetronNavigationBar extends StatelessWidget {
   IconButton navigationIconButton(
           Icon icon, int iconIndex, BuildContext context) =>
       IconButton(
-        onPressed: () => selectPage(iconIndex),
-        icon: icon,
-        color: isCurrentlySelected(iconIndex)
-            ? Theme.of(context).colorScheme.surface
-            : Theme.of(context).colorScheme.tertiary,
-      );
+          onPressed: () => selectPage(iconIndex),
+          icon: icon,
+          color: isCurrentlySelected(iconIndex)
+              ? BudgetronColors.white
+              : BudgetronColors.darkSurface4);
 
   InkWell middleButton(BuildContext context) => InkWell(
       onTap: () => navigateToEntryCreation(context),
-      child: Icon(Icons.add_circle_outlined,
-          size: 52, color: Theme.of(context).colorScheme.surface));
+      child: const Icon(Icons.add_circle_outlined,
+          size: 52, color: BudgetronColors.white));
 }

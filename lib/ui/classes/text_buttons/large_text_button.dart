@@ -5,7 +5,6 @@ class BudgetronLargeTextButton extends StatelessWidget {
   final Function isActive;
   final Function onTap;
   final String text;
-  final TextStyle textStyle;
   final Color backgroundColor;
 
   const BudgetronLargeTextButton({
@@ -13,7 +12,6 @@ class BudgetronLargeTextButton extends StatelessWidget {
     required this.text,
     required this.backgroundColor,
     required this.onTap,
-    required this.textStyle,
     required this.isActive,
     required this.listenables,
   });
@@ -22,13 +20,15 @@ class BudgetronLargeTextButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
         style: ButtonStyle(
-            padding: MaterialStateProperty.all(EdgeInsets.zero),
+            padding: WidgetStateProperty.all(EdgeInsets.zero),
             visualDensity: VisualDensity.compact),
         onPressed: () => _resolveAction(),
         child: AnimatedBuilder(
           animation: Listenable.merge(listenables),
           builder: (BuildContext context, Widget? child) {
-            Color buttonColor = _resolveColor(context);
+            final theme = Theme.of(context);
+
+            Color buttonColor = _resolveColor(theme);
 
             return Container(
                 width: double.infinity,
@@ -38,15 +38,10 @@ class BudgetronLargeTextButton extends StatelessWidget {
                 ),
                 decoration: BoxDecoration(
                     color: buttonColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    border: Border(
-                        top: BorderSide(color: buttonColor),
-                        bottom: BorderSide(color: buttonColor),
-                        left: BorderSide(color: buttonColor),
-                        right: BorderSide(color: buttonColor))),
+                    borderRadius: const BorderRadius.all(Radius.circular(50))),
                 child: Text(
                   text,
-                  style: textStyle,
+                  style: _resolveStyle(theme),
                   textAlign: TextAlign.center,
                 ));
           },
@@ -55,15 +50,23 @@ class BudgetronLargeTextButton extends StatelessWidget {
 
   _resolveAction() => isActive() ? onTap() : {};
 
-  Color _resolveColor(BuildContext context) =>
-      isActive() ? backgroundColor : Theme.of(context).colorScheme.outline;
+  Color _resolveColor(ThemeData theme) => isActive()
+      ? theme.colorScheme.secondary
+      : theme.colorScheme.secondary.withOpacity(0.2);
+
+  TextStyle _resolveStyle(ThemeData theme) {
+    final color = theme.colorScheme.onPrimary;
+
+    return isActive()
+        ? theme.textTheme.titleMedium!.apply(color: color)
+        : theme.textTheme.titleMedium!.apply(color: color.withOpacity(0.2));
+  }
 }
 
 //TODO remove this one in favor of LargeButton
 class BudgetronBigTextButton extends StatelessWidget {
   final Function onTap;
   final String text;
-  final TextStyle textStyle;
   final Color backgroundColor;
 
   const BudgetronBigTextButton({
@@ -71,14 +74,15 @@ class BudgetronBigTextButton extends StatelessWidget {
     required this.text,
     required this.backgroundColor,
     required this.onTap,
-    required this.textStyle,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextButton(
         style: ButtonStyle(
-            padding: MaterialStateProperty.all(EdgeInsets.zero),
+            padding: WidgetStateProperty.all(EdgeInsets.zero),
             visualDensity: VisualDensity.compact),
         onPressed: () => onTap(),
         child: Row(
@@ -91,20 +95,13 @@ class BudgetronBigTextButton extends StatelessWidget {
                     bottom: 13.5,
                   ),
                   decoration: BoxDecoration(
-                      color: backgroundColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      border: Border(
-                          top: BorderSide(
-                              color: Theme.of(context).colorScheme.primary),
-                          bottom: BorderSide(
-                              color: Theme.of(context).colorScheme.primary),
-                          left: BorderSide(
-                              color: Theme.of(context).colorScheme.primary),
-                          right: BorderSide(
-                              color: Theme.of(context).colorScheme.primary))),
+                    color: backgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(50)),
+                  ),
                   child: Text(
                     text,
-                    style: textStyle,
+                    style: theme.textTheme.titleMedium!
+                        .apply(color: theme.colorScheme.onPrimary),
                     textAlign: TextAlign.center,
                   )),
             ),

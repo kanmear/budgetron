@@ -1,7 +1,7 @@
+import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/search_field.dart';
@@ -20,19 +20,14 @@ class CategoriesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-        //TODO replace appbar with BudgetronApp bar (and everywhere else)
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          leading: const ArrowBackIconButton(),
-          leadingWidth: 48,
-          title:
-              Text('Categories', style: BudgetronFonts.nunitoSize18Weight600),
-          titleSpacing: 0,
-          toolbarHeight: 48,
+        appBar: const BudgetronAppBar(
+          title: 'Categories',
+          leading: ArrowBackIconButton(),
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         body: Column(
           children: [
             BudgetronSearchField(
@@ -40,6 +35,7 @@ class CategoriesPage extends StatelessWidget {
             const SizedBox(height: 8),
             CategoriesList(
               nameFilter: nameFilter,
+              theme: theme,
             ),
           ],
         ),
@@ -54,10 +50,12 @@ class CategoriesPage extends StatelessWidget {
 
 class CategoriesList extends StatelessWidget {
   final ValueNotifier<String> nameFilter;
+  final ThemeData theme;
 
   const CategoriesList({
     super.key,
     required this.nameFilter,
+    required this.theme,
   });
 
   @override
@@ -73,21 +71,30 @@ class CategoriesList extends StatelessWidget {
               return ValueListenableBuilder(
                   valueListenable: nameFilter,
                   builder: (context, value, child) {
-                    return ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        for (var category in categories)
-                          if (category.name
-                              .toLowerCase()
-                              .contains(nameFilter.value.toLowerCase()))
-                            _categoryListTile(category, context)
-                      ],
+                    return ListView.separated(
+                      padding: const EdgeInsets.only(left: 16, right: 16),
+                      itemBuilder: (BuildContext context, int index) {
+                        var category = categories[index];
+
+                        if (category.name
+                            .toLowerCase()
+                            .contains(nameFilter.value.toLowerCase())) {
+                          return _categoryListTile(category, context);
+                        }
+
+                        return const SizedBox();
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const SizedBox(height: 8);
+                      },
+                      itemCount: categories.length,
                     );
                   });
             } else {
               return Center(
                 child: Text('No categories in database',
-                    style: BudgetronFonts.nunitoSize16Weight300Gray),
+                    style: theme.textTheme.bodyMedium!
+                        .apply(color: theme.colorScheme.surfaceContainerHigh)),
               );
             }
           }),
@@ -97,35 +104,19 @@ class CategoriesList extends StatelessWidget {
   InkWell _categoryListTile(EntryCategory category, BuildContext context) {
     return InkWell(
       onTap: () => _showEditCategoryDialog(category, context),
-      child: Column(
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: Icon(Icons.square_rounded,
-                        size: 18,
-                        color: CategoryService.stringToColor(category.color)),
-                  ),
-                  Text(
-                    category.name,
-                    style: BudgetronFonts.nunitoSize16Weight400,
-                  )
-                ],
-              )),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16),
-            child: Container(
-              height: 1,
-              decoration: BoxDecoration(
-                  border: Border.all(
-                      color: Theme.of(context).colorScheme.outline, width: 1)),
-            ),
-          ),
-        ],
-      ),
+      child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: theme.colorScheme.surfaceContainerLowest),
+          child: Row(children: [
+            Container(
+                padding: const EdgeInsets.only(right: 8),
+                child: Icon(Icons.square_rounded,
+                    size: 18,
+                    color: CategoryService.stringToColor(category.color))),
+            Text(category.name, style: theme.textTheme.bodyMedium)
+          ])),
     );
   }
 

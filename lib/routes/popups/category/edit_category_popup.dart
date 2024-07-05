@@ -7,7 +7,6 @@ import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/category/category.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 
 class EditCategoryDialog extends StatefulWidget {
   final ValueNotifier<Color?> colorNotifier = ValueNotifier(null);
@@ -31,6 +30,8 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     widget.colorNotifier.value =
         CategoryService.stringToColor(widget.category.color);
     widget.textController.text = widget.category.name;
@@ -41,8 +42,8 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "Color and category name",
-              style: BudgetronFonts.nunitoSize16Weight400,
+              'Color and category name',
+              style: theme.textTheme.bodyMedium,
             ),
           ),
           const SizedBox(height: 8),
@@ -65,8 +66,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                             color: widget.colorNotifier.value,
                             borderRadius: BorderRadius.circular(2),
                             border: Border.all(
-                                color: Theme.of(context).colorScheme.primary,
-                                width: 1.5)));
+                                color: theme.colorScheme.primary, width: 1.5)));
                   },
                 ),
               ),
@@ -75,7 +75,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                 child: BudgetronSmallTextField(
                   textController: widget.textController,
                   inputType: TextInputType.text,
-                  hintText: "Enter category name",
+                  hintText: 'Enter category name',
                   autoFocus: true,
                   onSubmitted: () => {},
                 ),
@@ -102,7 +102,6 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                         text: 'Delete',
                         backgroundColor: Theme.of(context).colorScheme.error,
                         onTap: () => _showDeleteCategoryDialog(),
-                        textStyle: BudgetronFonts.nunitoSize18Weight500White,
                         isActive: () => true,
                         listenables: const []),
                   ),
@@ -112,7 +111,6 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                         text: 'Save',
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         onTap: () => _updateCategory(),
-                        textStyle: BudgetronFonts.nunitoSize18Weight500White,
                         isActive: _isValid,
                         listenables: [
                           widget.colorNotifier,
@@ -129,7 +127,6 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                         text: 'Save',
                         backgroundColor: Theme.of(context).colorScheme.primary,
                         onTap: () => _updateCategory(),
-                        textStyle: BudgetronFonts.nunitoSize18Weight500White,
                         isActive: _isValid,
                         listenables: [
                           widget.colorNotifier,

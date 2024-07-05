@@ -14,10 +14,10 @@ import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 
 //TODO check if use of state is necessary here
 class NewGroupDialog extends StatefulWidget {
-  NewGroupDialog({super.key});
-
   final ValueNotifier<List<EntryCategory>> categoriesNotifier =
       ValueNotifier([]);
+
+  NewGroupDialog({super.key});
 
   @override
   State<NewGroupDialog> createState() => _NewGroupDialogState();
@@ -27,15 +27,19 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
   final ValueNotifier<String> textNotifier =
       ValueNotifier('Choose categories to group');
   final ValueNotifier<TextStyle> styleNotifier =
-      ValueNotifier(BudgetronFonts.nunitoSize16Weight400Hint);
+      ValueNotifier(BudgetronFonts.fallbackStyle);
   final TextEditingController textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    styleNotifier.value = theme.textTheme.bodyMedium!
+        .apply(color: theme.colorScheme.surfaceContainerHigh);
+
     return DockedDialog(
         title: 'New Group',
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Name', style: BudgetronFonts.nunitoSize14Weight600),
+          Text('Name', style: theme.textTheme.labelSmall),
           const SizedBox(height: 4),
           BudgetronSmallTextField(
               textController: textController,
@@ -44,7 +48,7 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
               onSubmitted: () => {},
               inputType: TextInputType.text),
           const SizedBox(height: 16),
-          Text('Categories', style: BudgetronFonts.nunitoSize14Weight600),
+          Text('Categories', style: theme.textTheme.labelSmall),
           const SizedBox(height: 4),
           ValueListenableBuilder(
               valueListenable: textNotifier,
@@ -62,7 +66,6 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
               text: 'Create group',
               backgroundColor: Theme.of(context).colorScheme.primary,
               onTap: () => _addGroup(),
-              textStyle: BudgetronFonts.nunitoSize18Weight500White,
               isActive: _isValid,
               listenables: [textController, widget.categoriesNotifier])
         ]));
@@ -114,6 +117,8 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
   }
 
   Widget _resolveCategoriesDisplay() {
+    final theme = Theme.of(context);
+
     var categories = widget.categoriesNotifier.value;
 
     if (categories.isNotEmpty) {
@@ -128,7 +133,8 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
                 GroupCategoryTile(
                     category: category,
                     isRemovable: true,
-                    onCloseTap: _removeCategory)
+                    onCloseTap: _removeCategory,
+                    theme: theme)
             ])))
       ]);
     }
@@ -143,13 +149,16 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
   }
 
   void _updateCategorySelectText(int length) {
+    final theme = Theme.of(context);
+
     if (length == 0) {
       textNotifier.value = 'Choose categories to group';
-      styleNotifier.value = BudgetronFonts.nunitoSize16Weight400Hint;
+      styleNotifier.value = theme.textTheme.bodyMedium!
+          .apply(color: theme.colorScheme.surfaceContainerHigh);
     } else {
       textNotifier.value =
           "$length ${length == 1 ? 'category' : 'categories'} chosen";
-      styleNotifier.value = BudgetronFonts.nunitoSize16Weight400;
+      styleNotifier.value = theme.textTheme.bodyMedium!;
     }
   }
 }

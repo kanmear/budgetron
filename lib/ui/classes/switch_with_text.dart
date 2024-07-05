@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
-
 class BudgetronSwitchWithText extends StatefulWidget {
   final ValueNotifier<bool> switchNotifier;
   final String text;
@@ -17,22 +15,26 @@ class BudgetronSwitchWithText extends StatefulWidget {
 class _BudgetronSwitchWithTextState extends State<BudgetronSwitchWithText> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     //REFACTOR maybe Row and Container with decorations could be separate
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: Theme.of(context).colorScheme.surface),
+            color: theme.colorScheme.surfaceContainerLowest),
         height: 58,
         padding: const EdgeInsets.all(10),
         constraints: const BoxConstraints(),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(widget.text, style: BudgetronFonts.nunitoSize14Weight400),
+          Text(widget.text, style: theme.textTheme.bodySmall),
           Switch(
+              trackOutlineColor: WidgetStateProperty.resolveWith<Color?>(
+                  (Set<WidgetState> states) => Colors.transparent),
               onChanged: (bool value) =>
                   setState(() => widget.switchNotifier.value = value),
               value: widget.switchNotifier.value,
-              activeColor: Theme.of(context).colorScheme.secondary)
+              activeColor: theme.colorScheme.secondary)
         ]));
   }
 }

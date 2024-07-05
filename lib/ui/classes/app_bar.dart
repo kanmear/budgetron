@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
-
 class BudgetronAppBar extends StatefulWidget implements PreferredSizeWidget {
   const BudgetronAppBar(
       {super.key,
@@ -23,20 +21,22 @@ class BudgetronAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _BudgetronAppBarState extends State<BudgetronAppBar> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: AppBar(
         leading: widget.leading,
         leadingWidth: 24,
         title: Text(widget.title,
-            style: BudgetronFonts.nunitoSize18Weight600,
+            style: theme.textTheme.headlineLarge,
             overflow: TextOverflow.fade,
             key: ValueKey<String>(widget.title)),
         titleSpacing: 8,
         actions: widget.actions,
         elevation: 0,
         toolbarHeight: 48,
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
       ),
     );
   }

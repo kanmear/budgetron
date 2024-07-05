@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 
 class CategoryColorDialog extends StatelessWidget {
   final List<List<Color>> colors = const [
@@ -59,11 +58,13 @@ class CategoryColorDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final ValueNotifier<MapEntry<int, int>> colorNotifier =
         ValueNotifier(const MapEntry(-1, -1));
 
     return AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         insetPadding: const EdgeInsets.all(30),
         contentPadding: const EdgeInsets.all(16),
         content: SizedBox(
@@ -80,7 +81,7 @@ class CategoryColorDialog extends StatelessWidget {
                     children: [
                       Text(
                         "Category color",
-                        style: BudgetronFonts.nunitoSize18Weight600,
+                        style: theme.textTheme.headlineLarge,
                       ),
                       IconButton(
                         constraints: const BoxConstraints(),
@@ -92,7 +93,7 @@ class CategoryColorDialog extends StatelessWidget {
                   ),
                   Text(
                     "Colors used by existing categories *",
-                    style: BudgetronFonts.nunitoSize11Weight300,
+                    style: theme.textTheme.titleSmall,
                   ),
                 ],
               ),
@@ -132,8 +133,7 @@ class CategoryColorDialog extends StatelessWidget {
                   child: BudgetronLargeTextButton(
                     text: "Confirm",
                     onTap: () => _validateColorIsChosen(context, colorNotifier),
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    textStyle: BudgetronFonts.nunitoSize16Weight400Confirm,
+                    backgroundColor: theme.colorScheme.primary,
                     isActive: () => _isValid(colorNotifier),
                     listenables: [colorNotifier],
                   ),

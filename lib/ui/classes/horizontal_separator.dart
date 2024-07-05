@@ -9,7 +9,8 @@ class HorizontalSeparator extends StatelessWidget {
       height: 1,
       decoration: BoxDecoration(
           border: Border.all(
-              color: Theme.of(context).colorScheme.outline, width: 1)),
+              color: Theme.of(context).colorScheme.surfaceContainerLow,
+              width: 1)),
     );
   }
 }

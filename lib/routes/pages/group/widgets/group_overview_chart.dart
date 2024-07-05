@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
@@ -21,6 +20,8 @@ class GroupOverviewChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     if (entries.isNotEmpty) {
       return ValueListenableBuilder(
           valueListenable: isExpenseFilterNotifier,
@@ -39,7 +40,7 @@ class GroupOverviewChart extends StatelessWidget {
             return Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(2),
-                    color: Theme.of(context).colorScheme.surface),
+                    color: theme.colorScheme.surfaceContainerLowest),
                 child: Column(children: [
                   ExpenseFilterTabs(isExpenseFilterNotifier,
                       isEnabled: !isEitherOr),
@@ -48,11 +49,11 @@ class GroupOverviewChart extends StatelessWidget {
                         ? data
                         : [
                             PieChartData(
-                                color: Theme.of(context).colorScheme.outline,
+                                color: theme.colorScheme.outline,
                                 value: 1,
                                 name: '')
                           ],
-                    child: _formChild(totalValue),
+                    child: _formChild(totalValue, context),
                   ),
                   const SizedBox(height: 2),
                   TopThreeCategories(data: data, total: totalValue)
@@ -65,21 +66,20 @@ class GroupOverviewChart extends StatelessWidget {
       return Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
-              color: Theme.of(context).colorScheme.surface),
+              color: theme.colorScheme.surfaceContainerLowest),
           padding:
               const EdgeInsets.only(top: 24, left: 10, right: 10, bottom: 12),
           child: Column(children: [
             BudgetronPieChart(
                 data: [
                   PieChartData(
-                      color: Theme.of(context).colorScheme.outline,
-                      value: 1,
-                      name: '')
+                      color: theme.colorScheme.outline, value: 1, name: '')
                 ],
                 child: Center(
                     child: Text(
                   'No data to display',
-                  style: BudgetronFonts.nunitoSize16Weight300Gray,
+                  style: theme.textTheme.bodyMedium!
+                      .apply(color: theme.colorScheme.surfaceContainerHigh),
                 )))
           ]));
     }
@@ -108,11 +108,11 @@ class GroupOverviewChart extends StatelessWidget {
     return data.values.toList();
   }
 
-  Widget _formChild(double value) {
+  Widget _formChild(double value, BuildContext context) {
     return Center(
         child: Text(
       value.toStringAsFixed(2),
-      style: BudgetronFonts.nunitoSize22Weight500,
+      style: Theme.of(context).textTheme.headlineLarge,
     ));
   }
 }
@@ -147,6 +147,8 @@ class ExpenseFilterTabs extends StatelessWidget {
   }
 
   Widget _filterTab(BuildContext context, String name, bool value) {
+    final theme = Theme.of(context);
+
     return Expanded(
       child: InkWell(
           onTap: () => _updateFilter(value),
@@ -154,12 +156,11 @@ class ExpenseFilterTabs extends StatelessWidget {
               padding: const EdgeInsets.only(top: 6, bottom: 6),
               decoration: BoxDecoration(
                   color: isExpenseFilterNotifier.value == value
-                      ? Theme.of(context).colorScheme.background
-                      : Theme.of(context).colorScheme.surface,
+                      ? theme.colorScheme.surface
+                      : theme.colorScheme.surfaceContainerLowest,
                   borderRadius: BorderRadius.circular(4)),
               child: Center(
-                  child: Text(name,
-                      style: BudgetronFonts.nunitoSize16Weight400)))),
+                  child: Text(name, style: theme.textTheme.headlineMedium)))),
     );
   }
 
@@ -177,6 +178,8 @@ class TopThreeCategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     List<PieChartData> topCategories = data;
     topCategories.sort((a, b) => b.value.compareTo(a.value));
     if (topCategories.length > 3) {
@@ -187,7 +190,7 @@ class TopThreeCategories extends StatelessWidget {
       padding: const EdgeInsets.only(left: 12, right: 12, bottom: 24),
       child: Column(children: [
         for (PieChartData d in topCategories)
-          CategoryWithProgressBar(data: d, total: total)
+          CategoryWithProgressBar(data: d, total: total, theme: theme)
       ]),
     );
   }
@@ -196,9 +199,13 @@ class TopThreeCategories extends StatelessWidget {
 class CategoryWithProgressBar extends StatelessWidget {
   final PieChartData data;
   final double total;
+  final ThemeData theme;
 
   const CategoryWithProgressBar(
-      {super.key, required this.data, required this.total});
+      {super.key,
+      required this.data,
+      required this.total,
+      required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -219,19 +226,18 @@ class CategoryWithProgressBar extends StatelessWidget {
     return Row(children: [
       Icon(Icons.square_rounded, size: 18, color: data.color),
       const SizedBox(width: 4),
-      Text(data.name, style: BudgetronFonts.nunitoSize14Weight400),
+      Text(data.name, style: theme.textTheme.bodyMedium),
     ]);
   }
 
   Widget _getTrailing(double value, double total) {
     return Row(children: [
-      Text(value.toStringAsFixed(2),
-          style: BudgetronFonts.nunitoSize14Weight300),
+      Text(value.toStringAsFixed(2), style: theme.textTheme.labelMedium),
       const SizedBox(width: 8),
       const Text('•'),
       const SizedBox(width: 8),
       Text("${(value / total * 100).toStringAsFixed(0)}%",
-          style: BudgetronFonts.nunitoSize14Weight400)
+          style: theme.textTheme.labelMedium)
     ]);
   }
 }

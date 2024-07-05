@@ -29,8 +29,8 @@ class _BudgetronNumberKeyboardState extends State<BudgetronNumberKeyboard> {
     double keyHeight = 50;
 
     final colorScheme = Theme.of(context).colorScheme;
-    Color leftPartColor = colorScheme.onSecondary;
-    Color rightPartColor = Theme.of(context).colorScheme.surface;
+    Color leftPartColor = colorScheme.surfaceContainerLow;
+    Color rightPartColor = Theme.of(context).colorScheme.surfaceContainerLowest;
 
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),

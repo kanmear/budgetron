@@ -11,8 +11,9 @@ class BudgetronFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
+      shape: const CircleBorder(),
       onPressed: () => onPressed(),
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       child: Transform.scale(scale: 1.5, child: icon),
     );
   }

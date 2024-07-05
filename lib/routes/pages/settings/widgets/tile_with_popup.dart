@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
-
 class TileWithPopup extends StatelessWidget {
   final ValueNotifier<Object> valueNotifier;
   final String title;
@@ -15,6 +13,8 @@ class TileWithPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: () => showDialog(context: context, builder: (context) => popup),
       child: SizedBox(
@@ -24,15 +24,14 @@ class TileWithPopup extends StatelessWidget {
           children: [
             Text(
               title,
-              style: BudgetronFonts.nunitoSize16Weight400,
+              style: theme.textTheme.bodyMedium,
             ),
             ValueListenableBuilder(
               valueListenable: valueNotifier,
               builder: (context, value, _) {
-                return Text(
-                  value.toString(),
-                  style: BudgetronFonts.nunitoSize16Weight300Gray,
-                );
+                return Text(value.toString(),
+                    style: theme.textTheme.labelMedium!
+                        .apply(color: theme.colorScheme.surfaceContainerHigh));
               },
             ),
           ],

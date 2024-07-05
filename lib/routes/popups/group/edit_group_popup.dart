@@ -31,11 +31,15 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
   final ValueNotifier<String> textNotifier =
       ValueNotifier('Choose categories to group');
   final ValueNotifier<TextStyle> styleNotifier =
-      ValueNotifier(BudgetronFonts.nunitoSize16Weight400Hint);
+      ValueNotifier(BudgetronFonts.fallbackStyle);
   final TextEditingController textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    styleNotifier.value = theme.textTheme.bodyMedium!
+        .apply(color: theme.colorScheme.surfaceContainerHigh);
+
     if (widget.firstTimeLoadNotifier.value) {
       CategoryGroup group = widget.group;
 
@@ -49,7 +53,7 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
     return DockedDialog(
         title: 'Edit Group',
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Name', style: BudgetronFonts.nunitoSize14Weight600),
+          Text('Name', style: theme.textTheme.labelSmall),
           const SizedBox(height: 4),
           BudgetronSmallTextField(
               textController: textController,
@@ -58,7 +62,7 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
               onSubmitted: () => {},
               inputType: TextInputType.text),
           const SizedBox(height: 16),
-          Text('Categories', style: BudgetronFonts.nunitoSize14Weight600),
+          Text('Categories', style: theme.textTheme.labelSmall),
           const SizedBox(height: 4),
           ValueListenableBuilder(
               valueListenable: textNotifier,
@@ -77,9 +81,8 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
               Expanded(
                 child: BudgetronLargeTextButton(
                     text: 'Delete',
-                    backgroundColor: Theme.of(context).colorScheme.error,
+                    backgroundColor: theme.colorScheme.error,
                     onTap: () => _showDeleteGroupDialog(),
-                    textStyle: BudgetronFonts.nunitoSize18Weight500White,
                     isActive: () => true,
                     listenables: [textController, widget.categoriesNotifier]),
               ),
@@ -87,9 +90,8 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
               Expanded(
                 child: BudgetronLargeTextButton(
                     text: 'Save',
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: theme.colorScheme.primary,
                     onTap: () => _saveGroup(),
-                    textStyle: BudgetronFonts.nunitoSize18Weight500White,
                     isActive: _isValid,
                     listenables: [textController, widget.categoriesNotifier]),
               ),
@@ -125,6 +127,8 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
   }
 
   Widget _resolveCategoriesDisplay() {
+    final theme = Theme.of(context);
+
     var categories = widget.categoriesNotifier.value;
 
     if (categories.isNotEmpty) {
@@ -139,7 +143,8 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
                 GroupCategoryTile(
                     category: category,
                     isRemovable: true,
-                    onCloseTap: _removeCategory)
+                    onCloseTap: _removeCategory,
+                    theme: theme)
             ])))
       ]);
     }
@@ -190,13 +195,16 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
   }
 
   void _updateCategorySelectText(int length) {
+    final theme = Theme.of(context);
+
     if (length == 0) {
       textNotifier.value = 'Choose categories to group';
-      styleNotifier.value = BudgetronFonts.nunitoSize16Weight400Hint;
+      styleNotifier.value = theme.textTheme.bodyMedium!
+          .apply(color: theme.colorScheme.surfaceContainerHigh);
     } else {
       textNotifier.value =
           "$length ${length == 1 ? 'category' : 'categories'} chosen";
-      styleNotifier.value = BudgetronFonts.nunitoSize16Weight400;
+      styleNotifier.value = theme.textTheme.bodyMedium!;
     }
   }
 

@@ -13,7 +13,6 @@ import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/ui/classes/date_selector.dart';
 import 'package:budgetron/ui/classes/date_selector_legacy.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/utils/enums.dart';
@@ -31,19 +30,22 @@ class AccountOperationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
+    final theme = Theme.of(context);
+
     final isLegacy = appData.legacyDateSelector;
 
     return Scaffold(
         appBar: const BudgetronAppBar(
             leading: ArrowBackIconButton(), title: 'Operations'),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         body: Column(children: [
           OperationsListView(
               account: account,
               dateTimeNotifier: dateTimeNotifier,
               datePeriodNotifier: datePeriodNotifier,
               currency: appData.currency,
-              isLegacy: isLegacy),
+              isLegacy: isLegacy,
+              theme: theme),
           _resolveDateSelector(isLegacy)
         ]));
   }
@@ -68,6 +70,7 @@ class OperationsListView extends StatelessWidget {
   final Account account;
   final String currency;
   final bool isLegacy;
+  final ThemeData theme;
 
   const OperationsListView(
       {super.key,
@@ -75,7 +78,8 @@ class OperationsListView extends StatelessWidget {
       required this.currency,
       required this.datePeriodNotifier,
       required this.isLegacy,
-      required this.account});
+      required this.account,
+      required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +104,8 @@ class OperationsListView extends StatelessWidget {
                   return Center(
                       child: Text(
                     'No entries in database',
-                    style: BudgetronFonts.nunitoSize16Weight300Gray,
+                    style: theme.textTheme.bodyMedium!
+                        .apply(color: theme.colorScheme.surfaceContainerHigh),
                   ));
                 }
               }));
@@ -120,7 +125,9 @@ class OperationsListView extends StatelessWidget {
                             return Center(
                                 child: Text(
                               'No entries for this period',
-                              style: BudgetronFonts.nunitoSize16Weight300Gray,
+                              style: theme.textTheme.bodyMedium!.apply(
+                                  color:
+                                      theme.colorScheme.surfaceContainerHigh),
                             ));
                           }
                         }));
@@ -172,7 +179,8 @@ class OperationsListView extends StatelessWidget {
             operations: operationsOrEmpty,
             groupingDate: groupingDate,
             datePeriod: datePeriod,
-            currency: currency);
+            currency: currency,
+            theme: theme);
       },
       separatorBuilder: (BuildContext context, int index) {
         return const Padding(
@@ -196,6 +204,7 @@ class OperationListTileContainer extends StatelessWidget {
   final DatePeriod datePeriod;
   final String currency;
   final DateTime groupingDate;
+  final ThemeData theme;
 
   const OperationListTileContainer({
     super.key,
@@ -204,12 +213,13 @@ class OperationListTileContainer extends StatelessWidget {
     required this.datePeriod,
     required this.currency,
     required this.operations,
+    required this.theme,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
           Column(
@@ -228,13 +238,13 @@ class OperationListTileContainer extends StatelessWidget {
               Column(children: [
                 for (var category in entriesToCategoryMap.keys)
                   EntryListTile(
-                    category: category,
-                    entries: entriesToCategoryMap[category]!,
-                    isExpandable: datePeriod == DatePeriod.day,
-                    datePeriod: datePeriod,
-                  ),
+                      category: category,
+                      entries: entriesToCategoryMap[category]!,
+                      isExpandable: datePeriod == DatePeriod.day,
+                      datePeriod: datePeriod,
+                      theme: theme),
                 for (var operation in operations)
-                  OperationListTile(operation: operation)
+                  OperationListTile(operation: operation, theme: theme)
               ]),
             ],
           ),
@@ -252,7 +262,7 @@ class OperationListTileContainer extends StatelessWidget {
             BudgetronDateUtils.stripTime(now)) {
       return Text(
         'Today',
-        style: BudgetronFonts.nunitoSize16Weight600,
+        style: theme.textTheme.bodySmall,
       );
     }
 
@@ -271,7 +281,7 @@ class OperationListTileContainer extends StatelessWidget {
         throw Exception('Not a valid date period.');
     }
 
-    return Text(text, style: BudgetronFonts.nunitoSize16Weight600);
+    return Text(text, style: theme.textTheme.bodySmall);
   }
 
   Widget _resolveContainerSumValue() {
@@ -291,15 +301,17 @@ class OperationListTileContainer extends StatelessWidget {
 
     return Text(
       "${sum.toStringAsFixed(2)} $currency",
-      style: BudgetronFonts.nunitoSize16Weight600,
+      style: theme.textTheme.bodySmall,
     );
   }
 }
 
 class OperationListTile extends StatelessWidget {
   final Listable operation;
+  final ThemeData theme;
 
-  const OperationListTile({super.key, required this.operation});
+  const OperationListTile(
+      {super.key, required this.operation, required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -307,19 +319,19 @@ class OperationListTile extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
-              color: Theme.of(context).colorScheme.surface),
+              borderRadius: BorderRadius.circular(8),
+              color: theme.colorScheme.surfaceContainerLowest),
           padding: const EdgeInsets.all(12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 operation.toString(),
-                style: BudgetronFonts.nunitoSize16Weight400,
+                style: theme.textTheme.bodyMedium,
               ),
               Text(
                 operation.value.toStringAsFixed(2),
-                style: BudgetronFonts.nunitoSize16Weight400,
+                style: theme.textTheme.bodyMedium,
               )
             ],
           ),

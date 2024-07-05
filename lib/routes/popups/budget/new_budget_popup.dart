@@ -12,7 +12,6 @@ import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/switch_with_text.dart';
 import 'package:budgetron/models/category/category.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 
 class NewBudgetDialog extends StatefulWidget {
@@ -31,13 +30,14 @@ class NewBudgetDialog extends StatefulWidget {
 class _NewBudgetDialogState extends State<NewBudgetDialog> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DockedDialog(
         title: 'New Budget',
         body: Column(children: [
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('Budget category',
-                style: BudgetronFonts.nunitoSize14Weight300),
+            child: Text('Budget category', style: theme.textTheme.labelSmall),
           ),
           const SizedBox(height: 4),
           BudgetronDropdownButton(
@@ -54,8 +54,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Period',
-                          style: BudgetronFonts.nunitoSize14Weight300),
+                      child: Text('Period', style: theme.textTheme.labelSmall),
                     ),
                     const SizedBox(height: 4),
                     BudgetronDropdownButton(
@@ -72,8 +71,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Target',
-                          style: BudgetronFonts.nunitoSize14Weight300),
+                      child: Text('Target', style: theme.textTheme.labelSmall),
                     ),
                     const SizedBox(height: 4),
                     BudgetronSmallTextField(
@@ -94,9 +92,8 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
           const SizedBox(height: 16),
           BudgetronLargeTextButton(
               text: 'Add budget',
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: theme.colorScheme.primary,
               onTap: () => _addBudget(),
-              textStyle: BudgetronFonts.nunitoSize18Weight500White,
               isActive: _isValid,
               listenables: [widget.categoryNotifier, widget.textController])
         ]));

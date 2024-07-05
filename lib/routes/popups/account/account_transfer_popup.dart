@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/db/accounts_controller.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
@@ -22,6 +21,8 @@ class AccountTransferDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     fromAccountNotifier.value = account;
 
     return DockedDialog(
@@ -29,8 +30,7 @@ class AccountTransferDialog extends StatelessWidget {
         body: Column(children: [
           Align(
               alignment: Alignment.centerLeft,
-              child: Text('From account',
-                  style: BudgetronFonts.nunitoSize14Weight300)),
+              child: Text('From account', style: theme.textTheme.labelSmall)),
           const SizedBox(height: 4),
           BudgetronDropdownButton(
               valueNotifier: fromAccountNotifier,
@@ -41,8 +41,7 @@ class AccountTransferDialog extends StatelessWidget {
           const SizedBox(height: 16),
           Align(
               alignment: Alignment.centerLeft,
-              child: Text('To account',
-                  style: BudgetronFonts.nunitoSize14Weight300)),
+              child: Text('To account', style: theme.textTheme.labelSmall)),
           const SizedBox(height: 4),
           ValueListenableBuilder(
               valueListenable: fromAccountNotifier,
@@ -60,8 +59,8 @@ class AccountTransferDialog extends StatelessWidget {
           const SizedBox(height: 16),
           Align(
               alignment: Alignment.centerLeft,
-              child: Text('Transfer amount',
-                  style: BudgetronFonts.nunitoSize14Weight300)),
+              child:
+                  Text('Transfer amount', style: theme.textTheme.labelSmall)),
           const SizedBox(height: 4),
           BudgetronSmallTextField(
               textController: textController,
@@ -72,9 +71,8 @@ class AccountTransferDialog extends StatelessWidget {
           const SizedBox(height: 24),
           BudgetronLargeTextButton(
               text: 'Transfer',
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: theme.colorScheme.primary,
               onTap: () => _createTransfer(context),
-              textStyle: BudgetronFonts.nunitoSize18Weight500White,
               isActive: _isValid,
               listenables: [
                 fromAccountNotifier,

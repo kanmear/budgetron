@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/colors.dart';
-import 'package:budgetron/ui/data/fonts.dart';
-
 class BudgetronSearchField extends StatefulWidget {
   final ValueNotifier<String> filter;
   final String hintText;
@@ -18,7 +15,7 @@ class BudgetronSearchField extends StatefulWidget {
 }
 
 class _BudgetronSearchFieldState extends State<BudgetronSearchField> {
-  Color iconColor = BudgetronColors.gray4;
+  late Color iconColor;
 
   void setIconColor(bool focus) {
     if (focus) {
@@ -27,32 +24,35 @@ class _BudgetronSearchFieldState extends State<BudgetronSearchField> {
       });
     } else if (!focus && widget.filter.value.isEmpty) {
       setState(() {
-        iconColor = Theme.of(context).colorScheme.outlineVariant;
+        iconColor = Theme.of(context).colorScheme.primary.withOpacity(0.2);
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    iconColor = theme.colorScheme.primary;
+
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Focus(
         onFocusChange: (focus) => setIconColor(focus),
         child: TextField(
-          style: BudgetronFonts.nunitoSize16Weight600,
-          cursorColor: Theme.of(context).colorScheme.primary,
+          style: theme.textTheme.headlineMedium,
+          cursorColor: theme.colorScheme.primary,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.only(top: 13, bottom: 13),
             enabledBorder: OutlineInputBorder(
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.primary),
+                borderSide: BorderSide(color: theme.colorScheme.primary),
                 borderRadius: const BorderRadius.all(Radius.circular(2))),
             focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary, width: 1.5),
+                borderSide:
+                    BorderSide(color: theme.colorScheme.primary, width: 1.5),
                 borderRadius: const BorderRadius.all(Radius.circular(2))),
             hintText: widget.hintText,
-            hintStyle: BudgetronFonts.nunitoSize16Weight600Hint,
+            hintStyle: theme.textTheme.headlineMedium!
+                .apply(color: theme.colorScheme.surfaceContainerHigh),
             prefixIconConstraints: const BoxConstraints(),
             prefixIcon: Padding(
               padding: const EdgeInsets.only(

@@ -2,7 +2,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
@@ -15,6 +14,8 @@ class FavoriteBudgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return StreamBuilder<List<Budget>>(
       stream: _getBudgets(),
       builder: (context, snapshot) {
@@ -23,7 +24,8 @@ class FavoriteBudgets extends StatelessWidget {
         } else {
           return Center(
               child: Text('No favorite budgets',
-                  style: BudgetronFonts.nunitoSize16Weight300Gray));
+                  style: theme.textTheme.bodyMedium!
+                      .apply(color: theme.colorScheme.surfaceContainerHigh)));
         }
       },
     );
@@ -112,12 +114,14 @@ class BudgetListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final currency = Provider.of<AppData>(context).currency;
 
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(2),
-          color: Theme.of(context).colorScheme.surface),
+          color: theme.colorScheme.surfaceContainerLowest),
       padding: const EdgeInsets.all(10),
       child: Column(children: [
         Row(
@@ -127,17 +131,17 @@ class BudgetListTile extends StatelessWidget {
               children: [
                 Icon(Icons.square_rounded, size: 18, color: color),
                 const SizedBox(width: 4),
-                Text(name, style: BudgetronFonts.nunitoSize14Weight400),
+                Text(name, style: theme.textTheme.bodyMedium),
               ],
             ),
             Row(
               children: [
-                Text(leftString, style: BudgetronFonts.nunitoSize14Weight300),
+                Text(leftString, style: theme.textTheme.labelMedium),
                 const SizedBox(width: 8),
                 const Text('•'),
                 const SizedBox(width: 8),
                 Text("$rightString $currency",
-                    style: BudgetronFonts.nunitoSize14Weight400),
+                    style: theme.textTheme.labelMedium),
               ],
             ),
           ],

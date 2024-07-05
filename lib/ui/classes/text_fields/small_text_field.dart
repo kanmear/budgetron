@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
-
+//TODO rename to text field
 class BudgetronSmallTextField extends StatelessWidget {
   final TextEditingController? textController;
   final TextInputType inputType;
@@ -19,26 +18,29 @@ class BudgetronSmallTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextField(
       onSubmitted: (value) => onSubmitted(value),
       controller: textController,
       autofocus: autoFocus,
       keyboardType: inputType,
-      style: BudgetronFonts.nunitoSize16Weight400,
-      cursorColor: Theme.of(context).colorScheme.primary,
+      style: theme.textTheme.bodyMedium,
+      cursorColor: theme.colorScheme.primary,
       decoration: InputDecoration(
         isDense: true,
         contentPadding: const EdgeInsets.all(8),
         enabledBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: Theme.of(context).colorScheme.primary),
+                BorderSide(color: theme.colorScheme.surfaceContainerHigh),
             borderRadius: const BorderRadius.all(Radius.circular(2))),
         focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
-                color: Theme.of(context).colorScheme.primary, width: 1.5),
+                color: theme.colorScheme.surfaceContainerHigh, width: 1.5),
             borderRadius: const BorderRadius.all(Radius.circular(2))),
         hintText: hintText,
-        hintStyle: BudgetronFonts.nunitoSize16Weight400Hint,
+        hintStyle: theme.textTheme.bodyMedium!
+            .apply(color: theme.colorScheme.surfaceContainerHigh),
       ),
     );
   }

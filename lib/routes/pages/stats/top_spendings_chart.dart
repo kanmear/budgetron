@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
@@ -15,6 +14,8 @@ class TopSpendingsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ValueListenableBuilder(
         valueListenable: dateTimeNotifier,
         builder: (context, value, child) {
@@ -35,7 +36,7 @@ class TopSpendingsChart extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2),
-                          color: Theme.of(context).colorScheme.surface),
+                          color: theme.colorScheme.surfaceContainerLowest),
                       padding: const EdgeInsets.only(
                           top: 12, left: 10, right: 10, bottom: 12),
                       child: Column(
@@ -43,14 +44,14 @@ class TopSpendingsChart extends StatelessWidget {
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text('Top expenditures',
-                                  style: BudgetronFonts.nunitoSize16Weight400)),
+                                  style: theme.textTheme.bodyMedium)),
                           const SizedBox(height: 20),
                           Row(
                             children: [
                               BudgetronPieChart(
                                   data: data,
-                                  child: _formChild(
-                                      totalValue, totalValueOfTopSpendings)),
+                                  child: _formChild(totalValue,
+                                      totalValueOfTopSpendings, theme)),
                               const SizedBox(width: 20),
                               TopCategories(data: data, totalValue: totalValue)
                             ],
@@ -66,7 +67,7 @@ class TopSpendingsChart extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2),
-                          color: Theme.of(context).colorScheme.surface),
+                          color: theme.colorScheme.surfaceContainerLowest),
                       padding: const EdgeInsets.only(
                           top: 12, left: 10, right: 10, bottom: 12),
                       child: Column(
@@ -74,21 +75,21 @@ class TopSpendingsChart extends StatelessWidget {
                           Align(
                               alignment: Alignment.topLeft,
                               child: Text('Top expenditures',
-                                  style: BudgetronFonts.nunitoSize16Weight400)),
+                                  style: theme.textTheme.bodyMedium)),
                           const SizedBox(height: 20),
                           BudgetronPieChart(
                               data: [
                                 PieChartData(
-                                    color:
-                                        Theme.of(context).colorScheme.outline,
+                                    color: theme.colorScheme.outline,
                                     value: 1,
                                     name: '')
                               ],
                               child: Center(
                                 child: Text(
                                   'No data to display',
-                                  style:
-                                      BudgetronFonts.nunitoSize16Weight300Gray,
+                                  style: theme.textTheme.bodyMedium!.apply(
+                                      color: theme
+                                          .colorScheme.surfaceContainerHigh),
                                 ),
                               )),
                         ],
@@ -138,18 +139,20 @@ class TopSpendingsChart extends StatelessWidget {
     return values;
   }
 
-  Widget _formChild(double totalValue, double totalValueOfTopSpendings) {
+  Widget _formChild(
+      double totalValue, double totalValueOfTopSpendings, ThemeData theme) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             totalValueOfTopSpendings.toStringAsFixed(2),
-            style: BudgetronFonts.nunitoSize22Weight500,
+            style: theme.textTheme.headlineLarge,
           ),
           Text(
             'of ${totalValue.toStringAsFixed(2)}',
-            style: BudgetronFonts.nunitoSize14Weight400Gray,
+            style: theme.textTheme.headlineLarge!
+                .apply(color: theme.colorScheme.surfaceContainerHigh),
           ),
         ],
       ),
@@ -196,6 +199,8 @@ class TopCategoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Row(
@@ -204,14 +209,14 @@ class TopCategoryListTile extends StatelessWidget {
             const SizedBox(width: 4),
             Text(
               '${(pieChartData.value / totalValue * 100).toStringAsFixed(0)}%',
-              style: BudgetronFonts.nunitoSize14Weight600,
+              style: theme.textTheme.bodyMedium,
             )
           ],
         ),
         const SizedBox(width: 6),
         Expanded(
             child: Text(pieChartData.name,
-                style: BudgetronFonts.nunitoSize11Weight300,
+                style: theme.textTheme.labelMedium,
                 softWrap: false,
                 overflow: TextOverflow.ellipsis)),
       ],

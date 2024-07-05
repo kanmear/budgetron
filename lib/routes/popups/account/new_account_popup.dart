@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/ui/classes/switch_with_text.dart';
@@ -21,13 +20,15 @@ class NewAccountDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DockedDialog(
         title: 'New Account',
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Align(
               alignment: Alignment.centerLeft,
               child: Text('Color and account name',
-                  style: BudgetronFonts.nunitoSize16Weight400)),
+                  style: theme.textTheme.labelSmall)),
           const SizedBox(height: 4),
           ColorAndNameSelector(
               textController: nameTextController,
@@ -36,7 +37,7 @@ class NewAccountDialog extends StatelessWidget {
           const SizedBox(height: 16),
           Align(
             alignment: Alignment.centerLeft,
-            child: Text('Balance', style: BudgetronFonts.nunitoSize16Weight400),
+            child: Text('Balance', style: theme.textTheme.labelSmall),
           ),
           const SizedBox(height: 4),
           //TODO onTap => clean zero?
@@ -53,9 +54,8 @@ class NewAccountDialog extends StatelessWidget {
           const SizedBox(height: 16),
           BudgetronLargeTextButton(
               text: 'Create account',
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: theme.colorScheme.primary,
               onTap: () => _addAccount(context),
-              textStyle: BudgetronFonts.nunitoSize18Weight500White,
               isActive: _isValid,
               listenables: [
                 nameTextController,

@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/models/enums/date_period.dart';
@@ -38,15 +37,17 @@ class _EntriesPageState extends State<EntriesPage> {
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
     final isLegacy = appData.legacyDateSelector;
+    final theme = Theme.of(context);
 
     return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: theme.colorScheme.surface,
         body: Column(children: [
           EntriesListView(
               dateTimeNotifier: widget.dateTimeNotifier,
               datePeriodNotifier: widget.datePeriodNotifier,
               currency: appData.currency,
-              isLegacy: isLegacy),
+              isLegacy: isLegacy,
+              theme: theme),
           _resolveDateSelector(isLegacy, appData.earliestEntryDate)
         ]));
   }
@@ -70,13 +71,15 @@ class EntriesListView extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final String currency;
   final bool isLegacy;
+  final ThemeData theme;
 
   const EntriesListView(
       {super.key,
       required this.dateTimeNotifier,
       required this.currency,
       required this.datePeriodNotifier,
-      required this.isLegacy});
+      required this.isLegacy,
+      required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +104,8 @@ class EntriesListView extends StatelessWidget {
                   return Center(
                       child: Text(
                     'No entries in database',
-                    style: BudgetronFonts.nunitoSize16Weight300Gray,
+                    style: theme.textTheme.bodyMedium!
+                        .apply(color: theme.colorScheme.surfaceContainerHigh),
                   ));
                 }
               }));
@@ -121,7 +125,9 @@ class EntriesListView extends StatelessWidget {
                             return Center(
                                 child: Text(
                               'No entries for this period',
-                              style: BudgetronFonts.nunitoSize16Weight300Gray,
+                              style: theme.textTheme.bodyMedium!.apply(
+                                  color:
+                                      theme.colorScheme.surfaceContainerHigh),
                             ));
                           }
                         }));
@@ -154,7 +160,8 @@ class EntriesListView extends StatelessWidget {
             entriesToCategoryMap: entriesMap[groupingDate]!,
             groupingDate: groupingDate,
             datePeriod: datePeriod,
-            currency: currency);
+            currency: currency,
+            theme: theme);
       },
       separatorBuilder: (BuildContext context, int index) {
         return const Padding(
@@ -177,6 +184,7 @@ class EntryListTileContainer extends StatelessWidget {
   final DatePeriod datePeriod;
   final String currency;
   final DateTime groupingDate;
+  final ThemeData theme;
 
   const EntryListTileContainer({
     super.key,
@@ -184,12 +192,13 @@ class EntryListTileContainer extends StatelessWidget {
     required this.groupingDate,
     required this.datePeriod,
     required this.currency,
+    required this.theme,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
           Column(
@@ -208,11 +217,11 @@ class EntryListTileContainer extends StatelessWidget {
               Column(children: [
                 for (var category in entriesToCategoryMap.keys)
                   EntryListTile(
-                    category: category,
-                    entries: entriesToCategoryMap[category]!,
-                    isExpandable: datePeriod == DatePeriod.day,
-                    datePeriod: datePeriod,
-                  ),
+                      category: category,
+                      entries: entriesToCategoryMap[category]!,
+                      isExpandable: datePeriod == DatePeriod.day,
+                      datePeriod: datePeriod,
+                      theme: theme),
               ]),
             ],
           ),
@@ -228,10 +237,7 @@ class EntryListTileContainer extends StatelessWidget {
     if (datePeriod == DatePeriod.day &&
         BudgetronDateUtils.stripTime(groupingDate) ==
             DateTime(now.year, now.month, now.day)) {
-      return Text(
-        "Today",
-        style: BudgetronFonts.nunitoSize16Weight600,
-      );
+      return Text('Today', style: theme.textTheme.bodySmall);
     }
 
     String text;
@@ -252,7 +258,7 @@ class EntryListTileContainer extends StatelessWidget {
         throw Exception('Not a valid date period.');
     }
 
-    return Text(text, style: BudgetronFonts.nunitoSize16Weight600);
+    return Text(text, style: theme.textTheme.bodySmall);
   }
 
   Widget _resolveContainerSumValue(Map<EntryCategory, List<Entry>> entries) {
@@ -264,7 +270,7 @@ class EntryListTileContainer extends StatelessWidget {
 
     return Text(
       "$sum $currency",
-      style: BudgetronFonts.nunitoSize16Weight600,
+      style: theme.textTheme.bodySmall,
     );
   }
 }
@@ -275,6 +281,7 @@ class EntryListTile extends StatelessWidget {
   final EntryCategory category;
   final List<Entry> entries;
   final bool isExpandable;
+  final ThemeData theme;
 
   EntryListTile({
     super.key,
@@ -282,6 +289,7 @@ class EntryListTile extends StatelessWidget {
     required this.category,
     required this.isExpandable,
     required this.datePeriod,
+    required this.theme,
   });
 
   @override
@@ -296,7 +304,7 @@ class EntryListTile extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: Theme.of(context).colorScheme.surface),
+                      color: theme.colorScheme.surfaceContainerLowest),
                   padding: const EdgeInsets.all(12),
                   child: Column(
                     children: [
@@ -317,7 +325,7 @@ class EntryListTile extends StatelessWidget {
                           ),
                           Text(
                             _resolveSum(),
-                            style: BudgetronFonts.nunitoSize16Weight400,
+                            style: theme.textTheme.bodyMedium,
                           )
                         ],
                       ),
@@ -354,10 +362,9 @@ class EntryListTile extends StatelessWidget {
   _resolveTileName() {
     return Row(
       children: [
-        Text(category.name, style: BudgetronFonts.nunitoSize16Weight400),
-        const SizedBox(width: 4),
+        Text(category.name, style: theme.textTheme.bodyMedium),
         isExpandable && entries.length > 1
-            ? Text("•", style: BudgetronFonts.nunitoSize8Weight300)
+            ? Icon(Icons.arrow_drop_down, color: theme.colorScheme.primary)
             : const SizedBox()
       ],
     );
@@ -375,7 +382,7 @@ class EntryListTile extends StatelessWidget {
       return Container(
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
-              color: Theme.of(context).colorScheme.surface),
+              color: theme.colorScheme.surfaceContainerLowest),
           padding: const EdgeInsets.only(left: 8, right: 10, bottom: 8),
           //APPROACH is there a better way to handle 'RenderBox was not laid out'?
           //HACK height value is take from design
@@ -386,7 +393,7 @@ class EntryListTile extends StatelessWidget {
             separatorBuilder: (BuildContext context, int index) =>
                 const SizedBox(width: 8),
             itemBuilder: (BuildContext context, int index) =>
-                ExpandedEntryTile(entry: entries[index]),
+                ExpandedEntryTile(entry: entries[index], theme: theme),
           ));
     } else {
       return const SizedBox();
@@ -396,10 +403,12 @@ class EntryListTile extends StatelessWidget {
 
 class ExpandedEntryTile extends StatelessWidget {
   final Entry entry;
+  final ThemeData theme;
 
   const ExpandedEntryTile({
     super.key,
     required this.entry,
+    required this.theme,
   });
 
   @override
@@ -411,17 +420,17 @@ class ExpandedEntryTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: Theme.of(context).colorScheme.background),
+            color: Theme.of(context).colorScheme.surface),
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(DateFormat.Hm().format(entry.dateTime),
-                style: BudgetronFonts.nunitoSize16Weight300Gray,
+                style: theme.textTheme.labelMedium!
+                    .apply(color: theme.colorScheme.surfaceContainerHigh),
                 textAlign: TextAlign.center),
             Text(entry.value.toStringAsFixed(2),
-                style: BudgetronFonts.nunitoSize16Weight400,
-                textAlign: TextAlign.center),
+                style: theme.textTheme.bodyMedium, textAlign: TextAlign.center),
           ],
         ),
       ),

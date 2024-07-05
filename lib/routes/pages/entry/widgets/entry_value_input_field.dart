@@ -2,7 +2,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/utils/interfaces.dart';
 
 class EntryValueInputField extends StatelessWidget {
@@ -17,6 +16,8 @@ class EntryValueInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final currency = Provider.of<AppData>(context).currency;
 
     return Expanded(
@@ -29,12 +30,12 @@ class EntryValueInputField extends StatelessWidget {
                 valueListenable: tabNotifier,
                 builder: (context, value, _) {
                   return Text(_resolveLeading(),
-                      style: BudgetronFonts.robotoSize32Weight400);
+                      style: theme.textTheme.displayMedium);
                 }),
             IntrinsicWidth(
                 child: ValueTextField(textController: textController)),
             const SizedBox(width: 8),
-            Text(currency, style: BudgetronFonts.robotoSize32Weight400),
+            Text(currency, style: theme.textTheme.displayMedium),
             ValueListenableBuilder(
                 valueListenable: tabNotifier,
                 builder: (context, value, _) {
@@ -49,11 +50,13 @@ class EntryValueInputField extends StatelessWidget {
   String _resolveLeading() => tabNotifier.value.getValue() ? '' : '–';
 
   Widget _resolveTrailing(BuildContext context) {
+    final theme = Theme.of(context);
+
     return tabNotifier.value.getValue()
         ? const SizedBox()
         : Text('–',
-            style: BudgetronFonts.robotoSize32Weight400
-                .apply(color: Theme.of(context).colorScheme.background));
+            style: theme.textTheme.displayMedium!
+                .apply(color: Theme.of(context).colorScheme.surface));
   }
 }
 
@@ -81,6 +84,8 @@ class _ValueTextFieldState extends State<ValueTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return TextField(
       textAlignVertical: TextAlignVertical.center,
       textAlign: TextAlign.end,
@@ -89,14 +94,13 @@ class _ValueTextFieldState extends State<ValueTextField> {
       controller: widget.textController,
       autofocus: true,
       keyboardType: TextInputType.number,
-      style: BudgetronFonts.robotoSize32Weight400,
+      style: theme.textTheme.displayMedium,
       cursorColor: Theme.of(context).colorScheme.primary,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         isDense: true,
         contentPadding: EdgeInsets.zero,
         enabledBorder: InputBorder.none,
         focusedBorder: InputBorder.none,
-        hintStyle: BudgetronFonts.robotoSize32Weight400Hint,
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/category/category.dart';
@@ -20,13 +19,15 @@ class NewCategoryDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DockedDialog(
         title: "New Category",
         body: Column(children: [
           Align(
               alignment: Alignment.centerLeft,
-              child: Text("Color and category name",
-                  style: BudgetronFonts.nunitoSize16Weight400)),
+              child: Text('Color and category name',
+                  style: theme.textTheme.labelSmall)),
           const SizedBox(height: 4),
           ColorAndNameSelector(
               textController: textController,
@@ -43,7 +44,6 @@ class NewCategoryDialog extends StatelessWidget {
               text: 'Create category',
               backgroundColor: Theme.of(context).colorScheme.primary,
               onTap: () => _addCategory(context),
-              textStyle: BudgetronFonts.nunitoSize18Weight500White,
               isActive: _isValid,
               listenables: [textController, colorNotifier])
         ]));

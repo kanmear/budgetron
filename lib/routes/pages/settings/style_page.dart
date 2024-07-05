@@ -18,7 +18,7 @@ class StylePage extends StatelessWidget {
         leading: ArrowBackIconButton(),
         title: 'Style and appearance',
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: const Padding(
         padding: EdgeInsets.only(left: 16, right: 16),
         child: StyleSettings(),

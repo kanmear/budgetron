@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/text_buttons/small_text_button.dart';
@@ -12,7 +11,8 @@ class DeleteBudgetDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color backgroundColor = Theme.of(context).colorScheme.background;
+    final theme = Theme.of(context);
+    Color backgroundColor = theme.colorScheme.surface;
 
     return AlertDialog(
       backgroundColor: backgroundColor,
@@ -22,26 +22,23 @@ class DeleteBudgetDialog extends StatelessWidget {
           width: 256,
           child: Column(children: [
             Text('Do you really want to delete this budget?',
-                textAlign: TextAlign.center,
-                style: BudgetronFonts.nunitoSize16Weight400),
+                textAlign: TextAlign.center, style: theme.textTheme.bodyMedium),
             const SizedBox(height: 16),
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Expanded(
                 child: BudgetronSmallTextButton(
-                    text: 'Cancel',
-                    backgroundColor: backgroundColor,
-                    borderColor: Theme.of(context).colorScheme.primary,
-                    onTap: () => {Navigator.pop(context)},
-                    textStyle: BudgetronFonts.nunitoSize16Weight400),
+                  text: 'Cancel',
+                  backgroundColor: backgroundColor,
+                  onTap: () => {Navigator.pop(context)},
+                ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: BudgetronSmallTextButton(
-                    text: 'Delete',
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                    borderColor: Theme.of(context).colorScheme.error,
-                    onTap: () => _deleteBudget(context),
-                    textStyle: BudgetronFonts.nunitoSize16Weight400White),
+                  text: 'Delete',
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  onTap: () => _deleteBudget(context),
+                ),
               ),
             ])
           ]),

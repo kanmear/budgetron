@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/logic/number_keyboard/number_keyboard_service.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 
 import 'number_keyboard.dart';
 
@@ -36,11 +35,13 @@ class BudgetronKeyboardCharKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BudgetronKeyboardKey(
         onTap: onTap,
         child: Text(
           char,
-          style: BudgetronFonts.robotoSize24Weight400,
+          style: theme.textTheme.displaySmall,
         ));
   }
 }
@@ -75,6 +76,8 @@ class BudgetronKeyboardOperateKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return AnimatedBuilder(
         animation: Listenable.merge([textEditingController, operationNotifier]),
         builder: (context, _) {
@@ -84,12 +87,13 @@ class BudgetronKeyboardOperateKey extends StatelessWidget {
           if (isOperationActive) {
             return BudgetronKeyboardKey(
                 onTap: () => keyboardService.performOperation(),
-                child: Text('=', style: BudgetronFonts.robotoSize24Weight400));
+                child: Text('=', style: theme.textTheme.displaySmall));
           } else {
             return BudgetronKeyboardKey(
                 onTap: () => {},
                 child: Text('=',
-                    style: BudgetronFonts.robotoSize24Weight400Disabled));
+                    style: theme.textTheme.displaySmall!.apply(
+                        color: theme.colorScheme.primary.withOpacity(0.4))));
           }
         });
   }

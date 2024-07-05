@@ -1,4 +1,3 @@
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronDropdownButton extends StatefulWidget {
@@ -31,12 +30,14 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(),
         height: 38,
         decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.primary),
+            border: Border.all(color: theme.colorScheme.surfaceContainerHigh),
             borderRadius: const BorderRadius.all(Radius.circular(2))),
         child: FutureBuilder(
             //REFACTOR why is future builder used for static values?
@@ -53,7 +54,8 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                       children: [
                         const SizedBox(width: 8),
                         Text(widget.hint,
-                            style: BudgetronFonts.nunitoSize16Weight400Hint),
+                            style: theme.textTheme.bodyMedium!.apply(
+                                color: theme.colorScheme.surfaceContainerHigh)),
                       ],
                     ),
                     underline: const SizedBox(),
@@ -66,14 +68,15 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                           //REFACTOR this is a weird way to do this
                           if (widget.leading != null) widget.leading!(object),
                           Text(object.toString(),
-                              style: BudgetronFonts.nunitoSize16Weight400)
+                              style: theme.textTheme.bodyMedium)
                         ]),
                       );
                     }).toList(),
-                    icon: const SizedBox(
+                    icon: SizedBox(
                       height: 31,
                       width: 31,
-                      child: Icon(Icons.arrow_drop_down),
+                      child: Icon(Icons.arrow_drop_down,
+                          color: theme.colorScheme.primary),
                     ),
                     onChanged: (Object? value) {
                       setState(() {
@@ -87,7 +90,8 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(widget.fallbackValue,
-                          style: BudgetronFonts.nunitoSize16Weight400Gray),
+                          style: theme.textTheme.bodyMedium!.apply(
+                              color: theme.colorScheme.surfaceContainerHigh)),
                     ));
               }
             }));

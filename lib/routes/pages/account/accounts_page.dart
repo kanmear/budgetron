@@ -2,7 +2,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/accounts_controller.dart';
@@ -20,7 +19,7 @@ class AccountsPage extends StatelessWidget {
     return Scaffold(
         appBar: const BudgetronAppBar(
             leading: ArrowBackIconButton(), title: 'Accounts'),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: const Column(children: [SizedBox(height: 8), AccountsList()]),
         floatingActionButton: BudgetronFloatingActionButton(
             onPressed: () => showDialog(
@@ -34,6 +33,7 @@ class AccountsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final currency = Provider.of<AppData>(context).currency;
 
     return Expanded(
@@ -48,7 +48,9 @@ class AccountsList extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     itemBuilder: (BuildContext context, int index) {
                       return AccountListTile(
-                          account: accounts[index], currency: currency);
+                          account: accounts[index],
+                          currency: currency,
+                          theme: theme);
                     },
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 8);
@@ -57,7 +59,8 @@ class AccountsList extends StatelessWidget {
               } else {
                 return Center(
                     child: Text('No accounts in database',
-                        style: BudgetronFonts.nunitoSize16Weight300Gray));
+                        style: theme.textTheme.bodyMedium!.apply(
+                            color: theme.colorScheme.surfaceContainerHigh)));
               }
             }));
   }
@@ -66,9 +69,13 @@ class AccountsList extends StatelessWidget {
 class AccountListTile extends StatelessWidget {
   final Account account;
   final String currency;
+  final ThemeData theme;
 
   const AccountListTile(
-      {super.key, required this.account, required this.currency});
+      {super.key,
+      required this.account,
+      required this.currency,
+      required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +88,7 @@ class AccountListTile extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: Theme.of(context).colorScheme.surface),
+              color: theme.colorScheme.surfaceContainerLowest),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(children: [
@@ -89,12 +96,12 @@ class AccountListTile extends StatelessWidget {
                   size: 18,
                   color: CategoryService.stringToColor(account.color)),
               const SizedBox(width: 8),
-              Text(account.name, style: BudgetronFonts.nunitoSize16Weight400)
+              Text(account.name, style: theme.textTheme.bodyMedium)
             ]),
             Row(children: [
               Text(account.balance.toStringAsFixed(2),
-                  style: BudgetronFonts.nunitoSize16Weight400),
-              Text(" $currency", style: BudgetronFonts.nunitoSize12Weight400)
+                  style: theme.textTheme.bodyMedium),
+              Text(" $currency", style: theme.textTheme.titleSmall)
             ])
           ])),
     );

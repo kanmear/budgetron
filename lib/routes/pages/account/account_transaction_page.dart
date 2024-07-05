@@ -1,5 +1,4 @@
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
@@ -48,7 +47,7 @@ class AccountTransactionPage extends StatelessWidget {
           leading: ArrowBackIconButton(),
           title: '',
         ),
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Column(children: [
           BudgetronTabSwitch(
               valueNotifier: tabNotifier,
@@ -96,7 +95,6 @@ class AccountTransactionPage extends StatelessWidget {
                 text: 'Create transaction',
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 onTap: () => _createNewTransaction(context),
-                textStyle: BudgetronFonts.nunitoSize18Weight500White,
                 isActive: () => _isValid(keyboardService),
                 listenables: [textController, currentOperationNotifier]),
           ),

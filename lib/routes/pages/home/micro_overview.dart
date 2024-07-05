@@ -4,7 +4,6 @@ import 'dart:math';
 
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 
@@ -13,6 +12,8 @@ class MicroOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final currency = Provider.of<AppData>(context).currency;
 
     return StreamBuilder<List<Entry>>(
@@ -28,9 +29,9 @@ class MicroOverview extends StatelessWidget {
                 .where((entry) => entry.category.target!.isExpense == true)
                 .toList());
 
-            return _getOverview(totalExpenses, totalIncome, currency);
+            return _getOverview(totalExpenses, totalIncome, currency, theme);
           } else {
-            return _getOverview(0.00, 0.00, currency);
+            return _getOverview(0.00, 0.00, currency, theme);
           }
         });
   }
@@ -42,26 +43,28 @@ class MicroOverview extends StatelessWidget {
         period: [DateTime(now.year, now.month), now]);
   }
 
-  _getOverview(double totalExpenses, double totalIncome, String currency) {
+  _getOverview(double totalExpenses, double totalIncome, String currency,
+      ThemeData theme) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TotalValueWithIcon(
-              icon: const Icon(Icons.trending_up),
+              icon: Icon(Icons.trending_up, color: theme.colorScheme.primary),
               name: 'Income',
               text: Text("${totalIncome.toStringAsFixed(2)} $currency",
-                  style: BudgetronFonts.nunitoSize18Weight600MainColor)),
+                  style: theme.textTheme.headlineLarge!
+                      .apply(color: theme.colorScheme.secondary))),
           const SizedBox(width: 16),
           IncomeRatioCircle(
               total: totalExpenses + totalIncome, income: totalIncome),
           const SizedBox(width: 16),
           TotalValueWithIcon(
-              icon: const Icon(Icons.trending_down),
+              icon: Icon(Icons.trending_down, color: theme.colorScheme.primary),
               name: 'Expenses',
               text: Text("${totalExpenses.toStringAsFixed(2)} $currency",
-                  style: BudgetronFonts.nunitoSize18Weight600)),
+                  style: theme.textTheme.headlineLarge)),
         ],
       ),
     );
@@ -112,7 +115,7 @@ class IncomeRatioCirclePainter extends CustomPainter {
     radian = (total - income) * 2 * pi / total;
 
     paint.style = PaintingStyle.stroke;
-    paint.color = Theme.of(context).colorScheme.surface;
+    paint.color = Theme.of(context).colorScheme.surfaceContainerLowest;
 
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
         radian, false, paint);
@@ -140,12 +143,14 @@ class TotalValueWithIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Expanded(
       child:
           Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
         icon,
         const SizedBox(height: 2),
-        Text(name, style: BudgetronFonts.nunitoSize11Weight300Gray),
+        Text(name, style: theme.textTheme.titleSmall),
         const SizedBox(height: 2),
         text
       ]),

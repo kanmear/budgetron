@@ -1,4 +1,3 @@
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronRadioListTile extends StatelessWidget {
@@ -19,6 +18,8 @@ class BudgetronRadioListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return InkWell(
       onTap: () {
         if (value != groupValue) onChanged(value);
@@ -30,14 +31,14 @@ class BudgetronRadioListTile extends StatelessWidget {
             groupValue: groupValue,
             value: value,
             onChanged: (value) => onChanged(value),
-            activeColor: Theme.of(context).colorScheme.primary,
+            activeColor: theme.colorScheme.primary,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             visualDensity: const VisualDensity(
                 horizontal: VisualDensity.minimumDensity,
                 vertical: VisualDensity.minimumDensity),
           ),
           const SizedBox(width: 4),
-          Text(label, style: BudgetronFonts.nunitoSize16Weight400)
+          Text(label, style: theme.textTheme.bodyMedium)
         ]),
       ),
     );

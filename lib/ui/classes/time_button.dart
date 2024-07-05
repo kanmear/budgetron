@@ -15,9 +15,6 @@ class BudgetronTimeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(3),
-            border: Border.all(color: Theme.of(context).colorScheme.primary)),
         padding: EdgeInsets.zero,
         child: ValueListenableBuilder(
           valueListenable: timeNotifier,
@@ -27,8 +24,7 @@ class BudgetronTimeButton extends StatelessWidget {
 
             return ButtonWithIcon(
                 onTap: () => _selectTime(context),
-                icon: const Icon(Icons.access_time),
-                color: Theme.of(context).colorScheme.background,
+                iconData: Icons.access_time,
                 text: "$hour:$minute");
           },
         ),

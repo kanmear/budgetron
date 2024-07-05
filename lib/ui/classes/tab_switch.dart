@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
-
 class BudgetronTabSwitch extends StatelessWidget {
   final ValueNotifier<Enum> valueNotifier;
   final List<Enum> tabs;
@@ -14,15 +12,17 @@ class BudgetronTabSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.surface),
+                color: theme.colorScheme.surfaceContainerLowest),
             child: Row(children: [
               for (var tab in tabs)
-                SwitchTab(valueNotifier: valueNotifier, tab: tab)
+                SwitchTab(valueNotifier: valueNotifier, tab: tab, theme: theme)
             ])));
   }
 }
@@ -30,11 +30,13 @@ class BudgetronTabSwitch extends StatelessWidget {
 class SwitchTab extends StatelessWidget {
   final ValueNotifier<Object> valueNotifier;
   final Enum tab;
+  final ThemeData theme;
 
   const SwitchTab({
     super.key,
     required this.valueNotifier,
     required this.tab,
+    required this.theme,
   });
 
   @override
@@ -45,19 +47,20 @@ class SwitchTab extends StatelessWidget {
             onTap: () => _selectTab(tab),
             child: ValueListenableBuilder(
                 valueListenable: valueNotifier,
-                builder: (BuildContext context, value, Widget? child) {
+                builder: (context, value, Widget? child) {
                   bool isSelected = tab == valueNotifier.value;
                   return Padding(
                       padding: const EdgeInsets.all(4),
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
-                            color: _resolveColor(isSelected, context)),
+                            color: _resolveColor(isSelected)),
                         child: Center(
                             child: Padding(
                           padding: const EdgeInsets.only(top: 6, bottom: 6),
                           child: Text(tab.toString(),
-                              style: _resolveStyle(isSelected)),
+                              style: theme.textTheme.headlineMedium!
+                                  .apply(color: _resolveColor(!isSelected))),
                         )),
                       ));
                 })));
@@ -65,13 +68,9 @@ class SwitchTab extends StatelessWidget {
 
   void _selectTab(Enum value) => valueNotifier.value = value;
 
-  Color _resolveColor(bool isSelected, BuildContext context) => isSelected
-      ? Theme.of(context).colorScheme.primary
-      : Theme.of(context).colorScheme.surface;
-
-  TextStyle _resolveStyle(bool isSelected) => isSelected
-      ? BudgetronFonts.nunitoSize18Weight500White
-      : BudgetronFonts.nunitoSize16Weight600;
+  Color _resolveColor(bool isSelected) => isSelected
+      ? theme.colorScheme.primary
+      : theme.colorScheme.surfaceContainerLowest;
 }
 
 class BudgetronDisabledTabSwitch extends StatelessWidget {
@@ -86,15 +85,18 @@ class BudgetronDisabledTabSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.surface),
+                color: theme.colorScheme.surfaceContainerLowest),
             child: Row(children: [
               for (var tab in tabs)
-                DisabledSwitchTab(tab: tab, selectedTab: selectedTab)
+                DisabledSwitchTab(
+                    tab: tab, selectedTab: selectedTab, theme: theme)
             ])));
   }
 }
@@ -102,11 +104,13 @@ class BudgetronDisabledTabSwitch extends StatelessWidget {
 class DisabledSwitchTab extends StatelessWidget {
   final Enum tab;
   final Enum selectedTab;
+  final ThemeData theme;
 
   const DisabledSwitchTab({
     super.key,
     required this.tab,
     required this.selectedTab,
+    required this.theme,
   });
 
   @override
@@ -119,22 +123,21 @@ class DisabledSwitchTab extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: _resolveColor(isSelected, context)),
+                  color: _resolveColor(isSelected)),
               child: Center(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 6, bottom: 6),
-                child: Text(tab.toString(),
-                    style: _resolveStyle(isSelected, context)),
+                child: Text(tab.toString(), style: _resolveStyle(isSelected)),
               )),
             )));
   }
 
-  Color _resolveColor(bool isSelected, BuildContext context) => isSelected
-      ? Theme.of(context).colorScheme.primary
-      : Theme.of(context).colorScheme.surface;
+  Color _resolveColor(bool isSelected) => isSelected
+      ? theme.colorScheme.primary
+      : theme.colorScheme.surfaceContainerLowest;
 
-  TextStyle _resolveStyle(bool isSelected, BuildContext context) => isSelected
-      ? BudgetronFonts.nunitoSize18Weight500White
-      : BudgetronFonts.nunitoSize18Weight500White
-          .apply(color: Theme.of(context).colorScheme.outlineVariant);
+  TextStyle _resolveStyle(bool isSelected) => isSelected
+      ? theme.textTheme.headlineMedium!
+      : theme.textTheme.headlineMedium!
+          .apply(color: theme.colorScheme.surfaceContainerHigh);
 }

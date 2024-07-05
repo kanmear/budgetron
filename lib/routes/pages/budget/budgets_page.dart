@@ -2,7 +2,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/budget_controller.dart';
@@ -19,7 +18,7 @@ class BudgetsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: const Padding(
         padding: EdgeInsets.only(bottom: 16),
         child: Column(children: [
@@ -44,12 +43,11 @@ class BudgetsView extends StatelessWidget {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: BudgetronBigTextButton(
-                    text: "Add budget",
-                    backgroundColor: Theme.of(context).colorScheme.background,
+                    text: 'Add budget',
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
                     onTap: () => showDialog(
                         context: context,
-                        builder: (BuildContext context) => NewBudgetDialog()),
-                    textStyle: BudgetronFonts.nunitoSize18Weight500),
+                        builder: (BuildContext context) => NewBudgetDialog())),
               )
             ],
           )),
@@ -62,6 +60,8 @@ class BudgetsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Expanded(
       child: StreamBuilder<List<Budget>>(
           stream: BudgetController.getBudgets(),
@@ -87,7 +87,8 @@ class BudgetsListView extends StatelessWidget {
                                 .where((budget) =>
                                     budget.budgetPeriodIndex == period)
                                 .toList(),
-                            period: period),
+                            period: period,
+                            theme: theme),
                         const SizedBox(height: 16)
                       ],
                     );
@@ -99,7 +100,8 @@ class BudgetsListView extends StatelessWidget {
             } else {
               return Center(
                   child: Text('No budgets in database',
-                      style: BudgetronFonts.nunitoSize16Weight300Gray));
+                      style: theme.textTheme.bodyMedium!.apply(
+                          color: theme.colorScheme.surfaceContainerHigh)));
             }
           }),
     );
@@ -109,9 +111,13 @@ class BudgetsListView extends StatelessWidget {
 class BudgetListTileContainer extends StatelessWidget {
   final List<Budget> budgets;
   final int period;
+  final ThemeData theme;
 
   const BudgetListTileContainer(
-      {super.key, required this.budgets, required this.period});
+      {super.key,
+      required this.budgets,
+      required this.period,
+      required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -119,13 +125,13 @@ class BudgetListTileContainer extends StatelessWidget {
       Align(
         alignment: Alignment.centerLeft,
         child: Text(BudgetService.getPeriodByIndex(period).name,
-            style: BudgetronFonts.nunitoSize14Weight400Gray),
+            style: theme.textTheme.labelSmall),
       ),
       const SizedBox(height: 8),
       Column(children: [
         for (var budget in budgets)
           Column(children: [
-            BudgetronListTile(budget: budget),
+            BudgetListTile(budget: budget, theme: theme),
             const SizedBox(height: 8)
           ])
       ])
@@ -133,13 +139,15 @@ class BudgetListTileContainer extends StatelessWidget {
   }
 }
 
-class BudgetronListTile extends StatelessWidget {
-  const BudgetronListTile({
+class BudgetListTile extends StatelessWidget {
+  const BudgetListTile({
     super.key,
     required this.budget,
+    required this.theme,
   });
 
   final Budget budget;
+  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +162,7 @@ class BudgetronListTile extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            color: Theme.of(context).colorScheme.surface),
+            color: theme.colorScheme.surfaceContainerLowest),
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
@@ -169,7 +177,7 @@ class BudgetronListTile extends StatelessWidget {
               alignment: Alignment.centerRight,
               child: Text(
                   BudgetService.calculateRemainingDays(budget.resetDate),
-                  style: BudgetronFonts.nunitoSize14Weight400Gray),
+                  style: theme.textTheme.labelSmall),
             ),
           ],
         ),
@@ -195,7 +203,7 @@ class BudgetronListTile extends StatelessWidget {
         Icon(Icons.square_rounded,
             size: 18, color: CategoryService.stringToColor(category.color)),
         const SizedBox(width: 4),
-        Text(category.name, style: BudgetronFonts.nunitoSize14Weight400),
+        Text(category.name, style: theme.textTheme.bodyMedium),
       ],
     );
   }
@@ -205,12 +213,12 @@ class BudgetronListTile extends StatelessWidget {
     return Row(
       children: [
         Text(currentValue.toStringAsFixed(2),
-            style: BudgetronFonts.nunitoSize14Weight300),
+            style: theme.textTheme.labelMedium),
         const SizedBox(width: 8),
         const Text('•'),
         const SizedBox(width: 8),
         Text("${targetValue.toStringAsFixed(0)} $currency",
-            style: BudgetronFonts.nunitoSize14Weight400),
+            style: theme.textTheme.labelMedium),
       ],
     );
   }

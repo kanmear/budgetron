@@ -58,11 +58,24 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = BudgetronFonts.textTheme;
+
     return MaterialApp(
       themeMode: themeMode,
-      theme: ThemeData(colorScheme: BudgetronColors.lightColorScheme),
-      darkTheme: ThemeData(colorScheme: BudgetronColors.darkColorScheme),
-      home: const Budgetron(),
+      theme: ThemeData(
+          colorScheme: BudgetronColors.lightColorScheme, textTheme: textTheme),
+      darkTheme: ThemeData(
+          colorScheme: BudgetronColors.darkColorScheme, textTheme: textTheme),
+      home: Builder(builder: (context) {
+        final theme = Theme.of(context);
+        final textColor = theme.colorScheme.primary;
+
+        return Theme(
+            data: theme.copyWith(
+                textTheme: textTheme.apply(
+                    bodyColor: textColor, displayColor: textColor)),
+            child: const Budgetron());
+      }),
     );
   }
 }

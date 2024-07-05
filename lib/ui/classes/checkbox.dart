@@ -7,6 +7,8 @@ class BudgetronCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SizedBox(
         width: 20,
         height: 20,
@@ -14,10 +16,17 @@ class BudgetronCheckbox extends StatelessWidget {
             valueListenable: valueNotifier,
             builder: (BuildContext context, value, Widget? child) {
               return Checkbox(
+                  // shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.circular(3),
+                  //     side: WidgetStateBorderSide.resolveWith((states) =>
+                  //         BorderSide(width: 1, color: colorScheme.tertiary))),
                   value: value,
                   checkColor: Colors.white,
-                  fillColor: MaterialStateProperty.resolveWith(
-                      (states) => Theme.of(context).colorScheme.outlineVariant),
+                  fillColor: WidgetStateProperty.resolveWith((states) {
+                    return value
+                        ? colorScheme.tertiary
+                        : colorScheme.surfaceContainerLow;
+                  }),
                   onChanged: (bool? value) => _onChanged(value!),
                   side: BorderSide.none);
             }));

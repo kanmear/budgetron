@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/data/fonts.dart';
-
 //REFACTOR rename to budgetron docked dialog for consistency
 class DockedDialog extends StatelessWidget {
   final String title;
@@ -13,13 +11,15 @@ class DockedDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     double screenWidth = MediaQuery.of(context).size.width;
 
     return AlertDialog(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       alignment: Alignment.bottomCenter,
       insetPadding: EdgeInsets.zero,
       contentPadding: EdgeInsets.zero,
@@ -34,10 +34,14 @@ class DockedDialog extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(title, style: BudgetronFonts.nunitoSize18Weight600),
+                    Text(title, style: theme.textTheme.headlineLarge),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.close, size: 24),
+                      child: Icon(
+                        Icons.close,
+                        size: 24,
+                        color: theme.colorScheme.primary,
+                      ),
                     )
                   ],
                 ),

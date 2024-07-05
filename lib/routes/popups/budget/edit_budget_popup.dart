@@ -11,7 +11,6 @@ import 'package:budgetron/models/budget/budget.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/ui/classes/switch_with_text.dart';
 import 'package:budgetron/models/category/category.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/entry.dart';
 
 class EditBudgetDialog extends StatefulWidget {
@@ -37,6 +36,8 @@ class EditBudgetDialog extends StatefulWidget {
 class _EditBudgetDialogState extends State<EditBudgetDialog> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     EntryCategory category = widget.budget.category.target!;
     widget.periodNotifier.value =
         BudgetService.getPeriodByIndex(widget.budget.budgetPeriodIndex);
@@ -48,15 +49,14 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
         body: Column(children: [
           Align(
             alignment: Alignment.centerLeft,
-            child:
-                Text('Spent sum', style: BudgetronFonts.nunitoSize14Weight300),
+            child: Text('Spent sum', style: theme.textTheme.labelSmall),
             //TODO update this value when period is changed?
           ),
           const SizedBox(height: 4),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(widget.budget.currentValue.toStringAsFixed(2),
-                style: BudgetronFonts.nunitoSize16Weight400),
+                style: theme.textTheme.bodyMedium),
           ),
           const SizedBox(height: 16),
           Row(
@@ -66,8 +66,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Period',
-                          style: BudgetronFonts.nunitoSize14Weight300),
+                      child: Text('Period', style: theme.textTheme.labelSmall),
                     ),
                     const SizedBox(height: 4),
                     BudgetronDropdownButton(
@@ -84,8 +83,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                   children: [
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text('Target',
-                          style: BudgetronFonts.nunitoSize14Weight300),
+                      child: Text('Target', style: theme.textTheme.labelSmall),
                     ),
                     const SizedBox(height: 4),
                     BudgetronSmallTextField(
@@ -111,7 +109,6 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                     text: 'Delete',
                     backgroundColor: Theme.of(context).colorScheme.error,
                     onTap: () => _showDeleteBudgetDialog(),
-                    textStyle: BudgetronFonts.nunitoSize18Weight500White,
                     isActive: () => true,
                     listenables: const []),
               ),
@@ -121,7 +118,6 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                     text: 'Save',
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     onTap: () => _updateBudget(),
-                    textStyle: BudgetronFonts.nunitoSize18Weight500White,
                     isActive: _isValid,
                     listenables: [
                       widget.periodNotifier,

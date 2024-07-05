@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
@@ -32,6 +31,8 @@ class GroupOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final ValueNotifier<bool> groupChangeNotifier = ValueNotifier(false);
 
     return ValueListenableBuilder(
@@ -52,7 +53,7 @@ class GroupOverviewPage extends StatelessWidget {
                       onGroupUpdate: () => _updateGroup(groupChangeNotifier))
                 ],
                 title: title),
-            backgroundColor: Theme.of(context).colorScheme.background,
+            backgroundColor: theme.colorScheme.surface,
             body: StreamBuilder<List<Entry>>(
                 stream: entriesStream,
                 builder: (BuildContext context,
@@ -103,7 +104,8 @@ class GroupOverviewPage extends StatelessWidget {
                                         entries: modifiedEntries,
                                         datePeriod: datePeriodNotifier.value,
                                         isEitherOr: isEitherOr,
-                                        isExpense: expenseFilterNotifier.value)
+                                        isExpense: expenseFilterNotifier.value,
+                                        theme: theme)
                                   ]);
                                 }))),
                     DateSelectorGroups(
@@ -147,6 +149,8 @@ class GroupAmountOfEntries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     var length = isEitherOr
         ? entries.length
         : entries
@@ -155,7 +159,8 @@ class GroupAmountOfEntries extends StatelessWidget {
 
     return Center(
         child: Text("$length entries",
-            style: BudgetronFonts.nunitoSize16Weight400Gray));
+            style: theme.textTheme.bodyMedium!
+                .apply(color: theme.colorScheme.surfaceContainerHigh)));
   }
 }
 
@@ -165,12 +170,14 @@ class GroupEntries extends StatelessWidget {
       required this.entries,
       required this.datePeriod,
       required this.isEitherOr,
-      required this.isExpense});
+      required this.isExpense,
+      required this.theme});
 
   final DatePeriod datePeriod;
   final List<Entry> entries;
   final bool isEitherOr;
   final bool isExpense;
+  final ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
@@ -203,7 +210,8 @@ class GroupEntries extends StatelessWidget {
                   entriesToCategoryMap: entriesMap[groupingDate]!,
                   groupingDate: groupingDate,
                   datePeriod: dateGroupPeriod,
-                  currency: currency);
+                  currency: currency,
+                  theme: theme);
             },
             separatorBuilder: (BuildContext context, int index) {
               return const Column(children: [

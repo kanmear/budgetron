@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/entry_controller.dart';
@@ -28,6 +27,8 @@ class BudgetOverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ValueListenableBuilder(
         valueListenable: updateNotifier,
         builder: (context, update, _) {
@@ -58,7 +59,7 @@ class BudgetOverviewPage extends StatelessWidget {
                     const BudgetOptionsIcon(),
                   ],
                   title: title),
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: theme.colorScheme.surface,
               body: Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: Column(children: [
@@ -96,7 +97,8 @@ class BudgetOverviewPage extends StatelessWidget {
                                     const SizedBox(height: 24),
                                     BudgetEntries(
                                         entries: entries,
-                                        budgetPeriod: datePeriod)
+                                        budgetPeriod: datePeriod,
+                                        theme: theme)
                                   ]),
                                 );
                               });
@@ -128,6 +130,8 @@ class BudgetHistoryOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     var budgetHistoriesStream = BudgetController.getBudgetHistories(budget.id);
 
     return StreamBuilder(
@@ -142,7 +146,7 @@ class BudgetHistoryOverview extends StatelessWidget {
               height: 220,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
+                  color: Theme.of(context).colorScheme.surfaceContainerLowest,
                   borderRadius: const BorderRadius.all(Radius.circular(8))),
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
@@ -164,6 +168,7 @@ class BudgetHistoryOverview extends StatelessWidget {
                         columnWidth: columnWidth,
                         history: history,
                         budgetHistoryNotifier: budgetHistoryNotifier,
+                        theme: theme,
                       );
                     },
                     separatorBuilder: (BuildContext context, int index) {
@@ -180,12 +185,14 @@ class BudgetHistoryColumn extends StatelessWidget {
   final BudgetHistory history;
 
   final double columnWidth;
+  final ThemeData theme;
 
   const BudgetHistoryColumn({
     super.key,
     required this.history,
     required this.columnWidth,
     required this.budgetHistoryNotifier,
+    required this.theme,
   });
 
   @override
@@ -205,7 +212,7 @@ class BudgetHistoryColumn extends StatelessWidget {
               width: columnWidth,
               height: 140,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.outline,
+                  color: Theme.of(context).colorScheme.surfaceTint,
                   borderRadius: const BorderRadius.all(Radius.circular(8))),
             ),
             ValueListenableBuilder(
@@ -216,8 +223,8 @@ class BudgetHistoryColumn extends StatelessWidget {
                       ? (isOverspent
                           ? colorScheme.error
                           : colorScheme.secondary)
-                      : colorScheme.primary;
-                  final textColor = colorScheme.primary;
+                      : colorScheme.surfaceContainerHigh;
+                  final textColor = colorScheme.onPrimary;
 
                   return Container(
                       decoration: BoxDecoration(
@@ -230,7 +237,7 @@ class BudgetHistoryColumn extends StatelessWidget {
                           child: isSelected
                               ? Text(
                                   "${(endToTargetRatio * 100).toStringAsFixed(0)}%",
-                                  style: BudgetronFonts.nunitoSize12Weight400
+                                  style: theme.textTheme.titleLarge!
                                       .apply(color: textColor))
                               : const SizedBox()));
                 })
@@ -266,45 +273,47 @@ class BudgetProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     final targetValue = history.targetValue;
 
     return Container(
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
+            color: theme.colorScheme.surfaceContainerLowest,
             borderRadius: const BorderRadius.all(Radius.circular(8))),
         padding: const EdgeInsets.all(12),
         child: Column(children: [
           ListTileWithProgressBar(
-            leading: _getLeading(value),
-            trailing: _getTrailing(targetValue),
+            leading: _getLeading(value, theme),
+            trailing: _getTrailing(targetValue, theme),
             currentValue: value,
             totalValue: targetValue,
           ),
           const SizedBox(height: 4),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(_formatDate(history.startDate),
-                style: BudgetronFonts.nunitoSize12Weight400),
+                style: theme.textTheme.titleSmall),
             Text(_formatDate(history.endDate),
-                style: BudgetronFonts.nunitoSize12Weight400)
+                style: theme.textTheme.titleSmall)
           ])
         ]));
   }
 
-  Widget _getLeading(double value) {
+  Widget _getLeading(double value, ThemeData theme) {
     return Row(children: [
-      Text(value.toStringAsFixed(2),
-          style: BudgetronFonts.nunitoSize16Weight400),
+      Text(value.toStringAsFixed(2), style: theme.textTheme.labelMedium),
       const SizedBox(width: 2),
-      Text(currency, style: BudgetronFonts.nunitoSize12Weight400),
+      Text(currency, style: theme.textTheme.titleSmall),
     ]);
   }
 
-  Widget _getTrailing(double value) {
+  Widget _getTrailing(double value, ThemeData theme) {
     return Row(children: [
       Text(value.toStringAsFixed(0),
-          style: BudgetronFonts.nunitoSize16Weight400Gray),
+          style: theme.textTheme.labelMedium!
+              .apply(color: theme.colorScheme.surfaceContainerHigh)),
       const SizedBox(width: 2),
-      Text(currency, style: BudgetronFonts.nunitoSize12Weight400Gray),
+      Text(currency, style: theme.textTheme.titleSmall),
     ]);
   }
 
@@ -320,19 +329,26 @@ class AmountOfEntries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Center(
         child: Text("$amountOfEntries entries",
-            style: BudgetronFonts.nunitoSize16Weight400Gray));
+            style: theme.textTheme.bodyMedium!
+                .apply(color: theme.colorScheme.surfaceContainerHigh)));
   }
 }
 
 //TODO should these Entries be editable? this would require Month period rework
 class BudgetEntries extends StatelessWidget {
-  const BudgetEntries(
-      {super.key, required this.entries, required this.budgetPeriod});
-
   final BudgetPeriod budgetPeriod;
   final List<Entry> entries;
+  final ThemeData theme;
+
+  const BudgetEntries(
+      {super.key,
+      required this.entries,
+      required this.budgetPeriod,
+      required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -353,10 +369,12 @@ class BudgetEntries extends StatelessWidget {
           var groupingDate = entryDates[index];
 
           return EntryListTileContainer(
-              entriesToCategoryMap: entriesMap[groupingDate]!,
-              groupingDate: groupingDate,
-              datePeriod: datePeriod,
-              currency: currency);
+            entriesToCategoryMap: entriesMap[groupingDate]!,
+            groupingDate: groupingDate,
+            datePeriod: datePeriod,
+            currency: currency,
+            theme: theme,
+          );
         },
         separatorBuilder: (BuildContext context, int index) {
           return const Column(
