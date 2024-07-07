@@ -37,8 +37,8 @@ class BudgetronColors {
     surfaceContainerLow: lightSurface2,
     surfaceContainer: lightSurface3,
     surfaceContainerHigh: lightSurface4,
-    //NOTE tint is used as a crutch for additional color complements
-    surfaceTint: lightSurface0,
+    //NOTE surfaceTint is used as a crutch for additional color complements
+    surfaceTint: lightSurface1,
     error: error,
     onError: buttonText,
     brightness: Brightness.light,
@@ -56,7 +56,7 @@ class BudgetronColors {
     surfaceContainerLow: darkSurface2,
     surfaceContainer: darkSurface3,
     surfaceContainerHigh: darkSurface4,
-    surfaceTint: darkSurface0,
+    surfaceTint: darkSurface2,
     error: error,
     onError: buttonText,
     brightness: Brightness.light,

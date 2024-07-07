@@ -19,25 +19,30 @@ class AccountOptionsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DockedDialog(
         title: "${account.name} Account",
         body: Column(children: [
           CurrentBalance(account: account),
           const SizedBox(height: 16),
           ButtonWithIcon(
-              onTap: () => showDialog(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      EditAccountDialog(account: account)),
-              iconData: Icons.edit,
-              text: 'Edit'),
+            onTap: () => showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    EditAccountDialog(account: account)),
+            icon: Icon(Icons.edit, color: theme.colorScheme.primary),
+            text: Text('Edit', style: theme.textTheme.bodyMedium),
+            backgroundColor: theme.colorScheme.surfaceTint,
+          ),
           const SizedBox(height: 16),
           Row(children: [
             Expanded(
                 child: ButtonWithIcon(
                     onTap: () => _navigateToOperationsPage(context),
-                    iconData: Icons.list,
-                    text: 'Operations')),
+                    icon: Icon(Icons.list, color: theme.colorScheme.primary),
+                    text: Text('Operations', style: theme.textTheme.bodyMedium),
+                    backgroundColor: theme.colorScheme.surfaceTint)),
             const SizedBox(width: 16),
             Expanded(
                 child: ButtonWithIcon(
@@ -45,8 +50,10 @@ class AccountOptionsDialog extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) =>
                             AccountTransferDialog(account: account)),
-                    iconData: Icons.credit_card,
-                    text: 'Transfer')),
+                    icon: Icon(Icons.credit_card,
+                        color: theme.colorScheme.primary),
+                    text: Text('Transfer', style: theme.textTheme.bodyMedium),
+                    backgroundColor: theme.colorScheme.surfaceTint)),
           ]),
           const SizedBox(height: 16),
           Row(children: [
@@ -56,8 +63,12 @@ class AccountOptionsDialog extends StatelessWidget {
                           context,
                           TransactionType.debit,
                         ),
-                    iconData: Icons.trending_up,
-                    text: 'Debit')),
+                    icon: Icon(Icons.trending_up,
+                        color: theme.colorScheme.onPrimary),
+                    text: Text('Debit',
+                        style: theme.textTheme.bodyMedium!
+                            .apply(color: theme.colorScheme.onPrimary)),
+                    backgroundColor: theme.colorScheme.secondary)),
             const SizedBox(width: 16),
             Expanded(
                 child: ButtonWithIcon(
@@ -65,8 +76,12 @@ class AccountOptionsDialog extends StatelessWidget {
                           context,
                           TransactionType.credit,
                         ),
-                    iconData: Icons.trending_down,
-                    text: 'Credit'))
+                    icon: Icon(Icons.trending_down,
+                        color: theme.colorScheme.onPrimary),
+                    text: Text('Credit',
+                        style: theme.textTheme.bodyMedium!
+                            .apply(color: theme.colorScheme.onPrimary)),
+                    backgroundColor: theme.colorScheme.error))
           ])
         ]));
   }
@@ -102,7 +117,7 @@ class CurrentBalance extends StatelessWidget {
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: theme.colorScheme.primary)),
+            border: Border.all(color: theme.colorScheme.secondary)),
         padding: const EdgeInsets.all(12),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

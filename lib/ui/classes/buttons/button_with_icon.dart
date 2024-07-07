@@ -2,36 +2,31 @@ import 'package:flutter/material.dart';
 
 class ButtonWithIcon extends StatelessWidget {
   final Function onTap;
-  final String text;
-  final IconData iconData;
+  final Text text;
+  final Icon icon;
+  final Color backgroundColor;
 
   const ButtonWithIcon(
       {super.key,
       required this.onTap,
-      required this.iconData,
-      required this.text});
+      required this.icon,
+      required this.text,
+      required this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return GestureDetector(
       onTap: () => onTap(),
       behavior: HitTestBehavior.opaque,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          border: Border.all(
-              width: 1,
-              color: Theme.of(context).colorScheme.surfaceContainerHigh),
+          borderRadius: BorderRadius.circular(8),
+          color: backgroundColor,
         ),
         padding: const EdgeInsets.all(12),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(text, style: theme.textTheme.bodyMedium),
-            Icon(iconData, color: theme.colorScheme.primary)
-          ],
+          children: [text, icon],
         ),
       ),
     );

@@ -212,7 +212,7 @@ class BudgetHistoryColumn extends StatelessWidget {
               width: columnWidth,
               height: 140,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceTint,
+                  color: Theme.of(context).colorScheme.surface,
                   borderRadius: const BorderRadius.all(Radius.circular(8))),
             ),
             ValueListenableBuilder(
