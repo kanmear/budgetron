@@ -93,7 +93,7 @@ class AccountTransactionPage extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: BudgetronLargeTextButton(
                 text: 'Create transaction',
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: Theme.of(context).colorScheme.secondary,
                 onTap: () => _createNewTransaction(context),
                 isActive: () => _isValid(keyboardService),
                 listenables: [textController, currentOperationNotifier]),

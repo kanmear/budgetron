@@ -42,7 +42,7 @@ class NewCategoryDialog extends StatelessWidget {
           const SizedBox(height: 24),
           BudgetronLargeTextButton(
               text: 'Create category',
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
               onTap: () => _addCategory(context),
               isActive: _isValid,
               listenables: [textController, colorNotifier])

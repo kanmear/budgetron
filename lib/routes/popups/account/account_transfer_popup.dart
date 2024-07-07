@@ -71,7 +71,7 @@ class AccountTransferDialog extends StatelessWidget {
           const SizedBox(height: 24),
           BudgetronLargeTextButton(
               text: 'Transfer',
-              backgroundColor: theme.colorScheme.primary,
+              backgroundColor: theme.colorScheme.secondary,
               onTap: () => _createTransfer(context),
               isActive: _isValid,
               listenables: [

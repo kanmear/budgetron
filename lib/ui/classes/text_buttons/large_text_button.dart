@@ -50,9 +50,8 @@ class BudgetronLargeTextButton extends StatelessWidget {
 
   _resolveAction() => isActive() ? onTap() : {};
 
-  Color _resolveColor(ThemeData theme) => isActive()
-      ? theme.colorScheme.secondary
-      : theme.colorScheme.secondary.withOpacity(0.2);
+  Color _resolveColor(ThemeData theme) =>
+      isActive() ? backgroundColor : backgroundColor.withOpacity(0.2);
 
   TextStyle _resolveStyle(ThemeData theme) {
     final color = theme.colorScheme.onPrimary;
@@ -60,52 +59,5 @@ class BudgetronLargeTextButton extends StatelessWidget {
     return isActive()
         ? theme.textTheme.titleMedium!.apply(color: color)
         : theme.textTheme.titleMedium!.apply(color: color.withOpacity(0.2));
-  }
-}
-
-//TODO remove this one in favor of LargeButton
-class BudgetronBigTextButton extends StatelessWidget {
-  final Function onTap;
-  final String text;
-  final Color backgroundColor;
-
-  const BudgetronBigTextButton({
-    super.key,
-    required this.text,
-    required this.backgroundColor,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return TextButton(
-        style: ButtonStyle(
-            padding: WidgetStateProperty.all(EdgeInsets.zero),
-            visualDensity: VisualDensity.compact),
-        onPressed: () => onTap(),
-        child: Row(
-          children: [
-            Expanded(
-              child: Container(
-                  constraints: const BoxConstraints(minWidth: 126),
-                  padding: const EdgeInsets.only(
-                    top: 13.5,
-                    bottom: 13.5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: backgroundColor,
-                    borderRadius: const BorderRadius.all(Radius.circular(50)),
-                  ),
-                  child: Text(
-                    text,
-                    style: theme.textTheme.titleMedium!
-                        .apply(color: theme.colorScheme.onPrimary),
-                    textAlign: TextAlign.center,
-                  )),
-            ),
-          ],
-        ));
   }
 }

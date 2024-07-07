@@ -94,7 +94,7 @@ class EditEntryPage extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: BudgetronLargeTextButton(
                   text: 'Update entry',
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
                   onTap: () => _updateEntry(context),
                   isActive: () => _isValid(keyboardService),
                   listenables: [

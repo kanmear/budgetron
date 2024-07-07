@@ -42,12 +42,15 @@ class BudgetsView extends StatelessWidget {
               const BudgetsListView(),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: BudgetronBigTextButton(
-                    text: 'Add budget',
-                    backgroundColor: Theme.of(context).colorScheme.tertiary,
-                    onTap: () => showDialog(
-                        context: context,
-                        builder: (BuildContext context) => NewBudgetDialog())),
+                child: BudgetronLargeTextButton(
+                  text: 'Add budget',
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  onTap: () => showDialog(
+                      context: context,
+                      builder: (BuildContext context) => NewBudgetDialog()),
+                  isActive: () => true,
+                  listenables: const [],
+                ),
               )
             ],
           )),

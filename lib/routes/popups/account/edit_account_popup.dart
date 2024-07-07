@@ -67,7 +67,7 @@ class EditAccountDialog extends StatelessWidget {
           const SizedBox(height: 16),
           BudgetronLargeTextButton(
               text: 'Save account',
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
               onTap: () => _updateAccount(context),
               isActive: _isValid,
               listenables: [

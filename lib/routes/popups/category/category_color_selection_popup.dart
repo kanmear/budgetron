@@ -133,7 +133,7 @@ class CategoryColorDialog extends StatelessWidget {
                   child: BudgetronLargeTextButton(
                     text: "Confirm",
                     onTap: () => _validateColorIsChosen(context, colorNotifier),
-                    backgroundColor: theme.colorScheme.primary,
+                    backgroundColor: theme.colorScheme.secondary,
                     isActive: () => _isValid(colorNotifier),
                     listenables: [colorNotifier],
                   ),

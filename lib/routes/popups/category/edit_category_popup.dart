@@ -109,7 +109,8 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                   Expanded(
                     child: BudgetronLargeTextButton(
                         text: 'Save',
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         onTap: () => _updateCategory(),
                         isActive: _isValid,
                         listenables: [
@@ -125,7 +126,8 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
                   Expanded(
                     child: BudgetronLargeTextButton(
                         text: 'Save',
-                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondary,
                         onTap: () => _updateCategory(),
                         isActive: _isValid,
                         listenables: [

@@ -64,7 +64,7 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
           const SizedBox(height: 24),
           BudgetronLargeTextButton(
               text: 'Create group',
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
               onTap: () => _addGroup(),
               isActive: _isValid,
               listenables: [textController, widget.categoriesNotifier])

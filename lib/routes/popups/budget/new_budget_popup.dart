@@ -92,7 +92,7 @@ class _NewBudgetDialogState extends State<NewBudgetDialog> {
           const SizedBox(height: 16),
           BudgetronLargeTextButton(
               text: 'Add budget',
-              backgroundColor: theme.colorScheme.primary,
+              backgroundColor: theme.colorScheme.secondary,
               onTap: () => _addBudget(),
               isActive: _isValid,
               listenables: [widget.categoryNotifier, widget.textController])

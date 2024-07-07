@@ -90,7 +90,7 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
               Expanded(
                 child: BudgetronLargeTextButton(
                     text: 'Save',
-                    backgroundColor: theme.colorScheme.primary,
+                    backgroundColor: theme.colorScheme.secondary,
                     onTap: () => _saveGroup(),
                     isActive: _isValid,
                     listenables: [textController, widget.categoriesNotifier]),

@@ -116,7 +116,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
               Expanded(
                 child: BudgetronLargeTextButton(
                     text: 'Save',
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Theme.of(context).colorScheme.secondary,
                     onTap: () => _updateBudget(),
                     isActive: _isValid,
                     listenables: [

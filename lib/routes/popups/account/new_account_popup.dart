@@ -54,7 +54,7 @@ class NewAccountDialog extends StatelessWidget {
           const SizedBox(height: 16),
           BudgetronLargeTextButton(
               text: 'Create account',
-              backgroundColor: theme.colorScheme.primary,
+              backgroundColor: theme.colorScheme.secondary,
               onTap: () => _addAccount(context),
               isActive: _isValid,
               listenables: [
