@@ -203,17 +203,14 @@ class EntryListTileContainer extends StatelessWidget {
         children: [
           Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _resolveContainerTitle(),
-                    _resolveContainerSumValue(entriesToCategoryMap)
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _resolveContainerTitle(),
+                  _resolveContainerSumValue(entriesToCategoryMap)
+                ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Column(children: [
                 for (var category in entriesToCategoryMap.keys)
                   EntryListTile(
