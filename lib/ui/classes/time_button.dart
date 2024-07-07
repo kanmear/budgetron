@@ -1,6 +1,8 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/classes/buttons/button_with_icon.dart';
+import 'package:budgetron/app_data.dart';
+import 'package:budgetron/ui/classes/buttons/datetime_button.dart';
 
 class BudgetronTimeButton extends StatelessWidget {
   final ValueNotifier<bool> isKeyboardOnNotifier;
@@ -22,10 +24,11 @@ class BudgetronTimeButton extends StatelessWidget {
             var hour = timeValue.hour.toString().padLeft(2, '0');
             var minute = timeValue.minute.toString().padLeft(2, '0');
 
-            return ButtonWithIcon(
-                onTap: () => _selectTime(context),
-                iconData: Icons.access_time,
-                text: "$hour:$minute");
+            return DateTimeButton(
+              onTap: () => _selectTime(context),
+              iconData: Icons.access_time,
+              text: "$hour:$minute",
+            );
           },
         ),
       ),
@@ -39,6 +42,48 @@ class BudgetronTimeButton extends StatelessWidget {
 
     final TimeOfDay? time = await showTimePicker(
         // initialEntryMode: TimePickerEntryMode.dialOnly,
+        builder: (context, child) {
+          final themeMode = Provider.of<AppData>(context).themeMode;
+
+          return Theme(
+            data: themeMode == ThemeMode.light
+                ? ThemeData.light()
+                : ThemeData.dark(),
+            child: child!,
+          );
+          // final theme = Theme.of(context);
+          // final colorScheme = theme.colorScheme;
+          //
+          // return Theme(
+          //     data: ThemeData.light().copyWith(
+          //         timePickerTheme: TimePickerThemeData(
+          //       backgroundColor: colorScheme.surface, // Background color
+          //       hourMinuteColor: colorScheme.surfaceContainerLow,
+          //       hourMinuteTextColor:
+          //           colorScheme.primary, // Text color for hours and minutes
+          //       dayPeriodColor: colorScheme.tertiary,
+          //       dayPeriodTextColor: colorScheme.primary, // Text color for AM/PM
+          //       dialBackgroundColor: colorScheme.surfaceContainerLow,
+          //       dialHandColor: colorScheme.tertiary,
+          //       dialTextColor:
+          //           colorScheme.primary, // Text color on the clock dial
+          //       entryModeIconColor: colorScheme.surfaceContainerHigh,
+          //       helpTextStyle: theme.textTheme.bodyMedium,
+          //       cancelButtonStyle: ButtonStyle(
+          //           textStyle: WidgetStateProperty.resolveWith(
+          //               (states) => theme.textTheme.bodyMedium),
+          //           foregroundColor:
+          //               WidgetStateProperty.all<Color>(colorScheme.primary)),
+          //       confirmButtonStyle: ButtonStyle(
+          //           textStyle: WidgetStateProperty.resolveWith(
+          //               (states) => theme.textTheme.bodyMedium),
+          //           foregroundColor:
+          //               WidgetStateProperty.all<Color>(colorScheme.primary)),
+          //       hourMinuteTextStyle: theme.textTheme
+          //           .displayMedium, // Text style for hours and minutes
+          //     )),
+          //     child: child!);
+        },
         context: context,
         initialTime: currentTime);
 
