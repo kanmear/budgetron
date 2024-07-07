@@ -28,16 +28,16 @@ class DeleteBudgetDialog extends StatelessWidget {
               Expanded(
                 child: BudgetronSmallTextButton(
                   text: 'Cancel',
-                  backgroundColor: backgroundColor,
                   onTap: () => {Navigator.pop(context)},
+                  isDelete: false,
                 ),
               ),
               const SizedBox(width: 8),
               Expanded(
                 child: BudgetronSmallTextButton(
                   text: 'Delete',
-                  backgroundColor: Theme.of(context).colorScheme.error,
                   onTap: () => _deleteBudget(context),
+                  isDelete: true,
                 ),
               ),
             ])

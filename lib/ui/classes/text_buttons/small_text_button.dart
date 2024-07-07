@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 class BudgetronSmallTextButton extends StatelessWidget {
   final String text;
   final Function onTap;
-  final Color backgroundColor;
+  final bool isDelete;
 
   const BudgetronSmallTextButton({
     super.key,
     required this.text,
-    required this.backgroundColor,
     required this.onTap,
+    required this.isDelete,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final backgroundColor = isDelete
+        ? theme.colorScheme.error
+        : theme.colorScheme.surfaceContainerLow;
 
     return TextButton(
         style: ButtonStyle(

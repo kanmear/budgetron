@@ -31,16 +31,16 @@ class DeleteGroupDialog extends StatelessWidget {
                         Expanded(
                           child: BudgetronSmallTextButton(
                             text: 'Cancel',
-                            backgroundColor: backgroundColor,
                             onTap: () => {Navigator.pop(context)},
+                            isDelete: false,
                           ),
                         ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: BudgetronSmallTextButton(
                             text: 'Delete',
-                            backgroundColor: theme.colorScheme.error,
                             onTap: () => _deleteGroup(context),
+                            isDelete: true,
                           ),
                         )
                       ])
