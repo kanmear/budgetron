@@ -20,13 +20,7 @@ class BudgetronNavigationBar extends StatelessWidget {
         height: 72,
         clipBehavior: Clip.hardEdge,
         padding: const EdgeInsets.only(left: 20, right: 20),
-        decoration: BoxDecoration(color: color, boxShadow: [
-          BoxShadow(
-              color: color.withOpacity(0.5),
-              spreadRadius: 5,
-              blurRadius: 12,
-              offset: const Offset(0, -3))
-        ]),
+        decoration: const BoxDecoration(color: color),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

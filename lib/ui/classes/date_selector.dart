@@ -24,7 +24,7 @@ class DateSelector extends StatelessWidget {
 
     return Container(
       height: 56,
-      color: theme.colorScheme.surfaceContainerHigh,
+      color: theme.colorScheme.surfaceContainerLow,
       child: DatePeriodSelector(
           datePeriodNotifier: datePeriodNotifier,
           dateTimeNotifier: dateTimeNotifier,
@@ -95,7 +95,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
   }
 
   _dateSelectorDisplayedItem(BuildContext context) {
-    var color = widget.theme.colorScheme.surfaceContainerHigh;
+    var color = widget.theme.colorScheme.surfaceContainerLow;
 
     return widget.items.map((period) {
       return Align(
@@ -226,6 +226,6 @@ class ArrowIcon extends StatelessWidget {
 
   Color _resolveColor(BuildContext context, bool isEnabled) {
     var colorScheme = Theme.of(context).colorScheme;
-    return isEnabled ? colorScheme.primary : colorScheme.outline;
+    return isEnabled ? colorScheme.primary : colorScheme.surfaceContainerHigh;
   }
 }

@@ -11,7 +11,7 @@ class LegacyDateSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainerHigh,
+          color: Theme.of(context).colorScheme.surfaceContainerLow,
           //TODO set a shadow
           // boxShadow: [
           //   BoxShadow(
@@ -67,7 +67,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
 
   _dateSelectorDisplayedItem(BuildContext context) {
     final theme = Theme.of(context);
-    var color = theme.colorScheme.surfaceContainerHigh;
+    var color = theme.colorScheme.surfaceContainerLow;
 
     return items.map((period) {
       return Align(

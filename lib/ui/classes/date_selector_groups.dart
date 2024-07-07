@@ -25,7 +25,7 @@ class DateSelectorGroups extends StatelessWidget {
 
     return Container(
       height: 56,
-      color: theme.colorScheme.surfaceContainerHigh,
+      color: theme.colorScheme.surfaceContainerLow,
       child: DatePeriodSelector(
           datePeriodNotifier: datePeriodNotifier,
           dateTimeNotifier: dateTimeNotifier,
@@ -96,7 +96,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
 
   _dateSelectorDisplayedItem(BuildContext context) {
     final theme = Theme.of(context);
-    var color = theme.colorScheme.surfaceContainerHigh;
+    var color = theme.colorScheme.surfaceContainerLow;
 
     return widget.items.map((period) {
       return Align(

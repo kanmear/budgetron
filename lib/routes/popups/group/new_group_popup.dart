@@ -33,8 +33,8 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    styleNotifier.value = theme.textTheme.bodyMedium!
-        .apply(color: theme.colorScheme.surfaceContainerHigh);
+    styleNotifier.value = theme.textTheme.bodyMedium!;
+    // .apply(color: theme.colorScheme.surfaceContainerHigh);
 
     return DockedDialog(
         title: 'New Group',
@@ -153,8 +153,7 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
 
     if (length == 0) {
       textNotifier.value = 'Choose categories to group';
-      styleNotifier.value = theme.textTheme.bodyMedium!
-          .apply(color: theme.colorScheme.surfaceContainerHigh);
+      styleNotifier.value = theme.textTheme.bodyMedium!;
     } else {
       textNotifier.value =
           "$length ${length == 1 ? 'category' : 'categories'} chosen";
