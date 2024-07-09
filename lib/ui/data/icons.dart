@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+class CustomIconPath {
+  static const String entriesPage = "assets/icons/nav_bar/entries_page.svg";
+  static const String homePage = "assets/icons/nav_bar/home_page.svg";
+  static const String budgetsPage = "assets/icons/nav_bar/budgets_page.svg";
+  static const String statsPage = "assets/icons/nav_bar/stats_page.svg";
+}
+
 //TODO naming
 class ArrowBackIconButton extends StatelessWidget {
   const ArrowBackIconButton({

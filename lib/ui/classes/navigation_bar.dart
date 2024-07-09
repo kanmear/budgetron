@@ -1,4 +1,6 @@
+import 'package:budgetron/ui/classes/icons/custom_icon.dart';
 import 'package:budgetron/ui/data/colors.dart';
+import 'package:budgetron/ui/data/icons.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronNavigationBar extends StatelessWidget {
@@ -24,23 +26,29 @@ class BudgetronNavigationBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            navigationIconButton(const Icon(Icons.list), 0, context),
-            navigationIconButton(const Icon(Icons.home), 1, context),
+            navigationIconButton(CustomIconPath.entriesPage, 0),
+            navigationIconButton(CustomIconPath.homePage, 1),
             middleButton(context),
-            navigationIconButton(const Icon(Icons.wallet), 2, context),
-            navigationIconButton(const Icon(Icons.bar_chart), 3, context),
+            navigationIconButton(CustomIconPath.budgetsPage, 2),
+            navigationIconButton(CustomIconPath.statsPage, 3),
           ],
         ));
   }
 
-  IconButton navigationIconButton(
-          Icon icon, int iconIndex, BuildContext context) =>
-      IconButton(
-          onPressed: () => selectPage(iconIndex),
-          icon: icon,
-          color: isCurrentlySelected(iconIndex)
-              ? BudgetronColors.white
-              : BudgetronColors.darkSurface4);
+  Widget navigationIconButton(String iconPath, int pageIndex) {
+    return SizedBox(
+      height: 48,
+      width: 48,
+      child: InkWell(
+        onTap: () => selectPage(pageIndex),
+        child: CustomIcon(
+            iconPath: iconPath,
+            color: isCurrentlySelected(pageIndex)
+                ? BudgetronColors.white
+                : BudgetronColors.darkSurface4),
+      ),
+    );
+  }
 
   InkWell middleButton(BuildContext context) => InkWell(
       onTap: () => navigateToEntryCreation(context),
