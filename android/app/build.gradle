@@ -77,6 +77,6 @@ configurations {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     
-    def objectbox_admin_version = "3.5.1"
+    def objectbox_admin_version = "4.0.0"
     debugImplementation("io.objectbox:objectbox-android-objectbrowser:$objectbox_admin_version")
 }
