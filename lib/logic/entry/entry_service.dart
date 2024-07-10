@@ -26,26 +26,6 @@ class EntryService {
     }
   }
 
-  static void updateEntry(Entry entry, double newValue) {
-    var previousEntry = EntryController.getEntry(entry.id);
-    if (entry.account.target != previousEntry.account.target ||
-        entry.category.target != previousEntry.category.target) {
-      deleteEntry(previousEntry);
-      createEntry(entry, entry.category.target!);
-
-      return;
-    }
-
-    EntryCategory category = entry.category.target!;
-    if (category.isBudgetTracked) {
-      double delta = -(newValue - entry.value);
-      BudgetService.updateBudget(category.id, delta);
-    }
-
-    entry.value = category.isExpense ? -newValue : newValue;
-    EntryController.addEntry(entry);
-  }
-
   static deleteEntry(Entry entry) async {
     EntryCategory category = entry.category.target!;
     if (category.isBudgetTracked) {

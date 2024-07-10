@@ -112,7 +112,20 @@ class EditEntryPage extends StatelessWidget {
   }
 
   void _updateEntry(BuildContext context) {
-    EntryService.updateEntry(entry, double.parse(textController.text));
+    double value = double.parse(textController.text);
+    var dateValue = dateNotifier.value;
+    var timeValue = timeNotifier.value;
+    var date = DateTime(dateValue.year, dateValue.month, dateValue.day,
+        timeValue.hour, timeValue.minute);
+
+    Entry updatedEntry = Entry(value: value, dateTime: date);
+    if (accountNotifier.value != null) {
+      updatedEntry.account.target = accountNotifier.value;
+    }
+
+    EntryService.createEntry(updatedEntry, entry.category.target!);
+    EntryService.deleteEntry(entry);
+    Navigator.pop(context);
   }
 
   bool _isValid(NumberKeyboardService keyboardService) {
