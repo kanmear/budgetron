@@ -19,9 +19,9 @@ class BudgetronNavigationBar extends StatelessWidget {
     const color = BudgetronColors.lightPrimary;
 
     return Container(
-        height: 72,
+        height: 88,
         clipBehavior: Clip.hardEdge,
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding: const EdgeInsets.only(left: 16, right: 16),
         decoration: const BoxDecoration(color: color),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,16 +36,25 @@ class BudgetronNavigationBar extends StatelessWidget {
   }
 
   Widget navigationIconButton(String iconPath, int pageIndex) {
+    const backgroundColor = BudgetronColors.lightPrimary;
+    Color splashColor = BudgetronColors.white.withOpacity(0.05);
+
     return SizedBox(
       height: 48,
       width: 48,
-      child: InkWell(
-        onTap: () => selectPage(pageIndex),
-        child: CustomIcon(
-            iconPath: iconPath,
-            color: isCurrentlySelected(pageIndex)
-                ? BudgetronColors.white
-                : BudgetronColors.darkSurface4),
+      child: Material(
+        color: backgroundColor,
+        child: InkWell(
+          splashColor: splashColor,
+          highlightColor: splashColor,
+          customBorder: const CircleBorder(),
+          onTap: () => selectPage(pageIndex),
+          child: CustomIcon(
+              iconPath: iconPath,
+              color: isCurrentlySelected(pageIndex)
+                  ? BudgetronColors.white
+                  : BudgetronColors.darkSurface4),
+        ),
       ),
     );
   }
