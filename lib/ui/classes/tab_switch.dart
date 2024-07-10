@@ -52,24 +52,26 @@ class SwitchTab extends StatelessWidget {
                   return Padding(
                       padding: const EdgeInsets.all(4),
                       child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: _resolveColor(isSelected)),
-                        child: Center(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: _resolveTabColor(isSelected)),
+                          child: Center(
                             child: Padding(
-                          padding: const EdgeInsets.only(top: 6, bottom: 6),
-                          child: Text(tab.toString(),
-                              style: theme.textTheme.headlineMedium!
-                                  .apply(color: _resolveColor(!isSelected))),
-                        )),
-                      ));
+                                padding:
+                                    const EdgeInsets.only(top: 6, bottom: 6),
+                                child: Text(
+                                  tab.toString(),
+                                  style: theme.textTheme.headlineMedium!
+                                      .apply(color: theme.colorScheme.primary),
+                                )),
+                          )));
                 })));
   }
 
   void _selectTab(Enum value) => valueNotifier.value = value;
 
-  Color _resolveColor(bool isSelected) => isSelected
-      ? theme.colorScheme.primary
+  Color _resolveTabColor(bool isSelected) => isSelected
+      ? theme.colorScheme.surface
       : theme.colorScheme.surfaceContainerLowest;
 }
 
@@ -127,17 +129,17 @@ class DisabledSwitchTab extends StatelessWidget {
               child: Center(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 6, bottom: 6),
-                child: Text(tab.toString(), style: _resolveStyle(isSelected)),
+                child: Text(tab.toString(), style: _resolveStyle(!isSelected)),
               )),
             )));
   }
 
   Color _resolveColor(bool isSelected) => isSelected
-      ? theme.colorScheme.primary
+      ? theme.colorScheme.surface
       : theme.colorScheme.surfaceContainerLowest;
 
   TextStyle _resolveStyle(bool isSelected) => isSelected
       ? theme.textTheme.headlineMedium!
-      : theme.textTheme.headlineMedium!
-          .apply(color: theme.colorScheme.surfaceContainerHigh);
+          .apply(color: theme.colorScheme.surfaceContainerHigh)
+      : theme.textTheme.headlineMedium!.apply(color: theme.colorScheme.primary);
 }
