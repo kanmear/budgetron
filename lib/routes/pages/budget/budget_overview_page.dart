@@ -55,8 +55,8 @@ class BudgetOverviewPage extends StatelessWidget {
                   actions: [
                     BudgetEditIcon(
                         budget: budget, updateNotifier: updateNotifier),
-                    const SizedBox(width: 8),
-                    const BudgetOptionsIcon(),
+                    // const SizedBox(width: 8),
+                    // const BudgetOptionsIcon(),
                   ],
                   title: title),
               backgroundColor: theme.colorScheme.surface,
