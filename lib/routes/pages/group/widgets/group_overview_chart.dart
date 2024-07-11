@@ -234,7 +234,7 @@ class CategoryWithProgressBar extends StatelessWidget {
     return Row(children: [
       Text(value.toStringAsFixed(2), style: theme.textTheme.labelMedium),
       const SizedBox(width: 8),
-      const Text('•'),
+      Text('•', style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8)),
       const SizedBox(width: 8),
       Text("${(value / total * 100).toStringAsFixed(0)}%",
           style: theme.textTheme.labelMedium)

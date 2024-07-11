@@ -138,7 +138,9 @@ class BudgetListTile extends StatelessWidget {
               children: [
                 Text(leftString, style: theme.textTheme.labelMedium),
                 const SizedBox(width: 8),
-                const Text('•'),
+                Text('•',
+                    style:
+                        theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8)),
                 const SizedBox(width: 8),
                 Text("$rightString $currency",
                     style: theme.textTheme.labelMedium),
