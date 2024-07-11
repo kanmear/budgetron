@@ -1,3 +1,4 @@
+import 'package:budgetron/logic/category/category_service.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -42,9 +43,17 @@ class EntriesListView extends StatelessWidget {
         if (snapshot.data?.isNotEmpty ?? false) {
           List<Entry> entries = snapshot.data!;
 
-          return Column(children: [
-            for (var entry in entries) EntryListTile(entry: entry)
-          ]);
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: theme.colorScheme.surfaceContainerLowest,
+            ),
+            padding: const EdgeInsets.only(left: 12, right: 12),
+            child: Column(children: [
+              for (var entry in entries)
+                EntryListTile(entry: entry, isLast: entry == entries.last)
+            ]),
+          );
         } else {
           return Center(
               child: Text('No entries in database',
@@ -59,40 +68,50 @@ class EntriesListView extends StatelessWidget {
 }
 
 class EntryListTile extends StatelessWidget {
+  final Entry entry;
+  final bool isLast;
+
   const EntryListTile({
     super.key,
     required this.entry,
+    required this.isLast,
   });
-
-  final Entry entry;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     final currency = Provider.of<AppData>(context).currency;
+    final category = entry.category.target!;
 
     return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
-          color: theme.colorScheme.surfaceContainerLowest),
-      child: Container(
-          decoration: BoxDecoration(
-              border:
-                  Border(bottom: BorderSide(color: theme.colorScheme.surface))),
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    entry.category.target!.name,
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                  Text("${entry.value.toStringAsFixed(2)} $currency",
-                      style: theme.textTheme.bodyMedium)
-                ]),
-          )),
-    );
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    color: isLast
+                        ? Colors.transparent
+                        : theme.colorScheme.surfaceContainerLow))),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.square_rounded,
+                  size: 18,
+                  color: CategoryService.stringToColor(category.color),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  entry.category.target!.name,
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ],
+            ),
+            Text("${entry.value.toStringAsFixed(2)} $currency",
+                style: theme.textTheme.bodyMedium)
+          ]),
+        ));
   }
 }
