@@ -16,7 +16,7 @@ class BudgetronNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const color = BudgetronColors.lightPrimary;
+    const color = BudgetronColors.darkSurface1;
 
     return Container(
         height: 88,
@@ -36,7 +36,7 @@ class BudgetronNavigationBar extends StatelessWidget {
   }
 
   Widget navigationIconButton(String iconPath, int pageIndex) {
-    const backgroundColor = BudgetronColors.lightPrimary;
+    const backgroundColor = BudgetronColors.darkSurface1;
     Color splashColor = BudgetronColors.white.withOpacity(0.05);
 
     return SizedBox(
