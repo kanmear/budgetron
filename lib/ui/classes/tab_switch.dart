@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/data/colors.dart';
 import 'package:flutter/material.dart';
 
 class BudgetronTabSwitch extends StatelessWidget {
@@ -61,8 +62,8 @@ class SwitchTab extends StatelessWidget {
                                     const EdgeInsets.only(top: 6, bottom: 6),
                                 child: Text(
                                   tab.toString(),
-                                  style: theme.textTheme.headlineMedium!
-                                      .apply(color: theme.colorScheme.primary),
+                                  style: theme.textTheme.headlineMedium!.apply(
+                                      color: _resolveTextColor(isSelected)),
                                 )),
                           )));
                 })));
@@ -71,8 +72,11 @@ class SwitchTab extends StatelessWidget {
   void _selectTab(Enum value) => valueNotifier.value = value;
 
   Color _resolveTabColor(bool isSelected) => isSelected
-      ? theme.colorScheme.surface
+      ? BudgetronColors.darkSurface0
       : theme.colorScheme.surfaceContainerLowest;
+
+  Color _resolveTextColor(bool isSelected) =>
+      isSelected ? BudgetronColors.darkPrimary : theme.colorScheme.primary;
 }
 
 class BudgetronDisabledTabSwitch extends StatelessWidget {
@@ -129,17 +133,18 @@ class DisabledSwitchTab extends StatelessWidget {
               child: Center(
                   child: Padding(
                 padding: const EdgeInsets.only(top: 6, bottom: 6),
-                child: Text(tab.toString(), style: _resolveStyle(!isSelected)),
+                child: Text(tab.toString(), style: _resolveStyle(isSelected)),
               )),
             )));
   }
 
   Color _resolveColor(bool isSelected) => isSelected
-      ? theme.colorScheme.surface
+      ? BudgetronColors.darkSurface0
       : theme.colorScheme.surfaceContainerLowest;
 
   TextStyle _resolveStyle(bool isSelected) => isSelected
       ? theme.textTheme.headlineMedium!
-          .apply(color: theme.colorScheme.surfaceContainerHigh)
-      : theme.textTheme.headlineMedium!.apply(color: theme.colorScheme.primary);
+          .apply(color: BudgetronColors.darkPrimary)
+      : theme.textTheme.headlineMedium!
+          .apply(color: theme.colorScheme.surfaceContainerHigh);
 }
