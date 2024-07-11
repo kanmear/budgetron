@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/data/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
@@ -102,6 +103,7 @@ class IncomeRatioCirclePainter extends CustomPainter {
     paint.strokeWidth = 8;
     paint.color = Theme.of(context).colorScheme.secondary;
 
+    double padding = 12 * pi / total;
     Offset center = Offset(size.width / 2, size.height / 2);
     double radius = 35;
 
@@ -112,10 +114,12 @@ class IncomeRatioCirclePainter extends CustomPainter {
         radian, false, paint);
 
     startAngle += radian;
+    startAngle += padding;
     radian = (total - income) * 2 * pi / total;
+    radian -= padding * 2;
 
     paint.style = PaintingStyle.stroke;
-    paint.color = Theme.of(context).colorScheme.surfaceContainerLowest;
+    paint.color = BudgetronColors.white;
 
     canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle,
         radian, false, paint);
