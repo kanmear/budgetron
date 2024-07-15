@@ -19,12 +19,18 @@ class ThemeDialog extends StatelessWidget {
           children: [
             ThemeRadioButton(
                 themeNotifier: themeNotifier,
-                theme: ThemeMode.light,
+                themeMode: ThemeMode.light,
                 appData: appData),
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
             ThemeRadioButton(
               themeNotifier: themeNotifier,
-              theme: ThemeMode.dark,
+              themeMode: ThemeMode.dark,
+              appData: appData,
+            ),
+            const SizedBox(height: 8),
+            ThemeRadioButton(
+              themeNotifier: themeNotifier,
+              themeMode: ThemeMode.system,
               appData: appData,
             ),
           ],
@@ -34,14 +40,14 @@ class ThemeDialog extends StatelessWidget {
 
 class ThemeRadioButton extends StatelessWidget {
   final ValueNotifier<ThemeMode> themeNotifier;
-  final ThemeMode theme;
+  final ThemeMode themeMode;
 
   final AppData appData;
 
   const ThemeRadioButton(
       {super.key,
       required this.themeNotifier,
-      required this.theme,
+      required this.themeMode,
       required this.appData});
 
   @override
@@ -51,24 +57,40 @@ class ThemeRadioButton extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: themeNotifier,
       builder: (context, selectedTheme, _) {
-        return Row(
-          children: [
-            Radio(
-              groupValue: selectedTheme,
-              value: theme,
-              onChanged: (value) => _changeTheme(value!),
-              activeColor: themeData.colorScheme.primary,
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              visualDensity: const VisualDensity(
-                  horizontal: VisualDensity.minimumDensity,
-                  vertical: VisualDensity.minimumDensity),
+        return InkWell(
+          onTap: () {
+            if (themeMode != themeNotifier.value) _changeTheme(themeMode);
+          },
+          child: Padding(
+            //FIX these paddings inflate tapping are, but also shift buttons
+            // further from the popup title
+            padding: const EdgeInsets.only(top: 8, bottom: 8),
+            child: Row(
+              children: [
+                Radio(
+                  groupValue: selectedTheme,
+                  value: themeMode,
+                  onChanged: (value) => _changeTheme(value!),
+                  activeColor: themeData.colorScheme.primary,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: const VisualDensity(
+                      horizontal: VisualDensity.minimumDensity,
+                      vertical: VisualDensity.minimumDensity),
+                ),
+                const SizedBox(width: 6),
+                Text(_capitalize(themeMode.name),
+                    style: themeData.textTheme.bodyMedium),
+              ],
             ),
-            const SizedBox(width: 6),
-            Text(theme.name, style: themeData.textTheme.bodyMedium),
-          ],
+          ),
         );
       },
     );
+  }
+
+  //REFACTOR
+  String _capitalize(String text) {
+    return "${text[0].toUpperCase()}${text.substring(1)}";
   }
 
   void _changeTheme(ThemeMode themeMode) {

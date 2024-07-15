@@ -16,6 +16,7 @@ class TileWithPopup extends StatelessWidget {
     final theme = Theme.of(context);
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => showDialog(context: context, builder: (context) => popup),
       child: SizedBox(
         height: 48,
@@ -29,7 +30,12 @@ class TileWithPopup extends StatelessWidget {
             ValueListenableBuilder(
               valueListenable: valueNotifier,
               builder: (context, value, _) {
-                return Text(value.toString(),
+                //REFACTOR
+                String text = value is ThemeMode
+                    ? _getThemeModeName(value)
+                    : value.toString();
+
+                return Text(text,
                     style: theme.textTheme.labelMedium!
                         .apply(color: theme.colorScheme.surfaceContainerHigh));
               },
@@ -38,5 +44,15 @@ class TileWithPopup extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getThemeModeName(ThemeMode mode) {
+    String modeString = mode.toString();
+    int pointIndex = modeString.indexOf('.');
+    return _capitalize(modeString.substring(++pointIndex));
+  }
+
+  String _capitalize(String text) {
+    return "${text[0].toUpperCase()}${text.substring(1)}";
   }
 }
