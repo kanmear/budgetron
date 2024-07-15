@@ -19,6 +19,7 @@ class AboutPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const SizedBox(),
             Column(
               children: [
                 Text('Team:', style: theme.textTheme.bodyLarge),
@@ -29,8 +30,10 @@ class AboutPage extends StatelessWidget {
               ],
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text('Made with ❤️', style: theme.textTheme.bodyLarge),
+                Text('Gomel, Belarus', style: theme.textTheme.bodySmall),
                 const SizedBox(height: 16)
               ],
             )
