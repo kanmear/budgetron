@@ -1,4 +1,5 @@
 import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/ui/classes/text_buttons/small_text_button.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,7 @@ class SettingsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final appData = Provider.of<AppData>(context);
 
     final widgets = [
@@ -46,9 +48,31 @@ class SettingsList extends StatelessWidget {
           topText: 'Style and appearance',
           bottomText: 'Theme and icons'),
       SettingsListTile(
-          onTap: () => {},
-          iconData: Icons.color_lens_outlined,
-          topText: 'Language'),
+        onTap: () => showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  backgroundColor: theme.colorScheme.surface,
+                  contentPadding: const EdgeInsets.all(16),
+                  content: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        Text(
+                          'Support for other languages coming soon!',
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                        const SizedBox(height: 16),
+                        BudgetronSmallTextButton(
+                            text: 'Ok',
+                            onTap: () => Navigator.pop(context),
+                            isDelete: false)
+                      ],
+                    ),
+                  ),
+                )),
+        iconData: Icons.color_lens_outlined,
+        topText: 'Language',
+        bottomText: 'English',
+      ),
     ];
 
     return Expanded(
@@ -99,10 +123,12 @@ class SettingsListTile extends StatelessWidget {
         bottomText,
         style: theme.textTheme.labelMedium!
             .apply(color: colorScheme.surfaceContainerHigh),
+        overflow: TextOverflow.ellipsis,
       ));
     }
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => onTap(),
       child: SizedBox(
         height: 48,
