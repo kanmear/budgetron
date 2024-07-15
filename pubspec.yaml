@@ -33,3 +33,5 @@ flutter:
     - assets/
     - assets/icons/
     - assets/icons/nav_bar/
+    - assets/fonts/
+    - assets/fonts/nunito/
