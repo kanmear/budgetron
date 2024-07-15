@@ -15,9 +15,12 @@ class BudgetronKeyboardKey extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
-        onTap: () => onTap(),
-        child: Center(child: child),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => onTap(),
+          child: Center(child: child),
+        ),
       ),
     );
   }

@@ -61,6 +61,7 @@ class MainApp extends StatelessWidget {
     final textTheme = BudgetronFonts.textTheme;
 
     return MaterialApp(
+      title: 'Budgetron',
       themeMode: themeMode,
       theme: ThemeData(
           colorScheme: BudgetronColors.lightColorScheme, textTheme: textTheme),
