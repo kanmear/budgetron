@@ -26,9 +26,9 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get currency => globals.currency;
+  int get currencyIndex => globals.currencyIndex;
 
-  void setCurrency(String value) {
+  void setCurrency(int value) {
     SettingsService.setCurrency(value);
     notifyListeners();
   }

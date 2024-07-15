@@ -1,4 +1,5 @@
 enum DatePeriod {
+  //REFACTOR enum has indexes by default, remove these periodIndexes
   day(periodIndex: 0, name: 'Day'),
   week(periodIndex: 1, name: 'Week'),
   month(periodIndex: 2, name: 'Month'),

@@ -10,6 +10,7 @@ import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
@@ -32,9 +33,14 @@ class BudgetOverviewPage extends StatelessWidget {
     return ValueListenableBuilder(
         valueListenable: updateNotifier,
         builder: (context, update, _) {
+          final appData = Provider.of<AppData>(context);
           final budget = BudgetController.getBudget(budgetId);
 
-          final currency = Provider.of<AppData>(context).currency;
+          //REFACTOR should use a service that determines what to display
+          String currency = Currency.values
+              .where((e) => e.index == appData.currencyIndex)
+              .first
+              .code;
           final BudgetPeriod datePeriod =
               BudgetService.getPeriodByIndex(budget.budgetPeriodIndex);
 
@@ -352,10 +358,15 @@ class BudgetEntries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     //REFACTOR copy paste of _buildListView from entries_page.dart
     Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
     List<DateTime> entryDates = [];
-    var currency = Provider.of<AppData>(context).currency;
+
+    String currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     var datePeriod =
         DatePeriod.values.firstWhere((e) => e.name == budgetPeriod.name);

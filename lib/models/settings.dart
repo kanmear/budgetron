@@ -8,7 +8,7 @@ class Settings {
 
   // bool isDarkThemeOn;
   // int entryIconId;
-  String currency;
+  int currencyId;
 
   // internal data
   DateTime earliestEntryDate = DateTime.now();
@@ -25,7 +25,7 @@ class Settings {
 
   Settings({
     this.themeModeIndex = 0,
-    this.currency = '',
+    this.currencyId = 0,
     this.defaultAccountId = -1,
     this.legacyDateSelector = false,
     this.defaultDatePeriodEntries = 0,

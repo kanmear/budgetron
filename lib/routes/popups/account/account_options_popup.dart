@@ -2,6 +2,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/account/transaction.dart';
@@ -110,9 +111,13 @@ class CurrentBalance extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
 
-    final currency = Provider.of<AppData>(context).currency;
+    String currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     return Container(
         decoration: BoxDecoration(

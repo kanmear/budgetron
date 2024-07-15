@@ -2,7 +2,7 @@
 //settings
 import 'package:flutter/material.dart';
 
-String currency = '';
+int currencyIndex = 0;
 
 //internal data
 DateTime earliestEntryDate = DateTime.now();

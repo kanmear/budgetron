@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/db/accounts_controller.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/logic/category/category_service.dart';
@@ -33,8 +34,13 @@ class AccountsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
-    final currency = Provider.of<AppData>(context).currency;
+
+    String currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     return Expanded(
         child: StreamBuilder<List<Account>>(

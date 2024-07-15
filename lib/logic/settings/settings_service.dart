@@ -1,27 +1,26 @@
 import 'package:budgetron/globals.dart' as globals;
 
+import 'package:flutter/material.dart';
+
 import 'package:budgetron/db/settings_controller.dart';
 import 'package:budgetron/models/settings.dart';
-import 'package:flutter/src/material/app.dart';
 
 class SettingsService {
   static Future<void> loadDataToGlobals() async {
     Settings settings = await _getSettings();
 
-    globals.currency = settings.currency;
+    globals.currencyIndex = settings.currencyId;
     globals.earliestEntryDate = settings.earliestEntryDate;
     globals.defaultAccountId = settings.defaultAccountId;
-    globals.themeMode = ThemeMode.values
-        .where((e) => e.index == settings.themeModeIndex)
-        .toList()
-        .first;
+    globals.themeMode =
+        ThemeMode.values.where((e) => e.index == settings.themeModeIndex).first;
     // globals.defaultDatePeriodEntries = settings.defaultDatePeriodEntries;
     // globals.defaultDatePeriodGroups = settings.defaultDatePeriodGroups;
     // globals.defaultDatePeriodStats = settings.defaultDatePeriodStats;
   }
 
   //TODO remove separate getters
-  static Future<String> getCurrency() async => (await _getSettings()).currency;
+  static Future<int> getCurrency() async => (await _getSettings()).currencyId;
 
   static void setThemeMode(ThemeMode value) async {
     Settings settings = await _getSettings();
@@ -31,12 +30,12 @@ class SettingsService {
     globals.themeMode = value;
   }
 
-  static void setCurrency(String value) async {
+  static void setCurrency(int value) async {
     Settings settings = await _getSettings();
-    settings.currency = value;
+    settings.currencyId = value;
 
     SettingsController.updateSettings(settings);
-    globals.currency = value;
+    globals.currencyIndex = value;
   }
 
   //TODO remove separate getters

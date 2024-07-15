@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/models/enums/currency.dart';
 
 class LatestEntries extends StatelessWidget {
   const LatestEntries({super.key});
@@ -79,9 +80,13 @@ class EntryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
 
-    final currency = Provider.of<AppData>(context).currency;
+    String currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
     final category = entry.category.target!;
 
     return Container(

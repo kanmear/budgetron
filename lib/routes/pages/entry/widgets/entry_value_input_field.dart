@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/utils/interfaces.dart';
+import 'package:budgetron/models/enums/currency.dart';
 
 class EntryValueInputField extends StatelessWidget {
   final ValueNotifier<TabValue> tabNotifier;
@@ -16,9 +17,13 @@ class EntryValueInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
 
-    final currency = Provider.of<AppData>(context).currency;
+    String currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     return Expanded(
       child: Padding(

@@ -9,6 +9,7 @@ import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/db/entry_controller.dart';
 import 'package:budgetron/db/groups_controller.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/category/group.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
@@ -42,6 +43,7 @@ class GroupOverviewPage extends StatelessWidget {
 
         var title = "${group.name} Group";
         var entriesStream = EntryController.getEntries(
+            //FIX and check nothing breaks
             categoryFilter: [...group.categories.toList()]);
 
         return Scaffold(
@@ -181,7 +183,12 @@ class GroupEntries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var currency = Provider.of<AppData>(context).currency;
+    final appData = Provider.of<AppData>(context);
+
+    final currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     var selectedEntries = entries;
     if (!isEitherOr) {

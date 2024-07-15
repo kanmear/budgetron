@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/logic/account/account_service.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/models/category/category.dart';
@@ -34,6 +35,11 @@ class AccountOperationsPage extends StatelessWidget {
 
     final isLegacy = appData.legacyDateSelector;
 
+    String currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
+
     return Scaffold(
         appBar: const BudgetronAppBar(
             leading: ArrowBackIconButton(), title: 'Operations'),
@@ -43,7 +49,7 @@ class AccountOperationsPage extends StatelessWidget {
               account: account,
               dateTimeNotifier: dateTimeNotifier,
               datePeriodNotifier: datePeriodNotifier,
-              currency: appData.currency,
+              currency: currency,
               isLegacy: isLegacy,
               theme: theme),
           _resolveDateSelector(isLegacy)

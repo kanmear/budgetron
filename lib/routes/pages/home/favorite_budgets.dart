@@ -5,6 +5,7 @@ import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/db/budget_controller.dart';
 import 'package:budgetron/models/budget/budget.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/data_visualization/elements/progress_bar.dart';
@@ -114,9 +115,13 @@ class BudgetListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
 
-    final currency = Provider.of<AppData>(context).currency;
+    String currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     return Container(
       decoration: BoxDecoration(

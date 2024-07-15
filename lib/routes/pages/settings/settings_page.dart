@@ -1,13 +1,15 @@
-import 'package:budgetron/ui/classes/app_bar.dart';
-import 'package:budgetron/ui/classes/text_buttons/small_text_button.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/fonts.dart';
 import 'package:budgetron/ui/data/icons.dart';
+import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/pages/settings/style_page.dart';
+import 'package:budgetron/routes/pages/settings/currency_page.dart';
+import 'package:budgetron/ui/classes/text_buttons/small_text_button.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -36,59 +38,84 @@ class SettingsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final appData = Provider.of<AppData>(context);
 
-    final widgets = [
-      SettingsListTile(
-          onTap: () => {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const StylePage()))
-              },
-          iconData: Icons.color_lens_outlined,
-          topText: 'Style and appearance',
-          bottomText: 'Theme and icons'),
-      SettingsListTile(
-        onTap: () => showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  backgroundColor: theme.colorScheme.surface,
-                  contentPadding: const EdgeInsets.all(16),
-                  content: IntrinsicHeight(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Support for other languages coming soon!',
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                        const SizedBox(height: 16),
-                        BudgetronSmallTextButton(
-                            text: 'Ok',
-                            onTap: () => Navigator.pop(context),
-                            isDelete: false)
-                      ],
-                    ),
-                  ),
-                )),
-        iconData: Icons.color_lens_outlined,
-        topText: 'Language',
-        bottomText: 'English',
-      ),
-    ];
+    final ValueNotifier<bool> updateNotifier = ValueNotifier(false);
 
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
-            child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return widgets[index];
-                },
-                separatorBuilder: (context, _) {
-                  return const Padding(
-                    padding: EdgeInsets.only(top: 16, bottom: 16),
-                    child: HorizontalSeparator(),
-                  );
-                },
-                itemCount: widgets.length)));
+            child: ValueListenableBuilder(
+              valueListenable: updateNotifier,
+              builder: (context, updateValue, _) {
+                final appData = Provider.of<AppData>(context);
+
+                String currency = Currency.values
+                    .where((e) => e.index == appData.currencyIndex)
+                    .first
+                    .name;
+                final widgets = [
+                  SettingsListTile(
+                      onTap: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const StylePage()))
+                          },
+                      iconData: Icons.color_lens_outlined,
+                      topText: 'Style and appearance',
+                      bottomText: 'Theme and icons'),
+                  SettingsListTile(
+                      onTap: () => {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CurrencyPage(
+                                        updateNotifier: updateNotifier)))
+                          },
+                      iconData: Icons.color_lens_outlined,
+                      topText: 'Currency',
+                      bottomText: currency),
+                  SettingsListTile(
+                    onTap: () => showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                              backgroundColor: theme.colorScheme.surface,
+                              contentPadding: const EdgeInsets.all(16),
+                              content: IntrinsicHeight(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Support for other languages coming soon!',
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
+                                    const SizedBox(height: 16),
+                                    BudgetronSmallTextButton(
+                                        text: 'Ok',
+                                        onTap: () => Navigator.pop(context),
+                                        isDelete: false)
+                                  ],
+                                ),
+                              ),
+                            )),
+                    iconData: Icons.color_lens_outlined,
+                    topText: 'Language',
+                    bottomText: 'English',
+                  ),
+                ];
+
+                return ListView.separated(
+                    itemBuilder: (context, index) {
+                      return widgets[index];
+                    },
+                    separatorBuilder: (context, _) {
+                      return const Padding(
+                        padding: EdgeInsets.only(top: 16, bottom: 16),
+                        child: HorizontalSeparator(),
+                      );
+                    },
+                    itemCount: widgets.length);
+              },
+            )));
   }
 }
 
@@ -150,46 +177,6 @@ class SettingsListTile extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-//REFACTOR into proper widgets
-class CurrencySelector extends StatefulWidget {
-  final AppData appData;
-
-  const CurrencySelector({super.key, required this.appData});
-
-  @override
-  State<CurrencySelector> createState() => _CurrencySelectorState();
-}
-
-class _CurrencySelectorState extends State<CurrencySelector> {
-  @override
-  Widget build(BuildContext context) {
-    String currentValue = widget.appData.currency;
-
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text('Currency', style: BudgetronFonts.nunitoSize16Weight600),
-      //TODO replace with a separate page (similar to Categories)
-      DropdownButton<String>(
-          value: currentValue,
-          items: [
-            DropdownMenuItem(
-              value: 'BYN',
-              child: Text('BYN', style: BudgetronFonts.nunitoSize14Weight600),
-            ),
-            DropdownMenuItem(
-              value: 'USD',
-              child: Text('USD', style: BudgetronFonts.nunitoSize14Weight600),
-            )
-          ],
-          onChanged: (value) {
-            setState(() {
-              currentValue = value!;
-            });
-            widget.appData.setCurrency(value!);
-          })
-    ]);
   }
 }
 
