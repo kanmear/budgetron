@@ -1,3 +1,4 @@
+import 'package:budgetron/routes/pages/settings/about_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/routes/pages/group/group_page.dart';
@@ -48,12 +49,12 @@ class DrawerEntries extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const DrawerEntryTile(
-          name: 'Premium',
-          route: SettingsPage(),
-          iconData: Icons.star,
-        ),
-        const SizedBox(height: 16),
+        // const DrawerEntryTile(
+        //   name: 'Premium',
+        //   route: SettingsPage(),
+        //   iconData: Icons.star,
+        // ),
+        // const SizedBox(height: 16),
         DrawerEntryTile(
           name: 'Categories',
           route: CategoriesPage(),
@@ -83,14 +84,14 @@ class DrawerEntries extends StatelessWidget {
           route: SettingsPage(),
           iconData: Icons.settings,
         ),
-        DrawerEntryTile(
-          name: 'Support',
-          route: CategoriesPage(),
-          iconData: Icons.help,
-        ),
-        DrawerEntryTile(
+        // DrawerEntryTile(
+        //   name: 'Support',
+        //   route: CategoriesPage(),
+        //   iconData: Icons.help,
+        // ),
+        const DrawerEntryTile(
           name: 'About',
-          route: CategoriesPage(),
+          route: AboutPage(),
           iconData: Icons.people,
         ),
       ],
