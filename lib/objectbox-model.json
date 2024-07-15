@@ -151,7 +151,7 @@
     },
     {
       "id": "6:9083894278175952157",
-      "lastPropertyId": "8:726246260283058766",
+      "lastPropertyId": "9:7395672813503680238",
       "name": "Settings",
       "properties": [
         {
@@ -193,6 +193,11 @@
         {
           "id": "8:726246260283058766",
           "name": "defaultDatePeriodGroups",
+          "type": 6
+        },
+        {
+          "id": "9:7395672813503680238",
+          "name": "themeModeIndex",
           "type": 6
         }
       ],

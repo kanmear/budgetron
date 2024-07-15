@@ -21,7 +21,10 @@ class Settings {
   int defaultDatePeriodStats;
   int defaultDatePeriodGroups;
 
+  int themeModeIndex;
+
   Settings({
+    this.themeModeIndex = 0,
     this.currency = '',
     this.defaultAccountId = -1,
     this.legacyDateSelector = false,

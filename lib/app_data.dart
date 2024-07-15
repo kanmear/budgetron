@@ -5,13 +5,12 @@ import 'package:budgetron/ui/data/colors.dart';
 import 'package:budgetron/logic/settings/settings_service.dart';
 
 class AppData extends ChangeNotifier {
-  late ThemeMode _themeMode = ThemeMode.light;
   late ColorScheme _darkScheme = BudgetronColors.darkColorScheme;
   late ColorScheme _lightScheme = BudgetronColors.lightColorScheme;
 
-  ThemeMode get themeMode => _themeMode;
+  ThemeMode get themeMode => globals.themeMode;
   void setThemeMode(ThemeMode value) {
-    _themeMode = value;
+    SettingsService.setThemeMode(value);
     notifyListeners();
   }
 
