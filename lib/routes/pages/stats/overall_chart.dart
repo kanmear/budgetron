@@ -1,12 +1,15 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
-import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
-import 'package:budgetron/logic/category/category_service.dart';
-import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/models/enums/currency.dart';
+import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/logic/category/category_service.dart';
+import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
+import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
 class OverallChart extends StatelessWidget {
   const OverallChart(
@@ -19,7 +22,13 @@ class OverallChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
+
+    final currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     //HACK animatedBuilder allows listening to multiple values
     return AnimatedBuilder(
@@ -49,7 +58,7 @@ class OverallChart extends StatelessWidget {
                         const SizedBox(height: 20),
                         BudgetronPieChart(
                           data: data,
-                          child: _formChild(totalValue, context),
+                          child: _formChild(totalValue, currency, theme),
                         ),
                         const SizedBox(height: 2),
                         TopThreeCategories(data: data, total: totalValue)
@@ -131,11 +140,26 @@ class OverallChart extends StatelessWidget {
     return data.values.toList();
   }
 
-  Widget _formChild(double value, BuildContext context) {
+  Widget _formChild(double value, String currency, ThemeData theme) {
     return Center(
-      child: Text(
-        value.toStringAsFixed(2),
-        style: Theme.of(context).textTheme.headlineLarge,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              value.toStringAsFixed(2),
+              style: theme.textTheme.headlineLarge,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Text(
+            " $currency",
+            style: theme.textTheme.headlineLarge,
+          )
+        ],
       ),
     );
   }
@@ -222,7 +246,13 @@ class CategoryWithProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
+
+    final currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     double value = data.value;
 
@@ -232,7 +262,7 @@ class CategoryWithProgressBar extends StatelessWidget {
         leading: _getLeading(data, theme),
         currentValue: value,
         totalValue: total,
-        trailing: _getTrailing(value, total, theme),
+        trailing: _getTrailing(value, total, currency, theme),
       )
     ]);
   }
@@ -247,10 +277,12 @@ class CategoryWithProgressBar extends StatelessWidget {
     );
   }
 
-  Widget _getTrailing(double value, double total, ThemeData theme) {
+  Widget _getTrailing(
+      double value, double total, String currency, ThemeData theme) {
     return Row(
       children: [
-        Text(value.toStringAsFixed(2), style: theme.textTheme.labelMedium),
+        Text("${value.toStringAsFixed(2)} $currency",
+            style: theme.textTheme.labelMedium),
         const SizedBox(width: 8),
         Text('•',
             style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8)),

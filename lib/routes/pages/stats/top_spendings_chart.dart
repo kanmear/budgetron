@@ -1,8 +1,11 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/models/enums/currency.dart';
+import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
@@ -14,7 +17,13 @@ class TopSpendingsChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
+
+    final currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
 
     return ValueListenableBuilder(
         valueListenable: dateTimeNotifier,
@@ -50,8 +59,11 @@ class TopSpendingsChart extends StatelessWidget {
                             children: [
                               BudgetronPieChart(
                                   data: data,
-                                  child: _formChild(totalValue,
-                                      totalValueOfTopSpendings, theme)),
+                                  child: _formChild(
+                                      totalValue,
+                                      totalValueOfTopSpendings,
+                                      currency,
+                                      theme)),
                               const SizedBox(width: 20),
                               TopCategories(data: data, totalValue: totalValue)
                             ],
@@ -139,21 +151,38 @@ class TopSpendingsChart extends StatelessWidget {
     return values;
   }
 
-  Widget _formChild(
-      double totalValue, double totalValueOfTopSpendings, ThemeData theme) {
+  Widget _formChild(double totalValue, double totalValueOfTopSpendings,
+      String currency, ThemeData theme) {
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            totalValueOfTopSpendings.toStringAsFixed(2),
-            style: theme.textTheme.headlineLarge,
+          SizedBox(
+            width: 100,
+            child: Text(
+              totalValueOfTopSpendings.toStringAsFixed(2),
+              style: theme.textTheme.headlineLarge,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+          SizedBox(
+            width: 100,
+            child: Text(
+              'of ${totalValue.toStringAsFixed(2)}',
+              style: theme.textTheme.headlineLarge!
+                  .apply(color: theme.colorScheme.surfaceContainerHigh),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
           Text(
-            'of ${totalValue.toStringAsFixed(2)}',
+            currency,
             style: theme.textTheme.headlineLarge!
                 .apply(color: theme.colorScheme.surfaceContainerHigh),
-          ),
+          )
         ],
       ),
     );
