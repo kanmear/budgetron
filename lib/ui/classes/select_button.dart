@@ -32,10 +32,12 @@ class BudgetronSelectButton extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SelectedItem(
-                      valueNotifier: valueNotifier,
-                      hintText: hintText,
-                      defaultValue: defaultValue),
+                  Expanded(
+                    child: SelectedItem(
+                        valueNotifier: valueNotifier,
+                        hintText: hintText,
+                        defaultValue: defaultValue),
+                  ),
                   Icon(Icons.arrow_right,
                       color: Theme.of(context).colorScheme.primary)
                 ])));
@@ -73,7 +75,13 @@ class SelectedItem extends StatelessWidget {
               Icon(Icons.square_rounded,
                   size: 18, color: CategoryService.stringToColor(value.color)),
               const SizedBox(width: 4),
-              Text(value.toString(), style: theme.textTheme.bodyMedium)
+              Expanded(
+                child: Text(
+                  value.toString(),
+                  style: theme.textTheme.bodyMedium,
+                  maxLines: 1,
+                ),
+              )
             ]);
           }
         });
