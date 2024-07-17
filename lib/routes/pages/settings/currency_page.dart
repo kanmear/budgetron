@@ -1,9 +1,10 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/app_data.dart';
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/models/enums/currency.dart';
-import 'package:budgetron/logic/settings/settings_service.dart';
 
 class CurrencyPage extends StatelessWidget {
   final ValueNotifier<bool> updateNotifier;
@@ -57,11 +58,12 @@ class CurrencyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () => _selectCurrency(context),
+      onTap: () => _selectCurrency(context, appData),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -84,8 +86,8 @@ class CurrencyTile extends StatelessWidget {
     );
   }
 
-  void _selectCurrency(BuildContext context) {
-    SettingsService.setCurrency(currency.index);
+  void _selectCurrency(BuildContext context, AppData appData) {
+    appData.setCurrency(currency.index);
     updateNotifier.value = !updateNotifier.value;
     Navigator.pop(context);
   }
