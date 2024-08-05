@@ -72,7 +72,7 @@ class SettingsList extends StatelessWidget {
                                     builder: (context) => CurrencyPage(
                                         updateNotifier: updateNotifier)))
                           },
-                      iconData: Icons.color_lens_outlined,
+                      iconData: Icons.monetization_on_outlined,
                       topText: 'Currency',
                       bottomText: currency),
                   SettingsListTile(
@@ -97,7 +97,7 @@ class SettingsList extends StatelessWidget {
                                 ),
                               ),
                             )),
-                    iconData: Icons.color_lens_outlined,
+                    iconData: Icons.language_outlined,
                     topText: 'Language',
                     bottomText: 'English',
                   ),
