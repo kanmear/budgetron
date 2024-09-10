@@ -19,7 +19,7 @@ class CustomEntryListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    //FIX hardcoded padding sum value
+    //FIX hardcoded list tile margins sum value
     //REFACTOR calculate once in the Main
     final listTileWidth = (MediaQuery.of(context).size.width - 32).floor();
     final leftPartWidth = listTileWidth / 3 * 2;
@@ -52,7 +52,7 @@ class CustomEntryListTile extends StatelessWidget {
             ),
           ),
           SizedBox(
-              //HACK what the fuck is that magic number? width of ellipse?
+              //FIX hardcoded edge insets sum value
               width: rightPartWidth - 24,
               child: Text(
                 trailingString,
