@@ -2,9 +2,10 @@ import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/db/category_controller.dart';
 import 'package:budgetron/ui/classes/search_field.dart';
+import 'package:budgetron/models/category/category.dart';
+import 'package:budgetron/ui/classes/list_tiles/list_tile.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
 import 'package:budgetron/ui/classes/floating_action_button.dart';
@@ -103,22 +104,15 @@ class CategoriesList extends StatelessWidget {
 
   InkWell _categoryListTile(EntryCategory category, BuildContext context) {
     return InkWell(
-      onTap: () => _showEditCategoryDialog(category, context),
-      child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: theme.colorScheme.surfaceContainerLowest),
-          child: Row(children: [
-            Container(
-                padding: const EdgeInsets.only(right: 8),
-                child: Icon(Icons.square_rounded,
-                    size: 18,
-                    color: CategoryService.stringToColor(category.color))),
-            Text(category.name, style: theme.textTheme.bodyMedium)
-          ])),
-    );
+        onTap: () => _showEditCategoryDialog(category, context),
+        child: CustomEntryListTile(
+          leadingIcon: _getLeadingIcon(category.color),
+          leadingString: category.name,
+        ));
   }
+
+  _getLeadingIcon(String color) => Icon(Icons.square_rounded,
+      size: 18, color: CategoryService.stringToColor(color));
 
   void _showEditCategoryDialog(EntryCategory category, BuildContext context) =>
       showDialog(

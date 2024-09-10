@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:budgetron/utils/string_utils.dart';
+
 class CustomEntryListTile extends StatelessWidget {
   final Widget leadingIcon;
   final String leadingString;
@@ -12,18 +14,22 @@ class CustomEntryListTile extends StatelessWidget {
     required this.leadingIcon,
     required this.leadingString,
     this.leadingOption = const SizedBox(),
-    required this.trailingString,
+    this.trailingString = StringUtils.emptyString,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    //FIX hardcoded list tile margins sum value
+    //FIX hardcoded list tile margins sum value (32)
+    //FIX hardcoded edge insets sum value (24)
     //REFACTOR calculate once in the Main
-    final listTileWidth = (MediaQuery.of(context).size.width - 32).floor();
-    final leftPartWidth = listTileWidth / 3 * 2;
-    final rightPartWidth = listTileWidth / 3;
+    final listTileWidth = (MediaQuery.of(context).size.width - 32 - 24).floor();
+    final isTrailingEmpty = trailingString.isEmpty;
+
+    final leftPartWidth =
+        isTrailingEmpty ? listTileWidth.toDouble() : listTileWidth / 3 * 2;
+    final rightPartWidth = isTrailingEmpty ? 0.toDouble() : listTileWidth / 3;
 
     return Container(
       decoration: BoxDecoration(
@@ -52,8 +58,7 @@ class CustomEntryListTile extends StatelessWidget {
             ),
           ),
           SizedBox(
-              //FIX hardcoded edge insets sum value
-              width: rightPartWidth - 24,
+              width: rightPartWidth,
               child: Text(
                 trailingString,
                 textAlign: TextAlign.end,

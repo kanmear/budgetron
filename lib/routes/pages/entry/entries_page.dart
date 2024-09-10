@@ -1,4 +1,3 @@
-import 'package:budgetron/ui/classes/list_tiles/entry_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +12,7 @@ import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/date_selector.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/ui/classes/list_tiles/list_tile.dart';
 import 'package:budgetron/ui/classes/date_selector_legacy.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
