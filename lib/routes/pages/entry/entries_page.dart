@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/classes/list_tiles/entry_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -303,38 +304,14 @@ class EntryListTile extends StatelessWidget {
         return Column(
           children: [
             _resolveWrapperWidget(
-                context,
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: theme.colorScheme.surfaceContainerLowest),
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.square_rounded,
-                                size: 18,
-                                color: CategoryService.stringToColor(
-                                    category.color),
-                              ),
-                              const SizedBox(width: 8),
-                              _resolveTileName()
-                            ],
-                          ),
-                          Text(
-                            _resolveSum(),
-                            style: theme.textTheme.bodyMedium,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                )),
+              context,
+              CustomEntryListTile(
+                leadingIcon: _getLeadingIcon(),
+                leadingString: category.name,
+                leadingOption: _getLeadingOption(),
+                trailingString: _resolveSum(),
+              ),
+            ),
             _expandedView(context),
             //REFACTOR replace with listview.separated
             const SizedBox(height: 8)
@@ -359,19 +336,18 @@ class EntryListTile extends StatelessWidget {
         child: child);
   }
 
+  _getLeadingIcon() => Icon(
+        Icons.square_rounded,
+        size: 18,
+        color: CategoryService.stringToColor(category.color),
+      );
+
+  _getLeadingOption() => isExpandable && entries.length > 1
+      ? Icon(Icons.arrow_drop_down, color: theme.colorScheme.primary)
+      : const SizedBox();
+
   _toggleExpandedView() =>
       isExpandedListenable.value = !isExpandedListenable.value;
-
-  _resolveTileName() {
-    return Row(
-      children: [
-        Text(category.name, style: theme.textTheme.bodyMedium),
-        isExpandable && entries.length > 1
-            ? Icon(Icons.arrow_drop_down, color: theme.colorScheme.primary)
-            : const SizedBox()
-      ],
-    );
-  }
 
   _resolveSum() {
     return entries
