@@ -72,8 +72,8 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                           const SizedBox(width: 8),
                           //REFACTOR this is a weird way to do this
                           if (widget.leading != null) widget.leading!(object),
-                          SizedBox(
-                            width: textMaxWidth,
+                          Container(
+                            constraints: BoxConstraints(maxWidth: textMaxWidth),
                             child: Text(
                               object.toString(),
                               style: theme.textTheme.bodyMedium,
