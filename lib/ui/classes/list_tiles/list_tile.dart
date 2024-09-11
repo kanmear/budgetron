@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/utils/string_utils.dart';
 
-class CustomEntryListTile extends StatelessWidget {
+class CustomListTile extends StatelessWidget {
   final Widget leadingIcon;
   final String leadingString;
   final Widget leadingOption;
 
   final String trailingString;
 
-  const CustomEntryListTile({
+  const CustomListTile({
     super.key,
     required this.leadingIcon,
     required this.leadingString,

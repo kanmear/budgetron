@@ -105,7 +105,7 @@ class CategoriesList extends StatelessWidget {
   InkWell _categoryListTile(EntryCategory category, BuildContext context) {
     return InkWell(
         onTap: () => _showEditCategoryDialog(category, context),
-        child: CustomEntryListTile(
+        child: CustomListTile(
           leadingIcon: _getLeadingIcon(category.color),
           leadingString: category.name,
         ));

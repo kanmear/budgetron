@@ -305,7 +305,7 @@ class EntryListTile extends StatelessWidget {
           children: [
             _resolveWrapperWidget(
               context,
-              CustomEntryListTile(
+              CustomListTile(
                 leadingIcon: _getLeadingIcon(),
                 leadingString: category.name,
                 leadingOption: _getLeadingOption(),
