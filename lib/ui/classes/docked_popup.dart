@@ -13,7 +13,10 @@ class DockedDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    double screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery.of(context).size.width;
+    //FIX hardcoded list tile margins sum value (32)
+    //REFACTOR calculate once in the Main
+    final titleMaxWidth = (screenWidth - 32) / 6 * 5;
 
     return AlertDialog(
       shape: const RoundedRectangleBorder(
@@ -34,7 +37,14 @@ class DockedDialog extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(title, style: theme.textTheme.headlineLarge),
+                    SizedBox(
+                        width: titleMaxWidth,
+                        child: Text(
+                          title,
+                          style: theme.textTheme.headlineLarge,
+                          softWrap: false,
+                          overflow: TextOverflow.ellipsis,
+                        )),
                     GestureDetector(
                       onTap: () => Navigator.pop(context),
                       child: Icon(
