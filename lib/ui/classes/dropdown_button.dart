@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BudgetronDropdownButton extends StatefulWidget {
-  //REFACTOR is it possible to not use valuenotifier?
+  //REFACTOR is it possible to not use ValueNotifier?
   final ValueNotifier<Object?> valueNotifier;
   final Future<List<Object>> items;
   final Function? leading;
@@ -31,6 +31,11 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    //FIX hardcoded list tile margins sum value (32)
+    //REFACTOR calculate once in the Main
+    final screenWidth = (MediaQuery.of(context).size.width).floor();
+    final textMaxWidth = screenWidth / 4 * 3 - 32;
 
     return Container(
         padding: EdgeInsets.zero,
@@ -67,8 +72,15 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                           const SizedBox(width: 8),
                           //REFACTOR this is a weird way to do this
                           if (widget.leading != null) widget.leading!(object),
-                          Text(object.toString(),
-                              style: theme.textTheme.bodyMedium)
+                          SizedBox(
+                            width: textMaxWidth,
+                            child: Text(
+                              object.toString(),
+                              style: theme.textTheme.bodyMedium,
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
                         ]),
                       );
                     }).toList(),
