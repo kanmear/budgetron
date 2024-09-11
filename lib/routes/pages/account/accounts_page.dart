@@ -1,3 +1,4 @@
+import 'package:budgetron/ui/classes/list_tiles/list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -86,30 +87,15 @@ class AccountListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () => showDialog(
-          context: context,
-          builder: (context) => AccountOptionsDialog(account: account)),
-      child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: theme.colorScheme.surfaceContainerLowest),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(children: [
-              Icon(Icons.square_rounded,
-                  size: 18,
-                  color: CategoryService.stringToColor(account.color)),
-              const SizedBox(width: 8),
-              Text(account.name, style: theme.textTheme.bodyMedium)
-            ]),
-            Row(children: [
-              Text(account.balance.toStringAsFixed(2),
-                  style: theme.textTheme.bodyMedium),
-              Text(" $currency", style: theme.textTheme.titleSmall)
-            ])
-          ])),
-    );
+        behavior: HitTestBehavior.opaque,
+        onTap: () => showDialog(
+            context: context,
+            builder: (context) => AccountOptionsDialog(account: account)),
+        child: CustomListTile(
+          leadingIcon: Icon(Icons.square_rounded,
+              size: 18, color: CategoryService.stringToColor(account.color)),
+          leadingString: account.name,
+          trailingString: "${account.balance.toStringAsFixed(2)} $currency",
+        ));
   }
 }
