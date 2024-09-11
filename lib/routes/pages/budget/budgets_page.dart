@@ -173,7 +173,7 @@ class BudgetListTile extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: theme.colorScheme.surfaceContainerLowest),
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(12),
         child: Column(
           children: [
             ListTileWithProgressBar(
@@ -213,7 +213,14 @@ class BudgetListTile extends StatelessWidget {
         Icon(Icons.square_rounded,
             size: 18, color: CategoryService.stringToColor(category.color)),
         const SizedBox(width: 4),
-        Text(category.name, style: theme.textTheme.bodyMedium),
+        Flexible(
+          child: Text(
+            category.name,
+            style: theme.textTheme.bodyMedium,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }
@@ -221,15 +228,27 @@ class BudgetListTile extends StatelessWidget {
   Widget _getTrailing(
       double currentValue, double targetValue, String currency) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(currentValue.toStringAsFixed(2),
-            style: theme.textTheme.labelMedium),
+        Flexible(
+          child: Text(
+            currentValue.toStringAsFixed(2),
+            style: theme.textTheme.labelMedium,
+            textAlign: TextAlign.end,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         const SizedBox(width: 8),
-        Text('•',
-            style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8)),
+        Text(
+          '•',
+          style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8),
+        ),
         const SizedBox(width: 8),
-        Text("${targetValue.toStringAsFixed(0)} $currency",
-            style: theme.textTheme.labelMedium),
+        Text(
+          "${targetValue.toStringAsFixed(0)} $currency",
+          style: theme.textTheme.labelMedium,
+        ),
       ],
     );
   }

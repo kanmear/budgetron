@@ -226,18 +226,35 @@ class CategoryWithProgressBar extends StatelessWidget {
     return Row(children: [
       Icon(Icons.square_rounded, size: 18, color: data.color),
       const SizedBox(width: 4),
-      Text(data.name, style: theme.textTheme.bodyMedium),
+      Flexible(
+          child: Text(
+        data.name,
+        style: theme.textTheme.bodyMedium,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      )),
     ]);
   }
 
   Widget _getTrailing(double value, double total) {
-    return Row(children: [
-      Text(value.toStringAsFixed(2), style: theme.textTheme.labelMedium),
+    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+      Flexible(
+          child: Text(
+        value.toStringAsFixed(2),
+        style: theme.textTheme.labelMedium,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      )),
       const SizedBox(width: 8),
-      Text('•', style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8)),
+      Text(
+        '•',
+        style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8),
+      ),
       const SizedBox(width: 8),
-      Text("${(value / total * 100).toStringAsFixed(0)}%",
-          style: theme.textTheme.labelMedium)
+      Text(
+        "${(value / total * 100).toStringAsFixed(0)}%",
+        style: theme.textTheme.labelMedium,
+      )
     ]);
   }
 }

@@ -307,17 +307,27 @@ class BudgetProgressBar extends StatelessWidget {
 
   Widget _getLeading(double value, ThemeData theme) {
     return Row(children: [
-      Text(value.toStringAsFixed(2), style: theme.textTheme.labelMedium),
+      Flexible(
+          child: Text(
+        value.toStringAsFixed(2),
+        style: theme.textTheme.labelMedium,
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      )),
       const SizedBox(width: 2),
       Text(currency, style: theme.textTheme.titleSmall),
     ]);
   }
 
   Widget _getTrailing(double value, ThemeData theme) {
-    return Row(children: [
-      Text(value.toStringAsFixed(0),
-          style: theme.textTheme.labelMedium!
-              .apply(color: theme.colorScheme.surfaceContainerHigh)),
+    return Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+      Text(
+        value.toStringAsFixed(0),
+        style: theme.textTheme.labelMedium!
+            .apply(color: theme.colorScheme.surfaceContainerHigh),
+        softWrap: false,
+        overflow: TextOverflow.ellipsis,
+      ),
       const SizedBox(width: 2),
       Text(currency, style: theme.textTheme.titleSmall),
     ]);

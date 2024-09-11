@@ -50,8 +50,7 @@ class OverallChart extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .surfaceContainerLowest),
-                    padding: const EdgeInsets.only(
-                        top: 12, left: 10, right: 10, bottom: 12),
+                    padding: const EdgeInsets.all(12),
                     child: Column(
                       children: [
                         ExpenseFilterTabs(isExpenseFilterNotifier),
@@ -272,7 +271,14 @@ class CategoryWithProgressBar extends StatelessWidget {
       children: [
         Icon(Icons.square_rounded, size: 18, color: data.color),
         const SizedBox(width: 4),
-        Text(data.name, style: theme.textTheme.bodyMedium),
+        Flexible(
+          child: Text(
+            data.name,
+            style: theme.textTheme.bodyMedium,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ],
     );
   }
@@ -280,15 +286,27 @@ class CategoryWithProgressBar extends StatelessWidget {
   Widget _getTrailing(
       double value, double total, String currency, ThemeData theme) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text("${value.toStringAsFixed(2)} $currency",
-            style: theme.textTheme.labelMedium),
+        Flexible(
+          child: Text(
+            "${value.toStringAsFixed(2)} $currency",
+            style: theme.textTheme.labelMedium,
+            textAlign: TextAlign.end,
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
         const SizedBox(width: 8),
-        Text('•',
-            style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8)),
+        Text(
+          '•',
+          style: theme.textTheme.titleSmall!.apply(fontSizeFactor: 0.8),
+        ),
         const SizedBox(width: 8),
-        Text("${(value / total * 100).toStringAsFixed(0)}%",
-            style: theme.textTheme.labelMedium),
+        Text(
+          "${(value / total * 100).toStringAsFixed(0)}%",
+          style: theme.textTheme.labelMedium,
+        ),
       ],
     );
   }
