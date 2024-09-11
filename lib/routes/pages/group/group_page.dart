@@ -83,7 +83,12 @@ class GroupListTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(group.name, style: theme.textTheme.bodyMedium),
+              Text(
+                group.name,
+                style: theme.textTheme.bodyMedium,
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+              ),
               const SizedBox(height: 8),
               GroupCategoriesList(categories: group.categories.toList())
             ],
