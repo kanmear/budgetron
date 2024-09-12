@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:budgetron/models/enums/date_period.dart';
+import 'package:budgetron/ui/classes/date_selector.dart';
 
 //REFACTOR a lot of similarity with other date selectors
 class DateSelectorGroups extends StatelessWidget {
@@ -130,10 +131,15 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
       wouldBeDate = DateUtils.addMonthsToMonthDate(wouldBeDate, value);
       var wouldBeShifted = BudgetronDateUtils.shiftToEndOfMonth(wouldBeDate);
       var nowShifted = BudgetronDateUtils.shiftToEndOfMonth(now);
+      if (value == 1) {}
+      print('wouldBeShifted: $wouldBeShifted');
+      print('nowShifted $nowShifted');
 
-      return value > 0
+      var r = value > 0
           ? (wouldBeDate.isBefore(nowShifted))
           : (wouldBeShifted.isAfter(widget.earliestDate));
+      print(r);
+      return r;
     } else {
       //year period
       return value > 0
@@ -183,32 +189,5 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
     setState(() {
       widget.dateTimeNotifier.value = [newFromDate, newToDate];
     });
-  }
-}
-
-class ArrowIcon extends StatelessWidget {
-  const ArrowIcon(
-      {super.key,
-      required this.onTap,
-      required this.isEnabled,
-      required this.iconData});
-
-  final Function onTap;
-  final bool isEnabled;
-  final IconData iconData;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () => isEnabled ? onTap() : {},
-        child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Icon(iconData, color: _resolveColor(context, isEnabled))));
-  }
-
-  Color _resolveColor(BuildContext context, bool isEnabled) {
-    var colorScheme = Theme.of(context).colorScheme;
-    return isEnabled ? colorScheme.primary : colorScheme.outline;
   }
 }
