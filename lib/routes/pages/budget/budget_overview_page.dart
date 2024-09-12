@@ -378,8 +378,21 @@ class BudgetEntries extends StatelessWidget {
         .first
         .code;
 
-    var datePeriod =
-        DatePeriod.values.firstWhere((e) => e.name == budgetPeriod.name);
+    DatePeriod datePeriod;
+    switch (budgetPeriod) {
+      case BudgetPeriod.week:
+        datePeriod = DatePeriod.day;
+        break;
+      case BudgetPeriod.month:
+        datePeriod = DatePeriod.day;
+        break;
+      case BudgetPeriod.year:
+        datePeriod = DatePeriod.month;
+        break;
+      default:
+        throw Exception('Not a valid date period.');
+    }
+
     EntryService.formEntriesData(datePeriod, entries, entriesMap, entryDates);
 
     return Flexible(
