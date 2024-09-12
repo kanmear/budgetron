@@ -132,14 +132,10 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
       var wouldBeShifted = BudgetronDateUtils.shiftToEndOfMonth(wouldBeDate);
       var nowShifted = BudgetronDateUtils.shiftToEndOfMonth(now);
       if (value == 1) {}
-      print('wouldBeShifted: $wouldBeShifted');
-      print('nowShifted $nowShifted');
 
-      var r = value > 0
+      return value > 0
           ? (wouldBeDate.isBefore(nowShifted))
           : (wouldBeShifted.isAfter(widget.earliestDate));
-      print(r);
-      return r;
     } else {
       //year period
       return value > 0
