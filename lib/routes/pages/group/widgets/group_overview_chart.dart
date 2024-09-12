@@ -44,6 +44,8 @@ class GroupOverviewChart extends StatelessWidget {
                 child: Column(children: [
                   ExpenseFilterTabs(isExpenseFilterNotifier,
                       isEnabled: !isEitherOr),
+                  //REFACTOR atrocious
+                  !isEitherOr ? const SizedBox(height: 24) : const SizedBox(),
                   BudgetronPieChart(
                     data: data.isNotEmpty
                         ? data
@@ -142,7 +144,6 @@ class ExpenseFilterTabs extends StatelessWidget {
               ]),
             );
           }),
-      const SizedBox(height: 24)
     ]);
   }
 

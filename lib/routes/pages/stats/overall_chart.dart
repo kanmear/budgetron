@@ -8,6 +8,7 @@ import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
+import 'package:budgetron/routes/pages/group/widgets/group_overview_chart.dart';
 import 'package:budgetron/ui/classes/data_visualization/elements/pie_chart.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
@@ -50,17 +51,27 @@ class OverallChart extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .surfaceContainerLowest),
-                    padding: const EdgeInsets.all(12),
                     child: Column(
                       children: [
-                        ExpenseFilterTabs(isExpenseFilterNotifier),
-                        const SizedBox(height: 20),
-                        BudgetronPieChart(
-                          data: data,
-                          child: _formChild(totalValue, currency, theme),
+                        ExpenseFilterTabs(
+                          isExpenseFilterNotifier,
+                          isEnabled: true,
                         ),
-                        const SizedBox(height: 2),
-                        TopThreeCategories(data: data, total: totalValue)
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 12, right: 12, bottom: 12),
+                          child: Column(
+                            children: [
+                              BudgetronPieChart(
+                                data: data,
+                                child: _formChild(totalValue, currency, theme),
+                              ),
+                              const SizedBox(height: 2),
+                              TopThreeCategories(data: data, total: totalValue)
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -75,25 +86,30 @@ class OverallChart extends StatelessWidget {
                         color: Theme.of(context)
                             .colorScheme
                             .surfaceContainerLowest),
-                    padding: const EdgeInsets.only(
-                        top: 12, left: 10, right: 10, bottom: 12),
                     child: Column(
                       children: [
-                        ExpenseFilterTabs(isExpenseFilterNotifier),
+                        ExpenseFilterTabs(
+                          isExpenseFilterNotifier,
+                          isEnabled: true,
+                        ),
                         const SizedBox(height: 20),
-                        BudgetronPieChart(
-                          data: [
-                            PieChartData(
-                                color: Theme.of(context).colorScheme.outline,
-                                value: 1,
-                                name: '')
-                          ],
-                          child: Center(
-                            child: Text(
-                              'No data to display',
-                              style: theme.textTheme.bodyMedium!.apply(
-                                  color:
-                                      theme.colorScheme.surfaceContainerHigh),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 12, right: 12, bottom: 12),
+                          child: BudgetronPieChart(
+                            data: [
+                              PieChartData(
+                                  color: Theme.of(context).colorScheme.outline,
+                                  value: 1,
+                                  name: '')
+                            ],
+                            child: Center(
+                              child: Text(
+                                'No data to display',
+                                style: theme.textTheme.bodyMedium!.apply(
+                                    color:
+                                        theme.colorScheme.surfaceContainerHigh),
+                              ),
                             ),
                           ),
                         ),
@@ -161,56 +177,6 @@ class OverallChart extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class ExpenseFilterTabs extends StatelessWidget {
-  final ValueNotifier<bool> isExpenseFilterNotifier;
-
-  const ExpenseFilterTabs(this.isExpenseFilterNotifier, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: isExpenseFilterNotifier,
-      builder: (BuildContext context, value, Widget? child) {
-        return Align(
-            alignment: Alignment.centerLeft,
-            child: Row(
-              children: [
-                _filterTab(context, const EdgeInsets.only(right: 12),
-                    'Expenses', true),
-                _filterTab(
-                    context, const EdgeInsets.only(left: 12), 'Income', false),
-              ],
-            ));
-      },
-    );
-  }
-
-  InkWell _filterTab(BuildContext context, EdgeInsetsGeometry padding,
-      String name, bool value) {
-    final theme = Theme.of(context);
-
-    return InkWell(
-        onTap: () => _updateFilter(value),
-        child: Padding(
-          padding: padding,
-          child: Container(
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        width: 1,
-                        color: isExpenseFilterNotifier.value == value
-                            ? theme.colorScheme.primary
-                            : Colors.transparent))),
-            child: Text(name, style: theme.textTheme.headlineMedium),
-          ),
-        ));
-  }
-
-  _updateFilter(bool isExpense) {
-    isExpenseFilterNotifier.value = isExpense;
   }
 }
 
