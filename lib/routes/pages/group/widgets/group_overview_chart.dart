@@ -61,14 +61,14 @@ class GroupOverviewChart extends StatelessWidget {
           });
     } else {
       //FIX code duplication
-      //FIX incorrectly displayed
       //FIX missing tabs
       return Container(
+          width: double.infinity,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(2),
               color: theme.colorScheme.surfaceContainerLowest),
           padding:
-              const EdgeInsets.only(top: 24, left: 10, right: 10, bottom: 12),
+              const EdgeInsets.only(top: 24, left: 10, right: 10, bottom: 24),
           child: Column(children: [
             BudgetronPieChart(
                 data: [
