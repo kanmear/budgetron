@@ -32,6 +32,7 @@ class CustomListTile extends StatelessWidget {
     final rightPartWidth = isTrailingEmpty ? 0.toDouble() : listTileWidth / 3;
 
     return Container(
+      height: 48,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: theme.colorScheme.surfaceContainerLowest),
