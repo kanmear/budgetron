@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:budgetron/utils/string_utils.dart';
 
 //TODO rename to text field
 class BudgetronSmallTextField extends StatelessWidget {
-  final TextEditingController? textController;
+  final TextEditingController textController;
   final TextInputType inputType;
   final Function onSubmitted;
   final String hintText;
@@ -14,13 +17,27 @@ class BudgetronSmallTextField extends StatelessWidget {
       required this.autoFocus,
       required this.onSubmitted,
       required this.inputType,
-      this.textController});
+      required this.textController});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final isNumberType = inputType == TextInputType.number;
+    final onChanged = isNumberType ? _onChanged : (value) => {};
+
+    List<TextInputFormatter> formatters = [];
+    if (isNumberType) {
+      //allow only numbers and periods
+      formatters.add(FilteringTextInputFormatter.allow(RegExp("[0-9.]")));
+    } else if (inputType == TextInputType.text) {
+      //allow only letters and numbers
+      formatters.add(FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")));
+    }
+
     return TextField(
+      onChanged: (value) => onChanged(value),
+      inputFormatters: formatters,
       onSubmitted: (value) => onSubmitted(value),
       controller: textController,
       autofocus: autoFocus,
@@ -43,5 +60,14 @@ class BudgetronSmallTextField extends StatelessWidget {
             .apply(color: theme.colorScheme.surfaceContainerHigh),
       ),
     );
+  }
+
+  //deny starting with a period and multiple periods
+  void _onChanged(String value) {
+    if (value.length == 1 && value == '.') {
+      textController.text = StringUtils.emptyString;
+    } else if (RegExp(r'^(.*\..*\.)$').hasMatch(value)) {
+      textController.text = value.substring(0, value.lastIndexOf('.'));
+    }
   }
 }
