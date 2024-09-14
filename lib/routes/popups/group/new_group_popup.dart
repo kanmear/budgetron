@@ -8,7 +8,7 @@ import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/ui/classes/multi_select_button.dart';
 import 'package:budgetron/routes/pages/group/group_page.dart';
 import 'package:budgetron/models/enums/entry_category_type.dart';
-import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
+import 'package:budgetron/ui/classes/text_fields/text_field.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/routes/pages/category/category_selection_page.dart';
 
@@ -41,7 +41,7 @@ class _NewGroupDialogState extends State<NewGroupDialog> {
         body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text('Name', style: theme.textTheme.labelSmall),
           const SizedBox(height: 4),
-          BudgetronSmallTextField(
+          CustomTextField(
               textController: textController,
               hintText: 'Enter group name',
               autoFocus: false,

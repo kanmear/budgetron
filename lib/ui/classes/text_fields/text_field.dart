@@ -3,15 +3,14 @@ import 'package:flutter/services.dart';
 
 import 'package:budgetron/utils/string_utils.dart';
 
-//TODO rename to text field
-class BudgetronSmallTextField extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
   final TextEditingController textController;
   final TextInputType inputType;
   final Function onSubmitted;
   final String hintText;
   final bool autoFocus;
 
-  const BudgetronSmallTextField(
+  const CustomTextField(
       {super.key,
       required this.hintText,
       required this.autoFocus,

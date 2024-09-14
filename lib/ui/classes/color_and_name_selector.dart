@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
+import 'package:budgetron/ui/classes/text_fields/text_field.dart';
 import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
 
 class ColorAndNameSelector extends StatelessWidget {
@@ -40,7 +40,7 @@ class ColorAndNameSelector extends StatelessWidget {
               })),
       const SizedBox(width: 8),
       Expanded(
-          child: BudgetronSmallTextField(
+          child: CustomTextField(
               textController: textController,
               inputType: TextInputType.text,
               hintText: hintText,

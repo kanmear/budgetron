@@ -6,7 +6,7 @@ import 'package:budgetron/ui/classes/switch_with_text.dart';
 import 'package:budgetron/logic/account/account_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/color_and_name_selector.dart';
-import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
+import 'package:budgetron/ui/classes/text_fields/text_field.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 
 class NewAccountDialog extends StatelessWidget {
@@ -41,7 +41,7 @@ class NewAccountDialog extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           //TODO onTap => clean zero?
-          BudgetronSmallTextField(
+          CustomTextField(
               textController: balanceTextController,
               hintText: '',
               autoFocus: false,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/routes/popups/category/category_color_selection_popup.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
-import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
+import 'package:budgetron/ui/classes/text_fields/text_field.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/category/category.dart';
@@ -72,7 +72,7 @@ class _EditCategoryDialogState extends State<EditCategoryDialog> {
               ),
               const SizedBox(width: 8),
               Expanded(
-                child: BudgetronSmallTextField(
+                child: CustomTextField(
                   textController: widget.textController,
                   inputType: TextInputType.text,
                   hintText: 'Enter category name',

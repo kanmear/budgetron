@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 import 'package:budgetron/routes/popups/budget/delete_budget_popup.dart';
-import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
+import 'package:budgetron/ui/classes/text_fields/text_field.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
@@ -86,7 +86,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                       child: Text('Target', style: theme.textTheme.labelSmall),
                     ),
                     const SizedBox(height: 4),
-                    BudgetronSmallTextField(
+                    CustomTextField(
                         textController: widget.textController,
                         inputType: TextInputType.number,
                         hintText: '0',

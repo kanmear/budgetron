@@ -7,7 +7,7 @@ import 'package:budgetron/models/account/transfer.dart';
 import 'package:budgetron/ui/classes/dropdown_button.dart';
 import 'package:budgetron/logic/account/account_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
-import 'package:budgetron/ui/classes/text_fields/small_text_field.dart';
+import 'package:budgetron/ui/classes/text_fields/text_field.dart';
 import 'package:budgetron/ui/classes/text_buttons/large_text_button.dart';
 
 class AccountTransferDialog extends StatelessWidget {
@@ -62,7 +62,7 @@ class AccountTransferDialog extends StatelessWidget {
               child:
                   Text('Transfer amount', style: theme.textTheme.labelSmall)),
           const SizedBox(height: 4),
-          BudgetronSmallTextField(
+          CustomTextField(
               textController: textController,
               inputType: TextInputType.number,
               hintText: '',
