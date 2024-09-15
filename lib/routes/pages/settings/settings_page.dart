@@ -1,15 +1,17 @@
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/ui/data/fonts.dart';
+
+import 'package:budgetron/models/enums/currency.dart';
+
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
-import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
+import 'package:budgetron/ui/classes/text_buttons/small_text_button.dart';
+
 import 'package:budgetron/routes/pages/settings/style_page.dart';
 import 'package:budgetron/routes/pages/settings/currency_page.dart';
-import 'package:budgetron/ui/classes/text_buttons/small_text_button.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -17,7 +19,6 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO replace with budgetron app bar
       appBar: const BudgetronAppBar(
         title: 'Settings',
         leading: ArrowBackIconButton(),
@@ -63,7 +64,7 @@ class SettingsList extends StatelessWidget {
                           },
                       iconData: Icons.color_lens_outlined,
                       topText: 'Style and appearance',
-                      bottomText: 'Theme and icons'),
+                      bottomText: 'Theme, icons and lists style'),
                   SettingsListTile(
                       onTap: () => {
                             Navigator.push(
@@ -123,14 +124,14 @@ class SettingsListTile extends StatelessWidget {
   final IconData iconData;
   final Function onTap;
   final String topText;
-  final String bottomText;
+  final String? bottomText;
 
   const SettingsListTile(
       {super.key,
       required this.iconData,
       required this.topText,
       required this.onTap,
-      this.bottomText = ''});
+      this.bottomText});
 
   @override
   Widget build(BuildContext context) {
@@ -144,13 +145,15 @@ class SettingsListTile extends StatelessWidget {
       )
     ];
 
-    final isNotEmpty = bottomText.isNotEmpty;
-    if (isNotEmpty) {
+    final hasBottomText = bottomText != null;
+    if (hasBottomText) {
+      //FIX should handle text overflow
       textColumn.add(Text(
-        bottomText,
+        bottomText!,
         style: theme.textTheme.labelMedium!
             .apply(color: colorScheme.surfaceContainerHigh),
-        overflow: TextOverflow.ellipsis,
+        // softWrap: false,
+        // overflow: TextOverflow.ellipsis,
       ));
     }
 
@@ -166,7 +169,7 @@ class SettingsListTile extends StatelessWidget {
               Icon(iconData, color: colorScheme.primary),
               const SizedBox(width: 8),
               Column(
-                  mainAxisAlignment: isNotEmpty
+                  mainAxisAlignment: hasBottomText
                       ? MainAxisAlignment.spaceBetween
                       : MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,34 +180,5 @@ class SettingsListTile extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class DateModeSelector extends StatefulWidget {
-  final ValueNotifier<bool> switchNotifier = ValueNotifier(false);
-  final AppData appData;
-
-  DateModeSelector({super.key, required this.appData});
-
-  @override
-  State<DateModeSelector> createState() => _DateModeSelectorState();
-}
-
-class _DateModeSelectorState extends State<DateModeSelector> {
-  @override
-  Widget build(BuildContext context) {
-    widget.switchNotifier.value = widget.appData.legacyDateSelector;
-
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text('Use legacy view for Entries',
-          style: BudgetronFonts.nunitoSize16Weight600),
-      Switch(
-          onChanged: (bool value) {
-            setState(() => widget.switchNotifier.value = value);
-            widget.appData.setLegacyDateSelector(value);
-          },
-          value: widget.switchNotifier.value,
-          activeColor: Theme.of(context).colorScheme.secondary)
-    ]);
   }
 }
