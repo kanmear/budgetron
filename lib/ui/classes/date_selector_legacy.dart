@@ -76,7 +76,7 @@ class _DatePeriodSelectorState extends State<DatePeriodSelector> {
             //HACK invisible icons to inflate width of menu button
             Icon(Icons.check_box_outline_blank, color: color),
             Text(_resolveTextValue(), style: theme.textTheme.bodyMedium),
-            const Icon(Icons.arrow_drop_down),
+            Icon(Icons.arrow_drop_down, color: theme.colorScheme.primary),
             Icon(Icons.check_box_outline_blank, color: color)
           ]));
     }).toList();
