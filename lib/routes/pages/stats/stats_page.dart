@@ -14,7 +14,7 @@ class StatsPage extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.month);
   final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(BudgetronDateUtils.getDatesInPeriod(BudgetronPage.stats));
+      ValueNotifier(BudgetronDateUtils.calculateDateRange(BudgetronPage.stats));
   //TODO check that isExpense is needed here and not in overall chart after finishing Stats
   final ValueNotifier<bool> isExpenseFilterNotifier = ValueNotifier(true);
 

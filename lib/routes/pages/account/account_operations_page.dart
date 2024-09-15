@@ -23,8 +23,8 @@ class AccountOperationsPage extends StatelessWidget {
   final Account account;
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.day);
-  final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(BudgetronDateUtils.getDatesInPeriod(BudgetronPage.entries));
+  final ValueNotifier<List<DateTime>> dateTimeNotifier = ValueNotifier(
+      BudgetronDateUtils.calculateDateRange(BudgetronPage.accounts));
 
   AccountOperationsPage({super.key, required this.account});
 
@@ -35,7 +35,7 @@ class AccountOperationsPage extends StatelessWidget {
 
     final isLegacy = appData.legacyDateSelector;
 
-    String currency = Currency.values
+    final currency = Currency.values
         .where((e) => e.index == appData.currencyIndex)
         .first
         .code;
@@ -52,11 +52,11 @@ class AccountOperationsPage extends StatelessWidget {
               currency: currency,
               isLegacy: isLegacy,
               theme: theme),
-          _resolveDateSelector(isLegacy)
+          _resolveDateSelectorWidget(isLegacy)
         ]));
   }
 
-  Widget _resolveDateSelector(bool legacyDateSelector) {
+  _resolveDateSelectorWidget(bool legacyDateSelector) {
     if (legacyDateSelector) {
       return LegacyDateSelector(datePeriodNotifier: datePeriodNotifier);
     } else {

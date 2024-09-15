@@ -23,8 +23,8 @@ class EntriesPage extends StatefulWidget {
   //TODO make settings entry for default datePeriod
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.day);
-  final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(BudgetronDateUtils.getDatesInPeriod(BudgetronPage.entries));
+  final ValueNotifier<List<DateTime>> dateTimeNotifier = ValueNotifier(
+      BudgetronDateUtils.calculateDateRange(BudgetronPage.entries));
 
   EntriesPage({
     super.key,

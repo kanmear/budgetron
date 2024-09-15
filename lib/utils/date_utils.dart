@@ -6,26 +6,30 @@ import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
 class BudgetronDateUtils {
-  static List<DateTime> getDatesInPeriod(BudgetronPage page) {
+  static List<DateTime> calculateDateRange(BudgetronPage page) {
     switch (page) {
       case BudgetronPage.entries:
-        return _calculatePairOfDates(DatePeriod.values
+        return _calculateDateRange(DatePeriod.values
             .where((p) => p.periodIndex == globals.defaultDatePeriodEntries)
             .first);
       case BudgetronPage.stats:
-        return _calculatePairOfDates(DatePeriod.values
+        return _calculateDateRange(DatePeriod.values
             .where((p) => p.periodIndex == globals.defaultDatePeriodStats)
             .first);
       case BudgetronPage.groups:
-        return _calculatePairOfDates(DatePeriod.values
+        return _calculateDateRange(DatePeriod.values
             .where((p) => p.periodIndex == globals.defaultDatePeriodGroups)
+            .first);
+      case BudgetronPage.accounts:
+        return _calculateDateRange(DatePeriod.values
+            .where((p) => p.periodIndex == globals.defaultDatePeriodAccounts)
             .first);
       default:
         throw Exception('Not a valid app page.');
     }
   }
 
-  static List<DateTime> _calculatePairOfDates(DatePeriod datePeriod) {
+  static List<DateTime> _calculateDateRange(DatePeriod datePeriod) {
     var now = DateTime.now();
     DateTime endDate;
 

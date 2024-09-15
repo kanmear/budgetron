@@ -14,5 +14,6 @@ int defaultAccountId = -1;
 int defaultDatePeriodEntries = 0;
 int defaultDatePeriodStats = 2;
 int defaultDatePeriodGroups = 2;
+int defaultDatePeriodAccounts = 0;
 
 ThemeMode themeMode = ThemeMode.system;

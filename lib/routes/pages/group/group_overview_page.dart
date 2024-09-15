@@ -26,8 +26,8 @@ class GroupOverviewPage extends StatelessWidget {
   final int groupId;
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.month);
-  final ValueNotifier<List<DateTime>> dateTimeNotifier =
-      ValueNotifier(BudgetronDateUtils.getDatesInPeriod(BudgetronPage.groups));
+  final ValueNotifier<List<DateTime>> dateTimeNotifier = ValueNotifier(
+      BudgetronDateUtils.calculateDateRange(BudgetronPage.groups));
   final ValueNotifier<bool> expenseFilterNotifier = ValueNotifier(true);
 
   @override
