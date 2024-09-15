@@ -1,25 +1,29 @@
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/utils/enums.dart';
-import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/utils/date_utils.dart';
+
 import 'package:budgetron/db/entry_controller.dart';
+import 'package:budgetron/logic/entry/entry_service.dart';
+import 'package:budgetron/logic/category/category_service.dart';
+
+import 'package:budgetron/models/entry.dart';
 import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
-import 'package:budgetron/ui/classes/date_selector.dart';
-import 'package:budgetron/logic/entry/entry_service.dart';
-import 'package:budgetron/ui/classes/list_tiles/list_tile.dart';
-import 'package:budgetron/ui/classes/date_selector_legacy.dart';
-import 'package:budgetron/logic/category/category_service.dart';
-import 'package:budgetron/ui/classes/horizontal_separator.dart';
-import 'package:budgetron/routes/pages/entry/edit_entry_page.dart';
 
-//TODO check if stateful widget is not needed
-class EntriesPage extends StatefulWidget {
+import 'package:budgetron/ui/classes/list_tiles/list_tile.dart';
+import 'package:budgetron/ui/classes/date_selector.dart';
+import 'package:budgetron/ui/classes/horizontal_separator.dart';
+
+import 'package:budgetron/utils/enums.dart';
+import 'package:budgetron/utils/date_utils.dart';
+
+import 'package:budgetron/routes/pages/entry/edit_entry_page.dart';
+import 'package:budgetron/routes/pages/entry/entries_page/legacy_entries_page.dart';
+
+class EntriesPage extends StatelessWidget {
   //TODO make settings entry for default datePeriod
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.day);
@@ -31,14 +35,13 @@ class EntriesPage extends StatefulWidget {
   });
 
   @override
-  State<EntriesPage> createState() => _EntriesPageState();
-}
-
-class _EntriesPageState extends State<EntriesPage> {
-  @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
-    final isLegacy = appData.legacyDateSelector;
+
+    if (appData.legacyDateSelector) {
+      return LegacyEntriesPage();
+    }
+
     final theme = Theme.of(context);
 
     final currency = Currency.values
@@ -50,26 +53,21 @@ class _EntriesPageState extends State<EntriesPage> {
         backgroundColor: theme.colorScheme.surface,
         body: Column(children: [
           EntriesListView(
-              dateTimeNotifier: widget.dateTimeNotifier,
-              datePeriodNotifier: widget.datePeriodNotifier,
+              dateTimeNotifier: dateTimeNotifier,
+              datePeriodNotifier: datePeriodNotifier,
               currency: currency,
-              isLegacy: isLegacy,
               theme: theme),
-          _resolveDateSelector(isLegacy, appData.earliestEntryDate)
+          DateSelector(
+            datePeriodNotifier: datePeriodNotifier,
+            dateTimeNotifier: dateTimeNotifier,
+            earliestDate: appData.earliestEntryDate,
+            periodItems: const [
+              DatePeriod.day,
+              DatePeriod.month,
+              DatePeriod.year
+            ],
+          )
         ]));
-  }
-
-  Widget _resolveDateSelector(bool legacyDateSelector, DateTime earliestDate) {
-    if (legacyDateSelector) {
-      return LegacyDateSelector(datePeriodNotifier: widget.datePeriodNotifier);
-    } else {
-      return DateSelector(
-        datePeriodNotifier: widget.datePeriodNotifier,
-        dateTimeNotifier: widget.dateTimeNotifier,
-        earliestDate: earliestDate,
-        periodItems: const [DatePeriod.day, DatePeriod.month, DatePeriod.year],
-      );
-    }
   }
 }
 
@@ -77,7 +75,6 @@ class EntriesListView extends StatelessWidget {
   final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final String currency;
-  final bool isLegacy;
   final ThemeData theme;
 
   const EntriesListView(
@@ -85,67 +82,38 @@ class EntriesListView extends StatelessWidget {
       required this.dateTimeNotifier,
       required this.currency,
       required this.datePeriodNotifier,
-      required this.isLegacy,
       required this.theme});
 
   @override
   Widget build(BuildContext context) {
-    return _resolveBody(isLegacy);
-  }
-
-  Widget _resolveBody(bool isLegacy) {
-    if (isLegacy) {
-      return Flexible(
-          child: StreamBuilder<List<Entry>>(
-              stream: EntryController.getEntries(),
-              builder: (context, snapshot) {
-                if (snapshot.data?.isNotEmpty ?? false) {
-                  return ValueListenableBuilder(
-                      valueListenable: datePeriodNotifier,
-                      builder: (context, value, child) {
-                        return Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 16),
-                            child: _buildListView(snapshot.data!, currency));
-                      });
-                } else {
-                  return Center(
-                      child: Text(
-                    'No entries in database',
-                    style: theme.textTheme.bodyMedium!
-                        .apply(color: theme.colorScheme.surfaceContainerHigh),
-                  ));
-                }
-              }));
-    } else {
-      return Flexible(
-          child: ValueListenableBuilder(
-              valueListenable: dateTimeNotifier,
-              builder: (context, value, child) {
-                return Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: StreamBuilder<List<Entry>>(
-                        stream: _getEntries(),
-                        builder: (context, snapshot) {
-                          if (snapshot.data?.isNotEmpty ?? false) {
-                            return _buildListView(snapshot.data!, currency);
-                          } else {
-                            return Center(
-                                child: Text(
-                              'No entries for this period',
-                              style: theme.textTheme.bodyMedium!.apply(
-                                  color:
-                                      theme.colorScheme.surfaceContainerHigh),
-                            ));
-                          }
-                        }));
-              }));
-    }
+    return Flexible(
+        child: ValueListenableBuilder(
+            valueListenable: dateTimeNotifier,
+            builder: (context, value, child) {
+              return Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: StreamBuilder<List<Entry>>(
+                      stream: _getEntries(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data?.isNotEmpty ?? false) {
+                          return _buildListView(snapshot.data!, currency);
+                        } else {
+                          return Center(
+                              child: Text(
+                            'No entries for this period',
+                            style: theme.textTheme.bodyMedium!.apply(
+                                color: theme.colorScheme.surfaceContainerHigh),
+                          ));
+                        }
+                      }));
+            }));
   }
 
   Stream<List<Entry>> _getEntries() {
     var fromDate = dateTimeNotifier.value[0];
     var toDate = dateTimeNotifier.value[1];
 
+    //REFACTOR should not directly call controllers
     return EntryController.getEntries(period: [fromDate, toDate]);
   }
 
