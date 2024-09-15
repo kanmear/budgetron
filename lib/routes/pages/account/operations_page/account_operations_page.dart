@@ -1,23 +1,28 @@
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:budgetron/app_data.dart';
-import 'package:budgetron/models/entry.dart';
-import 'package:budgetron/ui/classes/app_bar.dart';
-import 'package:budgetron/models/enums/currency.dart';
+
 import 'package:budgetron/logic/account/account_service.dart';
+
+import 'package:budgetron/models/entry.dart';
+import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/enums/date_period.dart';
-import 'package:budgetron/routes/pages/entry/entries_page.dart';
-import 'package:budgetron/ui/classes/date_selector.dart';
-import 'package:budgetron/ui/classes/date_selector_legacy.dart';
-import 'package:budgetron/ui/classes/horizontal_separator.dart';
+
 import 'package:budgetron/ui/data/icons.dart';
-import 'package:budgetron/utils/date_utils.dart';
+import 'package:budgetron/ui/classes/app_bar.dart';
+import 'package:budgetron/ui/classes/date_selector.dart';
+import 'package:budgetron/ui/classes/horizontal_separator.dart';
+
 import 'package:budgetron/utils/enums.dart';
+import 'package:budgetron/utils/date_utils.dart';
 import 'package:budgetron/utils/interfaces.dart';
+
+import 'package:budgetron/routes/pages/entry/entries_page.dart';
+import 'package:budgetron/routes/pages/account/operations_page/legacy_operations_page.dart';
 
 class AccountOperationsPage extends StatelessWidget {
   final Account account;
@@ -31,9 +36,12 @@ class AccountOperationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appData = Provider.of<AppData>(context);
-    final theme = Theme.of(context);
 
-    final isLegacy = appData.legacyDateSelector;
+    if (appData.legacyDateSelector) {
+      return LegacyAccountOperationsPage(account: account);
+    }
+
+    final theme = Theme.of(context);
 
     final currency = Currency.values
         .where((e) => e.index == appData.currencyIndex)
@@ -50,23 +58,18 @@ class AccountOperationsPage extends StatelessWidget {
               dateTimeNotifier: dateTimeNotifier,
               datePeriodNotifier: datePeriodNotifier,
               currency: currency,
-              isLegacy: isLegacy,
               theme: theme),
-          _resolveDateSelectorWidget(isLegacy)
+          DateSelector(
+            datePeriodNotifier: datePeriodNotifier,
+            dateTimeNotifier: dateTimeNotifier,
+            earliestDate: account.earliestOperationDate,
+            periodItems: const [
+              DatePeriod.day,
+              DatePeriod.month,
+              DatePeriod.year
+            ],
+          )
         ]));
-  }
-
-  _resolveDateSelectorWidget(bool legacyDateSelector) {
-    if (legacyDateSelector) {
-      return LegacyDateSelector(datePeriodNotifier: datePeriodNotifier);
-    } else {
-      return DateSelector(
-        datePeriodNotifier: datePeriodNotifier,
-        dateTimeNotifier: dateTimeNotifier,
-        earliestDate: account.earliestOperationDate,
-        periodItems: const [DatePeriod.day, DatePeriod.month, DatePeriod.year],
-      );
-    }
   }
 }
 
@@ -75,7 +78,6 @@ class OperationsListView extends StatelessWidget {
   final ValueNotifier<DatePeriod> datePeriodNotifier;
   final Account account;
   final String currency;
-  final bool isLegacy;
   final ThemeData theme;
 
   const OperationsListView(
@@ -83,69 +85,32 @@ class OperationsListView extends StatelessWidget {
       required this.dateTimeNotifier,
       required this.currency,
       required this.datePeriodNotifier,
-      required this.isLegacy,
       required this.account,
       required this.theme});
 
   @override
   Widget build(BuildContext context) {
-    return _resolveBody(isLegacy);
-  }
-
-  Widget _resolveBody(bool isLegacy) {
-    if (isLegacy) {
-      return Flexible(
-          child: StreamBuilder<List<Listable>>(
-              stream: _getOperations(),
-              builder: (context, snapshot) {
-                if (snapshot.data?.isNotEmpty ?? false) {
-                  return ValueListenableBuilder(
-                      valueListenable: datePeriodNotifier,
-                      builder: (context, value, child) {
-                        return Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 16),
-                            child: _buildListView(snapshot.data!, currency));
-                      });
-                } else {
-                  return Center(
-                      child: Text(
-                    'No entries in database',
-                    style: theme.textTheme.bodyMedium!
-                        .apply(color: theme.colorScheme.surfaceContainerHigh),
-                  ));
-                }
-              }));
-    } else {
-      return Flexible(
-          child: ValueListenableBuilder(
-              valueListenable: dateTimeNotifier,
-              builder: (context, value, child) {
-                return Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: StreamBuilder<List<Listable>>(
-                        stream: _getOperationsInPeriod(),
-                        builder: (context, snapshot) {
-                          if (snapshot.data?.isNotEmpty ?? false) {
-                            return _buildListView(snapshot.data!, currency);
-                          } else {
-                            return Center(
-                                child: Text(
-                              'No entries for this period',
-                              style: theme.textTheme.bodyMedium!.apply(
-                                  color:
-                                      theme.colorScheme.surfaceContainerHigh),
-                            ));
-                          }
-                        }));
-              }));
-    }
-  }
-
-  Stream<List<Listable>> _getOperations() {
-    var fromDate = account.earliestOperationDate;
-    var toDate = DateTime.now();
-
-    return AccountService.getOperationsInPeriod(account.id, [fromDate, toDate]);
+    return Flexible(
+        child: ValueListenableBuilder(
+            valueListenable: dateTimeNotifier,
+            builder: (context, value, child) {
+              return Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: StreamBuilder<List<Listable>>(
+                      stream: _getOperationsInPeriod(),
+                      builder: (context, snapshot) {
+                        if (snapshot.data?.isNotEmpty ?? false) {
+                          return _buildListView(snapshot.data!, currency);
+                        } else {
+                          return Center(
+                              child: Text(
+                            'No entries for this period',
+                            style: theme.textTheme.bodyMedium!.apply(
+                                color: theme.colorScheme.surfaceContainerHigh),
+                          ));
+                        }
+                      }));
+            }));
   }
 
   Stream<List<Listable>> _getOperationsInPeriod() {

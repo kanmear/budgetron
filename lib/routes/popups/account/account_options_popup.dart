@@ -8,7 +8,7 @@ import 'package:budgetron/ui/classes/docked_popup.dart';
 import 'package:budgetron/models/account/transaction.dart';
 import 'package:budgetron/ui/classes/buttons/button_with_icon.dart';
 import 'package:budgetron/routes/popups/account/edit_account_popup.dart';
-import 'package:budgetron/routes/pages/account/account_operations_page.dart';
+import 'package:budgetron/routes/pages/account/operations_page/account_operations_page.dart';
 import 'package:budgetron/routes/popups/account/account_transfer_popup.dart';
 import 'package:budgetron/routes/pages/account/account_transaction_page.dart';
 

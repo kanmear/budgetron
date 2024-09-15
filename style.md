@@ -32,3 +32,16 @@ For internal getters return value type usually should not be specified and inste
 
 ##### Public and/or static methods
 For public methods return value type usually should be specified
+
+---
+### Imports
+Logically separated with newlines, sorted by import length
+
+Order:
+1) Flutter modules, e.g. material, intl, provider
+2) AppData
+3) Logic / services
+4) Data models
+5) UI modules
+6) Utils
+7) Routes
