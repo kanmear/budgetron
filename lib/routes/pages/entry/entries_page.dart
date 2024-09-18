@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:budgetron/app_data.dart';
 
 import 'package:budgetron/db/entry_controller.dart';
-import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/category/category_service.dart';
 
 import 'package:budgetron/models/entry.dart';
@@ -13,9 +12,8 @@ import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
 
-import 'package:budgetron/ui/classes/list_tiles/list_tile.dart';
 import 'package:budgetron/ui/classes/date_selector.dart';
-import 'package:budgetron/ui/classes/horizontal_separator.dart';
+import 'package:budgetron/ui/classes/list_tiles/list_tile.dart';
 
 import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/utils/date_utils.dart';
@@ -30,9 +28,7 @@ class EntriesPage extends StatelessWidget {
   final ValueNotifier<List<DateTime>> dateTimeNotifier = ValueNotifier(
       BudgetronDateUtils.calculateDateRange(BudgetronPage.entries));
 
-  EntriesPage({
-    super.key,
-  });
+  EntriesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,19 +40,13 @@ class EntriesPage extends StatelessWidget {
 
     final theme = Theme.of(context);
 
-    final currency = Currency.values
-        .where((e) => e.index == appData.currencyIndex)
-        .first
-        .code;
-
     return Scaffold(
         backgroundColor: theme.colorScheme.surface,
         body: Column(children: [
           EntriesListView(
-              dateTimeNotifier: dateTimeNotifier,
-              datePeriodNotifier: datePeriodNotifier,
-              currency: currency,
-              theme: theme),
+            dateTimeNotifier: dateTimeNotifier,
+            datePeriodNotifier: datePeriodNotifier,
+          ),
           DateSelector(
             datePeriodNotifier: datePeriodNotifier,
             dateTimeNotifier: dateTimeNotifier,
@@ -74,18 +64,17 @@ class EntriesPage extends StatelessWidget {
 class EntriesListView extends StatelessWidget {
   final ValueNotifier<List<DateTime>> dateTimeNotifier;
   final ValueNotifier<DatePeriod> datePeriodNotifier;
-  final String currency;
-  final ThemeData theme;
 
-  const EntriesListView(
-      {super.key,
-      required this.dateTimeNotifier,
-      required this.currency,
-      required this.datePeriodNotifier,
-      required this.theme});
+  const EntriesListView({
+    super.key,
+    required this.dateTimeNotifier,
+    required this.datePeriodNotifier,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Flexible(
         child: ValueListenableBuilder(
             valueListenable: dateTimeNotifier,
@@ -93,10 +82,13 @@ class EntriesListView extends StatelessWidget {
               return Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: StreamBuilder<List<Entry>>(
-                      stream: _getEntries(),
+                      stream: _getEntriesStream(),
                       builder: (context, snapshot) {
                         if (snapshot.data?.isNotEmpty ?? false) {
-                          return _buildListView(snapshot.data!, currency);
+                          return EntryListTileContainer(
+                            entries: snapshot.data!,
+                            datePeriod: datePeriodNotifier.value,
+                          );
                         } else {
                           return Center(
                               child: Text(
@@ -109,100 +101,89 @@ class EntriesListView extends StatelessWidget {
             }));
   }
 
-  Stream<List<Entry>> _getEntries() {
-    var fromDate = dateTimeNotifier.value[0];
-    var toDate = dateTimeNotifier.value[1];
+  _getEntriesStream() {
+    final fromDate = dateTimeNotifier.value[0];
+    final toDate = dateTimeNotifier.value[1];
 
     //REFACTOR should not directly call controllers
     return EntryController.getEntries(period: [fromDate, toDate]);
   }
-
-  Widget _buildListView(List<Entry> entries, String currency) {
-    Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
-    List<DateTime> entryDates = [];
-
-    DatePeriod datePeriod = datePeriodNotifier.value;
-
-    EntryService.formEntriesData(datePeriod, entries, entriesMap, entryDates);
-
-    return ListView.separated(
-      padding: EdgeInsets.zero,
-      itemCount: entryDates.length,
-      itemBuilder: (context, index) {
-        var groupingDate = entryDates[index];
-
-        return EntryListTileContainer(
-            entriesToCategoryMap: entriesMap[groupingDate]!,
-            groupingDate: groupingDate,
-            datePeriod: datePeriod,
-            currency: currency,
-            theme: theme);
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const Padding(
-          padding: EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            children: [
-              SizedBox(height: 16),
-              HorizontalSeparator(),
-              SizedBox(height: 16)
-            ],
-          ),
-        );
-      },
-    );
-  }
 }
 
 class EntryListTileContainer extends StatelessWidget {
-  final Map<EntryCategory, List<Entry>> entriesToCategoryMap;
+  final List<Entry> entries;
   final DatePeriod datePeriod;
-  final String currency;
-  final DateTime groupingDate;
-  final ThemeData theme;
 
   const EntryListTileContainer({
     super.key,
-    required this.entriesToCategoryMap,
-    required this.groupingDate,
+    required this.entries,
     required this.datePeriod,
-    required this.currency,
-    required this.theme,
   });
 
   @override
   Widget build(BuildContext context) {
+    Map<EntryCategory, List<Entry>> categoryToEntriesMap =
+        _calculateMap(entries);
+    final isExpandable = datePeriod == DatePeriod.day;
+
+    final appData = Provider.of<AppData>(context);
+    final theme = Theme.of(context);
+    final currency = Currency.values
+        .where((e) => e.index == appData.currencyIndex)
+        .first
+        .code;
+
     return Container(
       color: Theme.of(context).colorScheme.surface,
       child: Column(
         children: [
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _resolveContainerTitle(),
-                  _resolveContainerSumValue(entriesToCategoryMap)
-                ],
-              ),
-              const SizedBox(height: 8),
-              Column(children: [
-                for (var category in entriesToCategoryMap.keys)
-                  EntryListTile(
-                      category: category,
-                      entries: entriesToCategoryMap[category]!,
-                      isExpandable: datePeriod == DatePeriod.day,
-                      datePeriod: datePeriod,
-                      theme: theme),
-              ]),
+              _resolveContainerTitle(datePeriod, entries.first.dateTime, theme),
+              _resolveContainerSum(entries, currency, theme)
             ],
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: ListView.separated(
+                itemBuilder: (context, index) {
+                  final category = categoryToEntriesMap.keys.elementAt(index);
+
+                  return EntryListTile(
+                      entries: categoryToEntriesMap[category]!,
+                      category: category,
+                      isExpandable: isExpandable,
+                      datePeriod: datePeriod,
+                      theme: theme);
+                },
+                separatorBuilder: (context, _) {
+                  return const SizedBox(height: 8);
+                },
+                itemCount: categoryToEntriesMap.keys.length),
           ),
         ],
       ),
     );
   }
 
-  Widget _resolveContainerTitle() {
+  _calculateMap(List<Entry> entries) {
+    Map<EntryCategory, List<Entry>> map = {};
+
+    for (var entry in entries) {
+      var category = entry.category.target!;
+      if (map.containsKey(category)) {
+        map[category]!.add(entry);
+      } else {
+        map[category] = [entry];
+      }
+    }
+
+    return map;
+  }
+
+  Widget _resolveContainerTitle(
+      DatePeriod datePeriod, DateTime groupingDate, ThemeData theme) {
     //if grouped by day and containers date is today => display today
     DateTime now = DateTime.now();
 
@@ -233,9 +214,9 @@ class EntryListTileContainer extends StatelessWidget {
     return Text(text, style: theme.textTheme.bodySmall);
   }
 
-  Widget _resolveContainerSumValue(Map<EntryCategory, List<Entry>> entries) {
-    var sum = entries.values
-        .expand((element) => element.toList())
+  Widget _resolveContainerSum(
+      List<Entry> entries, String currency, ThemeData theme) {
+    final sum = entries
         .map((e) => e.value)
         .reduce((value, element) => value + element)
         .toStringAsFixed(2);
@@ -281,8 +262,6 @@ class EntryListTile extends StatelessWidget {
               ),
             ),
             _expandedView(context),
-            //REFACTOR replace with listview.separated
-            const SizedBox(height: 8)
           ],
         );
       },

@@ -15,10 +15,10 @@ import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/ui/classes/date_selector_groups.dart';
-import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/popups/group/edit_group_popup.dart';
 import 'package:budgetron/routes/pages/group/widgets/group_overview_chart.dart';
+import 'package:budgetron/routes/pages/entry/entries_page/legacy_entries_page.dart';
 
 class GroupOverviewPage extends StatelessWidget {
   GroupOverviewPage({super.key, required this.groupId});

@@ -162,12 +162,17 @@ class EntryListTileContainer extends StatelessWidget {
               const SizedBox(height: 8),
               Column(children: [
                 for (var category in entriesToCategoryMap.keys)
-                  EntryListTile(
-                      category: category,
-                      entries: entriesToCategoryMap[category]!,
-                      isExpandable: datePeriod == DatePeriod.day,
-                      datePeriod: datePeriod,
-                      theme: theme),
+                  Column(
+                    children: [
+                      EntryListTile(
+                          category: category,
+                          entries: entriesToCategoryMap[category]!,
+                          isExpandable: datePeriod == DatePeriod.day,
+                          datePeriod: datePeriod,
+                          theme: theme),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
               ]),
             ],
           ),

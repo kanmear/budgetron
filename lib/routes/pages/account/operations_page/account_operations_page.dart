@@ -208,12 +208,19 @@ class OperationListTileContainer extends StatelessWidget {
               const SizedBox(height: 16),
               Column(children: [
                 for (var category in entriesToCategoryMap.keys)
-                  EntryListTile(
-                      category: category,
-                      entries: entriesToCategoryMap[category]!,
-                      isExpandable: datePeriod == DatePeriod.day,
-                      datePeriod: datePeriod,
-                      theme: theme),
+                  //REFACTOR like in entries_page, list view should be on this level,
+                  //not higher, because in this view mode there is always only one container
+                  Column(
+                    children: [
+                      EntryListTile(
+                          category: category,
+                          entries: entriesToCategoryMap[category]!,
+                          isExpandable: datePeriod == DatePeriod.day,
+                          datePeriod: datePeriod,
+                          theme: theme),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
                 for (var operation in operations)
                   OperationListTile(operation: operation, theme: theme)
               ]),

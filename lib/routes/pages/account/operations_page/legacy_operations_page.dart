@@ -193,12 +193,17 @@ class OperationListTileContainer extends StatelessWidget {
               const SizedBox(height: 16),
               Column(children: [
                 for (var category in entriesToCategoryMap.keys)
-                  EntryListTile(
-                      category: category,
-                      entries: entriesToCategoryMap[category]!,
-                      isExpandable: datePeriod == DatePeriod.day,
-                      datePeriod: datePeriod,
-                      theme: theme),
+                  Column(
+                    children: [
+                      EntryListTile(
+                          category: category,
+                          entries: entriesToCategoryMap[category]!,
+                          isExpandable: datePeriod == DatePeriod.day,
+                          datePeriod: datePeriod,
+                          theme: theme),
+                      const SizedBox(height: 8),
+                    ],
+                  ),
                 for (var operation in operations)
                   OperationListTile(operation: operation, theme: theme)
               ]),

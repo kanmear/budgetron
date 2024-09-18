@@ -15,9 +15,9 @@ import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/logic/entry/entry_service.dart';
 import 'package:budgetron/logic/budget/budget_service.dart';
 import 'package:budgetron/models/budget/budget_history.dart';
-import 'package:budgetron/routes/pages/entry/entries_page.dart';
 import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/routes/popups/budget/edit_budget_popup.dart';
+import 'package:budgetron/routes/pages/entry/entries_page/legacy_entries_page.dart';
 import 'package:budgetron/ui/classes/data_visualization/list_tile_with_progress_bar.dart';
 
 class BudgetOverviewPage extends StatelessWidget {
