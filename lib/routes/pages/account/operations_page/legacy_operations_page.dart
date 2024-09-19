@@ -12,6 +12,8 @@ import 'package:budgetron/models/account/account.dart';
 import 'package:budgetron/models/category/category.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 
+import 'package:budgetron/routes/pages/entry/widgets/entry_list_tile.dart';
+
 import 'package:budgetron/ui/data/icons.dart';
 import 'package:budgetron/ui/classes/app_bar.dart';
 import 'package:budgetron/ui/classes/date_selector_legacy.dart';
@@ -20,8 +22,6 @@ import 'package:budgetron/ui/classes/horizontal_separator.dart';
 import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/utils/interfaces.dart';
 import 'package:budgetron/utils/date_utils.dart';
-
-import 'package:budgetron/routes/pages/entry/entries_page.dart';
 
 class LegacyAccountOperationsPage extends StatelessWidget {
   final Account account;

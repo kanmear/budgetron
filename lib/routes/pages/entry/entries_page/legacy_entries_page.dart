@@ -12,22 +12,39 @@ import 'package:budgetron/models/enums/currency.dart';
 import 'package:budgetron/models/enums/date_period.dart';
 import 'package:budgetron/models/category/category.dart';
 
+import 'package:budgetron/routes/pages/entry/widgets/entry_list_tile.dart';
+
 import 'package:budgetron/ui/classes/date_selector_legacy.dart';
-import 'package:budgetron/ui/classes/horizontal_separator.dart';
 
-import 'package:budgetron/utils/enums.dart';
 import 'package:budgetron/utils/date_utils.dart';
-
-import 'package:budgetron/routes/pages/entry/entries_page.dart';
 
 class LegacyEntriesPage extends StatelessWidget {
   //TODO make settings entry for default datePeriod
   final ValueNotifier<DatePeriod> datePeriodNotifier =
       ValueNotifier(DatePeriod.day);
-  final ValueNotifier<List<DateTime>> dateTimeNotifier = ValueNotifier(
-      BudgetronDateUtils.calculateDateRange(BudgetronPage.entries));
 
   LegacyEntriesPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+        backgroundColor: theme.colorScheme.surface,
+        body: Column(children: [
+          EntriesListView(datePeriodNotifier: datePeriodNotifier),
+          LegacyDateSelector(datePeriodNotifier: datePeriodNotifier)
+        ]));
+  }
+}
+
+class EntriesListView extends StatelessWidget {
+  final ValueNotifier<DatePeriod> datePeriodNotifier;
+
+  const EntriesListView({
+    super.key,
+    required this.datePeriodNotifier,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,34 +56,6 @@ class LegacyEntriesPage extends StatelessWidget {
         .first
         .code;
 
-    return Scaffold(
-        backgroundColor: theme.colorScheme.surface,
-        body: Column(children: [
-          EntriesListView(
-              dateTimeNotifier: dateTimeNotifier,
-              datePeriodNotifier: datePeriodNotifier,
-              currency: currency,
-              theme: theme),
-          LegacyDateSelector(datePeriodNotifier: datePeriodNotifier)
-        ]));
-  }
-}
-
-class EntriesListView extends StatelessWidget {
-  final ValueNotifier<List<DateTime>> dateTimeNotifier;
-  final ValueNotifier<DatePeriod> datePeriodNotifier;
-  final String currency;
-  final ThemeData theme;
-
-  const EntriesListView(
-      {super.key,
-      required this.dateTimeNotifier,
-      required this.currency,
-      required this.datePeriodNotifier,
-      required this.theme});
-
-  @override
-  Widget build(BuildContext context) {
     return Flexible(
         child: StreamBuilder<List<Entry>>(
             //REFACTOR should not directly call controllers
@@ -78,7 +67,8 @@ class EntriesListView extends StatelessWidget {
                     builder: (context, value, child) {
                       return Padding(
                           padding: const EdgeInsets.only(left: 16, right: 16),
-                          child: _buildListView(snapshot.data!, currency));
+                          child:
+                              _buildListView(snapshot.data!, currency, theme));
                     });
               } else {
                 return Center(
@@ -91,7 +81,7 @@ class EntriesListView extends StatelessWidget {
             }));
   }
 
-  Widget _buildListView(List<Entry> entries, String currency) {
+  Widget _buildListView(List<Entry> entries, String currency, ThemeData theme) {
     Map<DateTime, Map<EntryCategory, List<Entry>>> entriesMap = {};
     List<DateTime> entryDates = [];
 
@@ -115,13 +105,7 @@ class EntriesListView extends StatelessWidget {
       separatorBuilder: (BuildContext context, int index) {
         return const Padding(
           padding: EdgeInsets.only(left: 16, right: 16),
-          child: Column(
-            children: [
-              SizedBox(height: 16),
-              HorizontalSeparator(),
-              SizedBox(height: 16)
-            ],
-          ),
+          child: SizedBox(height: 24),
         );
       },
     );
@@ -156,7 +140,7 @@ class EntryListTileContainer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _resolveContainerTitle(),
-                  _resolveContainerSumValue(entriesToCategoryMap)
+                  _resolveContainerSum(entriesToCategoryMap)
                 ],
               ),
               const SizedBox(height: 8),
@@ -212,7 +196,7 @@ class EntryListTileContainer extends StatelessWidget {
     return Text(text, style: theme.textTheme.bodySmall);
   }
 
-  Widget _resolveContainerSumValue(Map<EntryCategory, List<Entry>> entries) {
+  Widget _resolveContainerSum(Map<EntryCategory, List<Entry>> entries) {
     var sum = entries.values
         .expand((element) => element.toList())
         .map((e) => e.value)

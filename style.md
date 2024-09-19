@@ -35,6 +35,13 @@ For public methods return value type usually should be specified
 
 ---
 ### Imports
+##### Architecture
+Classes should never import widgets from another page (e.g., EntryListTileContainer used to be imported from 
+legacy_entries_page to budget_overview_page and group_overview_page, and EntryListTile from entries_page used 
+to be imported in account_operations_page and legacy_operations_page). In such a case widget should be extracted
+to a separate file.
+
+##### Order
 Logically separated with newlines, sorted by import length
 
 Order:
@@ -42,6 +49,6 @@ Order:
 2) AppData
 3) Logic / services
 4) Data models
-5) UI modules
-6) Utils
-7) Routes
+5) Routes
+6) UI modules
+7) Utils
