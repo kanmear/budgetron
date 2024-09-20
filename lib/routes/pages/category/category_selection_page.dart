@@ -107,15 +107,14 @@ class CategoriesList extends StatelessWidget {
                                 //FIX checkbox of last tile can't be seen
                                 padding:
                                     const EdgeInsets.only(left: 16, right: 16),
-                                itemBuilder: (BuildContext context, int index) {
+                                itemBuilder: (context, index) {
                                   return CategoryListTile(
                                       category: categories[index],
                                       isMultipleSelection: isMultipleSelection,
                                       selectedCategories: selectedCategories,
                                       theme: theme);
                                 },
-                                separatorBuilder:
-                                    (BuildContext context, int index) {
+                                separatorBuilder: (context, _) {
                                   return const SizedBox(height: 8);
                                 },
                                 itemCount: categories.length);

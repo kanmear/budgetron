@@ -66,26 +66,22 @@ class CategoriesList extends StatelessWidget {
           stream: CategoryController.getCategories("", null),
           builder: (context, snapshot) {
             if (snapshot.data?.isNotEmpty ?? false) {
-              List<EntryCategory> categories = snapshot.data!;
-              categories.sort((a, b) => a.name.compareTo(b.name));
-
               return ValueListenableBuilder(
                   valueListenable: nameFilter,
                   builder: (context, value, child) {
+                    List<EntryCategory> categories = snapshot.data!
+                        .where((c) =>
+                            c.name.toLowerCase().contains(value.toLowerCase()))
+                        .toList();
+
+                    categories.sort((a, b) => a.name.compareTo(b.name));
+
                     return ListView.separated(
                       padding: const EdgeInsets.only(left: 16, right: 16),
-                      itemBuilder: (BuildContext context, int index) {
-                        var category = categories[index];
-
-                        if (category.name
-                            .toLowerCase()
-                            .contains(nameFilter.value.toLowerCase())) {
-                          return _categoryListTile(category, context);
-                        }
-
-                        return const SizedBox();
+                      itemBuilder: (context, index) {
+                        return _categoryListTile(categories[index], context);
                       },
-                      separatorBuilder: (BuildContext context, int index) {
+                      separatorBuilder: (context, _) {
                         return const SizedBox(height: 8);
                       },
                       itemCount: categories.length,
