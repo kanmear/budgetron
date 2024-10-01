@@ -125,7 +125,7 @@ class BudgetListTile extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(2),
+          borderRadius: BorderRadius.circular(8),
           color: theme.colorScheme.surfaceContainerLowest),
       padding: const EdgeInsets.all(10),
       child: Column(children: [
