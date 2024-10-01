@@ -30,9 +30,11 @@ class EntryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ValueListenableBuilder(
       valueListenable: isExpandedListenable,
-      builder: (context, value, child) {
+      builder: (context, isExpanded, child) {
         return Column(
           children: [
             _resolveWrapperWidget(
@@ -42,6 +44,13 @@ class EntryListTile extends StatelessWidget {
                 leadingString: category.name,
                 leadingOption: _resolveLeadingOption(),
                 trailingString: _calculateSum(),
+                decoration: isExpanded
+                    ? BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerLowest,
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(8),
+                            topLeft: Radius.circular(8)))
+                    : null,
               ),
             ),
             _resolveExpandedView(context),
@@ -90,7 +99,9 @@ class EntryListTile extends StatelessWidget {
     if (isExpandedListenable.value && entries.length > 1) {
       return Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(8),
+                  bottomRight: Radius.circular(8)),
               color: theme.colorScheme.surfaceContainerLowest),
           padding: const EdgeInsets.only(left: 8, right: 10, bottom: 8),
           //APPROACH is there a better way to handle 'RenderBox was not laid out'?

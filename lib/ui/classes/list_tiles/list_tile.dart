@@ -6,6 +6,7 @@ class CustomListTile extends StatelessWidget {
   final Widget leadingIcon;
   final String leadingString;
   final Widget leadingOption;
+  final Decoration? decoration;
 
   final String trailingString;
 
@@ -15,6 +16,7 @@ class CustomListTile extends StatelessWidget {
     required this.leadingString,
     this.leadingOption = const SizedBox(),
     this.trailingString = StringUtils.emptyString,
+    this.decoration,
   });
 
   @override
@@ -33,9 +35,10 @@ class CustomListTile extends StatelessWidget {
 
     return Container(
       height: 48,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: theme.colorScheme.surfaceContainerLowest),
+      decoration: decoration ??
+          BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: theme.colorScheme.surfaceContainerLowest),
       padding: const EdgeInsets.all(12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
