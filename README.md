@@ -1,3 +1,5 @@
-# budgetron
+# Budgetron
 
-Flutter budget app.
+Flutter budgeting app.
+
+Landing and download: https://kanmear.github.io/budgetron-landing/
