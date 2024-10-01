@@ -209,6 +209,15 @@ class BudgetService {
       }
     }
 
+    if (remainingDays == 0) {
+      int remainingHours = resetDate.difference(DateTime.now()).inHours;
+
+      if (remainingHours == 0) return 'less than an hour left';
+      return remainingHours == 1
+          ? '$remainingHours hour left'
+          : '$remainingHours hours left';
+    }
+
     return remainingDays == 1
         ? '$remainingDays day left'
         : '$remainingDays days left';
