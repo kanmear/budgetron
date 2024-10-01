@@ -74,8 +74,7 @@ class GroupOverviewChart extends StatelessWidget {
           child: Column(children: [
             BudgetronPieChart(
                 data: [
-                  PieChartData(
-                      color: theme.colorScheme.outline, value: 1, name: '')
+                  PieChartData(color: Colors.transparent, value: 1, name: '')
                 ],
                 child: Center(
                     child: Text(

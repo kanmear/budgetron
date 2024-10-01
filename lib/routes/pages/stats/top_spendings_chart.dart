@@ -92,7 +92,7 @@ class TopSpendingsChart extends StatelessWidget {
                           BudgetronPieChart(
                               data: [
                                 PieChartData(
-                                    color: theme.colorScheme.outline,
+                                    color: Colors.transparent,
                                     value: 1,
                                     name: '')
                               ],

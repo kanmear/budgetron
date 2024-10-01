@@ -99,9 +99,7 @@ class OverallChart extends StatelessWidget {
                           child: BudgetronPieChart(
                             data: [
                               PieChartData(
-                                  color: Theme.of(context).colorScheme.outline,
-                                  value: 1,
-                                  name: '')
+                                  color: Colors.transparent, value: 1, name: '')
                             ],
                             child: Center(
                               child: Text(
