@@ -23,16 +23,6 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    //FIX hardcoded list tile margins sum value (32)
-    //FIX hardcoded edge insets sum value (24)
-    //REFACTOR calculate once in the Main
-    final listTileWidth = (MediaQuery.of(context).size.width - 32 - 24).floor();
-    final isTrailingEmpty = trailingString.isEmpty;
-
-    final leftPartWidth =
-        isTrailingEmpty ? listTileWidth.toDouble() : listTileWidth / 3 * 2;
-    final rightPartWidth = isTrailingEmpty ? 0.toDouble() : listTileWidth / 3;
-
     return Container(
       height: 48,
       decoration: decoration ??
@@ -43,8 +33,10 @@ class CustomListTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: leftPartWidth,
+          //NOTE 3 and 2 flex factors feel like magic
+          Flexible(
+            flex: 3,
+            fit: FlexFit.loose,
             child: Row(
               children: [
                 leadingIcon,
@@ -61,15 +53,17 @@ class CustomListTile extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-              width: rightPartWidth,
-              child: Text(
-                trailingString,
-                textAlign: TextAlign.end,
-                style: theme.textTheme.bodyMedium,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-              )),
+          Flexible(
+            flex: 2,
+            fit: FlexFit.loose,
+            child: Text(
+              trailingString,
+              textAlign: TextAlign.end,
+              style: theme.textTheme.bodyMedium,
+              overflow: TextOverflow.ellipsis,
+              softWrap: false,
+            ),
+          ),
         ],
       ),
     );
