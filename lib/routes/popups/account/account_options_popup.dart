@@ -124,14 +124,33 @@ class CurrentBalance extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: theme.colorScheme.secondary)),
         padding: const EdgeInsets.all(12),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text('Current balance', style: theme.textTheme.bodyMedium),
-          Row(children: [
-            Text(account.balance.toStringAsFixed(2),
-                style: theme.textTheme.bodyMedium),
-            Text(" $currency", style: theme.textTheme.titleSmall)
-          ])
-        ]));
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Current balance',
+              style: theme.textTheme.bodyMedium,
+            ),
+            Flexible(
+              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                Flexible(
+                  flex: 3,
+                  fit: FlexFit.loose,
+                  child: Text(
+                    account.balance.toStringAsFixed(2),
+                    style: theme.textTheme.bodyMedium,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: false,
+                  ),
+                ),
+                Flexible(
+                    flex: 1,
+                    fit: FlexFit.loose,
+                    child:
+                        Text(" $currency", style: theme.textTheme.titleSmall))
+              ]),
+            )
+          ],
+        ));
   }
 }
