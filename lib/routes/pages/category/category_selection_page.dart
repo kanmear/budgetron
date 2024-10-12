@@ -157,12 +157,6 @@ class CategoryListTile extends StatelessWidget {
       }
     });
 
-    //FIX hardcoded list tile margins sum value (32)
-    //FIX hardcoded edge insets sum value (24)
-    //REFACTOR calculate once in the Main
-    final listTileWidth = (MediaQuery.of(context).size.width - 32 - 24).floor();
-    final leftPartWidth = (listTileWidth / 6 * 5);
-
     return GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: () => _resolveOnTap(context),
@@ -174,8 +168,8 @@ class CategoryListTile extends StatelessWidget {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: leftPartWidth,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Row(children: [
                       Container(
                           padding: const EdgeInsets.only(right: 8),
@@ -192,7 +186,12 @@ class CategoryListTile extends StatelessWidget {
                       ))
                     ]),
                   ),
-                  _resolveTrailing()
+                  Row(
+                    children: [
+                      const SizedBox(width: 8),
+                      _resolveTrailing(),
+                    ],
+                  )
                 ])));
   }
 

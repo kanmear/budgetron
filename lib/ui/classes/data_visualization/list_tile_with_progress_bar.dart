@@ -17,17 +17,12 @@ class ListTileWithProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //FIX hardcoded list tile margins sum value (32)
-    //FIX hardcoded edge insets sum value (24)
-    //REFACTOR calculate once in the Main
-    final listTileWidth = (MediaQuery.of(context).size.width - 32 - 24).floor();
-
     return Column(children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(width: listTileWidth / 2, child: leading),
-          SizedBox(width: listTileWidth / 2, child: trailing)
+          Expanded(child: leading),
+          Expanded(child: trailing),
         ],
       ),
       const SizedBox(height: 2),

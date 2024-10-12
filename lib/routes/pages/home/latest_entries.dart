@@ -83,12 +83,6 @@ class EntryListTile extends StatelessWidget {
     final appData = Provider.of<AppData>(context);
     final theme = Theme.of(context);
 
-    //FIX hardcoded list tile margins sum value
-    //REFACTOR calculate once in the Main
-    final listTileWidth = (MediaQuery.of(context).size.width - 32).floor();
-    final leftPartWidth = listTileWidth / 3 * 2;
-    final rightPartWidth = listTileWidth / 3;
-
     String currency = Currency.values
         .where((e) => e.index == appData.currencyIndex)
         .first
@@ -104,41 +98,63 @@ class EntryListTile extends StatelessWidget {
                         : theme.colorScheme.surfaceContainerLow))),
         child: Padding(
           padding: const EdgeInsets.only(top: 10, bottom: 10),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            SizedBox(
-              width: leftPartWidth,
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.square_rounded,
-                    size: 18,
-                    color: CategoryService.stringToColor(category.color),
-                  ),
-                  const SizedBox(width: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                flex: 4,
+                fit: FlexFit.loose,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.square_rounded,
+                      size: 18,
+                      color: CategoryService.stringToColor(category.color),
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(
+                      child: Text(
+                        entry.category.target!.name,
+                        style: theme.textTheme.bodyMedium,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Flexible(
+                flex: 3,
+                fit: FlexFit.loose,
+                child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   Flexible(
+                    flex: 3,
+                    fit: FlexFit.loose,
                     child: Text(
-                      entry.category.target!.name,
+                      entry.value.toStringAsFixed(2),
                       style: theme.textTheme.bodyMedium,
+                      textAlign: TextAlign.end,
                       overflow: TextOverflow.ellipsis,
                       softWrap: false,
                     ),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(
-              //FIX hardcoded edge insets sum value (set in EntriesListView)
-              width: rightPartWidth - 24,
-              child: Text(
-                "${entry.value.toStringAsFixed(2)} $currency",
-                style: theme.textTheme.bodyMedium,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-              ),
-            )
-          ]),
+                  //HACK text with space
+                  Text(' ', style: theme.textTheme.bodyMedium),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.loose,
+                    child: Text(
+                      currency,
+                      style: theme.textTheme.bodyMedium,
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                    ),
+                  )
+                ]),
+              )
+            ],
+          ),
         ));
   }
 }

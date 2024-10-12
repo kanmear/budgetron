@@ -32,11 +32,6 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    //FIX hardcoded list tile margins sum value (32)
-    //REFACTOR calculate once in the Main
-    final screenWidth = (MediaQuery.of(context).size.width).floor();
-    final textMaxWidth = screenWidth / 4 * 3 - 32;
-
     return Container(
         padding: EdgeInsets.zero,
         constraints: const BoxConstraints(),
@@ -72,8 +67,8 @@ class _BudgetronDropdownButtonState extends State<BudgetronDropdownButton> {
                           const SizedBox(width: 8),
                           //REFACTOR this is a weird way to do this
                           if (widget.leading != null) widget.leading!(object),
-                          Container(
-                            constraints: BoxConstraints(maxWidth: textMaxWidth),
+                          Flexible(
+                            fit: FlexFit.loose,
                             child: Text(
                               object.toString(),
                               style: theme.textTheme.bodyMedium,
