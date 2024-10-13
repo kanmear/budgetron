@@ -114,8 +114,6 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
 
     if (result != null) {
       callback.call(result);
-    } else {
-      _setDefaultValues();
     }
   }
 
@@ -185,13 +183,6 @@ class _EditGroupDialogState extends State<EditGroupDialog> {
         context: context,
         builder: (BuildContext context) =>
             DeleteGroupDialog(groupId: widget.group.id));
-  }
-
-  void _setDefaultValues() {
-    setState(() {
-      widget.categoriesNotifier.value = [];
-    });
-    _updateCategorySelectText(0);
   }
 
   void _updateCategorySelectText(int length) {
