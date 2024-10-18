@@ -33,6 +33,7 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  //REFACTOR probably can be removed
   DateTime get earliestEntryDate => globals.earliestEntryDate;
 
   //TODO set this whenever an entry created with date < this one

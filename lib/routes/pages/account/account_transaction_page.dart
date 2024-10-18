@@ -52,9 +52,15 @@ class AccountTransactionPage extends StatelessWidget {
           BudgetronTabSwitch(
               valueNotifier: tabNotifier,
               tabs: const [TransactionType.credit, TransactionType.debit]),
-          EntryValueInputField(
-            tabNotifier: tabNotifier,
-            textController: textController,
+          Expanded(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onHorizontalDragEnd: (details) => _setCategoryType(details),
+              child: EntryValueInputField(
+                tabNotifier: tabNotifier,
+                textController: textController,
+              ),
+            ),
           ),
           Padding(
               padding: const EdgeInsets.only(left: 16, right: 16),
@@ -100,6 +106,17 @@ class AccountTransactionPage extends StatelessWidget {
           ),
           const SizedBox(height: 16)
         ]));
+  }
+
+  void _setCategoryType(DragEndDetails details) {
+    final categoryType = tabNotifier.value;
+    if (categoryType == TransactionType.credit &&
+        details.primaryVelocity! > 0) {
+      tabNotifier.value = TransactionType.debit;
+    } else if (categoryType == TransactionType.debit &&
+        details.primaryVelocity! < 0) {
+      tabNotifier.value = TransactionType.credit;
+    }
   }
 
   void _navigateToAccountSelection(BuildContext context) async {

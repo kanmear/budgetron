@@ -25,29 +25,26 @@ class EntryValueInputField extends StatelessWidget {
         .first
         .code;
 
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 32, right: 32),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ValueListenableBuilder(
-                valueListenable: tabNotifier,
-                builder: (context, value, _) {
-                  return Text(_resolveLeading(),
-                      style: theme.textTheme.displayMedium);
-                }),
-            IntrinsicWidth(
-                child: ValueTextField(textController: textController)),
-            const SizedBox(width: 8),
-            Text(currency, style: theme.textTheme.displayMedium),
-            ValueListenableBuilder(
-                valueListenable: tabNotifier,
-                builder: (context, value, _) {
-                  return _resolveTrailing(context);
-                }),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 32, right: 32),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ValueListenableBuilder(
+              valueListenable: tabNotifier,
+              builder: (context, value, _) {
+                return Text(_resolveLeading(),
+                    style: theme.textTheme.displayMedium);
+              }),
+          IntrinsicWidth(child: ValueTextField(textController: textController)),
+          const SizedBox(width: 8),
+          Text(currency, style: theme.textTheme.displayMedium),
+          ValueListenableBuilder(
+              valueListenable: tabNotifier,
+              builder: (context, value, _) {
+                return _resolveTrailing(context);
+              }),
+        ],
       ),
     );
   }

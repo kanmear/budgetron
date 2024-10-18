@@ -52,9 +52,15 @@ class NewEntryPage extends StatelessWidget {
               valueNotifier: tabNotifier,
               tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
             ),
-            EntryValueInputField(
-              tabNotifier: tabNotifier,
-              textController: textController,
+            Expanded(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onHorizontalDragEnd: (details) => _setCategoryType(details),
+                child: EntryValueInputField(
+                  tabNotifier: tabNotifier,
+                  textController: textController,
+                ),
+              ),
             ),
             EntryParameters(
                 tabNotifier: tabNotifier,
@@ -88,7 +94,18 @@ class NewEntryPage extends StatelessWidget {
         ));
   }
 
-  void _createNewEntry(BuildContext context) {
+  void _setCategoryType(DragEndDetails details) {
+    final categoryType = tabNotifier.value;
+    if (categoryType == EntryCategoryType.income &&
+        details.primaryVelocity! < 0) {
+      tabNotifier.value = EntryCategoryType.expense;
+    } else if (categoryType == EntryCategoryType.expense &&
+        details.primaryVelocity! > 0) {
+      tabNotifier.value = EntryCategoryType.income;
+    }
+  }
+
+  _createNewEntry(BuildContext context) {
     var value = textController.text;
     EntryCategory category = categoryNotifier.value!;
 
