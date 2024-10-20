@@ -72,10 +72,11 @@ class EditEntryPage extends StatelessWidget {
               tabs: const [EntryCategoryType.expense, EntryCategoryType.income],
               selectedTab: categoryType,
             ),
-            EntryValueInputField(
+            Expanded(
+                child: EntryValueInputField(
               tabNotifier: tabNotifier,
               textController: textController,
-            ),
+            )),
             EntryParameters(
                 tabNotifier: tabNotifier,
                 categoryNotifier: categoryNotifier,
