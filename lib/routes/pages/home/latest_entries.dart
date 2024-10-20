@@ -42,7 +42,8 @@ class EntriesListView extends StatelessWidget {
       stream: _getEntries(),
       builder: (context, snapshot) {
         if (snapshot.data?.isNotEmpty ?? false) {
-          List<Entry> entries = snapshot.data!;
+          List<Entry> entries = snapshot.data!
+            ..sort((a, b) => b.dateTime.compareTo(a.dateTime));
 
           return Container(
             decoration: BoxDecoration(
