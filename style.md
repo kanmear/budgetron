@@ -27,8 +27,8 @@ Method retrieves a value (Dart types like int, bool, DateTime, etc.) by calculat
 ##### Internal methods 
 [return_value_type] _methodName, e.g `void _setPosition()`
 
-For internal getters return value type usually should not be specified and instead be clear from method name, e.g.
-`_getEntries()`
+For internal getters return value type usually should not be specified (unless void) and instead be clear from 
+method name, e.g. `_getEntries()`
 
 ##### Public and/or static methods
 For public methods return value type usually should be specified

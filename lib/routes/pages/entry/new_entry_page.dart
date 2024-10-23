@@ -97,10 +97,10 @@ class NewEntryPage extends StatelessWidget {
   void _setCategoryType(DragEndDetails details) {
     final categoryType = tabNotifier.value;
     if (categoryType == EntryCategoryType.income &&
-        details.primaryVelocity! < 0) {
+        details.primaryVelocity! > 0) {
       tabNotifier.value = EntryCategoryType.expense;
     } else if (categoryType == EntryCategoryType.expense &&
-        details.primaryVelocity! > 0) {
+        details.primaryVelocity! < 0) {
       tabNotifier.value = EntryCategoryType.income;
     }
   }

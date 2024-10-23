@@ -111,10 +111,10 @@ class AccountTransactionPage extends StatelessWidget {
   void _setCategoryType(DragEndDetails details) {
     final categoryType = tabNotifier.value;
     if (categoryType == TransactionType.credit &&
-        details.primaryVelocity! > 0) {
+        details.primaryVelocity! < 0) {
       tabNotifier.value = TransactionType.debit;
     } else if (categoryType == TransactionType.debit &&
-        details.primaryVelocity! < 0) {
+        details.primaryVelocity! > 0) {
       tabNotifier.value = TransactionType.credit;
     }
   }
